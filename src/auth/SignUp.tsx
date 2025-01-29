@@ -1,0 +1,135 @@
+import { useEffect, useState } from "react";
+import { registerUser, removeUserError } from "../features/auth/authSlice";
+import { SignUpInterface } from "../interfaces/authInterfaces";
+import { UserContextInterface } from "../interfaces/userInterfaces";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { currencyConverter, numPop } from "../helpers/currencyConverter";
+import KeyPad from "../budgets/KeyPad";
+import { useNavigate } from "react-router-dom";
+
+const SignUp = () => {
+  const initialState = { username: "", password: "", totalAssets: 0 };
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<SignUpInterface>(initialState);
+
+  const userStatus: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo
+  );
+  useEffect(() => {
+    let inputs = localStorage.getItem("userInputs");
+    if (inputs) {
+      setFormData(JSON.parse(inputs));
+      localStorage.removeItem("userInputs");
+    }
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (userStatus.error) {
+      dispatch(removeUserError());
+    }
+    const { name, value } = e.target;
+    setFormData((data) => ({ ...data, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { username, password, totalAssets } = formData;
+    try {
+      const signUpInfo: SignUpInterface = {
+        username,
+        password,
+        totalAssets: totalAssets / 100,
+      };
+      localStorage.setItem(
+        "userInputs",
+        JSON.stringify({ ...formData, password: "" })
+      );
+      await dispatch(registerUser(signUpInfo)).unwrap();
+      localStorage.removeItem("userInputs");
+      navigate("/");
+    } catch (err) {
+      console.log("ERROR ERROR ERROR");
+      //   console.log(userStatus.error);
+    }
+  };
+
+  const handlePress = (num: number) => {
+    let newNum = currencyConverter(formData.totalAssets, num);
+    setFormData((data) => ({ ...data, totalAssets: newNum }));
+  };
+
+  const handleDelete = () => {
+    let newNum = numPop(formData.totalAssets);
+    setFormData((data) => ({
+      ...data,
+      totalAssets: newNum,
+    }));
+  };
+  return (
+    <div className="register-page">
+      <div className="register-form">
+        <h1 className="text-3xl font-bold underline">Sign Up Here!</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="username-div">
+            <label htmlFor="username">Username: </label>
+            <input
+              id="signup_username"
+              type="text"
+              name="username"
+              placeholder="type your username here"
+              value={formData.username}
+              onChange={handleChange}
+              //   required
+              //   maxLength={30}
+              //   minLength={5}
+            />
+          </div>
+          <div className="password-div">
+            <label htmlFor="password">Password: </label>
+            <input
+              id="signup_password"
+              type="password"
+              name="password"
+              placeholder="type your password here"
+              value={formData.password}
+              onChange={handleChange}
+              //   required
+              //   maxLength={20}
+              //   minLength={5}
+            />
+          </div>
+          <div className="total-assets-div">
+            <label htmlFor="moneyAllocated">Total Assets: ($ U.S.): </label>
+            <input
+              id="total_assets"
+              type="text"
+              name="totalAssets"
+              placeholder="0.00"
+              value={(formData.totalAssets / 100).toFixed(2)}
+              onChange={handleChange}
+              required
+              readOnly
+            />
+          </div>
+          <div className="keyPad-div">
+            <KeyPad
+              handlePress={handlePress}
+              handleDelete={handleDelete}
+              num={formData.totalAssets}
+            />
+          </div>
+
+          <div className="button-div">
+            <button className="make-profile-button">Sign Up!</button>
+          </div>
+          <div className="error-message">
+            {userStatus.error && <p>{userStatus.error}</p>}
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default SignUp;
