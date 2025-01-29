@@ -27,7 +27,7 @@ const BudgetPage = () => {
       };
     });
     setBudgetList(listBudgets);
-  }, []);
+  }, [userStatus]);
 
   const [showBudgetForm, setShowBudgetForm] = useState<boolean>(false);
 
@@ -40,8 +40,13 @@ const BudgetPage = () => {
       {" "}
       <button onClick={() => navigate(-1)}>Back Home</button>
       <h1>BudgetPage</h1>
-      <button onClick={() => setShowBudgetForm(true)}>Add a new Budget</button>
-      {showBudgetForm && <BudgetForm hideForm={HideForm} />}
+      {showBudgetForm ? (
+        <BudgetForm hideForm={HideForm} />
+      ) : (
+        <button onClick={() => setShowBudgetForm(true)}>
+          Add a new Budget
+        </button>
+      )}
       {userStatus.user.budgets.length ? (
         <BudgetList allBudgets={budgetList} />
       ) : (

@@ -5,6 +5,8 @@ import { UserContextInterface } from "../interfaces/userInterfaces";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import BudgetPageCard from "./BudgetPageCard";
 import ExpenseForm from "../expenses/ExpenseForm";
+import BudgetErrorPage from "./BudgetErrorPage";
+import ExpenseList from "../expenses/ExpenseList";
 
 const SingleBudgetPage = () => {
   const { id } = useParams();
@@ -31,8 +33,6 @@ const SingleBudgetPage = () => {
     let currentBudget = getBudget();
     if (currentBudget) {
       setBudget(currentBudget);
-    } else {
-      navigate("/budgets/error/unauthorized");
     }
     setLoading(false);
   }, []);
@@ -42,11 +42,24 @@ const SingleBudgetPage = () => {
   }
 
   return (
-    <div className="budget-page">
-      <button onClick={() => navigate(-1)}>Back to All Budgets</button>
-      <BudgetPageCard budget={budget} />
-      <button onClick={() => setShowExpenseForm(true)}>Add Expense</button>
-      {showExpenseForm && <ExpenseForm hideForm={HideForm} budget={budget} />}
+    <div>
+      {budget ? (
+        <div className="budget-page">
+          <button onClick={() => navigate(-1)}>Back to All Budgets</button>
+          <BudgetPageCard budget={budget} />
+
+          {showExpenseForm ? (
+            <ExpenseForm hideForm={HideForm} budget={budget} />
+          ) : (
+            <button onClick={() => setShowExpenseForm(true)}>
+              Add Expense
+            </button>
+          )}
+          <ExpenseList expensesList={budget?.expenses} />
+        </div>
+      ) : (
+        <BudgetErrorPage />
+      )}
     </div>
   );
 };

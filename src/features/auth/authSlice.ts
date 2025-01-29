@@ -9,6 +9,7 @@ import {
   UserEditInterface,
 } from "../../interfaces/userInterfaces";
 import { newBudgetInterface } from "../../interfaces/budgetInterfaces";
+import { newExpenseInterface } from "../../interfaces/expenseInterfaces";
 import axios from "axios";
 
 const API_URL: string = "http://localhost:3001";
@@ -164,13 +165,13 @@ export const addNewBudget = createAsyncThunk<newBudgetInterface, any>(
   }
 );
 
-export const checkBudget = createAsyncThunk(
-  "budgets/check/match",
-  async (data: any = {}, thunkAPI) => {
+export const addNewExpense = createAsyncThunk<newExpenseInterface, any>(
+  "expenses/add/new",
+  async (data: newExpenseInterface, thunkAPI) => {
     try {
       let res = await axios({
-        method: "get",
-        url: `${API_URL}/budgets/check/match`,
+        method: "post",
+        url: `${API_URL}/expenses/add/new`,
         data,
         withCredentials: true,
       });
@@ -180,6 +181,8 @@ export const checkBudget = createAsyncThunk(
     }
   }
 );
+
+//
 
 const authSlice = createSlice({
   name: "auth",
@@ -285,6 +288,9 @@ const authSlice = createSlice({
           ...state.userInfo.user.budgets,
           action.payload.budget,
         ];
+      })
+      .addCase(addNewExpense.fulfilled, (state, action: any) => {
+        console.log(action.payload);
       });
   },
 });

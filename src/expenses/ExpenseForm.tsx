@@ -3,10 +3,10 @@ import KeyPad from "../budgets/KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
-import { addToAssets } from "../features/auth/authSlice";
 import { newExpenseInterface } from "../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
+import { addNewExpense } from "../features/auth/authSlice";
 
 interface Props {
   hideForm: any;
@@ -17,21 +17,20 @@ const ExpenseForm: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch();
   const initialState: newExpenseInterface = {
     title: "",
-    date: null,
     transaction: 0,
   };
-  const [formData, setFormData] = useState(initialState);
-  const [keyPadError, setKeyPadError] = useState<boolean>(false);
-
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
-  );
   const initialMoney = getRemainingMoney(
     props.budget?.moneyAllocated || "",
     props.budget?.moneySpent || 0
   );
-  const [originalMoney, setOriginalMoney] = useState<string>(initialMoney);
+  const [formData, setFormData] = useState(initialState);
+  const [keyPadError, setKeyPadError] = useState<boolean>(false);
+  const [originalMoney] = useState<string>(initialMoney);
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
+
+  const userStatus: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo
+  );
 
   const hide = () => {
     props.hideForm();
@@ -39,8 +38,9 @@ const ExpenseForm: React.FC<Props> = (props) => {
 
   const handlePress = (num: number) => {
     let newNum = currencyConverter(formData.transaction, num);
-    let newAvailableMoney = parseFloat(originalMoney) * 100 - newNum;
-    if (newNum < newAvailableMoney) {
+    let original = parseFloat(originalMoney) * 100;
+    if (newNum <= original) {
+      let newAvailableMoney = original - newNum;
       setFormData((data) => ({
         ...data,
         transaction: newNum,
@@ -69,19 +69,19 @@ const ExpenseForm: React.FC<Props> = (props) => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let date = new Date().toLocaleDateString();
-
-    let submitData = {
-      ...formData,
-      budgetID: props.budget?._id,
-      userID: userStatus.user._id,
-
-      date,
-      transaction: formData.transaction / 100,
-    };
-    console.log(submitData);
+    try {
+      let submitData = {
+        ...formData,
+        budgetID: props.budget?._id,
+        transaction: formData.transaction / 100,
+      };
+      await dispatch(addNewExpense(submitData)).unwrap();
+      hide();
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div>
