@@ -16,7 +16,7 @@ const SingleBudgetPage = () => {
   );
   const budget = useMemo(
     () => getCurrentBudget(userStatus.user.budgets, id || ""),
-    [userStatus]
+    [userStatus.user.budgets]
   );
   const [showExpenseForm, setShowExpenseForm] = useState<boolean>(false);
 

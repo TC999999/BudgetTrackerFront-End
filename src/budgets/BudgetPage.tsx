@@ -15,7 +15,7 @@ const BudgetPage = () => {
 
   const budgetList = useMemo(
     () => makeBudgetList(userStatus.user.budgets),
-    [userStatus]
+    [userStatus.user.budgets]
   );
 
   const [showBudgetForm, setShowBudgetForm] = useState<boolean>(false);

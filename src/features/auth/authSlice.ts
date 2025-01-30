@@ -270,16 +270,6 @@ const authSlice = createSlice({
         state.userInfo.loading = false;
         state.userInfo.error = action.payload;
       })
-      // .addCase(addToAssets.pending, (state) => {
-      //   state.userInfo.loading = true;
-      // })
-      // .addCase(addToAssets.fulfilled, (state, action: any) => {
-      //   state.userInfo.loading = false;
-      //   state.userInfo.user.totalAssets = action.payload.totalAssets;
-      // })
-      // .addCase(addToAssets.rejected, (state) => {
-      //   state.userInfo.loading = false;
-      // })
       .addCase(addToAssets.fulfilled, (state, action: any) => {
         state.userInfo.user.totalAssets = action.payload.totalAssets;
       })
@@ -290,7 +280,16 @@ const authSlice = createSlice({
         ];
       })
       .addCase(addNewExpense.fulfilled, (state, action: any) => {
-        console.log(action.payload);
+        let newBudgets = state.userInfo.user.budgets.map((v) => {
+          return v._id === action.payload.budget._id
+            ? action.payload.budget
+            : v;
+        });
+        state.userInfo.user.budgets = newBudgets;
+        state.userInfo.user.expenses = [
+          action.payload.expense,
+          ...state.userInfo.user.expenses,
+        ];
       });
   },
 });

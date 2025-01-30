@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { registerUser, removeUserError } from "../features/auth/authSlice";
 import { SignUpInterface } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
@@ -54,18 +54,28 @@ const SignUp = () => {
     }
   };
 
-  const handlePress = (num: number) => {
-    let newNum = currencyConverter(formData.totalAssets, num);
-    setFormData((data) => ({ ...data, totalAssets: newNum }));
-  };
+  const handlePress = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      let num = +e.currentTarget.value;
+      let newNum = currencyConverter(formData.totalAssets, num);
+      setFormData((data) => ({ ...data, totalAssets: newNum }));
+    },
+    [formData]
+  );
 
-  const handleDelete = () => {
-    let newNum = numPop(formData.totalAssets);
-    setFormData((data) => ({
-      ...data,
-      totalAssets: newNum,
-    }));
-  };
+  const handleDelete = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      let newNum = numPop(formData.totalAssets);
+      setFormData((data) => ({
+        ...data,
+        totalAssets: newNum,
+      }));
+    },
+    [formData]
+  );
+
   return (
     <div className="register-page">
       <div className="register-form">
@@ -80,9 +90,6 @@ const SignUp = () => {
               placeholder="type your username here"
               value={formData.username}
               onChange={handleChange}
-              //   required
-              //   maxLength={30}
-              //   minLength={5}
             />
           </div>
           <div className="password-div">
@@ -94,9 +101,6 @@ const SignUp = () => {
               placeholder="type your password here"
               value={formData.password}
               onChange={handleChange}
-              //   required
-              //   maxLength={20}
-              //   minLength={5}
             />
           </div>
           <div className="total-assets-div">
@@ -106,7 +110,7 @@ const SignUp = () => {
               type="text"
               name="totalAssets"
               placeholder="0.00"
-              value={(formData.totalAssets / 100).toFixed(2)}
+              value={`$${(formData.totalAssets / 100).toFixed(2)}`}
               onChange={handleChange}
               required
               readOnly

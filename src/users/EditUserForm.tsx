@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   UserContextInterface,
   UserEditInterface,
@@ -31,30 +31,37 @@ const EditUserForm: React.FC<Props> = (props) => {
     currentAssets: (userStatus.user.totalAssets || 1) * 100,
   };
   const [formData, setFormData] = useState<FormInfo>(initialState);
-
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
 
-  const handlePress = (num: number) => {
-    let newNum = currencyConverter(formData.addedAssets, num);
+  const handlePress = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      let num = +e.currentTarget.value;
+      let newNum = currencyConverter(formData.addedAssets, num);
+      setFormData((data) => ({
+        ...data,
+        addedAssets: newNum,
+        newAssets: formData.currentAssets + newNum,
+      }));
+    },
+    [formData]
+  );
 
-    setFormData((data) => ({
-      ...data,
-      addedAssets: newNum,
-      newAssets: formData.currentAssets + newNum,
-    }));
-  };
-
-  const handleDelete = () => {
-    let newNum = numPop(formData.addedAssets);
-    setFormData((data) => ({
-      ...data,
-      addedAssets: newNum,
-      newAssets: formData.currentAssets + newNum,
-    }));
-    if (keyPadError) {
-      setKeyPadError(false);
-    }
-  };
+  const handleDelete = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      let newNum = numPop(formData.addedAssets);
+      setFormData((data) => ({
+        ...data,
+        addedAssets: newNum,
+        newAssets: formData.currentAssets + newNum,
+      }));
+      if (keyPadError) {
+        setKeyPadError(false);
+      }
+    },
+    [formData, keyPadError]
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -84,13 +91,15 @@ const EditUserForm: React.FC<Props> = (props) => {
       </h2>
       <form onSubmit={handleSubmit}>
         <div className="added-assets-div">
-          <label htmlFor="addedAssets">Input New Asset Value ($ U.S.): </label>
+          <label htmlFor="addedAssets">
+            Amount to Add to Assets ($ U.S.):{" "}
+          </label>
           <input
             id="added_assets"
             type="text"
             name="addedAssets"
             placeholder="0.00"
-            value={(formData.addedAssets / 100).toFixed(2)}
+            value={`$${(formData.addedAssets / 100).toFixed(2)}`}
             onChange={handleChange}
             required
             readOnly

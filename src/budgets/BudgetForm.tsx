@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import KeyPad from "./KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
@@ -21,34 +21,43 @@ const BudgetForm: React.FC<Props> = (props) => {
     moneyAllocated: 0,
   };
   const [formData, setFormData] = useState(initialState);
-  const [availableFunds, setAvailableFunds] = useState(
+  const [availableFunds, setAvailableFunds] = useState<number>(
     (userStatus.user.totalAssets || 1) * 100
   );
 
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
 
-  const handlePress = (num: number) => {
-    let newNum = currencyConverter(formData.moneyAllocated, num);
-    let currency = (newNum / 100).toFixed(2);
-    if (parseFloat(currency) < (userStatus.user?.totalAssets ?? 1)) {
-      setFormData((data) => ({ ...data, moneyAllocated: newNum }));
-      setAvailableFunds((userStatus.user.totalAssets || 1) * 100 - newNum);
-    } else {
-      setKeyPadError(true);
-    }
-  };
+  const handlePress = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      let num = +e.currentTarget.value;
+      let newNum = currencyConverter(formData.moneyAllocated, num);
+      let currency = (newNum / 100).toFixed(2);
+      if (parseFloat(currency) < (userStatus.user?.totalAssets ?? 1)) {
+        setFormData((data) => ({ ...data, moneyAllocated: newNum }));
+        setAvailableFunds((userStatus.user.totalAssets || 1) * 100 - newNum);
+      } else {
+        setKeyPadError(true);
+      }
+    },
+    [formData, keyPadError]
+  );
 
-  const handleDelete = () => {
-    let newNum = numPop(formData.moneyAllocated);
-    setFormData((data) => ({
-      ...data,
-      moneyAllocated: newNum,
-    }));
-    setAvailableFunds((userStatus.user.totalAssets || 1) * 100 - newNum);
-    if (keyPadError) {
-      setKeyPadError(false);
-    }
-  };
+  const handleDelete = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      let newNum = numPop(formData.moneyAllocated);
+      setFormData((data) => ({
+        ...data,
+        moneyAllocated: newNum,
+      }));
+      setAvailableFunds((userStatus.user.totalAssets || 1) * 100 - newNum);
+      if (keyPadError) {
+        setKeyPadError(false);
+      }
+    },
+    [formData, keyPadError]
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,12 +72,10 @@ const BudgetForm: React.FC<Props> = (props) => {
         username: userStatus.user.username || "",
         moneyAllocated: formData.moneyAllocated / 100,
       };
-
       const updateFunds: UserEditInterface = {
         username: userStatus.user.username || "",
         newAssets: availableFunds / 100,
       };
-
       await dispatch(addNewBudget(submitData)).unwrap();
       await dispatch(addToAssets(updateFunds)).unwrap();
       props.hideForm();
@@ -101,7 +108,7 @@ const BudgetForm: React.FC<Props> = (props) => {
             type="text"
             name="moneyAllocated"
             placeholder="0.00"
-            value={(formData.moneyAllocated / 100).toFixed(2)}
+            value={`$${(formData.moneyAllocated / 100).toFixed(2)}`}
             onChange={handleChange}
             required
             readOnly

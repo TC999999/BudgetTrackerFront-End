@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import KeyPad from "../budgets/KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
@@ -32,33 +32,42 @@ const ExpenseForm: React.FC<Props> = (props) => {
     (store) => store.user.userInfo
   );
 
-  const handlePress = (num: number) => {
-    let newNum = currencyConverter(formData.transaction, num);
-    let original = parseFloat(originalMoney.current) * 100;
-    if (newNum <= original) {
-      let newAvailableMoney = original - newNum;
+  const handlePress = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      let num = +e.currentTarget.value;
+      let newNum = currencyConverter(formData.transaction, num);
+      let original = parseFloat(originalMoney.current) * 100;
+      if (newNum <= original) {
+        let newAvailableMoney = original - newNum;
+        setFormData((data) => ({
+          ...data,
+          transaction: newNum,
+        }));
+        setAvailableMoney((newAvailableMoney / 100).toFixed(2));
+      } else {
+        setKeyPadError(true);
+      }
+    },
+    [formData, keyPadError]
+  );
+
+  const handleDelete = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      let newNum = numPop(formData.transaction);
       setFormData((data) => ({
         ...data,
         transaction: newNum,
       }));
+      if (keyPadError) {
+        setKeyPadError(false);
+      }
+      let newAvailableMoney = parseFloat(originalMoney.current) * 100 - newNum;
       setAvailableMoney((newAvailableMoney / 100).toFixed(2));
-    } else {
-      setKeyPadError(true);
-    }
-  };
-
-  const handleDelete = () => {
-    let newNum = numPop(formData.transaction);
-    setFormData((data) => ({
-      ...data,
-      transaction: newNum,
-    }));
-    if (keyPadError) {
-      setKeyPadError(false);
-    }
-    let newAvailableMoney = parseFloat(originalMoney.current) * 100 - newNum;
-    setAvailableMoney((newAvailableMoney / 100).toFixed(2));
-  };
+    },
+    [formData, keyPadError]
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -79,6 +88,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
       console.log(err);
     }
   };
+
   return (
     <div>
       <h2>Expense Form</h2>
@@ -103,7 +113,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
             type="text"
             name="trasaction"
             placeholder="0.00"
-            value={(formData.transaction / 100).toFixed(2)}
+            value={`$${(formData.transaction / 100).toFixed(2)}`}
             onChange={handleChange}
             required
             readOnly

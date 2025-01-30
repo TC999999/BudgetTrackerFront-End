@@ -13,9 +13,11 @@ const ExpenseCard: React.FC<Props> = (props) => {
   );
   return (
     <div className="expense-card px-6 py-4">
-      <h2>{props.expense.title}</h2>
-      <p>Transaction Made: ${props.expense.transaction}</p>
-      <p>Made At: {makeDateString(dateString)}</p>
+      <h2 className="expense-title">{props.expense.title}</h2>
+      <p className="expense-transaction">
+        Transaction Made: ${props.expense.transaction}
+      </p>
+      <p className="expense-date">Made At: {makeDateString(dateString)}</p>
     </div>
   );
 };
