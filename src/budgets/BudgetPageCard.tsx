@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 
@@ -7,16 +7,14 @@ interface Props {
 }
 
 const BudgetPageCard: React.FC<Props> = (props) => {
-  const [moneyRemaining, setMoneyRemaining] = useState<string>("");
-
-  useEffect(() => {
-    setMoneyRemaining(
+  const moneyRemaining = useMemo(
+    () =>
       getRemainingMoney(
         props.budget?.moneyAllocated || "",
         props.budget?.moneySpent || 0
-      )
-    );
-  }, []);
+      ),
+    [props.budget]
+  );
 
   return (
     <div className="budget-page-card">

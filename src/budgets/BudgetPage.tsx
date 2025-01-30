@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
 import { useAppSelector } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import { BudgetListInterface } from "../interfaces/budgetInterfaces";
-import { getRemainingMoney } from "../helpers/getRemainingMoney";
+import { makeBudgetList } from "../helpers/makeBudgetList";
 
 const BudgetPage = () => {
   const navigate = useNavigate();
@@ -14,26 +13,16 @@ const BudgetPage = () => {
     (store) => store.user.userInfo
   );
 
-  const [budgetList, setBudgetList] = useState<BudgetListInterface[]>([]);
-
-  useEffect(() => {
-    let listBudgets = userStatus.user.budgets.map((b) => {
-      return {
-        _id: b._id,
-        title: b.title,
-        moneyAllocated: b.moneyAllocated,
-        moneySpent: b.moneySpent,
-        moneyRemaining: getRemainingMoney(b.moneyAllocated, b.moneySpent),
-      };
-    });
-    setBudgetList(listBudgets);
-  }, [userStatus]);
+  const budgetList = useMemo(
+    () => makeBudgetList(userStatus.user.budgets),
+    [userStatus]
+  );
 
   const [showBudgetForm, setShowBudgetForm] = useState<boolean>(false);
 
-  const HideForm = () => {
+  const HideForm = useCallback(() => {
     setShowBudgetForm(false);
-  };
+  }, [showBudgetForm]);
 
   return (
     <div className="budget-page">

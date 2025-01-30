@@ -8,7 +8,6 @@ import {
   setUserLoading,
   removeUserError,
 } from "./features/auth/authSlice";
-
 import { useAppSelector } from "./features/hooks";
 import LoadingMsg from "./LoadingMsg";
 import { hasTokenInterface } from "./interfaces/authInterfaces";
@@ -43,14 +42,6 @@ function App() {
       navigate("/");
     }
   }, [dispatch, tokenStatus]);
-
-  // useEffect(() => {
-  //   if (userStatus.userExists && userStatus.user._id) {
-  //     dispatch(getAllBudgets({ userID: userStatus.user._id }));
-  //   } else {
-  //     dispatch(setBudgetLoading(false));
-  //   }
-  // }, [dispatch, userStatus]);
 
   useEffect(() => {
     if (location.pathname !== currPath) {

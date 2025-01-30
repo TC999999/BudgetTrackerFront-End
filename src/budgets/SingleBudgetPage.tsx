@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../features/hooks";
+import { getCurrentBudget } from "../helpers/getCurrentBudget";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import BudgetPageCard from "./BudgetPageCard";
 import ExpenseForm from "../expenses/ExpenseForm";
 import BudgetErrorPage from "./BudgetErrorPage";
@@ -11,35 +11,18 @@ import ExpenseList from "../expenses/ExpenseList";
 const SingleBudgetPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [budget, setBudget] = useState<BudgetInterface | null>(null);
-  const [showExpenseForm, setShowExpenseForm] = useState<boolean>(false);
-
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
+  const budget = useMemo(
+    () => getCurrentBudget(userStatus.user.budgets, id || ""),
+    [userStatus]
+  );
+  const [showExpenseForm, setShowExpenseForm] = useState<boolean>(false);
 
-  const HideForm = () => {
+  const HideForm = useCallback(() => {
     setShowExpenseForm(false);
-  };
-
-  useEffect(() => {
-    const getBudget = () => {
-      let arr = userStatus.user.budgets.filter((b) => {
-        return b._id === id;
-      });
-      return arr[0];
-    };
-    let currentBudget = getBudget();
-    if (currentBudget) {
-      setBudget(currentBudget);
-    }
-    setLoading(false);
-  }, []);
-
-  if (loading) {
-    return <p>Loading</p>;
-  }
+  }, [showExpenseForm]);
 
   return (
     <div>

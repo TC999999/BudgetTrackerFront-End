@@ -29,7 +29,6 @@ const BudgetForm: React.FC<Props> = (props) => {
 
   const handlePress = (num: number) => {
     let newNum = currencyConverter(formData.moneyAllocated, num);
-
     let currency = (newNum / 100).toFixed(2);
     if (parseFloat(currency) < (userStatus.user?.totalAssets ?? 1)) {
       setFormData((data) => ({ ...data, moneyAllocated: newNum }));
@@ -49,10 +48,6 @@ const BudgetForm: React.FC<Props> = (props) => {
     if (keyPadError) {
       setKeyPadError(false);
     }
-  };
-
-  const hide = () => {
-    props.hideForm();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +71,7 @@ const BudgetForm: React.FC<Props> = (props) => {
 
       await dispatch(addNewBudget(submitData)).unwrap();
       await dispatch(addToAssets(updateFunds)).unwrap();
-      hide();
+      props.hideForm();
     } catch (err: any) {
       console.log(err);
     }
@@ -131,7 +126,7 @@ const BudgetForm: React.FC<Props> = (props) => {
           {userStatus.error && <p>{userStatus.error}</p>}
         </div>
       </form>
-      <button onClick={hide}>Cancel</button>
+      <button onClick={props.hideForm}>Cancel</button>
     </div>
   );
 };

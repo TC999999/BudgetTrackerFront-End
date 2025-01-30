@@ -34,10 +34,6 @@ const EditUserForm: React.FC<Props> = (props) => {
 
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
 
-  const hide = () => {
-    props.hideForm();
-  };
-
   const handlePress = (num: number) => {
     let newNum = currencyConverter(formData.addedAssets, num);
 
@@ -74,7 +70,7 @@ const EditUserForm: React.FC<Props> = (props) => {
         newAssets: newAssets / 100,
       };
       await dispatch(addToAssets(submitData)).unwrap();
-      hide();
+      props.hideForm();
     } catch (err) {
       console.log(err);
     }
@@ -117,7 +113,7 @@ const EditUserForm: React.FC<Props> = (props) => {
         </div>
       </form>
 
-      <button onClick={hide}>Cancel</button>
+      <button onClick={props.hideForm}>Cancel</button>
     </div>
   );
 };

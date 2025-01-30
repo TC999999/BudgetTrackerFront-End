@@ -13,7 +13,8 @@ const monthes = new Map<number, string>([
   [11, "December"],
 ]);
 
-export const makeDateString = (date: Date): string => {
+export const makeDateString = (dateString: string): string => {
+  let date = new Date(dateString);
   let m: number = date.getMonth();
   let month: string = monthes.get(m)!;
   let day: number = date.getDate();

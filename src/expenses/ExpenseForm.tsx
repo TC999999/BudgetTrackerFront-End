@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import KeyPad from "../budgets/KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
@@ -25,20 +25,16 @@ const ExpenseForm: React.FC<Props> = (props) => {
   );
   const [formData, setFormData] = useState(initialState);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
-  const [originalMoney] = useState<string>(initialMoney);
+  const originalMoney = useRef<string>(initialMoney);
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
 
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
 
-  const hide = () => {
-    props.hideForm();
-  };
-
   const handlePress = (num: number) => {
     let newNum = currencyConverter(formData.transaction, num);
-    let original = parseFloat(originalMoney) * 100;
+    let original = parseFloat(originalMoney.current) * 100;
     if (newNum <= original) {
       let newAvailableMoney = original - newNum;
       setFormData((data) => ({
@@ -60,7 +56,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
     if (keyPadError) {
       setKeyPadError(false);
     }
-    let newAvailableMoney = parseFloat(originalMoney) * 100 - newNum;
+    let newAvailableMoney = parseFloat(originalMoney.current) * 100 - newNum;
     setAvailableMoney((newAvailableMoney / 100).toFixed(2));
   };
 
@@ -78,7 +74,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
         transaction: formData.transaction / 100,
       };
       await dispatch(addNewExpense(submitData)).unwrap();
-      hide();
+      props.hideForm();
     } catch (err) {
       console.log(err);
     }
@@ -134,7 +130,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
           {userStatus.error && <p>{userStatus.error}</p>}
         </div>
       </form>
-      <button onClick={hide}>Cancel</button>
+      <button onClick={props.hideForm}>Cancel</button>
     </div>
   );
 };

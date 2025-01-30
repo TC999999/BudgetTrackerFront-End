@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { logOutUser } from "../features/auth/authSlice";
@@ -10,9 +10,9 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [showAssetForm, setShowAssetForm] = useState(false);
 
-  const HideForm = () => {
+  const HideForm = useCallback(() => {
     setShowAssetForm(false);
-  };
+  }, [showAssetForm]);
 
   const logOutAnNavigate = (): void => {
     dispatch(logOutUser({}));
@@ -29,7 +29,9 @@ const Dashboard = () => {
         </button>
       )}
       {showAssetForm && <EditUserForm hideForm={HideForm} />}
-      <Link to="/budgets">Check out your budgets</Link>
+      <div className="link-to-budgets">
+        <Link to="/budgets">Check out your budgets</Link>
+      </div>
     </div>
   );
 };
