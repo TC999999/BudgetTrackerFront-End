@@ -11,3 +11,9 @@ export interface ExpenseInterface extends newExpenseInterface {
 export interface ExpenseListInterface {
   expenseList: ExpenseInterface[];
 }
+
+export interface deleteExpenseInterface {
+  _id: string;
+  budgetID: string | null;
+  transaction: number;
+}

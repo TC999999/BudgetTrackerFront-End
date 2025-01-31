@@ -9,7 +9,10 @@ import {
   UserEditInterface,
 } from "../../interfaces/userInterfaces";
 import { newBudgetInterface } from "../../interfaces/budgetInterfaces";
-import { newExpenseInterface } from "../../interfaces/expenseInterfaces";
+import {
+  newExpenseInterface,
+  deleteExpenseInterface,
+} from "../../interfaces/expenseInterfaces";
 import axios from "axios";
 
 const API_URL: string = "http://localhost:3001";
@@ -182,7 +185,22 @@ export const addNewExpense = createAsyncThunk<newExpenseInterface, any>(
   }
 );
 
-//
+export const removeExpense = createAsyncThunk<deleteExpenseInterface, any>(
+  "expenses/delete",
+  async (data: deleteExpenseInterface, thunkAPI) => {
+    try {
+      let res = await axios({
+        method: "delete",
+        url: `${API_URL}/expenses/delete`,
+        data,
+        withCredentials: true,
+      });
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data.error.message);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -280,16 +298,12 @@ const authSlice = createSlice({
         ];
       })
       .addCase(addNewExpense.fulfilled, (state, action: any) => {
-        let newBudgets = state.userInfo.user.budgets.map((v) => {
-          return v._id === action.payload.budget._id
-            ? action.payload.budget
-            : v;
-        });
-        state.userInfo.user.budgets = newBudgets;
-        state.userInfo.user.expenses = [
-          action.payload.expense,
-          ...state.userInfo.user.expenses,
-        ];
+        state.userInfo.user.budgets = action.payload.newUserBudgets;
+        state.userInfo.user.expenses = action.payload.newUserExpenses;
+      })
+      .addCase(removeExpense.fulfilled, (state, action: any) => {
+        state.userInfo.user.budgets = action.payload.newUserBudgets;
+        state.userInfo.user.expenses = action.payload.newUserExpenses;
       });
   },
 });

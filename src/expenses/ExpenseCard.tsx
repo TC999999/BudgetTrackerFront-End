@@ -4,6 +4,8 @@ import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 
 interface Props {
   expense: ExpenseInterface;
+  isFrontPage: boolean;
+  deleteExpense: any;
 }
 
 const ExpenseCard: React.FC<Props> = (props) => {
@@ -11,6 +13,7 @@ const ExpenseCard: React.FC<Props> = (props) => {
     () => makeDateString(props.expense.date),
     [props.expense]
   );
+
   return (
     <div className="expense-card px-6 py-4">
       <h2 className="expense-title">{props.expense.title}</h2>
@@ -18,6 +21,21 @@ const ExpenseCard: React.FC<Props> = (props) => {
         Transaction Made: ${props.expense.transaction}
       </p>
       <p className="expense-date">Made At: {makeDateString(dateString)}</p>
+      {!props.isFrontPage && (
+        <div className="delete-expense-div">
+          <button
+            onClick={(e) =>
+              props.deleteExpense(e, {
+                _id: props.expense._id,
+                transaction: props.expense.transaction,
+              })
+            }
+            className="delete-expense-button"
+          >
+            Delete Expense
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -36,7 +36,11 @@ const Dashboard = () => {
 
       <div className="recent-expenses-list">
         <h2 className="recent-expenses-list-title">Recent Expenses</h2>
-        <ExpenseList expensesList={user.expenses} />
+        <ExpenseList
+          expensesList={user.expenses}
+          isFrontPage={true}
+          budgetID={null}
+        />
       </div>
     </div>
   );

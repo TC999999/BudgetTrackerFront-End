@@ -30,7 +30,6 @@ const SingleBudgetPage = () => {
         <div className="budget-page">
           <button onClick={() => navigate(-1)}>Back to All Budgets</button>
           <BudgetPageCard budget={budget} />
-
           {showExpenseForm ? (
             <ExpenseForm hideForm={HideForm} budget={budget} />
           ) : (
@@ -38,7 +37,11 @@ const SingleBudgetPage = () => {
               Add Expense
             </button>
           )}
-          <ExpenseList expensesList={budget?.expenses} />
+          <ExpenseList
+            expensesList={budget?.expenses}
+            isFrontPage={false}
+            budgetID={id || null}
+          />
         </div>
       ) : (
         <BudgetErrorPage />
