@@ -24,7 +24,7 @@ const BudgetPage = () => {
   return (
     <div className="budget-page">
       {" "}
-      <button onClick={() => navigate(-1)}>Back Home</button>
+      <button onClick={() => navigate("/")}>Back Home</button>
       <h1>BudgetPage</h1>
       {showBudgetForm ? (
         <BudgetForm hideForm={HideForm} />

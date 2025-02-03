@@ -6,7 +6,7 @@ import { setUserLoading, removeUserError } from "./features/auth/authSlice";
 import { findToken } from "./features/actions/auth";
 import { getCurrentUser } from "./features/actions/users";
 import { useAppSelector } from "./features/hooks";
-import LoadingMsg from "./LoadingMsg";
+import LoadingMsg from "./LoadingUserMsg";
 import { hasTokenInterface } from "./interfaces/authInterfaces";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 
@@ -50,13 +50,10 @@ function App() {
     }
   }, [location]);
 
-  if (userStatus.loading) {
-    return <LoadingMsg />;
-  }
-
   return (
     <div className="App">
-      <RoutesList />
+      <LoadingMsg />
+      {!userStatus.loading && <RoutesList />}
     </div>
   );
 }

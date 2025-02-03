@@ -32,10 +32,12 @@ const SingleBudgetPage = () => {
   }, [showDeleteBudgetForm]);
 
   return (
-    <div>
+    <div className="budget-page">
       {budget ? (
-        <div className="budget-page">
-          <button onClick={() => navigate(-1)}>Back to All Budgets</button>
+        <div className="found-budget-page">
+          <button onClick={() => navigate("/budgets")}>
+            Back to All Budgets
+          </button>
           <BudgetPageCard budget={budget} />
           {showDeleteBudgetForm ? (
             <DeleteBudgetForm hideDeleteForm={HideDeleteForm} budget={budget} />

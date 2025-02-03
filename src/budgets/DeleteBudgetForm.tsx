@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   BudgetInterface,
   DeleteBudgetInterface,
 } from "../interfaces/budgetInterfaces";
+import { useAppDispatch } from "../features/hooks";
+import { deleteBudget } from "../features/actions/budgets";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
+import { makeExpenseIDList } from "../helpers/makeExpenseIDList";
 
 interface Props {
   hideDeleteForm: any;
@@ -11,9 +15,13 @@ interface Props {
 }
 
 const DeleteBudgetForm: React.FC<Props> = (props) => {
-  let expenseIDs = props.budget.expenses.map((v) => {
-    return v._id;
-  });
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  let expenseIDs = useMemo(
+    () => makeExpenseIDList(props.budget.expenses),
+    [props.budget.expenses]
+  );
   let remainingMoney: string = getRemainingMoney(
     props.budget.moneyAllocated,
     +props.budget.moneySpent
@@ -30,10 +38,11 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
     setFormData((data) => ({ ...data, [name]: +value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log(formData);
+      await dispatch(deleteBudget(formData)).unwrap();
+      navigate("/budgets");
     } catch (err) {
       console.log(err);
     }

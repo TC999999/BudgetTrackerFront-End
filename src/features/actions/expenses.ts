@@ -6,9 +6,9 @@ import {
   deleteExpenseInterface,
 } from "../../interfaces/expenseInterfaces";
 
-export const addNewExpense = createAsyncThunk<newExpenseInterface, any>(
+export const addNewExpense = createAsyncThunk<any, newExpenseInterface>(
   "expenses/add/new",
-  async (data: newExpenseInterface, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
       let res = await axios({
         method: "post",
@@ -23,9 +23,9 @@ export const addNewExpense = createAsyncThunk<newExpenseInterface, any>(
   }
 );
 
-export const removeExpense = createAsyncThunk<deleteExpenseInterface, any>(
+export const removeExpense = createAsyncThunk<any, deleteExpenseInterface>(
   "expenses/delete",
-  async (data: deleteExpenseInterface, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
       let res = await axios({
         method: "delete",

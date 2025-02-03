@@ -7,6 +7,7 @@ import { newExpenseInterface } from "../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { addNewExpense } from "../features/actions/expenses";
+import SmallLoadingMsg from "../SmallLoadingMsg";
 
 interface Props {
   hideForm: any;
@@ -27,6 +28,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
   const originalMoney = useRef<string>(initialMoney);
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
@@ -76,6 +78,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       let submitData = {
         ...formData,
@@ -85,62 +88,71 @@ const ExpenseForm: React.FC<Props> = (props) => {
       await dispatch(addNewExpense(submitData)).unwrap();
       props.hideForm();
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
   };
 
   return (
-    <div>
-      <h2>Expense Form</h2>
-      <h2>Available Budget: ${availableMoney}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="title-div">
-          <label htmlFor="title">Expense Title: </label>
-          <input
-            id="expense_title"
-            type="text"
-            name="title"
-            placeholder="What's this expense for?"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="transaction-div">
-          <label htmlFor="transaction">Transaction Value ($ U.S.): </label>
-          <input
-            id="expense_transaction"
-            type="text"
-            name="trasaction"
-            placeholder="0.00"
-            value={`$${(formData.transaction / 100).toFixed(2)}`}
-            onChange={handleChange}
-            required
-            readOnly
-          />
-        </div>
-        <div className="keyPad-div">
-          <KeyPad
-            handlePress={handlePress}
-            handleDelete={handleDelete}
-            num={formData.transaction}
-          />
-        </div>
-        {keyPadError && (
-          <div className="error-message">
+    <div className="new-expense-form-div">
+      {isLoading ? (
+        <SmallLoadingMsg />
+      ) : (
+        <div className="new-expense-form">
+          <h2>Expense Form</h2>
+          <h2>Available Budget: ${availableMoney}</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="title-div">
+              <label htmlFor="title">Expense Title: </label>
+              <input
+                id="expense_title"
+                type="text"
+                name="title"
+                placeholder="What's this expense for?"
+                value={formData.title}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="transaction-div">
+              <label htmlFor="transaction">Transaction Value ($ U.S.): </label>
+              <input
+                id="expense_transaction"
+                type="text"
+                name="trasaction"
+                placeholder="0.00"
+                value={`$${(formData.transaction / 100).toFixed(2)}`}
+                onChange={handleChange}
+                required
+                readOnly
+              />
+            </div>
+            <div className="keyPad-div">
+              <KeyPad
+                handlePress={handlePress}
+                handleDelete={handleDelete}
+                num={formData.transaction}
+              />
+            </div>
             {keyPadError && (
-              <p>Expense transaction value cannot exceed available budget</p>
+              <div className="error-message">
+                {keyPadError && (
+                  <p>
+                    Expense transaction value cannot exceed available budget
+                  </p>
+                )}
+              </div>
             )}
-          </div>
-        )}
-        <div className="button-div">
-          <button className="add-expense-button">Add this Expense</button>
+            <div className="button-div">
+              <button className="add-expense-button">Add this Expense</button>
+            </div>
+            <div className="error-message">
+              {userStatus.error && <p>{userStatus.error}</p>}
+            </div>
+          </form>
+          <button onClick={props.hideForm}>Cancel</button>
         </div>
-        <div className="error-message">
-          {userStatus.error && <p>{userStatus.error}</p>}
-        </div>
-      </form>
-      <button onClick={props.hideForm}>Cancel</button>
+      )}
     </div>
   );
 };
