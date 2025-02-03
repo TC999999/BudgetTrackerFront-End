@@ -4,8 +4,7 @@ import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { newBudgetInterface } from "../interfaces/budgetInterfaces";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
-import { UserEditInterface } from "../interfaces/userInterfaces";
-import { addToAssets, addNewBudget } from "../features/auth/authSlice";
+import { addNewBudget } from "../features/actions/budgets";
 
 interface Props {
   hideForm: any;
@@ -24,7 +23,6 @@ const BudgetForm: React.FC<Props> = (props) => {
   const [availableFunds, setAvailableFunds] = useState<number>(
     (userStatus.user.totalAssets || 1) * 100
   );
-
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
 
   const handlePress = useCallback(
@@ -67,17 +65,11 @@ const BudgetForm: React.FC<Props> = (props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      let submitData = {
+      let submitData: newBudgetInterface = {
         ...formData,
-        username: userStatus.user.username || "",
         moneyAllocated: formData.moneyAllocated / 100,
       };
-      const updateFunds: UserEditInterface = {
-        username: userStatus.user.username || "",
-        newAssets: availableFunds / 100,
-      };
       await dispatch(addNewBudget(submitData)).unwrap();
-      await dispatch(addToAssets(updateFunds)).unwrap();
       props.hideForm();
     } catch (err: any) {
       console.log(err);

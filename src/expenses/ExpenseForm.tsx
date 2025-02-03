@@ -6,7 +6,7 @@ import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { newExpenseInterface } from "../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
-import { addNewExpense } from "../features/auth/authSlice";
+import { addNewExpense } from "../features/actions/expenses";
 
 interface Props {
   hideForm: any;

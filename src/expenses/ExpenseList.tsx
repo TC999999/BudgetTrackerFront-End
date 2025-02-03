@@ -5,7 +5,7 @@ import {
   deleteExpenseInterface,
 } from "../interfaces/expenseInterfaces";
 import { useAppDispatch } from "../features/hooks";
-import { removeExpense } from "../features/auth/authSlice";
+import { removeExpense } from "../features/actions/expenses";
 
 interface Props {
   expensesList: ExpenseInterface[];
@@ -20,6 +20,7 @@ interface infoInterface {
 
 const ExpenseList: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch();
+  // console.log(props.expensesList);
 
   const deleteExpense = useCallback(
     async (

@@ -1,206 +1,19 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import {
-  AuthInitialStateInterface,
-  LogInInterface,
-  SignUpInterface,
-} from "../../interfaces/authInterfaces";
-import {
-  UserInfoInterface,
-  UserEditInterface,
-} from "../../interfaces/userInterfaces";
-import { newBudgetInterface } from "../../interfaces/budgetInterfaces";
-import {
-  newExpenseInterface,
-  deleteExpenseInterface,
-} from "../../interfaces/expenseInterfaces";
-import axios from "axios";
-
-const API_URL: string = "http://localhost:3001";
-
-const INITIAL_STATE: AuthInitialStateInterface = {
-  userInfo: {
-    user: {
-      _id: null,
-      username: "",
-      totalAssets: 0,
-      expenses: [],
-      budgets: [],
-    },
-    loading: true,
-    userExists: false,
-    error: "",
-  },
-
-  hasTokenInfo: { hasToken: true, loading: true },
-};
+  registerUser,
+  findToken,
+  logInUser,
+  logOutUser,
+} from "../actions/auth";
+import { getCurrentUser, addToAssets } from "../actions/users";
+import { addNewBudget } from "../actions/budgets";
+import { addNewExpense, removeExpense } from "../actions/expenses";
+import { INITIAL_STATE } from "../config";
 
 interface ActionInterface {
   type: string;
   payload: any;
 }
-
-export const registerUser = createAsyncThunk<
-  UserInfoInterface,
-  SignUpInterface
->("auth/register", async (data: SignUpInterface, thunkAPI) => {
-  try {
-    let res = await axios({
-      method: "post",
-      url: `${API_URL}/auth/register`,
-      data,
-      withCredentials: true,
-    });
-    return res.data.newUser;
-  } catch (err: any) {
-    return thunkAPI.rejectWithValue(err.response.data.error.message);
-  }
-});
-
-export const findToken = createAsyncThunk(
-  "auth/token",
-  async (data: any = {}, thunkAPI) => {
-    try {
-      let res = await axios({
-        method: "get",
-        url: `${API_URL}/auth/token`,
-        data,
-        withCredentials: true,
-      });
-      return res.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.res.data.errors);
-    }
-  }
-);
-
-export const getCurrentUser = createAsyncThunk<UserInfoInterface, any>(
-  "users/get/currentuser",
-  async (data: any = {}, thunkAPI) => {
-    try {
-      let res = await axios({
-        method: "get",
-        url: `${API_URL}/users/get/currentuser`,
-        data,
-        withCredentials: true,
-      });
-
-      return res.data.user;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data.error.message);
-    }
-  }
-);
-
-export const logInUser = createAsyncThunk<UserInfoInterface, LogInInterface>(
-  "auth/login",
-  async (
-    userInfo: LogInInterface = { username: "", password: "" },
-    thunkAPI
-  ) => {
-    try {
-      let res = await axios({
-        method: "post",
-        url: `${API_URL}/auth/login`,
-        data: userInfo,
-        withCredentials: true,
-      });
-
-      return res.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data.error.message);
-    }
-  }
-);
-
-export const logOutUser = createAsyncThunk(
-  "auth/logout",
-  async (data: any = {}, thunkAPI) => {
-    try {
-      await axios({
-        method: "get",
-        url: `${API_URL}/auth/logOut`,
-        data,
-        withCredentials: true,
-      });
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data.error.message);
-    }
-  }
-);
-
-export const addToAssets = createAsyncThunk<
-  UserInfoInterface,
-  UserEditInterface
->(
-  "user/update/assets",
-  async (
-    updateInfo: UserEditInterface = { username: "", newAssets: 0 },
-    thunkAPI
-  ) => {
-    try {
-      let res = await axios({
-        method: "patch",
-        url: `${API_URL}/users/update/assets`,
-        data: updateInfo,
-        withCredentials: true,
-      });
-      return res.data.user;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data.error.message);
-    }
-  }
-);
-
-export const addNewBudget = createAsyncThunk<newBudgetInterface, any>(
-  "budgets/add/new",
-  async (data: newBudgetInterface, thunkAPI) => {
-    try {
-      let res = await axios({
-        method: "post",
-        url: `${API_URL}/budgets/add/new`,
-        data,
-        withCredentials: true,
-      });
-      return res.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data.error.message);
-    }
-  }
-);
-
-export const addNewExpense = createAsyncThunk<newExpenseInterface, any>(
-  "expenses/add/new",
-  async (data: newExpenseInterface, thunkAPI) => {
-    try {
-      let res = await axios({
-        method: "post",
-        url: `${API_URL}/expenses/add/new`,
-        data,
-        withCredentials: true,
-      });
-      return res.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data.error.message);
-    }
-  }
-);
-
-export const removeExpense = createAsyncThunk<deleteExpenseInterface, any>(
-  "expenses/delete",
-  async (data: deleteExpenseInterface, thunkAPI) => {
-    try {
-      let res = await axios({
-        method: "delete",
-        url: `${API_URL}/expenses/delete`,
-        data,
-        withCredentials: true,
-      });
-      return res.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data.error.message);
-    }
-  }
-);
 
 const authSlice = createSlice({
   name: "auth",
@@ -292,10 +105,8 @@ const authSlice = createSlice({
         state.userInfo.user.totalAssets = action.payload.totalAssets;
       })
       .addCase(addNewBudget.fulfilled, (state, action: any) => {
-        state.userInfo.user.budgets = [
-          ...state.userInfo.user.budgets,
-          action.payload.budget,
-        ];
+        state.userInfo.user.budgets = action.payload.newUserBudgets;
+        state.userInfo.user.totalAssets = action.payload.newAssets;
       })
       .addCase(addNewExpense.fulfilled, (state, action: any) => {
         state.userInfo.user.budgets = action.payload.newUserBudgets;

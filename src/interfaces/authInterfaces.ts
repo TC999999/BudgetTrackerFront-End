@@ -1,5 +1,4 @@
 import { UserContextInterface } from "./userInterfaces";
-// import { CurrentBudgetInterface } from "./budgetInterfaces";
 
 export interface AuthInitialStateInterface {
   userInfo: UserContextInterface;

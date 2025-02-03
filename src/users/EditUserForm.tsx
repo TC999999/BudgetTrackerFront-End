@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   UserContextInterface,
   UserEditInterface,
@@ -6,17 +6,14 @@ import {
 import KeyPad from "../budgets/KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
-import { addToAssets } from "../features/auth/authSlice";
+import { addToAssets } from "../features/actions/users";
 
 interface Props {
   hideForm: any;
 }
 
 interface FormInfo {
-  username: string;
-  addedAssets: number;
-  newAssets: number;
-  currentAssets: number;
+  value: number;
 }
 
 const EditUserForm: React.FC<Props> = (props) => {
@@ -25,24 +22,25 @@ const EditUserForm: React.FC<Props> = (props) => {
     (store) => store.user.userInfo
   );
   const initialState = {
-    username: userStatus.user.username || "",
-    addedAssets: 0,
-    newAssets: (userStatus.user.totalAssets || 1) * 100,
-    currentAssets: (userStatus.user.totalAssets || 1) * 100,
+    value: 0,
   };
   const [formData, setFormData] = useState<FormInfo>(initialState);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
+  const currentAssets = useRef<number>(
+    (userStatus.user.totalAssets || 1) * 100
+  );
+  const newAssets = useRef<number>((userStatus.user.totalAssets || 1) * 100);
 
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
       let num = +e.currentTarget.value;
-      let newNum = currencyConverter(formData.addedAssets, num);
+      let newNum = currencyConverter(formData.value, num);
       setFormData((data) => ({
         ...data,
-        addedAssets: newNum,
-        newAssets: formData.currentAssets + newNum,
+        value: newNum,
       }));
+      newAssets.current = currentAssets.current + newNum;
     },
     [formData]
   );
@@ -50,12 +48,12 @@ const EditUserForm: React.FC<Props> = (props) => {
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
-      let newNum = numPop(formData.addedAssets);
+      let newNum = numPop(formData.value);
       setFormData((data) => ({
         ...data,
-        addedAssets: newNum,
-        newAssets: formData.currentAssets + newNum,
+        value: newNum,
       }));
+      newAssets.current = currentAssets.current + newNum;
       if (keyPadError) {
         setKeyPadError(false);
       }
@@ -71,10 +69,9 @@ const EditUserForm: React.FC<Props> = (props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { username, newAssets } = formData;
+      const { value } = formData;
       const submitData: UserEditInterface = {
-        username,
-        newAssets: newAssets / 100,
+        value: value / 100,
       };
       await dispatch(addToAssets(submitData)).unwrap();
       props.hideForm();
@@ -87,7 +84,7 @@ const EditUserForm: React.FC<Props> = (props) => {
     <div>
       <h1>Add to Your Current Assets</h1>
       <h2>
-        New Assets: <p>${(formData.newAssets / 100).toFixed(2)}</p>
+        New Assets: <p>${(newAssets.current / 100).toFixed(2)}</p>
       </h2>
       <form onSubmit={handleSubmit}>
         <div className="added-assets-div">
@@ -99,7 +96,7 @@ const EditUserForm: React.FC<Props> = (props) => {
             type="text"
             name="addedAssets"
             placeholder="0.00"
-            value={`$${(formData.addedAssets / 100).toFixed(2)}`}
+            value={`$${(formData.value / 100).toFixed(2)}`}
             onChange={handleChange}
             required
             readOnly
@@ -109,7 +106,7 @@ const EditUserForm: React.FC<Props> = (props) => {
           <KeyPad
             handlePress={handlePress}
             handleDelete={handleDelete}
-            num={formData.addedAssets}
+            num={formData.value}
           />
         </div>
         {keyPadError && (

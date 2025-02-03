@@ -19,3 +19,9 @@ export interface BudgetListInterface extends BaseBudgetInterface {
 export interface BudgetInterface extends BaseBudgetInterface {
   expenses: ExpenseInterface[];
 }
+
+export interface DeleteBudgetInterface {
+  addBackToAssets: number;
+  budgetID: string;
+  expenses: string[];
+}

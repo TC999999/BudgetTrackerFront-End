@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { logInUser, removeUserError } from "../features/auth/authSlice";
+import { removeUserError } from "../features/auth/authSlice";
+import { logInUser } from "../features/actions/auth";
 import { LogInInterface } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";

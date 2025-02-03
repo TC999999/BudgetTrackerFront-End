@@ -9,8 +9,7 @@ export interface UserContextInterface {
 }
 
 export interface UserEditInterface {
-  username: string;
-  newAssets: number;
+  value: number;
 }
 
 export interface UserInterface {

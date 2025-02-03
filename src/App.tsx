@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import RoutesList from "./RoutesList";
 import { useAppDispatch } from "./features/hooks";
-import {
-  findToken,
-  getCurrentUser,
-  setUserLoading,
-  removeUserError,
-} from "./features/auth/authSlice";
+import { setUserLoading, removeUserError } from "./features/auth/authSlice";
+import { findToken } from "./features/actions/auth";
+import { getCurrentUser } from "./features/actions/users";
 import { useAppSelector } from "./features/hooks";
 import LoadingMsg from "./LoadingMsg";
 import { hasTokenInterface } from "./interfaces/authInterfaces";
@@ -35,12 +32,15 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (tokenStatus.hasToken && !tokenStatus.loading) {
-      dispatch(getCurrentUser({}));
-    } else if (!tokenStatus.hasToken && !tokenStatus.loading) {
-      dispatch(setUserLoading(false));
-      navigate("/");
-    }
+    const getUserInfo = async () => {
+      if (tokenStatus.hasToken && !tokenStatus.loading) {
+        await dispatch(getCurrentUser({}));
+      } else if (!tokenStatus.hasToken && !tokenStatus.loading) {
+        dispatch(setUserLoading(false));
+        navigate("/");
+      }
+    };
+    getUserInfo();
   }, [dispatch, tokenStatus]);
 
   useEffect(() => {

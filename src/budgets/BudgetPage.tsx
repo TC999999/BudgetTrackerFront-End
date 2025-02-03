@@ -8,16 +8,13 @@ import { makeBudgetList } from "../helpers/makeBudgetList";
 
 const BudgetPage = () => {
   const navigate = useNavigate();
-
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
-
   const budgetList = useMemo(
     () => makeBudgetList(userStatus.user.budgets),
     [userStatus.user.budgets]
   );
-
   const [showBudgetForm, setShowBudgetForm] = useState<boolean>(false);
 
   const HideForm = useCallback(() => {

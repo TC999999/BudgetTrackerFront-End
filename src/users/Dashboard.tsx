@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
-import { logOutUser } from "../features/auth/authSlice";
+import { logOutUser } from "../features/actions/auth";
 import EditUserForm from "./EditUserForm";
 import ExpenseList from "../expenses/ExpenseList";
 
@@ -10,6 +10,7 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showAssetForm, setShowAssetForm] = useState(false);
+  // console.log(user);
 
   const HideForm = useCallback(() => {
     setShowAssetForm(false);

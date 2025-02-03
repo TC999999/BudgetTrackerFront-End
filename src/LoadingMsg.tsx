@@ -1,16 +1,22 @@
-import { useAppSelector } from "./features/hooks";
-import { UserContextInterface } from "./interfaces/userInterfaces";
+// import { useAppSelector } from "./features/hooks";
+// import { UserContextInterface } from "./interfaces/userInterfaces";
 
 const LoadingMsg = () => {
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
-  );
+  // const userStatus: UserContextInterface = useAppSelector(
+  //   (store) => store.user.userInfo
+  // );
 
-  return userStatus.loading ? (
-    <div className="loading-screen">
+  // return userStatus.loading ? (
+  //   <div className="loading-msg">
+  //     <b>Loading...</b>
+  //   </div>
+  // ) : null;
+
+  return (
+    <div className="loading-msg">
       <b>Loading...</b>
     </div>
-  ) : null;
+  );
 };
 
 export default LoadingMsg;
