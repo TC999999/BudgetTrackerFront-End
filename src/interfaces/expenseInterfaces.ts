@@ -3,8 +3,14 @@ export interface newExpenseInterface {
   transaction: number;
 }
 
+interface FrontPageExpenseInterface {
+  _id: string;
+  title: string;
+}
+
 export interface ExpenseInterface extends newExpenseInterface {
   date: string;
+  budgetID?: FrontPageExpenseInterface;
   _id: string;
 }
 

@@ -20,8 +20,6 @@ interface infoInterface {
 
 const ExpenseList: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch();
-  // console.log(props.expensesList);
-
   const deleteExpense = useCallback(
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,

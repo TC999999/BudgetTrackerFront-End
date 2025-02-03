@@ -70,8 +70,8 @@ const EditUserForm: React.FC<Props> = (props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const { value } = formData;
       const submitData: UserEditInterface = {
         value: value / 100,
@@ -79,6 +79,7 @@ const EditUserForm: React.FC<Props> = (props) => {
       await dispatch(addToAssets(submitData)).unwrap();
       props.hideForm();
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
   };
