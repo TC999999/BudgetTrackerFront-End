@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .striped .expense-card:nth-child(even) {
+    @apply bg-green-100;
+  }
+}

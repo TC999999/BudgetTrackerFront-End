@@ -15,14 +15,21 @@ const ExpenseCard: React.FC<Props> = (props) => {
   );
 
   return (
-    <div className="expense-card px-6 py-4">
-      <h2 className="expense-title">{props.expense.title}</h2>
-      <p className="expense-transaction">${props.expense.transaction}</p>
+    <div className="expense-card grid grid-cols-4 px-4 py-4">
+      <div className="expense-title">
+        <p>{props.expense.title}</p>
+      </div>
+      <div className="expense-transaction">
+        <p>${props.expense.transaction}</p>
+      </div>
       {props.isFrontPage && (
-        <p className="expense-budget-title">{props.expense.budgetID?.title}</p>
+        <div className="expense-budget-title">
+          <p>{props.expense.budgetID?.title}</p>
+        </div>
       )}
-
-      <p className="expense-date">{makeDateString(dateString)}</p>
+      <div className="expense-date">
+        <p>{makeDateString(dateString)}</p>
+      </div>
       {!props.isFrontPage && (
         <div className="delete-expense-div">
           <button
@@ -34,7 +41,7 @@ const ExpenseCard: React.FC<Props> = (props) => {
             }
             className="delete-expense-button"
           >
-            Delete Expense
+            Delete
           </button>
         </div>
       )}

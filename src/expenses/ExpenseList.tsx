@@ -38,16 +38,26 @@ const ExpenseList: React.FC<Props> = (props) => {
 
   return (
     <div className="expense-list">
-      {props.expensesList.map((e) => {
-        return (
-          <ExpenseCard
-            key={e._id}
-            expense={e}
-            isFrontPage={props.isFrontPage}
-            deleteExpense={deleteExpense}
-          />
-        );
-      })}
+      <div className="expense-list-headers grid grid-cols-4 border-b-2 border-green-500 px-4 py-2">
+        <div>Title</div>
+        <div>Transaction</div>
+        {props.isFrontPage && <div>Budget</div>}
+
+        <div>Date</div>
+        {!props.isFrontPage && <div></div>}
+      </div>
+      <div className="expense-card-list striped">
+        {props.expensesList.map((e) => {
+          return (
+            <ExpenseCard
+              key={e._id}
+              expense={e}
+              isFrontPage={props.isFrontPage}
+              deleteExpense={deleteExpense}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

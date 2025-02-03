@@ -10,7 +10,6 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showAssetForm, setShowAssetForm] = useState(false);
-  // console.log(user);
 
   const HideForm = useCallback(() => {
     setShowAssetForm(false);
@@ -22,21 +21,25 @@ const Dashboard = () => {
   };
   return (
     <div>
-      <button onClick={logOutAnNavigate}>Log Out</button>
-      <h1 className="dashboard-username mb-4">User: {user?.username}</h1>
-      <p>Funds Available: ${user?.totalAssets}</p>
-      {!showAssetForm && (
-        <button onClick={() => setShowAssetForm(true)}>
-          Add to Your Assets.
-        </button>
-      )}
+      <div className="dashboard-usercard">
+        <button onClick={logOutAnNavigate}>Log Out</button>
+        <h1 className="dashboard-username mb-4">User: {user?.username}</h1>
+        <p>Funds Available: ${user?.totalAssets}</p>
+        {!showAssetForm && (
+          <button onClick={() => setShowAssetForm(true)}>
+            Add to Your Assets.
+          </button>
+        )}
+      </div>
       {showAssetForm && <EditUserForm hideForm={HideForm} />}
       <div className="link-to-budgets">
         <Link to="/budgets">Check out your budgets</Link>
       </div>
 
       <div className="recent-expenses-list">
-        <h2 className="recent-expenses-list-title">Recent Expenses</h2>
+        <h2 className="recent-expenses-list-title text-center">
+          Recent Expenses
+        </h2>
         <ExpenseList
           expensesList={user.expenses}
           isFrontPage={true}
