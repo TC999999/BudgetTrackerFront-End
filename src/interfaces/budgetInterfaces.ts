@@ -5,6 +5,18 @@ export interface newBudgetInterface {
   moneyAllocated: number;
 }
 
+export interface BudgetEditInterface {
+  title: string;
+  addedMoney: number;
+  operation: string;
+}
+
+export interface SubmitBudgetUpdateInterface {
+  title: string;
+  addedMoney: number;
+  budgetID: string;
+}
+
 interface BaseBudgetInterface {
   _id: string;
   title: string;

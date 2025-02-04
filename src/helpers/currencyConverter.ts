@@ -9,5 +9,5 @@ export const currencyConverter = (
 export const numPop = (num: number) => {
   let numCopy = num.toString().slice();
   let sliceNum = numCopy.slice(0, numCopy.length - 1);
-  return sliceNum === "" ? 0 : parseFloat(sliceNum);
+  return sliceNum === "" || sliceNum === "-" ? 0 : parseFloat(sliceNum);
 };

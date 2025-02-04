@@ -3,7 +3,7 @@ import {
   UserContextInterface,
   UserEditInterface,
 } from "../interfaces/userInterfaces";
-import KeyPad from "../budgets/KeyPad";
+import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { addToAssets } from "../features/actions/users";

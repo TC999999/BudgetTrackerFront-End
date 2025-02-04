@@ -6,7 +6,7 @@ import {
   logOutUser,
 } from "../actions/auth";
 import { getCurrentUser, addToAssets } from "../actions/users";
-import { addNewBudget, deleteBudget } from "../actions/budgets";
+import { addNewBudget, updateBudget, deleteBudget } from "../actions/budgets";
 import { addNewExpense, removeExpense } from "../actions/expenses";
 import { INITIAL_STATE } from "../config";
 
@@ -105,6 +105,11 @@ const authSlice = createSlice({
         state.userInfo.user.totalAssets = action.payload.totalAssets;
       })
       .addCase(addNewBudget.fulfilled, (state, action: any) => {
+        state.userInfo.user.budgets = action.payload.newUserBudgets;
+        state.userInfo.user.totalAssets = action.payload.newAssets;
+      })
+
+      .addCase(updateBudget.fulfilled, (state, action: any) => {
         state.userInfo.user.budgets = action.payload.newUserBudgets;
         state.userInfo.user.totalAssets = action.payload.newAssets;
       })

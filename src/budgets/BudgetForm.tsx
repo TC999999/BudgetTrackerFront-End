@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import KeyPad from "./KeyPad";
+import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { newBudgetInterface } from "../interfaces/budgetInterfaces";
@@ -20,7 +20,7 @@ const BudgetForm: React.FC<Props> = (props) => {
     title: "",
     moneyAllocated: 0,
   };
-  const [formData, setFormData] = useState(initialState);
+  const [formData, setFormData] = useState<newBudgetInterface>(initialState);
   const [availableFunds, setAvailableFunds] = useState<number>(
     (userStatus.user.totalAssets || 1) * 100
   );

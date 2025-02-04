@@ -4,6 +4,7 @@ import axios from "axios";
 import {
   newBudgetInterface,
   DeleteBudgetInterface,
+  SubmitBudgetUpdateInterface,
 } from "../../interfaces/budgetInterfaces";
 
 export const addNewBudget = createAsyncThunk<any, newBudgetInterface>(
@@ -13,6 +14,23 @@ export const addNewBudget = createAsyncThunk<any, newBudgetInterface>(
       let res = await axios({
         method: "post",
         url: `${API_URL}/budgets/add/new`,
+        data,
+        withCredentials: true,
+      });
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data.error.message);
+    }
+  }
+);
+
+export const updateBudget = createAsyncThunk<any, SubmitBudgetUpdateInterface>(
+  "budgets/update",
+  async (data: SubmitBudgetUpdateInterface, thunkAPI) => {
+    try {
+      let res = await axios({
+        method: "patch",
+        url: `${API_URL}/budgets/update/${data.budgetID}`,
         data,
         withCredentials: true,
       });

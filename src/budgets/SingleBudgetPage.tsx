@@ -8,6 +8,14 @@ import ExpenseForm from "../expenses/ExpenseForm";
 import BudgetErrorPage from "./BudgetErrorPage";
 import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
+import EditBudgetForm from "./EditBudgetForm";
+
+interface FormStateInterface {
+  showExpenseForm: boolean;
+  showDeleteForm: boolean;
+  showEditForm: boolean;
+  [key: string]: boolean;
+}
 
 const SingleBudgetPage = () => {
   const { id } = useParams();
@@ -19,17 +27,21 @@ const SingleBudgetPage = () => {
     () => getCurrentBudget(userStatus.user.budgets, id || ""),
     [userStatus.user.budgets]
   );
-  const [showExpenseForm, setShowExpenseForm] = useState<boolean>(false);
-  const [showDeleteBudgetForm, setShowDeleteBudgetForm] =
-    useState<boolean>(false);
+  const initialFormState: FormStateInterface = {
+    showExpenseForm: false,
+    showDeleteForm: false,
+    showEditForm: false,
+  };
+  const [formsState, setFormsState] =
+    useState<FormStateInterface>(initialFormState);
 
-  const HideForm = useCallback(() => {
-    setShowExpenseForm(false);
-  }, [showExpenseForm]);
-
-  const HideDeleteForm = useCallback(() => {
-    setShowDeleteBudgetForm(false);
-  }, [showDeleteBudgetForm]);
+  const changeFormState = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, form: string) => {
+      e.preventDefault();
+      setFormsState(() => ({ ...initialFormState, [form]: !formsState[form] }));
+    },
+    [formsState]
+  );
 
   return (
     <div className="budget-page">
@@ -39,20 +51,32 @@ const SingleBudgetPage = () => {
             Back to All Budgets
           </button>
           <BudgetPageCard budget={budget} />
-          {showDeleteBudgetForm ? (
-            <DeleteBudgetForm hideDeleteForm={HideDeleteForm} budget={budget} />
+          {formsState.showEditForm ? (
+            <EditBudgetForm hideEditForm={changeFormState} budget={budget} />
           ) : (
-            <div className="delete-budget-form">
-              <button onClick={() => setShowDeleteBudgetForm(true)}>
+            <div className="Edit-budget-form-button">
+              <button onClick={(e) => changeFormState(e, "showEditForm")}>
+                Edit Budget
+              </button>
+            </div>
+          )}
+          {formsState.showDeleteForm ? (
+            <DeleteBudgetForm
+              hideDeleteForm={changeFormState}
+              budget={budget}
+            />
+          ) : (
+            <div className="delete-budget-form-button">
+              <button onClick={(e) => changeFormState(e, "showDeleteForm")}>
                 Delete this Budget
               </button>
             </div>
           )}
-          {showExpenseForm ? (
-            <ExpenseForm hideForm={HideForm} budget={budget} />
+          {formsState.showExpenseForm ? (
+            <ExpenseForm hideForm={changeFormState} budget={budget} />
           ) : (
-            <div className="add-expense-form">
-              <button onClick={() => setShowExpenseForm(true)}>
+            <div className="add-expense-form-button">
+              <button onClick={(e) => changeFormState(e, "showExpenseForm")}>
                 Add Expense
               </button>
             </div>

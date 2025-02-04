@@ -5,7 +5,7 @@ import { SignUpInterface } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
-import KeyPad from "../budgets/KeyPad";
+import KeyPad from "../KeyPad";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {

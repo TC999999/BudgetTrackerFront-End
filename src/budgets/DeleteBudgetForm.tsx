@@ -99,7 +99,9 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
             </div>
           </form>
           <div className="cancel-delete-budget">
-            <button onClick={props.hideDeleteForm}>Cancel</button>
+            <button onClick={(e) => props.hideDeleteForm(e, "showDeleteForm")}>
+              Cancel
+            </button>
           </div>
         </div>
       )}

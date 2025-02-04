@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import KeyPad from "../budgets/KeyPad";
+import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
@@ -86,7 +86,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
         transaction: formData.transaction / 100,
       };
       await dispatch(addNewExpense(submitData)).unwrap();
-      props.hideForm();
+      props.hideForm(e, "showExpenseForm");
     } catch (err) {
       setIsLoading(false);
       console.log(err);
@@ -150,7 +150,9 @@ const ExpenseForm: React.FC<Props> = (props) => {
               {userStatus.error && <p>{userStatus.error}</p>}
             </div>
           </form>
-          <button onClick={props.hideForm}>Cancel</button>
+          <button onClick={(e) => props.hideForm(e, "showExpenseForm")}>
+            Cancel
+          </button>
         </div>
       )}
     </div>
