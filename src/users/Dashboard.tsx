@@ -21,15 +21,25 @@ const Dashboard: React.FC = () => {
   };
   return (
     <div>
-      <div className="dashboard-usercard">
+      <div className="dashboard-usercard border-2 border-emerald-900 px-4 py-4 mx-4 my-4 shadow-xl">
         <button onClick={logOutAnNavigate}>Log Out</button>
-        <h1 className="dashboard-username mb-4">User: {user?.username}</h1>
-        <p>Funds Available: ${user?.totalAssets}</p>
-        {!showAssetForm && (
-          <button onClick={() => setShowAssetForm(true)}>
-            Add to Your Assets.
+        <div className="dashboard-username text-emerald-600">
+          <h1 className="text-2xl text-center">{user?.username}</h1>
+        </div>
+        <div className="dashboard-totalAssets text-emerald-600">
+          <p className="text-xl text-center">
+            Funds Available: ${user?.totalAssets}
+          </p>
+        </div>
+
+        <div className="add-asset-button flex justify-center">
+          <button
+            className="border rounded-full bg-green-700 px-2 py-2 hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"
+            onClick={() => setShowAssetForm(true)}
+          >
+            Add to Your Assets
           </button>
-        )}
+        </div>
       </div>
       {showAssetForm && <EditUserForm hideForm={HideForm} />}
       <div className="link-to-budgets">

@@ -15,9 +15,9 @@ const BudgetCard: React.FC<Props> = (props) => {
       <p className="budget-money-allocation text-center">
         Total Money Allocated: ${props.budget.moneyAllocated}
       </p>
-      <div className="budget-progress-bar-div grid grid-cols-7 my-4">
+      <div className="budget-progress-bar-div my-4 flex justify-center">
         <progress
-          className="budget-progress-bar col-span-4 col-start-2 w-96 [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-green-400 [&::-moz-progress-bar]:bg-green-400"
+          className="budget-progress-bar w-full [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-green-400 [&::-moz-progress-bar]:bg-green-400"
           max={props.budget.moneyAllocated}
           value={props.budget.moneySpent}
         ></progress>
