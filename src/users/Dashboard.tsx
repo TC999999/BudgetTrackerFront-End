@@ -5,13 +5,13 @@ import { logOutUser } from "../features/actions/auth";
 import EditUserForm from "./EditUserForm";
 import ExpenseList from "../expenses/ExpenseList";
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
   const { user } = useAppSelector((store) => store.user.userInfo);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showAssetForm, setShowAssetForm] = useState(false);
 
-  const HideForm = useCallback(() => {
+  const HideForm = useCallback((): void => {
     setShowAssetForm(false);
   }, [showAssetForm]);
 
@@ -37,7 +37,7 @@ const Dashboard = () => {
       </div>
 
       <div className="recent-expenses-list">
-        <h2 className="recent-expenses-list-title text-center">
+        <h2 className="recent-expenses-list-title text-center text-2xl text-emerald-600">
           Recent Expenses
         </h2>
         <ExpenseList

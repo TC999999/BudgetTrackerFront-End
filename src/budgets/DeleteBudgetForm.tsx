@@ -21,7 +21,7 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  let expenseIDs = useMemo(
+  let expenseIDs: string[] = useMemo<string[]>(
     () => makeExpenseIDList(props.budget.expenses),
     [props.budget.expenses]
   );
@@ -34,14 +34,15 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
     expenses: expenseIDs,
     addBackToAssets: +props.budget.moneyAllocated,
   };
-  const [formData, setFormData] = useState(deleteBudgetData);
+  const [formData, setFormData] =
+    useState<DeleteBudgetInterface>(deleteBudgetData);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData((data) => ({ ...data, [name]: +value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setIsLoading(true);
     try {

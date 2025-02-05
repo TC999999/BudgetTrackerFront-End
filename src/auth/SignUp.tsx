@@ -9,7 +9,11 @@ import KeyPad from "../KeyPad";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  const initialState = { username: "", password: "", totalAssets: 0 };
+  const initialState: SignUpInterface = {
+    username: "",
+    password: "",
+    totalAssets: 0,
+  };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<SignUpInterface>(initialState);
@@ -18,14 +22,14 @@ const SignUp = () => {
     (store) => store.user.userInfo
   );
   useEffect(() => {
-    let inputs = localStorage.getItem("userInputs");
+    let inputs: string | null = localStorage.getItem("userInputs");
     if (inputs) {
       setFormData(JSON.parse(inputs));
       localStorage.removeItem("userInputs");
     }
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (userStatus.error) {
       dispatch(removeUserError());
     }
@@ -33,7 +37,7 @@ const SignUp = () => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     const { username, password, totalAssets } = formData;
     try {
@@ -50,13 +54,12 @@ const SignUp = () => {
       localStorage.removeItem("userInputs");
       navigate("/");
     } catch (err) {
-      console.log("ERROR ERROR ERROR");
-      //   console.log(userStatus.error);
+      console.log(err);
     }
   };
 
   const handlePress = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.totalAssets, num);
@@ -66,7 +69,7 @@ const SignUp = () => {
   );
 
   const handleDelete = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let newNum = numPop(formData.totalAssets);
       setFormData((data) => ({

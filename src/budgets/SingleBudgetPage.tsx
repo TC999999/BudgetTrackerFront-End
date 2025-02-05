@@ -9,6 +9,7 @@ import BudgetErrorPage from "./BudgetErrorPage";
 import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
 import EditBudgetForm from "./EditBudgetForm";
+import { BudgetInterface } from "../interfaces/budgetInterfaces";
 
 interface FormStateInterface {
   showExpenseForm: boolean;
@@ -17,13 +18,13 @@ interface FormStateInterface {
   [key: string]: boolean;
 }
 
-const SingleBudgetPage = () => {
+const SingleBudgetPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
-  const budget = useMemo(
+  const budget: BudgetInterface = useMemo<BudgetInterface>(
     () => getCurrentBudget(userStatus.user.budgets, id || ""),
     [userStatus.user.budgets]
   );

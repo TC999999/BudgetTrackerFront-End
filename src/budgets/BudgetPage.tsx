@@ -5,19 +5,20 @@ import BudgetList from "./BudgetList";
 import { useAppSelector } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { makeBudgetList } from "../helpers/makeBudgetList";
+import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 
-const BudgetPage = () => {
+const BudgetPage: React.FC = () => {
   const navigate = useNavigate();
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
-  const budgetList = useMemo(
+  const budgetList: BudgetListInterface[] = useMemo<BudgetListInterface[]>(
     () => makeBudgetList(userStatus.user.budgets),
     [userStatus.user.budgets]
   );
   const [showBudgetForm, setShowBudgetForm] = useState<boolean>(false);
 
-  const HideForm = useCallback(() => {
+  const HideForm = useCallback((): void => {
     setShowBudgetForm(false);
   }, [showBudgetForm]);
 
@@ -25,13 +26,14 @@ const BudgetPage = () => {
     <div className="budget-page">
       {" "}
       <button onClick={() => navigate("/")}>Back Home</button>
-      <h1>BudgetPage</h1>
       {showBudgetForm ? (
         <BudgetForm hideForm={HideForm} />
       ) : (
-        <button onClick={() => setShowBudgetForm(true)}>
-          Add a new Budget
-        </button>
+        <div className="add-budget-form-button">
+          <button onClick={() => setShowBudgetForm(true)}>
+            Add a new Budget
+          </button>
+        </div>
       )}
       {userStatus.user.budgets.length ? (
         <BudgetList allBudgets={budgetList} />

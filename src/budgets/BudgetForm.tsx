@@ -28,11 +28,11 @@ const BudgetForm: React.FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handlePress = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
-      let num = +e.currentTarget.value;
-      let newNum = currencyConverter(formData.moneyAllocated, num);
-      let currency = (newNum / 100).toFixed(2);
+      let num: number = +e.currentTarget.value;
+      let newNum: number = currencyConverter(formData.moneyAllocated, num);
+      let currency: string = (newNum / 100).toFixed(2);
       if (parseFloat(currency) < (userStatus.user?.totalAssets ?? 1)) {
         setFormData((data) => ({ ...data, moneyAllocated: newNum }));
         setAvailableFunds((userStatus.user.totalAssets || 1) * 100 - newNum);
@@ -44,9 +44,9 @@ const BudgetForm: React.FC<Props> = (props) => {
   );
 
   const handleDelete = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
-      let newNum = numPop(formData.moneyAllocated);
+      let newNum: number = numPop(formData.moneyAllocated);
       setFormData((data) => ({
         ...data,
         moneyAllocated: newNum,
@@ -59,12 +59,12 @@ const BudgetForm: React.FC<Props> = (props) => {
     [formData, keyPadError]
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setIsLoading(true);
     try {

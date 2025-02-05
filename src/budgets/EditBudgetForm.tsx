@@ -26,7 +26,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
-  const remainingMoney = useMemo(() => {
+  const remainingMoney: number = useMemo<number>(() => {
     return (
       +getRemainingMoney(props.budget.moneyAllocated, props.budget.moneySpent) *
       100
@@ -42,18 +42,18 @@ const EditBudgetForm: React.FC<Props> = (props) => {
   const [keyPadErrorMessage, setKeyPadErrorMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const newAddBudget = useMemo(() => {
+  const newAddBudget: string = useMemo<string>(() => {
     return addBudgetValue(props.budget.moneyAllocated, formData.addedMoney);
   }, [formData.addedMoney]);
 
-  const newSubtractBudget = useMemo(() => {
+  const newSubtractBudget: string = useMemo<string>(() => {
     return subtractBudgetValue(
       props.budget.moneyAllocated,
       formData.addedMoney
     );
   }, [formData.addedMoney]);
 
-  const newTotalAssets = useMemo(() => {
+  const newTotalAssets: string = useMemo<string>(() => {
     return calculateNewTotalAssets(
       userStatus.user.totalAssets || 1,
       formData.addedMoney,
@@ -62,7 +62,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
   }, [formData]);
 
   const handlePress = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.addedMoney, num);
@@ -84,7 +84,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
   );
 
   const handleDelete = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let newNum = numPop(formData.addedMoney);
       setFormData((data) => ({
@@ -98,7 +98,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
     [formData, keyPadErrorMessage]
   );
 
-  const handleRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadio = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     if (value === "subtract" && formData.addedMoney > remainingMoney) {
       setKeyPadErrorMessage(
@@ -120,7 +120,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData((data) => ({
       ...data,
@@ -131,7 +131,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setIsLoading(true);
     try {

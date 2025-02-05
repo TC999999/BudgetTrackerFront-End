@@ -22,7 +22,7 @@ const EditUserForm: React.FC<Props> = (props) => {
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
-  const initialState = {
+  const initialState: FormInfo = {
     value: 0,
   };
   const [formData, setFormData] = useState<FormInfo>(initialState);
@@ -34,7 +34,7 @@ const EditUserForm: React.FC<Props> = (props) => {
   const newAssets = useRef<number>((userStatus.user.totalAssets || 1) * 100);
 
   const handlePress = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.value, num);
@@ -48,7 +48,7 @@ const EditUserForm: React.FC<Props> = (props) => {
   );
 
   const handleDelete = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let newNum = numPop(formData.value);
       setFormData((data) => ({
@@ -63,12 +63,12 @@ const EditUserForm: React.FC<Props> = (props) => {
     [formData, keyPadError]
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setIsLoading(true);
     try {

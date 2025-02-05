@@ -24,7 +24,7 @@ const ExpenseList: React.FC<Props> = (props) => {
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
       info: infoInterface
-    ) => {
+    ): Promise<void> => {
       e.preventDefault();
       let submitData: deleteExpenseInterface = {
         ...info,

@@ -20,11 +20,11 @@ const ExpenseForm: React.FC<Props> = (props) => {
     title: "",
     transaction: 0,
   };
-  const initialMoney = getRemainingMoney(
+  const initialMoney: string = getRemainingMoney(
     props.budget?.moneyAllocated || "",
     props.budget?.moneySpent || 0
   );
-  const [formData, setFormData] = useState(initialState);
+  const [formData, setFormData] = useState<newExpenseInterface>(initialState);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
   const originalMoney = useRef<string>(initialMoney);
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
@@ -35,7 +35,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
   );
 
   const handlePress = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.transaction, num);
@@ -55,9 +55,9 @@ const ExpenseForm: React.FC<Props> = (props) => {
   );
 
   const handleDelete = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
-      let newNum = numPop(formData.transaction);
+      let newNum: number = numPop(formData.transaction);
       setFormData((data) => ({
         ...data,
         transaction: newNum,
@@ -71,12 +71,12 @@ const ExpenseForm: React.FC<Props> = (props) => {
     [formData, keyPadError]
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setIsLoading(true);
     try {

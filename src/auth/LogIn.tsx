@@ -6,8 +6,8 @@ import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { Link } from "react-router-dom";
 
-const LogIn = () => {
-  const initialState = { username: "", password: "" };
+const LogIn: React.FC = () => {
+  const initialState: LogInInterface = { username: "", password: "" };
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<LogInInterface>(initialState);
 
@@ -16,14 +16,14 @@ const LogIn = () => {
   );
 
   useEffect(() => {
-    let inputs = localStorage.getItem("userInputs");
+    let inputs: string | null = localStorage.getItem("userInputs");
     if (inputs) {
       setFormData(JSON.parse(inputs));
       localStorage.removeItem("userInputs");
     }
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (userStatus.error) {
       dispatch(removeUserError());
     }
@@ -31,7 +31,7 @@ const LogIn = () => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     const { username, password } = formData;
     try {
