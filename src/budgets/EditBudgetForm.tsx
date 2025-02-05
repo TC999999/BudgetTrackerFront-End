@@ -5,9 +5,14 @@ import {
 } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
+import {
+  addBudgetValue,
+  subtractBudgetValue,
+} from "../helpers/showBudgetValue";
+import { getRemainingMoney } from "../helpers/getRemainingMoney";
+import { calculateNewTotalAssets } from "../helpers/calculateNewTotalAssets";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
-import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { updateBudget } from "../features/actions/budgets";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
@@ -37,11 +42,31 @@ const EditBudgetForm: React.FC<Props> = (props) => {
   const [keyPadErrorMessage, setKeyPadErrorMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const newAddBudget = useMemo(() => {
+    return addBudgetValue(props.budget.moneyAllocated, formData.addedMoney);
+  }, [formData.addedMoney]);
+
+  const newSubtractBudget = useMemo(() => {
+    return subtractBudgetValue(
+      props.budget.moneyAllocated,
+      formData.addedMoney
+    );
+  }, [formData.addedMoney]);
+
+  const newTotalAssets = useMemo(() => {
+    return calculateNewTotalAssets(
+      userStatus.user.totalAssets || 1,
+      formData.addedMoney,
+      formData.operation
+    );
+  }, [formData]);
+
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.addedMoney, num);
+      console.log((userStatus.user.totalAssets || 1) * 100);
       if (newNum > remainingMoney && formData.operation === "subtract") {
         setKeyPadErrorMessage(
           "New funds cannot be more than remaining budget funds"
@@ -133,6 +158,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
       ) : (
         <div className="edit-budget-form">
           <h2>Edit Budget {props.budget.title}</h2>
+          <h3>Your New Total Asset Value Will Be ${newTotalAssets}</h3>
           <form onSubmit={handleSubmit}>
             <div className="title-div">
               <label htmlFor="title">Budget Title: </label>
@@ -185,7 +211,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
                 />
                 <label htmlFor="add">
                   {/* Return all funds (${props.budget.moneyAllocated}) */}
-                  Add to Funds
+                  Add to Funds ({newAddBudget})
                 </label>
               </div>
               <div>
@@ -198,8 +224,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
                   checked={formData.operation === "subtract"}
                 />
                 <label htmlFor="remove">
-                  Subtract from Funds
-                  {/* Return remaining funds only (${remainingMoney}) */}
+                  Subtract from Funds ({newSubtractBudget})
                 </label>
               </div>
             </fieldset>
