@@ -50,12 +50,15 @@ const ExpenseForm: React.FC<Props> = (props) => {
         setKeyPadError(true);
       }
     },
-    [formData, keyPadError]
+    [formData, keyPadError, formErrors]
   );
 
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
+      if (formErrors.length) {
+        setFormErrors([]);
+      }
       let newNum: number = numPop(formData.transaction);
       setFormData((data) => ({
         ...data,
@@ -67,7 +70,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
       let newAvailableMoney = parseFloat(originalMoney.current) * 100 - newNum;
       setAvailableMoney((newAvailableMoney / 100).toFixed(2));
     },
-    [formData, keyPadError]
+    [formData, keyPadError, formErrors]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -151,12 +154,10 @@ const ExpenseForm: React.FC<Props> = (props) => {
                 />
               </div>
               {keyPadError && (
-                <div className="error-message">
-                  {keyPadError && (
-                    <p>
-                      Expense transaction value cannot exceed available budget
-                    </p>
-                  )}
+                <div className="error-message text-center">
+                  <p className="text-red-700 font-bold">
+                    Expense transaction value cannot exceed available budget
+                  </p>
                 </div>
               )}
               <div className="button-div flex justify-between m-2">

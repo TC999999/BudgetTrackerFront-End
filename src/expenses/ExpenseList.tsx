@@ -37,8 +37,8 @@ const ExpenseList: React.FC<Props> = (props) => {
   );
 
   return (
-    <div className="expense-list">
-      <div className="expense-list-headers grid grid-cols-4 border-b-2 border-green-500 px-4 py-2">
+    <div className="expense-list bg-white border-2 border-green-500 m-2 rounded-md">
+      <div className="expense-list-headers grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2">
         <div>Title</div>
         <div>Transaction</div>
         {props.isFrontPage && <div>Budget</div>}
@@ -58,7 +58,7 @@ const ExpenseList: React.FC<Props> = (props) => {
           );
         })}
         {!props.expensesList.length && (
-          <div className="no-expenses text-center text-xl m-4">
+          <div className="no-expenses text-center text-xl p-6">
             <p className="italic">No Expenses Yet</p>
           </div>
         )}

@@ -4,11 +4,11 @@
 
 @layer utilities {
   .striped .expense-card:nth-child(even) {
-    @apply bg-green-100;
+    @apply bg-green-200;
   }
 
   .stripedBudgets .budget-card:nth-child(even) {
-    @apply bg-green-100;
+    @apply bg-green-300;
   }
 
   .keypad-key-buttons .button {

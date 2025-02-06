@@ -17,7 +17,7 @@ const BudgetPageCard: React.FC<Props> = (props) => {
   );
 
   return (
-    <div className="budget-page-card border-2 px-6 py-4 mx-4 my-4 shadow-md">
+    <div className="budget-page-card border-2 px-6 py-4 mx-4 my-4 shadow-md rounded-lg bg-white">
       <h3 className="budget-title text-xl text-center ">
         {props.budget?.title}
       </h3>

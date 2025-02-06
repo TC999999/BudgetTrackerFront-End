@@ -82,7 +82,7 @@ const SignUp = () => {
   );
 
   return (
-    <div className="register-page bg-[url('../../public/signUp.jpg')] bg-cover bg-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div className="register-page bg-[url('../../public/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 max-h-full">
       <div className="register-form px-4 py-10 bg-white border-2 border-green-700 rounded-r-lg h-full">
         {/* <img src={moneyPic} alt="" /> */}
         <h1 className="text-3xl font-bold underline">Sign Up Here!</h1>

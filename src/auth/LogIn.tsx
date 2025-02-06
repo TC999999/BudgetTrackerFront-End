@@ -53,7 +53,7 @@ const LogIn: React.FC = () => {
   return (
     <div
       tabIndex={-1}
-      className="login-page-div bg-gray-500 bg-opacity-50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+      className="login-page-div bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0  max-h-full"
     >
       <div className="login-page relative w-full p-4 max-w-md max-h-full">
         <div className="login-form relative p-10 bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full">

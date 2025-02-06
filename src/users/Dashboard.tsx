@@ -22,8 +22,10 @@ const Dashboard: React.FC = () => {
   };
   return (
     <div>
-      <div className="dashboard-usercard border-2 border-emerald-900 px-4 py-4 mx-4 my-4 shadow-xl">
+      <div className="logout-button">
         <button onClick={logOutAnNavigate}>Log Out</button>
+      </div>
+      <div className="dashboard-usercard border-2 bg-white border-emerald-900 px-4 py-4 mx-4 my-4 shadow-xl">
         <div className="dashboard-username text-emerald-600">
           <h1 className="text-2xl text-center">{user?.username}</h1>
         </div>
@@ -54,7 +56,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="recent-expenses-list">
-        <h2 className="recent-expenses-list-title text-center text-2xl text-emerald-600">
+        <h2 className="recent-expenses-list-title text-center text-3xl underline text-emerald-600 mb-2">
           Recent Expenses
         </h2>
         <ExpenseList

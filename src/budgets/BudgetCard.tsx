@@ -7,7 +7,7 @@ interface Props {
 
 const BudgetCard: React.FC<Props> = (props) => {
   return (
-    <div className="budget-card border-2 w-full md:w-2/5 xl:w-1/5 my-4 mx-4 shadow-md">
+    <div className="budget-card border-2 w-full md:w-2/5 xl:w-1/5 my-4 mx-4 shadow-md bg-white rounded-md">
       <div className="px-6 py-4 mx-4 my-4">
         <h3 className="budget-title text-xl text-center hover:text-green-600 hover:underline active:text-green-100">
           <Link to={`/budgets/${props.budget._id}`}>{props.budget.title}</Link>

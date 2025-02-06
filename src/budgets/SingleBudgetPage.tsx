@@ -52,14 +52,30 @@ const SingleBudgetPage: React.FC = () => {
             Back to All Budgets
           </button>
           <BudgetPageCard budget={budget} />
+
+          <div className="flex justify-around p-2">
+            <div className="edit-budget-form-button border-2 border-orange-300 p-2 rounded-full bg-orange-400">
+              <button onClick={(e) => changeFormState(e, "showEditForm")}>
+                Edit Budget
+              </button>
+            </div>
+
+            <div className="delete-budget-form-button border-2 border-red-500 p-2 rounded-full bg-red-600">
+              <button onClick={(e) => changeFormState(e, "showDeleteForm")}>
+                Delete this Budget
+              </button>
+            </div>
+
+            <div className="add-expense-form-button border-2 border-green-300 p-2 rounded-full bg-green-400">
+              <button onClick={(e) => changeFormState(e, "showExpenseForm")}>
+                Add Expense
+              </button>
+            </div>
+          </div>
+
           {formsState.showEditForm && (
             <EditBudgetForm hideEditForm={changeFormState} budget={budget} />
           )}
-          <div className="Edit-budget-form-button">
-            <button onClick={(e) => changeFormState(e, "showEditForm")}>
-              Edit Budget
-            </button>
-          </div>
 
           {formsState.showDeleteForm && (
             <DeleteBudgetForm
@@ -67,20 +83,10 @@ const SingleBudgetPage: React.FC = () => {
               budget={budget}
             />
           )}
-          <div className="delete-budget-form-button">
-            <button onClick={(e) => changeFormState(e, "showDeleteForm")}>
-              Delete this Budget
-            </button>
-          </div>
 
           {formsState.showExpenseForm && (
             <ExpenseForm hideForm={changeFormState} budget={budget} />
           )}
-          <div className="add-expense-form-button">
-            <button onClick={(e) => changeFormState(e, "showExpenseForm")}>
-              Add Expense
-            </button>
-          </div>
 
           <ExpenseList
             expensesList={budget?.expenses}
