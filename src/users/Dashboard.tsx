@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
           <h1 className="text-2xl text-center">{user?.username}</h1>
         </div>
         <div className="dashboard-totalAssets text-emerald-600">
-          <p className="text-xl text-center">
+          <p className="text-3xl text-center">
             Funds Available: ${user?.totalAssets}
           </p>
         </div>

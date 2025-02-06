@@ -91,7 +91,7 @@ const EditUserForm: React.FC<Props> = (props) => {
         ) : (
           <div className="add-to-assets-form relative bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full">
             <h1 className="text-xl text-center">Add to Your Current Assets</h1>
-            <h2 className="text-l text-center">
+            <h2 className="text-lg text-center">
               New Assets: <span>${(newAssets.current / 100).toFixed(2)}</span>
             </h2>
             <form onSubmit={handleSubmit}>

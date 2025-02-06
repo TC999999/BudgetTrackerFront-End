@@ -16,6 +16,12 @@ const BudgetList: React.FC<Props> = (props) => {
         {props.allBudgets?.map((budget) => (
           <BudgetCard key={budget._id} budget={budget} />
         ))}
+        {!props.allBudgets?.length && (
+          <div className="no-budgets">
+            {" "}
+            <p className="text-xl m-4 italic">You currently have no budgets</p>
+          </div>
+        )}
       </div>
     </div>
   );

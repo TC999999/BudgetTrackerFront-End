@@ -51,45 +51,66 @@ const LogIn: React.FC = () => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-form">
-        <h1 className="text-3xl font-bold underline">Log in Here!</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="username-div">
-            <label htmlFor="username">Username: </label>
-            <input
-              id="login_username"
-              type="text"
-              name="username"
-              placeholder="type your username here"
-              value={formData.username}
-              onChange={handleChange}
-              // required
-            />
-          </div>
-          <div className="password-div">
-            <label htmlFor="password">Password: </label>
-            <input
-              id="login_password"
-              type="password"
-              name="password"
-              placeholder="type your password here"
-              value={formData.password}
-              onChange={handleChange}
-              // required
-            />
-          </div>
-          <div className="button-div">
-            <button className="get-profile-button">Log In!</button>
-          </div>
-          <div className="error-message">
-            {userStatus.error && <p>{userStatus.error}</p>}
-          </div>
-        </form>
+    <div
+      tabIndex={-1}
+      className="login-page-div bg-gray-500 bg-opacity-50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+    >
+      <div className="login-page relative w-full p-4 max-w-md max-h-full">
+        <div className="login-form relative p-10 bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full">
+          <h1 className="text-3xl font-bold underline">Log in Here!</h1>
+          <form onSubmit={handleSubmit}>
+            <div className="username-div">
+              <label className="text-lg block" htmlFor="username">
+                Username:{" "}
+              </label>
+              <input
+                className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
+                id="login_username"
+                type="text"
+                name="username"
+                placeholder="type your username here"
+                value={formData.username}
+                onChange={handleChange}
+                // required
+              />
+            </div>
+            <div className="password-div">
+              <label className="text-lg block" htmlFor="password">
+                Password:{" "}
+              </label>
+              <input
+                className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
+                id="login_password"
+                type="password"
+                name="password"
+                placeholder="type your password here"
+                value={formData.password}
+                onChange={handleChange}
+                // required
+              />
+            </div>
+            <div className="button-div text-center m-2">
+              <button className="get-profile-button border-2 border-green-500 rounded-full bg-green-400 p-2 hover:bg-green-900 hover:text-white">
+                Log In!
+              </button>
+            </div>
+            {userStatus.error && (
+              <div className="error-message text-red-500">
+                <p>{userStatus.error}</p>
+              </div>
+            )}
+          </form>
+        </div>
+        <p>
+          Not a user yet?{" "}
+          <Link
+            className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
+            to="/register"
+          >
+            Make an account here!
+          </Link>
+        </p>
       </div>
-      <p>
-        Not a user yet? <Link to="/register">Make an account here!</Link>
-      </p>
     </div>
   );
 };

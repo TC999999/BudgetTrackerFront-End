@@ -32,11 +32,7 @@ const BudgetPage: React.FC = () => {
           Add a new Budget
         </button>
       </div>
-      {userStatus.user.budgets.length ? (
-        <BudgetList allBudgets={budgetList} />
-      ) : (
-        <p>no budgets yet</p>
-      )}
+      <BudgetList allBudgets={budgetList} />
     </div>
   );
 };

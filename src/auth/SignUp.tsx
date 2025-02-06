@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import KeyPad from "../KeyPad";
 import { useNavigate } from "react-router-dom";
+// import moneyPic from "../../public/signUp.jpg";
 
 const SignUp = () => {
   const initialState: SignUpInterface = {
@@ -81,13 +82,17 @@ const SignUp = () => {
   );
 
   return (
-    <div className="register-page">
-      <div className="register-form">
+    <div className="register-page bg-[url('../../public/signUp.jpg')] bg-cover bg-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      <div className="register-form px-4 py-10 bg-white border-2 border-green-700 rounded-r-lg h-full">
+        {/* <img src={moneyPic} alt="" /> */}
         <h1 className="text-3xl font-bold underline">Sign Up Here!</h1>
         <form onSubmit={handleSubmit}>
           <div className="username-div">
-            <label htmlFor="username">Username: </label>
+            <label className="text-lg block" htmlFor="username">
+              Username:{" "}
+            </label>
             <input
+              className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
               id="signup_username"
               type="text"
               name="username"
@@ -97,8 +102,11 @@ const SignUp = () => {
             />
           </div>
           <div className="password-div">
-            <label htmlFor="password">Password: </label>
+            <label className="text-lg block" htmlFor="password">
+              Password:{" "}
+            </label>
             <input
+              className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
               id="signup_password"
               type="password"
               name="password"
@@ -108,8 +116,11 @@ const SignUp = () => {
             />
           </div>
           <div className="total-assets-div">
-            <label htmlFor="moneyAllocated">Total Assets: ($ U.S.): </label>
+            <label className="text-lg block" htmlFor="moneyAllocated">
+              Total Assets: ($ U.S.):{" "}
+            </label>
             <input
+              className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
               id="total_assets"
               type="text"
               name="totalAssets"
@@ -120,20 +131,23 @@ const SignUp = () => {
               readOnly
             />
           </div>
-          <div className="keyPad-div">
+          <div className="keyPad-div flex flex-start m-5">
             <KeyPad
               handlePress={handlePress}
               handleDelete={handleDelete}
               num={formData.totalAssets}
             />
           </div>
-
           <div className="button-div">
-            <button className="make-profile-button">Sign Up!</button>
-          </div>
-          <div className="error-message">
-            {userStatus.error && <p>{userStatus.error}</p>}
-          </div>
+            <button className="make-profile-button border-2 rounded-full border-green-500 bg-green-500 p-2">
+              Sign Up!
+            </button>
+          </div>{" "}
+          {userStatus.error && (
+            <div className="error-message">
+              <p className="text-red-400">{userStatus.error}</p>
+            </div>
+          )}
         </form>
       </div>
     </div>
