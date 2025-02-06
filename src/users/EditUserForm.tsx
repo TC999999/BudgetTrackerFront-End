@@ -120,7 +120,7 @@ const EditUserForm: React.FC<Props> = (props) => {
               </div>
 
               <div className="button-div flex justify-between">
-                <button className="add-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
                   Add to your Assets
                 </button>
                 <button

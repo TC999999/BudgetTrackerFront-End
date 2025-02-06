@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { logOutUser } from "../features/actions/auth";
 import EditUserForm from "./EditUserForm";
 import ExpenseList from "../expenses/ExpenseList";
+import { TfiMoney } from "react-icons/tfi";
 
 const Dashboard: React.FC = () => {
   const { user } = useAppSelector((store) => store.user.userInfo);
@@ -32,7 +33,7 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
 
-        <div className="add-asset-button flex justify-center">
+        <div className="add-asset-button flex justify-center m-4">
           <button
             className="border rounded-full bg-green-700 px-2 py-2 hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"
             onClick={() => setShowAssetForm(true)}
@@ -42,8 +43,14 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
       {showAssetForm && <EditUserForm hideForm={HideForm} />}
-      <div className="link-to-budgets">
-        <Link to="/budgets">Check out your budgets</Link>
+      <div className="link-to-budgets m-5 flex justify-end">
+        <Link to="/budgets">
+          <button className="border-2 border-green-600 bg-green-700 rounded flex justify-center hover:bg-green-300 active:bg-gray-100 active:text-green-700">
+            <TfiMoney className="text-lg my-1" />{" "}
+            <span>Check out your budgets </span>
+            <TfiMoney className="text-lg my-1" />
+          </button>
+        </Link>
       </div>
 
       <div className="recent-expenses-list">

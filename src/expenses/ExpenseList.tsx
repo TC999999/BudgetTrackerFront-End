@@ -57,6 +57,11 @@ const ExpenseList: React.FC<Props> = (props) => {
             />
           );
         })}
+        {!props.expensesList.length && (
+          <div className="no-expenses text-center text-xl m-4">
+            <p className="italic">No Expenses Yet</p>
+          </div>
+        )}
       </div>
     </div>
   );

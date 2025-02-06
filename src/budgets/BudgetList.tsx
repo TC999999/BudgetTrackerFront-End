@@ -12,9 +12,11 @@ const BudgetList: React.FC<Props> = (props) => {
         {" "}
         All Current Budgets
       </h1>
-      {props.allBudgets?.map((budget) => (
-        <BudgetCard key={budget._id} budget={budget} />
-      ))}
+      <div className="flex flex-wrap justify-center">
+        {props.allBudgets?.map((budget) => (
+          <BudgetCard key={budget._id} budget={budget} />
+        ))}
+      </div>
     </div>
   );
 };

@@ -26,15 +26,12 @@ const BudgetPage: React.FC = () => {
     <div className="budget-page">
       {" "}
       <button onClick={() => navigate("/")}>Back Home</button>
-      {showBudgetForm ? (
-        <BudgetForm hideForm={HideForm} />
-      ) : (
-        <div className="add-budget-form-button">
-          <button onClick={() => setShowBudgetForm(true)}>
-            Add a new Budget
-          </button>
-        </div>
-      )}
+      {showBudgetForm && <BudgetForm hideForm={HideForm} />}
+      <div className="add-budget-form-button">
+        <button onClick={() => setShowBudgetForm(true)}>
+          Add a new Budget
+        </button>
+      </div>
       {userStatus.user.budgets.length ? (
         <BudgetList allBudgets={budgetList} />
       ) : (
