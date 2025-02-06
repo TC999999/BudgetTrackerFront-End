@@ -52,36 +52,36 @@ const SingleBudgetPage: React.FC = () => {
             Back to All Budgets
           </button>
           <BudgetPageCard budget={budget} />
-          {formsState.showEditForm ? (
+          {formsState.showEditForm && (
             <EditBudgetForm hideEditForm={changeFormState} budget={budget} />
-          ) : (
-            <div className="Edit-budget-form-button">
-              <button onClick={(e) => changeFormState(e, "showEditForm")}>
-                Edit Budget
-              </button>
-            </div>
           )}
-          {formsState.showDeleteForm ? (
+          <div className="Edit-budget-form-button">
+            <button onClick={(e) => changeFormState(e, "showEditForm")}>
+              Edit Budget
+            </button>
+          </div>
+
+          {formsState.showDeleteForm && (
             <DeleteBudgetForm
               hideDeleteForm={changeFormState}
               budget={budget}
             />
-          ) : (
-            <div className="delete-budget-form-button">
-              <button onClick={(e) => changeFormState(e, "showDeleteForm")}>
-                Delete this Budget
-              </button>
-            </div>
           )}
-          {formsState.showExpenseForm ? (
+          <div className="delete-budget-form-button">
+            <button onClick={(e) => changeFormState(e, "showDeleteForm")}>
+              Delete this Budget
+            </button>
+          </div>
+
+          {formsState.showExpenseForm && (
             <ExpenseForm hideForm={changeFormState} budget={budget} />
-          ) : (
-            <div className="add-expense-form-button">
-              <button onClick={(e) => changeFormState(e, "showExpenseForm")}>
-                Add Expense
-              </button>
-            </div>
           )}
+          <div className="add-expense-form-button">
+            <button onClick={(e) => changeFormState(e, "showExpenseForm")}>
+              Add Expense
+            </button>
+          </div>
+
           <ExpenseList
             expensesList={budget?.expenses}
             isFrontPage={false}
