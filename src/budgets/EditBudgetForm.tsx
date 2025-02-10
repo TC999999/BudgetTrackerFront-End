@@ -55,24 +55,23 @@ const EditBudgetForm: React.FC<Props> = (props) => {
 
   const newTotalAssets: string = useMemo<string>(() => {
     return calculateNewTotalAssets(
-      userStatus.user.totalAssets || 1,
+      userStatus.user!.totalAssets,
       formData.addedMoney,
       formData.operation
     );
-  }, [formData]);
+  }, [formData.addedMoney, formData.operation]);
 
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.addedMoney, num);
-      console.log((userStatus.user.totalAssets || 1) * 100);
       if (newNum > remainingMoney && formData.operation === "subtract") {
         setKeyPadErrorMessage(
           "New funds cannot be more than remaining budget funds"
         );
       } else if (
-        newNum > (userStatus.user.totalAssets || 1) * 100 &&
+        newNum > userStatus.user!.totalAssets * 100 &&
         formData.operation === "add"
       ) {
         setKeyPadErrorMessage("New funds cannot be more that total assets");
@@ -106,7 +105,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
       );
     } else if (
       value === "add" &&
-      formData.addedMoney > (userStatus.user.totalAssets || 1) * 100
+      formData.addedMoney > userStatus.user!.totalAssets * 100
     ) {
       setKeyPadErrorMessage("New funds cannot be more that total assets");
     } else {
@@ -151,18 +150,25 @@ const EditBudgetForm: React.FC<Props> = (props) => {
     }
   };
 
-  return (
-    <div className="edit-budget-form-div">
-      {isLoading ? (
-        <SmallLoadingMsg />
-      ) : (
-        <div className="edit-budget-form">
-          <h2>Edit Budget {props.budget.title}</h2>
-          <h3>Your New Total Asset Value Will Be ${newTotalAssets}</h3>
+  return isLoading ? (
+    <SmallLoadingMsg />
+  ) : (
+    <div tabIndex={-1} className="budget-form-div modal-layer-1">
+      <div className="edit-budget-form-div modal-layer-2">
+        <div className="edit-budget-form modal-layer-3">
+          <div className="headers text-center">
+            <h2 className="text-2xl text-green-700 font-bold">
+              Edit {props.budget.title} Budget
+            </h2>
+            <h3>Your New Total Asset Value Will Be ${newTotalAssets}</h3>
+          </div>
           <form onSubmit={handleSubmit}>
-            <div className="title-div">
-              <label htmlFor="title">Budget Title: </label>
+            <div className="title-div text-center mb-2">
+              <label className="text-gray-700 text-lg block" htmlFor="title">
+                Budget Title:{" "}
+              </label>
               <input
+                className="text-gray-900 text-xl text-center w-96 border-2 focus:outline-none focus:border-green-700"
                 id="budget_title"
                 type="text"
                 name="title"
@@ -172,9 +178,15 @@ const EditBudgetForm: React.FC<Props> = (props) => {
                 required
               />
             </div>
-            <div className="added-funds-div">
-              <label htmlFor="addedMoney">New Budget Funds($ U.S.): </label>
+            <div className="added-funds-div text-center mb-2">
+              <label
+                className="text-gray-700 text-lg block"
+                htmlFor="addedMoney"
+              >
+                New Budget Funds($ U.S.):{" "}
+              </label>
               <input
+                className="text-gray-900 text-xl text-center w-96 border-2 focus:outline-none"
                 id="added_budget_allocation"
                 type="text"
                 name="addedMoney"
@@ -192,12 +204,12 @@ const EditBudgetForm: React.FC<Props> = (props) => {
               />
             </div>
 
-            <div className="error-message">
+            <div className="keypad-error-message text-red-700 font-bold text-center">
               <p>{keyPadErrorMessage}</p>
             </div>
 
-            <fieldset className="edit-budget-choices">
-              <legend>
+            <fieldset className="edit-budget-choices text-center">
+              <legend className="font-bold">
                 Are you adding or subtracting this amount from the total funds?
               </legend>
               <div>
@@ -209,10 +221,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
                   onChange={handleRadio}
                   checked={formData.operation === "add"}
                 />
-                <label htmlFor="add">
-                  {/* Return all funds (${props.budget.moneyAllocated}) */}
-                  Add to Funds ({newAddBudget})
-                </label>
+                <label htmlFor="add">Add to Funds ({newAddBudget})</label>
               </div>
               <div>
                 <input
@@ -228,18 +237,21 @@ const EditBudgetForm: React.FC<Props> = (props) => {
                 </label>
               </div>
             </fieldset>
-            <div className="button-div">
-              <button className="edit-budget-button">Edit Budget</button>
-            </div>
-            <div className="error-message">
-              {userStatus.error && <p>{userStatus.error}</p>}
+            <div className="buttons flex justify-between m-2">
+              <div className="submit-button">
+                <button className="edit-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                  Edit Budget
+                </button>
+              </div>
+              <div className="cancel-button">
+                <button onClick={(e) => props.hideEditForm(e, "showEditForm")}>
+                  Cancel
+                </button>
+              </div>
             </div>
           </form>
         </div>
-      )}
-      <button onClick={(e) => props.hideEditForm(e, "showEditForm")}>
-        Cancel
-      </button>
+      </div>
     </div>
   );
 };

@@ -18,3 +18,9 @@ export interface LogInInterface {
 export interface SignUpInterface extends LogInInterface {
   totalAssets: number;
 }
+
+export interface SignUpErrorInterface {
+  username?: string;
+  password?: string;
+  totalAssets?: number;
+}

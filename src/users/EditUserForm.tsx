@@ -27,21 +27,28 @@ const EditUserForm: React.FC<Props> = (props) => {
   };
   const [formData, setFormData] = useState<FormInfo>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const currentAssets = useRef<number>(
-    (userStatus.user.totalAssets || 1) * 100
+    (userStatus.user!.totalAssets || 1) * 100
   );
-  const newAssets = useRef<number>((userStatus.user.totalAssets || 1) * 100);
+  const newAssets = useRef<number>(userStatus.user!.totalAssets * 100);
+  const maxNum = useRef<number>(99999999999999);
+  const [keyPadError, setKeyPadError] = useState<boolean>(false);
 
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.value, num);
-      setFormData((data) => ({
-        ...data,
-        value: newNum,
-      }));
-      newAssets.current = currentAssets.current + newNum;
+      if (newNum > maxNum.current) {
+        setKeyPadError(true);
+      } else {
+        setFormData((data) => ({
+          ...data,
+          value: newNum,
+        }));
+        newAssets.current = currentAssets.current + newNum;
+      }
     },
     [formData]
   );
@@ -55,8 +62,11 @@ const EditUserForm: React.FC<Props> = (props) => {
         value: newNum,
       }));
       newAssets.current = currentAssets.current + newNum;
+      if (keyPadError) {
+        setKeyPadError(false);
+      }
     },
-    [formData]
+    [formData, keyPadError]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -73,66 +83,65 @@ const EditUserForm: React.FC<Props> = (props) => {
         value: value / 100,
       };
       await dispatch(addToAssets(submitData)).unwrap();
-      props.hideForm();
+      props.hideForm(e);
     } catch (err) {
       setIsLoading(false);
       console.log(err);
     }
   };
 
-  return (
-    <div
-      tabIndex={-1}
-      className="add-to-assets-form-div bg-gray-500 bg-opacity-50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-    >
-      <div className="relative w-full p-4 max-w-md max-h-full">
-        {isLoading ? (
-          <SmallLoadingMsg />
-        ) : (
-          <div className="add-to-assets-form relative bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full">
-            <h1 className="text-xl text-center">Add to Your Current Assets</h1>
-            <h2 className="text-lg text-center">
-              New Assets: <span>${(newAssets.current / 100).toFixed(2)}</span>
-            </h2>
-            <form onSubmit={handleSubmit}>
-              <div className="added-assets-div text-center">
-                <label className="text-gray-700 block" htmlFor="addedAssets">
-                  Amount to Add to Assets ($ U.S.):{" "}
-                </label>
-                <input
-                  className="text-gray-900 text-xl text-center mb-2"
-                  id="added_assets"
-                  type="text"
-                  name="addedAssets"
-                  placeholder="0.00"
-                  value={`$${(formData.value / 100).toFixed(2)}`}
-                  onChange={handleChange}
-                  required
-                  readOnly
-                />
+  return isLoading ? (
+    <SmallLoadingMsg />
+  ) : (
+    <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
+      <div className="modal-layer-2">
+        <div className="add-to-assets-form modal-layer-3">
+          <h1 className="text-xl text-center">Add to Your Current Assets</h1>
+          <h2 className="text-lg text-center">
+            New Assets: <span>${(newAssets.current / 100).toFixed(2)}</span>
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="added-assets-div text-center">
+              <label className="text-gray-700 block" htmlFor="addedAssets">
+                Amount to Add to Assets ($ U.S.):{" "}
+              </label>
+              <input
+                className="text-gray-900 text-xl text-center mb-2"
+                id="added_assets"
+                type="text"
+                name="addedAssets"
+                placeholder="0.00"
+                value={`$${(formData.value / 100).toFixed(2)}`}
+                onChange={handleChange}
+                required
+                readOnly
+              />
+            </div>
+            <div className="keyPad-div px-2 py-2">
+              <KeyPad
+                handlePress={handlePress}
+                handleDelete={handleDelete}
+                num={formData.value}
+              />
+            </div>
+            {keyPadError && (
+              <div className="text-red-700 font-bold">
+                <p>You've reached the maximum asset value.</p>
               </div>
-              <div className="keyPad-div px-2 py-2">
-                <KeyPad
-                  handlePress={handlePress}
-                  handleDelete={handleDelete}
-                  num={formData.value}
-                />
-              </div>
-
-              <div className="button-div flex justify-between">
-                <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                  Add to your Assets
-                </button>
-                <button
-                  className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
-                  onClick={props.hideForm}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
+            )}
+            <div className="button-div flex justify-between">
+              <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                Add to your Assets
+              </button>
+              <button
+                className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
+                onClick={(e) => props.hideForm(e)}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
 import { ExpenseInterface } from "./expenseInterfaces";
 import { BudgetInterface } from "./budgetInterfaces";
+import { SignUpErrorInterface } from "./authInterfaces";
 
 export interface UserContextInterface {
-  user: UserInfoInterface;
+  user: UserInfoInterface | null;
   userExists: boolean;
   loading: boolean;
-  error: string | null;
+  error: SignUpErrorInterface | string | null;
 }
 
 export interface UserEditInterface {
@@ -13,9 +14,9 @@ export interface UserEditInterface {
 }
 
 export interface UserInterface {
-  _id: string | null;
-  username: string | null;
-  totalAssets: number | null;
+  _id: string;
+  username: string;
+  totalAssets: number;
 }
 
 export interface UserInfoInterface extends UserInterface {

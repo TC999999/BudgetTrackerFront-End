@@ -5,6 +5,7 @@ import {
   logInUser,
   logOutUser,
 } from "../actions/auth";
+import { SignUpErrorInterface } from "../../interfaces/authInterfaces";
 import { getCurrentUser, addToAssets } from "../actions/users";
 import { addNewBudget, updateBudget, deleteBudget } from "../actions/budgets";
 import { addNewExpense, removeExpense } from "../actions/expenses";
@@ -39,10 +40,12 @@ const authSlice = createSlice({
         state.hasTokenInfo.hasToken = true;
       })
       .addCase(registerUser.rejected, (state, action: any) => {
+        // console.log(action.payload);
+        let payload: SignUpErrorInterface = action.payload;
         state.userInfo.user = INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
-        state.userInfo.error = action.payload;
+        state.userInfo.error = payload;
       })
       .addCase(logInUser.pending, (state) => {
         state.userInfo.loading = true;
@@ -102,33 +105,34 @@ const authSlice = createSlice({
         state.userInfo.error = action.payload;
       })
       .addCase(addToAssets.fulfilled, (state, action: any) => {
-        state.userInfo.user.totalAssets = action.payload.totalAssets;
+        state.userInfo.user!.totalAssets = action.payload.totalAssets;
       })
       .addCase(addNewBudget.fulfilled, (state, action: any) => {
-        state.userInfo.user.budgets = action.payload.newUserBudgets;
-        state.userInfo.user.totalAssets = action.payload.newAssets;
+        state.userInfo.user!.budgets = action.payload.newUserBudgets;
+        state.userInfo.user!.totalAssets = action.payload.newAssets;
       })
 
       .addCase(updateBudget.fulfilled, (state, action: any) => {
-        state.userInfo.user.budgets = action.payload.newUserBudgets;
-        state.userInfo.user.totalAssets = action.payload.newAssets;
+        state.userInfo.user!.budgets = action.payload.newUserBudgets;
+        state.userInfo.user!.totalAssets = action.payload.newAssets;
       })
       .addCase(deleteBudget.fulfilled, (state, action: any) => {
-        state.userInfo.user.budgets = action.payload.user.budgets;
-        state.userInfo.user.expenses = action.payload.user.expenses;
-        state.userInfo.user.totalAssets = action.payload.user.totalAssets;
+        state.userInfo.user!.budgets = action.payload.user.budgets;
+        state.userInfo.user!.expenses = action.payload.user.expenses;
+        state.userInfo.user!.totalAssets = action.payload.user.totalAssets;
       })
       .addCase(addNewExpense.fulfilled, (state, action: any) => {
-        state.userInfo.user.budgets = action.payload.newUserBudgets;
-        state.userInfo.user.expenses = action.payload.newUserExpenses;
+        state.userInfo.user!.budgets = action.payload.newUserBudgets;
+        state.userInfo.user!.expenses = action.payload.newUserExpenses;
       })
       .addCase(removeExpense.fulfilled, (state, action: any) => {
-        state.userInfo.user.budgets = action.payload.newUserBudgets;
-        state.userInfo.user.expenses = action.payload.newUserExpenses;
+        state.userInfo.user!.budgets = action.payload.newUserBudgets;
+        state.userInfo.user!.expenses = action.payload.newUserExpenses;
       });
   },
 });
 
 export const { setUserLoading, removeUserError } = authSlice.actions;
+// export const { setUserLoading } = authSlice.actions;
 
 export default authSlice.reducer;

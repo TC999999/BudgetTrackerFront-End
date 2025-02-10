@@ -42,7 +42,7 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
   let newAssets: string = useMemo<string>(
     () =>
       calculateNewTotalAssetsWithoutOperation(
-        userStatus.user.totalAssets || 0,
+        userStatus.user!.totalAssets,
         formData.addBackToAssets
       ),
     [formData.addBackToAssets]
@@ -64,32 +64,32 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
       console.log(err);
     }
   };
-  return (
+  return isLoading ? (
+    <SmallLoadingMsg />
+  ) : (
     <div className="delete-budget-form-div modal-layer-1">
       <div className="modal-layer-2">
-        {isLoading ? (
-          <SmallLoadingMsg />
-        ) : (
-          <div className="delete-budget-form text-center modal-layer-3">
-            <h3 className="text-3xl text-red-700">Before You Delete</h3>
-            <div className="form-div">
-              <form onSubmit={handleSubmit}>
-                <fieldset className="delete-choices">
-                  <legend className="text-xl">
-                    Are you returning any funds to your available assets?
-                  </legend>
-                  <div className="add-no-funds text-lg m-2">
-                    <input
-                      type="radio"
-                      id="none"
-                      name="addBackToAssets"
-                      value={0}
-                      onChange={handleChange}
-                      checked={formData.addBackToAssets === 0}
-                    />
-                    <label htmlFor="remaining">Return No Funds ($0.00)</label>
-                  </div>
-                  <div className="add-remaining-funds text-lg m-2">
+        <div className="delete-budget-form text-center modal-layer-3">
+          <h3 className="text-3xl text-red-700">Before You Delete</h3>
+          <div className="form-div">
+            <form onSubmit={handleSubmit}>
+              <fieldset className="delete-choices">
+                <legend className="text-xl">
+                  Are you returning any funds to your available assets?
+                </legend>
+                <div className="add-no-funds text-lg p-3">
+                  <input
+                    type="radio"
+                    id="none"
+                    name="addBackToAssets"
+                    value={0}
+                    onChange={handleChange}
+                    checked={formData.addBackToAssets === 0}
+                  />
+                  <label htmlFor="none">Return No Funds ($0.00)</label>
+                </div>
+                {remainingMoney !== props.budget.moneyAllocated && (
+                  <div className="add-remaining-funds text-lg p-3">
                     <input
                       type="radio"
                       id="remaining"
@@ -102,47 +102,46 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
                       Return Remaining Funds Only (${remainingMoney})
                     </label>
                   </div>
-                  <div className="add-all-funds text-lg m-2">
-                    <input
-                      type="radio"
-                      id="all"
-                      name="addBackToAssets"
-                      value={props.budget.moneyAllocated}
-                      onChange={handleChange}
-                      checked={
-                        formData.addBackToAssets ===
-                        +props.budget.moneyAllocated
-                      }
-                    />
-                    <label htmlFor="all">
-                      Return All Funds (${props.budget.moneyAllocated})
-                    </label>
-                  </div>
-                </fieldset>
+                )}
+                <div className="add-all-funds text-lg p-3">
+                  <input
+                    type="radio"
+                    id="all"
+                    name="addBackToAssets"
+                    value={props.budget.moneyAllocated}
+                    onChange={handleChange}
+                    checked={
+                      formData.addBackToAssets === +props.budget.moneyAllocated
+                    }
+                  />
+                  <label htmlFor="all">
+                    Return All Funds (${props.budget.moneyAllocated})
+                  </label>
+                </div>
+              </fieldset>
 
-                <div className="new-assets text-green-600">
-                  <p className="text-lg">Your New Available Assets Will Be</p>
-                  <p className="text-2xl">${newAssets}</p>
+              <div className="new-assets text-green-600">
+                <p className="text-lg">Your New Available Assets Will Be</p>
+                <p className="text-2xl">${newAssets}</p>
+              </div>
+              <div className="buttons flex justify-between m-2">
+                <div className="delete-button-div">
+                  <button className="delete-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                    Delete Budget
+                  </button>
                 </div>
-                <div className="buttons flex justify-between m-2">
-                  <div className="delete-button-div">
-                    <button className="delete-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                      Delete Budget
-                    </button>
-                  </div>
-                  <div className="cancel-delete-budget">
-                    <button
-                      className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
-                      onClick={(e) => props.hideDeleteForm(e, "showDeleteForm")}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                <div className="cancel-delete-budget">
+                  <button
+                    className="cancel-button"
+                    onClick={(e) => props.hideDeleteForm(e, "showDeleteForm")}
+                  >
+                    Cancel
+                  </button>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

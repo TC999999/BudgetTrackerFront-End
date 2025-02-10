@@ -28,13 +28,13 @@ const ExpenseForm: React.FC<Props> = (props) => {
   const originalMoney = useRef<string>(initialMoney);
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formErrors, setFormErrors] = useState<string[] | any>([]);
+  const [formErrors, setFormErrors] = useState(new Map<string, string>());
 
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
-      if (formErrors.length) {
-        setFormErrors([]);
+      if (formErrors.get("transaction")) {
+        formErrors.delete("transaction");
       }
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.transaction, num);
@@ -56,9 +56,10 @@ const ExpenseForm: React.FC<Props> = (props) => {
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
-      if (formErrors.length) {
-        setFormErrors([]);
+      if (formErrors.get("transaction")) {
+        formErrors.delete("transaction");
       }
+
       let newNum: number = numPop(formData.transaction);
       setFormData((data) => ({
         ...data,
@@ -74,8 +75,8 @@ const ExpenseForm: React.FC<Props> = (props) => {
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (formErrors.length) {
-      setFormErrors([]);
+    if (formErrors.get("title")) {
+      formErrors.delete("title");
     }
     const { name, value } = e.target;
     setFormData((data) => ({ ...data, [name]: value }));
@@ -94,97 +95,99 @@ const ExpenseForm: React.FC<Props> = (props) => {
       props.hideForm(e, "showExpenseForm");
     } catch (err) {
       setIsLoading(false);
-      setFormErrors(err || []);
+      if (Array.isArray(err)) {
+        setFormErrors(new Map(err));
+      }
     }
   };
 
-  return (
-    <div
-      tabIndex={-1}
-      className="new-expense-form-div bg-gray-500 bg-opacity-50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-    >
-      <div className="relative w-full p-4 max-w-md max-h-full">
-        {isLoading ? (
-          <SmallLoadingMsg />
-        ) : (
-          <div className="new-expense-form relative bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full">
-            <h2 className="text-2xl text-green-700 text-center">
-              Add a New Expense!
-            </h2>
-            <h2 className="text-lg text-center">
-              Available Budget Funds: ${availableMoney}
-            </h2>
-            <form onSubmit={handleSubmit}>
-              <div className="title-div text-center">
-                <label className="text-gray-700 text-lg block" htmlFor="title">
-                  Expense Title:
-                </label>
-                <input
-                  className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:outline-none focus:border-green-700"
-                  id="expense_title"
-                  type="text"
-                  name="title"
-                  placeholder="What's this expense for?"
-                  value={formData.title}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="transaction-div">
-                <label
-                  htmlFor="transaction"
-                  className="text-gray-700 text-lg block"
-                >
-                  Transaction Value ($ U.S.):
-                </label>
-                <input
-                  className="text-gray-900 text-xl text-center mb-2 w-96 focus:outline-none "
-                  id="expense_transaction"
-                  type="text"
-                  name="trasaction"
-                  placeholder="0.00"
-                  value={`$${(formData.transaction / 100).toFixed(2)}`}
-                  readOnly
-                />
-              </div>
-              <div className="keyPad-div">
-                <KeyPad
-                  handlePress={handlePress}
-                  handleDelete={handleDelete}
-                  num={formData.transaction}
-                />
-              </div>
-              {keyPadError && (
-                <div className="error-message text-center">
+  return isLoading ? (
+    <SmallLoadingMsg />
+  ) : (
+    <div tabIndex={-1} className="new-expense-form-div modal-layer-1">
+      <div className="modal-layer-2">
+        <div className="new-expense-form modal-layer-3">
+          <h2 className="text-2xl text-green-700 text-center">
+            Add a New Expense!
+          </h2>
+          <div className="available-funds text-lg text-center">
+            <h2>Available {props.budget?.title} Budget Funds:</h2>
+            <h2>${availableMoney}</h2>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="title-div text-center mb-2">
+              <label className="text-gray-700 text-lg block" htmlFor="title">
+                Expense Title:
+              </label>
+              <input
+                className="text-gray-900 text-center text-xl w-96 border-2 focus:outline-none focus:border-green-700"
+                id="expense_title"
+                type="text"
+                name="title"
+                placeholder="What's this expense for?"
+                value={formData.title}
+                onChange={handleChange}
+              />
+              {formErrors.get("title") && (
+                <div className="error-message">
                   <p className="text-red-700 font-bold">
-                    Expense transaction value cannot exceed available budget
+                    {formErrors.get("title")}
                   </p>
                 </div>
               )}
-              <div className="button-div flex justify-between m-2">
-                <button className="add-expense-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                  Add this Expense
-                </button>
-                <button
-                  className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
-                  onClick={(e) => props.hideForm(e, "showExpenseForm")}
-                >
-                  Cancel
-                </button>
-              </div>
-              {formErrors?.length > 0 && (
-                <div className="error-message text-center">
-                  {formErrors.map((e: string, i: number) => {
-                    return (
-                      <p key={i} className="text-red-700 font-bold">
-                        {e}
-                      </p>
-                    );
-                  })}
+            </div>
+            <div className="transaction-div text-center mb-2">
+              <label
+                htmlFor="transaction"
+                className="text-gray-700 text-lg block"
+              >
+                Transaction Value ($ U.S.):
+              </label>
+              <input
+                className="text-gray-900 text-xl text-center w-96 focus:outline-none "
+                id="expense_transaction"
+                type="text"
+                name="trasaction"
+                placeholder="0.00"
+                value={`$${(formData.transaction / 100).toFixed(2)}`}
+                readOnly
+              />
+              {formErrors.get("transaction") && (
+                <div className="error-message">
+                  <p className="text-red-700 font-bold">
+                    {formErrors.get("transaction")}
+                  </p>
                 </div>
               )}
-            </form>
-          </div>
-        )}
+            </div>
+
+            <div className="keyPad-div">
+              <KeyPad
+                handlePress={handlePress}
+                handleDelete={handleDelete}
+                num={formData.transaction}
+              />
+            </div>
+            {keyPadError && (
+              <div className="error-message text-center">
+                <p className="text-red-700 font-bold">
+                  Expense transaction value cannot exceed available budget
+                </p>
+              </div>
+            )}
+            <div className="button-div flex justify-between m-2">
+              <button className="add-expense-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                Add this Expense
+              </button>
+              <button
+                className="cancel-button"
+                onClick={(e) => props.hideForm(e, "showExpenseForm")}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

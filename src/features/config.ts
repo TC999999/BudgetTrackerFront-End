@@ -4,13 +4,7 @@ export const API_URL: string = "http://localhost:3001";
 
 export const INITIAL_STATE: AuthInitialStateInterface = {
   userInfo: {
-    user: {
-      _id: null,
-      username: "",
-      totalAssets: 0,
-      expenses: [],
-      budgets: [],
-    },
+    user: null,
     loading: true,
     userExists: false,
     error: "",
