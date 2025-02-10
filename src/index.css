@@ -18,4 +18,20 @@
   .keypad-key-buttons .button-delete {
     @apply bg-orange-400 text-center px-2 py-2 border border-gray-900 hover:bg-orange-100 active:bg-orange-400 active:text-gray-100;
   }
+
+  .modal-layer-1 {
+    @apply bg-gray-500 bg-opacity-50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full;
+  }
+
+  .modal-layer-2 {
+    @apply relative w-full p-4 max-w-md max-h-full;
+  }
+
+  .modal-layer-3 {
+    @apply relative bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full;
+  }
+
+  .cancel-button {
+    @apply bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600;
+  }
 }
