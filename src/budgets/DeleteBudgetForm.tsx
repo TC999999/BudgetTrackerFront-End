@@ -4,10 +4,12 @@ import {
   BudgetInterface,
   DeleteBudgetInterface,
 } from "../interfaces/budgetInterfaces";
-import { useAppDispatch } from "../features/hooks";
+import { UserContextInterface } from "../interfaces/userInterfaces";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { deleteBudget } from "../features/actions/budgets";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { makeExpenseIDList } from "../helpers/makeExpenseIDList";
+import { calculateNewTotalAssetsWithoutOperation } from "../helpers/calculateNewTotalAssets";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
 interface Props {
@@ -19,23 +21,32 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const userStatus: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo
+  );
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  let expenseIDs: string[] = useMemo<string[]>(
-    () => makeExpenseIDList(props.budget.expenses),
-    [props.budget.expenses]
-  );
   let remainingMoney: string = getRemainingMoney(
     props.budget.moneyAllocated,
     +props.budget.moneySpent
   );
   let deleteBudgetData: DeleteBudgetInterface = {
     budgetID: props.budget._id,
-    expenses: expenseIDs,
-    addBackToAssets: +props.budget.moneyAllocated,
+    expenses: makeExpenseIDList(props.budget.expenses),
+    addBackToAssets: 0,
   };
   const [formData, setFormData] =
     useState<DeleteBudgetInterface>(deleteBudgetData);
+
+  let newAssets: string = useMemo<string>(
+    () =>
+      calculateNewTotalAssetsWithoutOperation(
+        userStatus.user.totalAssets || 0,
+        formData.addBackToAssets
+      ),
+    [formData.addBackToAssets]
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -54,58 +65,85 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
     }
   };
   return (
-    <div className="delete-budget-form-div">
-      {isLoading ? (
-        <SmallLoadingMsg />
-      ) : (
-        <div className="delete-budget-form">
-          <h3>Before You Delete,</h3>
-          <form onSubmit={handleSubmit}>
-            <fieldset className="delete-choices">
-              <legend>
-                Are you returning the entire funds allocated or only the
-                remaining funds?
-              </legend>
-              <div>
-                <input
-                  type="radio"
-                  id="all"
-                  name="addBackToAssets"
-                  value={props.budget.moneyAllocated}
-                  onChange={handleChange}
-                  checked={
-                    formData.addBackToAssets === +props.budget.moneyAllocated
-                  }
-                />
-                <label htmlFor="all">
-                  Return all funds (${props.budget.moneyAllocated})
-                </label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="remaining"
-                  name="addBackToAssets"
-                  value={remainingMoney}
-                  onChange={handleChange}
-                  checked={formData.addBackToAssets === +remainingMoney}
-                />
-                <label htmlFor="remaining">
-                  Return remaining funds only (${remainingMoney})
-                </label>
-              </div>
-            </fieldset>
-            <div className="submit-button">
-              <button>Delete Budget</button>
+    <div className="delete-budget-form-div modal-layer-1">
+      <div className="modal-layer-2">
+        {isLoading ? (
+          <SmallLoadingMsg />
+        ) : (
+          <div className="delete-budget-form text-center modal-layer-3">
+            <h3 className="text-3xl text-red-700">Before You Delete</h3>
+            <div className="form-div">
+              <form onSubmit={handleSubmit}>
+                <fieldset className="delete-choices">
+                  <legend className="text-xl">
+                    Are you returning any funds to your available assets?
+                  </legend>
+                  <div className="add-no-funds text-lg m-2">
+                    <input
+                      type="radio"
+                      id="none"
+                      name="addBackToAssets"
+                      value={0}
+                      onChange={handleChange}
+                      checked={formData.addBackToAssets === 0}
+                    />
+                    <label htmlFor="remaining">Return No Funds ($0.00)</label>
+                  </div>
+                  <div className="add-remaining-funds text-lg m-2">
+                    <input
+                      type="radio"
+                      id="remaining"
+                      name="addBackToAssets"
+                      value={remainingMoney}
+                      onChange={handleChange}
+                      checked={formData.addBackToAssets === +remainingMoney}
+                    />
+                    <label htmlFor="remaining">
+                      Return Remaining Funds Only (${remainingMoney})
+                    </label>
+                  </div>
+                  <div className="add-all-funds text-lg m-2">
+                    <input
+                      type="radio"
+                      id="all"
+                      name="addBackToAssets"
+                      value={props.budget.moneyAllocated}
+                      onChange={handleChange}
+                      checked={
+                        formData.addBackToAssets ===
+                        +props.budget.moneyAllocated
+                      }
+                    />
+                    <label htmlFor="all">
+                      Return All Funds (${props.budget.moneyAllocated})
+                    </label>
+                  </div>
+                </fieldset>
+
+                <div className="new-assets text-green-600">
+                  <p className="text-lg">Your New Available Assets Will Be</p>
+                  <p className="text-2xl">${newAssets}</p>
+                </div>
+                <div className="buttons flex justify-between m-2">
+                  <div className="delete-button-div">
+                    <button className="delete-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                      Delete Budget
+                    </button>
+                  </div>
+                  <div className="cancel-delete-budget">
+                    <button
+                      className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
+                      onClick={(e) => props.hideDeleteForm(e, "showDeleteForm")}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
-          <div className="cancel-delete-budget">
-            <button onClick={(e) => props.hideDeleteForm(e, "showDeleteForm")}>
-              Cancel
-            </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
