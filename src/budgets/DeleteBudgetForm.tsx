@@ -12,12 +12,15 @@ import { makeExpenseIDList } from "../helpers/makeExpenseIDList";
 import { calculateNewTotalAssetsWithoutOperation } from "../helpers/calculateNewTotalAssets";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
-interface Props {
-  hideDeleteForm: any;
+type Props = {
+  hideDeleteForm: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    form: string
+  ) => void;
   budget: BudgetInterface;
-}
+};
 
-const DeleteBudgetForm: React.FC<Props> = (props) => {
+const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -28,12 +31,12 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   let remainingMoney: string = getRemainingMoney(
-    props.budget.moneyAllocated,
-    +props.budget.moneySpent
+    budget.moneyAllocated,
+    +budget.moneySpent
   );
   let deleteBudgetData: DeleteBudgetInterface = {
-    budgetID: props.budget._id,
-    expenses: makeExpenseIDList(props.budget.expenses),
+    budgetID: budget._id,
+    expenses: makeExpenseIDList(budget.expenses),
     addBackToAssets: 0,
   };
   const [formData, setFormData] =
@@ -88,7 +91,7 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
                   />
                   <label htmlFor="none">Return No Funds ($0.00)</label>
                 </div>
-                {remainingMoney !== props.budget.moneyAllocated && (
+                {remainingMoney !== budget.moneyAllocated && (
                   <div className="add-remaining-funds text-lg p-3">
                     <input
                       type="radio"
@@ -108,14 +111,14 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
                     type="radio"
                     id="all"
                     name="addBackToAssets"
-                    value={props.budget.moneyAllocated}
+                    value={budget.moneyAllocated}
                     onChange={handleChange}
                     checked={
-                      formData.addBackToAssets === +props.budget.moneyAllocated
+                      formData.addBackToAssets === +budget.moneyAllocated
                     }
                   />
                   <label htmlFor="all">
-                    Return All Funds (${props.budget.moneyAllocated})
+                    Return All Funds (${budget.moneyAllocated})
                   </label>
                 </div>
               </fieldset>
@@ -133,7 +136,7 @@ const DeleteBudgetForm: React.FC<Props> = (props) => {
                 <div className="cancel-delete-budget">
                   <button
                     className="cancel-button"
-                    onClick={(e) => props.hideDeleteForm(e, "showDeleteForm")}
+                    onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
                   >
                     Cancel
                   </button>

@@ -9,3 +9,13 @@ export const calculateNewTotalAssets = (
 
   return (newAssets / 100).toFixed(2);
 };
+
+export const calculateNewTotalAssetsWithoutOperation = (
+  totalAssets: number,
+  newFunds: number
+): string => {
+  let totalAssetsNum = +totalAssets;
+  let newAssets: number = totalAssetsNum + newFunds;
+
+  return newAssets.toFixed(2);
+};
