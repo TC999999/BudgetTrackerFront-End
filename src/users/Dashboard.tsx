@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
             className="border rounded-full bg-green-700 px-2 py-2 hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"
             onClick={() => setShowAssetForm(true)}
           >
-            Add to Your Available Assets
+            Update Your Available Assets
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import {
   UserContextInterface,
   UserEditInterface,
@@ -6,6 +6,7 @@ import {
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
+import { calculateNewTotalAssetsUserDashboard } from "../helpers/calculateNewTotalAssets";
 import { addToAssets } from "../features/actions/users";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
@@ -17,6 +18,7 @@ type Props = {
 
 type FormInfo = {
   value: number;
+  operation: string;
 };
 
 const EditUserForm: React.FC<Props> = ({ hideForm }) => {
@@ -26,16 +28,21 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
   );
   const initialState: FormInfo = {
     value: 0,
+    operation: "add",
   };
   const [formData, setFormData] = useState<FormInfo>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const currentAssets = useRef<number>(
-    (userStatus.user!.totalAssets || 1) * 100
-  );
-  const newAssets = useRef<number>(userStatus.user!.totalAssets * 100);
+  const [radioErrorMessage, setRadioErrorMessage] = useState<string>("");
   const maxNum = useRef<number>(99999999999999);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
+
+  const newTotalAssets: string = useMemo<string>(() => {
+    return calculateNewTotalAssetsUserDashboard(
+      userStatus.user!.totalAssets,
+      formData.value,
+      formData.operation
+    );
+  }, [formData.value, formData.operation]);
 
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -44,12 +51,18 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
       let newNum = currencyConverter(formData.value, num);
       if (newNum > maxNum.current) {
         setKeyPadError(true);
+      } else if (
+        formData.operation === "subtract" &&
+        newNum > userStatus.user!.totalAssets * 100
+      ) {
+        setRadioErrorMessage(
+          "Cannot subtract a value greater than current total assets"
+        );
       } else {
         setFormData((data) => ({
           ...data,
           value: newNum,
         }));
-        newAssets.current = currentAssets.current + newNum;
       }
     },
     [formData]
@@ -63,26 +76,43 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
         ...data,
         value: newNum,
       }));
-      newAssets.current = currentAssets.current + newNum;
       if (keyPadError) {
         setKeyPadError(false);
       }
+      if (radioErrorMessage) {
+        setRadioErrorMessage("");
+      }
     },
-    [formData, keyPadError]
+    [formData, keyPadError, radioErrorMessage]
   );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleRadio = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setFormData((data) => ({ ...data, [name]: value }));
+    if (
+      value === "subtract" &&
+      formData.value > userStatus.user!.totalAssets * 100
+    ) {
+      setRadioErrorMessage(
+        "Cannot subtract a value greater than current total assets"
+      );
+    } else {
+      setFormData((data) => ({
+        ...data,
+        [name]: value,
+      }));
+      if (radioErrorMessage) {
+        setRadioErrorMessage("");
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const { value } = formData;
+      const { value, operation } = formData;
       const submitData: UserEditInterface = {
-        value: value / 100,
+        value: operation === "add" ? +value / 100 : -value / 100,
       };
       await dispatch(addToAssets(submitData)).unwrap();
       hideForm(e);
@@ -98,14 +128,15 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="add-to-assets-form modal-layer-3">
-          <h1 className="text-xl text-center">Add to Your Current Assets</h1>
+          <h1 className="text-xl text-center">Update Your Current Assets</h1>
           <h2 className="text-lg text-center">
-            New Assets: <span>${(newAssets.current / 100).toFixed(2)}</span>
+            New Assets: <span>${newTotalAssets}</span>
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="added-assets-div text-center">
               <label className="text-gray-700 block" htmlFor="addedAssets">
-                Amount to Add to Assets ($ U.S.):{" "}
+                How much are you adding or subtracting from your current total
+                assets? ($ U.S.):{" "}
               </label>
               <input
                 className="text-gray-900 text-xl text-center mb-2"
@@ -114,10 +145,44 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                 name="addedAssets"
                 placeholder="0.00"
                 value={`$${(formData.value / 100).toFixed(2)}`}
-                onChange={handleChange}
                 required
                 readOnly
               />
+            </div>
+            <div>
+              <fieldset className="edit-budget-choices text-center">
+                <legend className="font-bold">
+                  Are you adding or subtracting this amount from your available
+                  assets?
+                </legend>
+                <div>
+                  <input
+                    type="radio"
+                    id="add"
+                    name="operation"
+                    value="add"
+                    onChange={handleRadio}
+                    checked={formData.operation === "add"}
+                  />
+                  <label htmlFor="add">Add to Funds</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="remove"
+                    name="operation"
+                    value="subtract"
+                    onChange={handleRadio}
+                    checked={formData.operation === "subtract"}
+                  />
+                  <label htmlFor="remove">Subtract from Funds</label>
+                </div>
+              </fieldset>
+              {radioErrorMessage && (
+                <div className="text-lg text-center text-red-700 font-bold">
+                  <p>{radioErrorMessage}</p>
+                </div>
+              )}
             </div>
             <div className="keyPad-div px-2 py-2">
               <KeyPad
@@ -133,12 +198,9 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
             )}
             <div className="button-div flex justify-between">
               <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                Add to your Assets
+                Update your Assets
               </button>
-              <button
-                className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
-                onClick={(e) => hideForm(e)}
-              >
+              <button className="cancel-button" onClick={(e) => hideForm(e)}>
                 Cancel
               </button>
             </div>
