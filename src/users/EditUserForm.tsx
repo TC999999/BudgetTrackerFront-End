@@ -129,9 +129,10 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
       <div className="modal-layer-2">
         <div className="add-to-assets-form modal-layer-3">
           <h1 className="text-xl text-center">Update Your Current Assets</h1>
-          <h2 className="text-lg text-center">
-            New Assets: <span>${newTotalAssets}</span>
-          </h2>
+          <div className="new-assets-value text-center">
+            <h2 className="text-lg text-center">New Assets:</h2>
+            <h2 className="text-3xl text-green-700">${newTotalAssets}</h2>
+          </div>
           <form onSubmit={handleSubmit}>
             <div className="added-assets-div text-center">
               <label className="text-gray-700 block" htmlFor="addedAssets">
@@ -192,7 +193,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
               />
             </div>
             {keyPadError && (
-              <div className="text-red-700 font-bold">
+              <div className="text-red-700 font-bold text-center">
                 <p>You've reached the maximum asset value.</p>
               </div>
             )}
