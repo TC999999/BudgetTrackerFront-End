@@ -54,15 +54,15 @@ const SingleBudgetPage: React.FC = () => {
           <div className="buttons sticky top-0 bg-emerald-900 flex justify-around p-2 w-full">
             <div className="back-button-div">
               <button
-                className="back-button border-2 border-gray-300 p-2 rounded-full bg-gray-400 hover:bg-gray-100 active:bg-gray-300 duration-150"
+                className="back-button border-2 border-gray-300 p-1 sm:p-2 rounded-full bg-gray-400 hover:bg-gray-100 active:bg-gray-300 duration-150"
                 onClick={() => navigate("/budgets")}
               >
-                Back to All Budgets
+                Back to Budgets
               </button>
             </div>
             <div className="edit-budget-button-div">
               <button
-                className="edit-budget-form-button border-2 border-orange-300 p-2 rounded-full text-white bg-orange-400 hover:bg-orange-200 hover:text-black active:bg-orange-300 duration-150"
+                className="edit-budget-form-button border-2 border-orange-300 p-1 sm:p-2 rounded-full text-white bg-orange-400 hover:bg-orange-200 hover:text-black active:bg-orange-300 duration-150"
                 onClick={(e) => changeFormState(e, "showEditForm")}
               >
                 Update Budget
@@ -71,16 +71,16 @@ const SingleBudgetPage: React.FC = () => {
 
             <div className="delete-budget-button-div">
               <button
-                className="delete-budget-form-button border-2 border-red-500 p-2 rounded-full bg-red-600"
+                className="delete-budget-form-button border-2 border-red-500 p-1 sm:p-2 rounded-full bg-red-600 hover:bg-red-400 hover:text-white active:bg-red-100 duration-150"
                 onClick={(e) => changeFormState(e, "showDeleteForm")}
               >
-                Delete this Budget
+                Delete Budget
               </button>
             </div>
 
             <div className="add-expense-button-div">
               <button
-                className="add-expense-form-button border-2 border-green-300 p-2 rounded-full bg-green-400"
+                className="add-expense-form-button border-2 border-green-300 p-1 sm:p-2 rounded-full bg-green-500 hover:bg-green-400 hover:text-white active:bg-green-200 duration-150"
                 onClick={(e) => changeFormState(e, "showExpenseForm")}
               >
                 Add Expense
