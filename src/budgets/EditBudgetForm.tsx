@@ -5,10 +5,7 @@ import {
 } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
-import {
-  addBudgetValue,
-  subtractBudgetValue,
-} from "../helpers/showBudgetValue";
+import { getNewBudgetValue } from "../helpers/showBudgetValue";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { calculateNewTotalAssets } from "../helpers/calculateNewTotalAssets";
 import KeyPad from "../KeyPad";
@@ -42,13 +39,13 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
   const [keyPadErrorMessage, setKeyPadErrorMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const newAddBudget: string = useMemo<string>(() => {
-    return addBudgetValue(budget.moneyAllocated, formData.addedMoney);
-  }, [formData.addedMoney]);
-
-  const newSubtractBudget: string = useMemo<string>(() => {
-    return subtractBudgetValue(budget.moneyAllocated, formData.addedMoney);
-  }, [formData.addedMoney]);
+  const newBudget: string = useMemo<string>(() => {
+    return getNewBudgetValue(
+      budget.moneyAllocated,
+      formData.addedMoney,
+      formData.operation
+    );
+  }, [formData.addedMoney, formData.operation]);
 
   const newTotalAssets: string = useMemo<string>(() => {
     return calculateNewTotalAssets(
@@ -157,7 +154,10 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
             <h2 className="text-2xl text-green-700 font-bold">
               Edit {budget.title} Budget
             </h2>
-            <h3>Your New Total Asset Value Will Be ${newTotalAssets}</h3>
+            <h3>Your New Total Asset Value Will Be</h3>
+            <p className="text-green-700 text-3xl"> ${newTotalAssets}</p>
+            <h3>Your New Total Budget Value Will Be</h3>
+            <p className="text-green-700 text-3xl">{newBudget}</p>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="title-div text-center mb-2">
@@ -218,7 +218,7 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
                   onChange={handleRadio}
                   checked={formData.operation === "add"}
                 />
-                <label htmlFor="add">Add to Funds ({newAddBudget})</label>
+                <label htmlFor="add">Add to Funds</label>
               </div>
               <div>
                 <input
@@ -229,9 +229,7 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
                   onChange={handleRadio}
                   checked={formData.operation === "subtract"}
                 />
-                <label htmlFor="remove">
-                  Subtract from Funds ({newSubtractBudget})
-                </label>
+                <label htmlFor="remove">Subtract from Funds</label>
               </div>
             </fieldset>
             <div className="buttons flex justify-between m-2">
