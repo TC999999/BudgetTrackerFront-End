@@ -8,7 +8,7 @@ interface Props {
 const BudgetList: React.FC<Props> = (props) => {
   return (
     <div className="budget-list stripedBudgets">
-      <h1 className="text-center text-2xl text-emerald-500">
+      <h1 className="text-center text-3xl text-emerald-500 underline font-bold">
         {" "}
         All Current Budgets
       </h1>

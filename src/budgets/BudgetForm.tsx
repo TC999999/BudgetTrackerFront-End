@@ -7,11 +7,11 @@ import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { addNewBudget } from "../features/actions/budgets";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
-interface Props {
-  hideForm: any;
-}
+type Props = {
+  hideForm: () => void;
+};
 
-const BudgetForm: React.FC<Props> = (props) => {
+const BudgetForm: React.FC<Props> = ({ hideForm }) => {
   const dispatch = useAppDispatch();
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
@@ -73,7 +73,7 @@ const BudgetForm: React.FC<Props> = (props) => {
         moneyAllocated: formData.moneyAllocated / 100,
       };
       await dispatch(addNewBudget(submitData)).unwrap();
-      props.hideForm();
+      hideForm();
     } catch (err: any) {
       setIsLoading(false);
       console.log(err);
@@ -146,7 +146,7 @@ const BudgetForm: React.FC<Props> = (props) => {
               </button>
               <button
                 className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
-                onClick={props.hideForm}
+                onClick={hideForm}
               >
                 Cancel
               </button>

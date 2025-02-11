@@ -51,7 +51,7 @@ const ExpenseCard: React.FC<Props> = ({
                 transaction: expense.transaction,
               })
             }
-            className="delete-expense-button"
+            className="delete-expense-button border-2 border-red-500 p-1 rounded-md bg-red-200 hover:bg-red-600 hover:text-white duration-300 active:bg-red-100 active:text-black"
           >
             Delete
           </button>
