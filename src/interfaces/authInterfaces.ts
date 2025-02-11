@@ -15,15 +15,15 @@ export interface LogInInterface {
   password: string;
 }
 
+export type LogInErrors = {
+  username: string;
+  password: string;
+  [key: string]: string;
+};
+
 export interface SignUpInterface extends LogInInterface {
   totalAssets: number;
 }
-
-export type SignUpErrorInterface = {
-  username?: string;
-  password?: string;
-  totalAssets?: number;
-};
 
 export type SignUpErrors = {
   username: string;

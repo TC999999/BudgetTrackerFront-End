@@ -1,15 +1,24 @@
 import { useState, useEffect } from "react";
 import { removeUserError } from "../features/auth/authSlice";
 import { logInUser } from "../features/actions/auth";
-import { LogInInterface } from "../interfaces/authInterfaces";
+import { LogInInterface, LogInErrors } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import {
+  handleLogInInputErrors,
+  handleLogInSubmitErrors,
+} from "../helpers/handleLogInErrors";
 import { Link } from "react-router-dom";
 
 const LogIn: React.FC = () => {
   const initialState: LogInInterface = { username: "", password: "" };
+  const initialErrors: LogInErrors = {
+    username: "",
+    password: "",
+  };
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<LogInInterface>(initialState);
+  const [logInErrors, setLogInErrors] = useState(initialErrors);
 
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
@@ -28,6 +37,7 @@ const LogIn: React.FC = () => {
       dispatch(removeUserError());
     }
     const { name, value } = e.target;
+    handleLogInInputErrors(name, value, setLogInErrors);
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
@@ -39,12 +49,14 @@ const LogIn: React.FC = () => {
         username,
         password,
       };
-      localStorage.setItem(
-        "userInputs",
-        JSON.stringify({ ...formData, password: "" })
-      );
-      await dispatch(logInUser(logInInfo));
-      localStorage.removeItem("userInputs");
+      if (handleLogInSubmitErrors(logInInfo, setLogInErrors)) {
+        localStorage.setItem(
+          "userInputs",
+          JSON.stringify({ ...formData, password: "" })
+        );
+        await dispatch(logInUser(logInInfo));
+        localStorage.removeItem("userInputs");
+      }
     } catch (err) {
       console.log("error in login");
     }
@@ -64,29 +76,42 @@ const LogIn: React.FC = () => {
                 Username:{" "}
               </label>
               <input
-                className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
+                className={`input 
+                ${logInErrors.username ? "input-error" : "input-valid"}`}
                 id="login_username"
                 type="text"
                 name="username"
                 placeholder="type your username here"
                 value={formData.username}
                 onChange={handleChange}
-                // required
+                maxLength={30}
               />
+              {logInErrors.username && (
+                <div className="username-error text-red-600 font-bold">
+                  <p>{logInErrors.username}</p>
+                </div>
+              )}
             </div>
             <div className="password-div">
               <label className="text-lg block" htmlFor="password">
                 Password:{" "}
               </label>
               <input
-                className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
+                className={`input 
+                  ${logInErrors.password ? "input-error" : "input-valid"}`}
                 id="login_password"
                 type="password"
                 name="password"
                 placeholder="type your password here"
                 value={formData.password}
                 onChange={handleChange}
+                maxLength={20}
               />
+              {logInErrors.password && (
+                <div className="password-error text-red-600 font-bold">
+                  <p>{logInErrors.password}</p>
+                </div>
+              )}
             </div>
             <div className="button-div text-center m-2">
               <button className="get-profile-button border-2 border-green-500 rounded-full bg-green-400 p-2 hover:bg-green-900 hover:text-white">
@@ -94,7 +119,7 @@ const LogIn: React.FC = () => {
               </button>
             </div>
             {typeof userStatus.error === "string" && (
-              <div className="error-message text-red-500">
+              <div className="error-message text-red-500 font-bold">
                 <p>{userStatus.error}</p>
               </div>
             )}
