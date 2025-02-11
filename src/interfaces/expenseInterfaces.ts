@@ -3,10 +3,10 @@ export interface newExpenseInterface {
   transaction: number;
 }
 
-interface FrontPageExpenseInterface {
+type FrontPageExpenseInterface = {
   _id: string;
   title: string;
-}
+};
 
 export interface ExpenseInterface extends newExpenseInterface {
   date: string;
@@ -14,12 +14,12 @@ export interface ExpenseInterface extends newExpenseInterface {
   _id: string;
 }
 
-export interface ExpenseListInterface {
+export type ExpenseListInterface = {
   expenseList: ExpenseInterface[];
-}
+};
 
-export interface deleteExpenseInterface {
+export type deleteExpenseInterface = {
   _id: string;
   budgetID: string | null;
   transaction: number;
-}
+};

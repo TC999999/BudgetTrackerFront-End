@@ -1,21 +1,21 @@
 import { ExpenseInterface } from "./expenseInterfaces";
 
-export interface newBudgetInterface {
+export type newBudgetInterface = {
   title: string;
   moneyAllocated: number;
-}
+};
 
-export interface BudgetEditInterface {
+export type BudgetEditInterface = {
   title: string;
   addedMoney: number;
   operation: string;
-}
+};
 
-export interface SubmitBudgetUpdateInterface {
+export type SubmitBudgetUpdateInterface = {
   title: string;
   addedMoney: number;
   budgetID: string;
-}
+};
 
 interface BaseBudgetInterface {
   _id: string;
@@ -32,8 +32,8 @@ export interface BudgetInterface extends BaseBudgetInterface {
   expenses: ExpenseInterface[];
 }
 
-export interface DeleteBudgetInterface {
+export type DeleteBudgetInterface = {
   addBackToAssets: number;
   budgetID: string;
   expenses: string[];
-}
+};

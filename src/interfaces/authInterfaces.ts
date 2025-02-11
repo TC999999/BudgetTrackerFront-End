@@ -1,14 +1,14 @@
 import { UserContextInterface } from "./userInterfaces";
 
-export interface AuthInitialStateInterface {
+export type AuthInitialStateInterface = {
   userInfo: UserContextInterface;
   hasTokenInfo: hasTokenInterface;
-}
+};
 
-export interface hasTokenInterface {
+export type hasTokenInterface = {
   hasToken: boolean;
   loading: boolean;
-}
+};
 
 export interface LogInInterface {
   username: string;
@@ -19,8 +19,15 @@ export interface SignUpInterface extends LogInInterface {
   totalAssets: number;
 }
 
-export interface SignUpErrorInterface {
+export type SignUpErrorInterface = {
   username?: string;
   password?: string;
   totalAssets?: number;
-}
+};
+
+export type SignUpErrors = {
+  username: string;
+  password: string;
+  totalAssets: string;
+  [key: string]: string;
+};
