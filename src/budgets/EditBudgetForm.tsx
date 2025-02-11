@@ -16,25 +16,25 @@ import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { updateBudget } from "../features/actions/budgets";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
-interface Props {
-  hideEditForm: any;
+type Props = {
+  hideEditForm: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+    form: string
+  ) => void;
   budget: BudgetInterface;
-}
+};
 
-const EditBudgetForm: React.FC<Props> = (props) => {
+const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
   const dispatch = useAppDispatch();
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
   const remainingMoney: number = useMemo<number>(() => {
-    return (
-      +getRemainingMoney(props.budget.moneyAllocated, props.budget.moneySpent) *
-      100
-    );
-  }, [props.budget]);
+    return +getRemainingMoney(budget.moneyAllocated, budget.moneySpent) * 100;
+  }, [budget]);
 
   const initialState: BudgetEditInterface = {
-    title: props.budget.title,
+    title: budget.title,
     addedMoney: 0,
     operation: "add",
   };
@@ -43,14 +43,11 @@ const EditBudgetForm: React.FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const newAddBudget: string = useMemo<string>(() => {
-    return addBudgetValue(props.budget.moneyAllocated, formData.addedMoney);
+    return addBudgetValue(budget.moneyAllocated, formData.addedMoney);
   }, [formData.addedMoney]);
 
   const newSubtractBudget: string = useMemo<string>(() => {
-    return subtractBudgetValue(
-      props.budget.moneyAllocated,
-      formData.addedMoney
-    );
+    return subtractBudgetValue(budget.moneyAllocated, formData.addedMoney);
   }, [formData.addedMoney]);
 
   const newTotalAssets: string = useMemo<string>(() => {
@@ -135,7 +132,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
     setIsLoading(true);
     try {
       let submitData = {
-        budgetID: props.budget._id,
+        budgetID: budget._id,
         title: formData.title,
         addedMoney:
           formData.operation === "add"
@@ -143,7 +140,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
             : -formData.addedMoney / 100,
       };
       await dispatch(updateBudget(submitData)).unwrap();
-      props.hideEditForm(e, "showEditForm");
+      hideEditForm(e, "showEditForm");
     } catch (err) {
       console.log(err);
       setIsLoading(false);
@@ -158,7 +155,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
         <div className="edit-budget-form modal-layer-3">
           <div className="headers text-center">
             <h2 className="text-2xl text-green-700 font-bold">
-              Edit {props.budget.title} Budget
+              Edit {budget.title} Budget
             </h2>
             <h3>Your New Total Asset Value Will Be ${newTotalAssets}</h3>
           </div>
@@ -244,7 +241,7 @@ const EditBudgetForm: React.FC<Props> = (props) => {
                 </button>
               </div>
               <div className="cancel-button">
-                <button onClick={(e) => props.hideEditForm(e, "showEditForm")}>
+                <button onClick={(e) => hideEditForm(e, "showEditForm")}>
                   Cancel
                 </button>
               </div>

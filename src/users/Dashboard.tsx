@@ -12,9 +12,15 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [showAssetForm, setShowAssetForm] = useState(false);
 
-  const HideForm = useCallback((): void => {
-    setShowAssetForm(false);
-  }, [showAssetForm]);
+  const HideForm = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+    ): void => {
+      e.preventDefault();
+      setShowAssetForm(false);
+    },
+    [showAssetForm]
+  );
 
   const logOutAnNavigate = (): void => {
     dispatch(logOutUser({}));
@@ -31,7 +37,7 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="dashboard-totalAssets text-emerald-600">
           <p className="text-3xl text-center">
-            Funds Available: ${user?.totalAssets}
+            Assets Available: ${user?.totalAssets}
           </p>
         </div>
 
@@ -40,7 +46,7 @@ const Dashboard: React.FC = () => {
             className="border rounded-full bg-green-700 px-2 py-2 hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"
             onClick={() => setShowAssetForm(true)}
           >
-            Add to Your Assets
+            Add to Your Available Assets
           </button>
         </div>
       </div>
@@ -60,7 +66,7 @@ const Dashboard: React.FC = () => {
           Recent Expenses
         </h2>
         <ExpenseList
-          expensesList={user.expenses}
+          expensesList={user!.expenses}
           isFrontPage={true}
           budgetID={null}
         />

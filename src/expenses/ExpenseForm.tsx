@@ -8,20 +8,23 @@ import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { addNewExpense } from "../features/actions/expenses";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
-interface Props {
-  hideForm: any;
-  budget: BudgetInterface | null;
-}
+type Props = {
+  hideExpenseForm: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+    form: string
+  ) => void;
+  budget: BudgetInterface;
+};
 
-const ExpenseForm: React.FC<Props> = (props) => {
+const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   const dispatch = useAppDispatch();
   const initialState: newExpenseInterface = {
     title: "",
     transaction: 0,
   };
   const initialMoney: string = getRemainingMoney(
-    props.budget?.moneyAllocated || "",
-    props.budget?.moneySpent || 0
+    budget?.moneyAllocated || "",
+    budget?.moneySpent || 0
   );
   const [formData, setFormData] = useState<newExpenseInterface>(initialState);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
@@ -88,11 +91,11 @@ const ExpenseForm: React.FC<Props> = (props) => {
     try {
       let submitData = {
         ...formData,
-        budgetID: props.budget?._id,
+        budgetID: budget?._id,
         transaction: formData.transaction / 100,
       };
       await dispatch(addNewExpense(submitData)).unwrap();
-      props.hideForm(e, "showExpenseForm");
+      hideExpenseForm(e, "showExpenseForm");
     } catch (err) {
       setIsLoading(false);
       if (Array.isArray(err)) {
@@ -111,7 +114,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
             Add a New Expense!
           </h2>
           <div className="available-funds text-lg text-center">
-            <h2>Available {props.budget?.title} Budget Funds:</h2>
+            <h2>Available {budget.title} Budget Funds:</h2>
             <h2>${availableMoney}</h2>
           </div>
           <form onSubmit={handleSubmit}>
@@ -181,7 +184,7 @@ const ExpenseForm: React.FC<Props> = (props) => {
               </button>
               <button
                 className="cancel-button"
-                onClick={(e) => props.hideForm(e, "showExpenseForm")}
+                onClick={(e) => hideExpenseForm(e, "showExpenseForm")}
               >
                 Cancel
               </button>

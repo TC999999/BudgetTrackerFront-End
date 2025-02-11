@@ -5,16 +5,15 @@ import {
   logInUser,
   logOutUser,
 } from "../actions/auth";
-import { SignUpErrorInterface } from "../../interfaces/authInterfaces";
 import { getCurrentUser, addToAssets } from "../actions/users";
 import { addNewBudget, updateBudget, deleteBudget } from "../actions/budgets";
 import { addNewExpense, removeExpense } from "../actions/expenses";
 import { INITIAL_STATE } from "../config";
 
-interface ActionInterface {
+type ActionInterface = {
   type: string;
   payload: any;
-}
+};
 
 const authSlice = createSlice({
   name: "auth",
@@ -40,12 +39,10 @@ const authSlice = createSlice({
         state.hasTokenInfo.hasToken = true;
       })
       .addCase(registerUser.rejected, (state, action: any) => {
-        // console.log(action.payload);
-        let payload: SignUpErrorInterface = action.payload;
         state.userInfo.user = INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
-        state.userInfo.error = payload;
+        state.userInfo.error = action.payload;
       })
       .addCase(logInUser.pending, (state) => {
         state.userInfo.loading = true;
@@ -133,6 +130,5 @@ const authSlice = createSlice({
 });
 
 export const { setUserLoading, removeUserError } = authSlice.actions;
-// export const { setUserLoading } = authSlice.actions;
 
 export default authSlice.reducer;

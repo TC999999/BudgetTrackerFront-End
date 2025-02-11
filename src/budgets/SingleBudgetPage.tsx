@@ -11,12 +11,12 @@ import DeleteBudgetForm from "./DeleteBudgetForm";
 import EditBudgetForm from "./EditBudgetForm";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 
-interface FormStateInterface {
+type FormStateInterface = {
   showExpenseForm: boolean;
   showDeleteForm: boolean;
   showEditForm: boolean;
   [key: string]: boolean;
-}
+};
 
 const SingleBudgetPage: React.FC = () => {
   const { id } = useParams();
@@ -25,8 +25,8 @@ const SingleBudgetPage: React.FC = () => {
     (store) => store.user.userInfo
   );
   const budget: BudgetInterface = useMemo<BudgetInterface>(
-    () => getCurrentBudget(userStatus.user.budgets, id || ""),
-    [userStatus.user.budgets]
+    () => getCurrentBudget(userStatus.user!.budgets, id || ""),
+    [userStatus.user!.budgets]
   );
   const initialFormState: FormStateInterface = {
     showExpenseForm: false,
@@ -37,7 +37,10 @@ const SingleBudgetPage: React.FC = () => {
     useState<FormStateInterface>(initialFormState);
 
   const changeFormState = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, form: string) => {
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+      form: string
+    ): void => {
       e.preventDefault();
       setFormsState(() => ({ ...initialFormState, [form]: !formsState[form] }));
     },
@@ -56,7 +59,7 @@ const SingleBudgetPage: React.FC = () => {
           <div className="flex justify-around p-2">
             <div className="edit-budget-form-button border-2 border-orange-300 p-2 rounded-full bg-orange-400">
               <button onClick={(e) => changeFormState(e, "showEditForm")}>
-                Edit Budget
+                Update Budget
               </button>
             </div>
 
@@ -85,7 +88,7 @@ const SingleBudgetPage: React.FC = () => {
           )}
 
           {formsState.showExpenseForm && (
-            <ExpenseForm hideForm={changeFormState} budget={budget} />
+            <ExpenseForm hideExpenseForm={changeFormState} budget={budget} />
           )}
 
           <ExpenseList

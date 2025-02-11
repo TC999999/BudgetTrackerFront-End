@@ -9,15 +9,17 @@ import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { addToAssets } from "../features/actions/users";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
-interface Props {
-  hideForm: any;
-}
+type Props = {
+  hideForm: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+  ) => void;
+};
 
-interface FormInfo {
+type FormInfo = {
   value: number;
-}
+};
 
-const EditUserForm: React.FC<Props> = (props) => {
+const EditUserForm: React.FC<Props> = ({ hideForm }) => {
   const dispatch = useAppDispatch();
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
@@ -83,7 +85,7 @@ const EditUserForm: React.FC<Props> = (props) => {
         value: value / 100,
       };
       await dispatch(addToAssets(submitData)).unwrap();
-      props.hideForm(e);
+      hideForm(e);
     } catch (err) {
       setIsLoading(false);
       console.log(err);
@@ -135,7 +137,7 @@ const EditUserForm: React.FC<Props> = (props) => {
               </button>
               <button
                 className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
-                onClick={(e) => props.hideForm(e)}
+                onClick={(e) => hideForm(e)}
               >
                 Cancel
               </button>
