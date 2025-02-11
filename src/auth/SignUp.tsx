@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { removeUserError } from "../features/auth/authSlice";
 import { registerUser } from "../features/actions/auth";
-import { SignUpInterface } from "../interfaces/authInterfaces";
+import { SignUpInterface, SignUpErrors } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import KeyPad from "../KeyPad";
 import { useNavigate } from "react-router-dom";
-// import moneyPic from "../../public/signUp.jpg";
+import {
+  handleSignUpInputErrors,
+  handleSignUpSubmitErrors,
+} from "../helpers/handleSignUpErrors";
 
 const SignUp = () => {
   const initialState: SignUpInterface = {
@@ -15,26 +18,39 @@ const SignUp = () => {
     password: "",
     totalAssets: 0,
   };
+
+  const initialErrors: SignUpErrors = {
+    username: "",
+    password: "",
+    totalAssets: "",
+  };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<SignUpInterface>(initialState);
-
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
+  const [formData, setFormData] = useState<SignUpInterface>(initialState);
+  const maxNum = useRef(99999999999999);
+  const [keyPadError, setKeyPadError] = useState<boolean>(false);
+  const [signUpErrors, setSignUpErrors] = useState(initialErrors);
+
   useEffect(() => {
+    if (userStatus.userExists) {
+      navigate("/");
+    }
     let inputs: string | null = localStorage.getItem("userInputs");
     if (inputs) {
       setFormData(JSON.parse(inputs));
       localStorage.removeItem("userInputs");
     }
-  }, []);
+  }, [userStatus]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (userStatus.error) {
+    const { name, value } = e.target;
+    if (userStatus.error && name === "username") {
       dispatch(removeUserError());
     }
-    const { name, value } = e.target;
+    handleSignUpInputErrors(name, value, setSignUpErrors);
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
@@ -47,16 +63,16 @@ const SignUp = () => {
         password,
         totalAssets: totalAssets / 100,
       };
-      localStorage.setItem(
-        "userInputs",
-        JSON.stringify({ ...formData, password: "" })
-      );
-      await dispatch(registerUser(signUpInfo)).unwrap();
-      localStorage.removeItem("userInputs");
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
+      if (handleSignUpSubmitErrors(signUpInfo, setSignUpErrors)) {
+        localStorage.setItem(
+          "userInputs",
+          JSON.stringify({ ...formData, password: "" })
+        );
+        await dispatch(registerUser(signUpInfo)).unwrap();
+        localStorage.removeItem("userInputs");
+        navigate("/");
+      }
+    } catch (err) {}
   };
 
   const handlePress = useCallback(
@@ -64,7 +80,11 @@ const SignUp = () => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.totalAssets, num);
-      setFormData((data) => ({ ...data, totalAssets: newNum }));
+      if (newNum > maxNum.current) {
+        setKeyPadError(true);
+      } else {
+        setFormData((data) => ({ ...data, totalAssets: newNum }));
+      }
     },
     [formData]
   );
@@ -77,50 +97,83 @@ const SignUp = () => {
         ...data,
         totalAssets: newNum,
       }));
+      if (keyPadError) {
+        setKeyPadError(false);
+      }
     },
-    [formData]
+    [formData, keyPadError]
   );
 
   return (
-    <div className="register-page bg-[url('../../public/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 max-h-full">
-      <div className="register-form px-4 py-10 bg-white border-2 border-green-700 rounded-r-lg h-full">
-        {/* <img src={moneyPic} alt="" /> */}
+    <div className="register-page bg-[url('/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-full max-h-full">
+      <div className="register-form px-4 py-2 bg-white border-2 border-green-700 rounded-r-lg h-full">
+        <button onClick={() => navigate("/")}>Go Back</button>
         <h1 className="text-3xl font-bold underline">Sign Up Here!</h1>
         <form onSubmit={handleSubmit}>
-          <div className="username-div">
+          <div className="username-div py-4">
             <label className="text-lg block" htmlFor="username">
               Username:{" "}
             </label>
             <input
-              className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
+              className={`input 
+                ${
+                  signUpErrors.username || userStatus.error
+                    ? "input-error"
+                    : "input-valid"
+                }`}
               id="signup_username"
               type="text"
               name="username"
               placeholder="type your username here"
               value={formData.username}
               onChange={handleChange}
+              maxLength={30}
             />
+            <div className="text-sm">
+              <p>Your username must be between 5-30 characters</p>
+            </div>
+            {signUpErrors.username && (
+              <div className="username-error text-red-600 font-bold">
+                <p>{signUpErrors.username}</p>
+              </div>
+            )}
+            {typeof userStatus.error === "string" && (
+              <div className="username-error text-red-600 font-bold">
+                <p>{userStatus.error}</p>
+              </div>
+            )}
           </div>
-          <div className="password-div">
+          <div className="password-div py-4">
             <label className="text-lg block" htmlFor="password">
               Password:{" "}
             </label>
             <input
-              className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
+              className={`input ${
+                signUpErrors.password ? "input-error" : "input-valid"
+              }`}
               id="signup_password"
               type="password"
               name="password"
               placeholder="type your password here"
               value={formData.password}
               onChange={handleChange}
+              maxLength={20}
             />
+            <div className="text-sm">
+              <p>Your password must be between 8-20 characters</p>
+            </div>
+            {signUpErrors.password && (
+              <div className="password-error text-red-600 font-bold">
+                <p>{signUpErrors.password}</p>
+              </div>
+            )}
           </div>
-          <div className="total-assets-div">
+          <div className="total-assets-div py-4">
             <label className="text-lg block" htmlFor="moneyAllocated">
               Total Assets: ($ U.S.):{" "}
             </label>
             <input
-              className="text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:border-green-600 focus:outline-none"
+              className="input input-valid"
               id="total_assets"
               type="text"
               name="totalAssets"
@@ -130,8 +183,16 @@ const SignUp = () => {
               required
               readOnly
             />
+            <div className="text-sm">
+              <p>Your total assets must be $999999999999.99 or less</p>
+            </div>
+            {keyPadError && (
+              <div className="text-green-700 font-bold text-sm">
+                <p>You've reached the maximum asset value.</p>
+              </div>
+            )}
           </div>
-          <div className="keyPad-div flex flex-start m-5">
+          <div className="keyPad-div flex justify-center m-5">
             <KeyPad
               handlePress={handlePress}
               handleDelete={handleDelete}
@@ -143,11 +204,11 @@ const SignUp = () => {
               Sign Up!
             </button>
           </div>{" "}
-          {userStatus.error && (
+          {/* {userStatus.error && (
             <div className="error-message">
               <p className="text-red-400">{userStatus.error}</p>
             </div>
-          )}
+          )} */}
         </form>
       </div>
     </div>

@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 @layer utilities {
+  .input {
+    @apply text-gray-900 text-xl text-center mb-2 w-96 border-2 focus:outline-none;
+  }
+
+  .input-error {
+    @apply bg-red-100 border-red-600;
+  }
+
+  .input-valid {
+    @apply focus:border-green-600;
+  }
+
   .striped .expense-card:nth-child(even) {
     @apply bg-green-200;
   }
