@@ -23,3 +23,9 @@ export type deleteExpenseInterface = {
   budgetID: string | null;
   transaction: number;
 };
+
+export type ExpenseFormErrors = {
+  title: string;
+  transaction: string;
+  date: string;
+};

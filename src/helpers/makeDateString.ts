@@ -1,4 +1,4 @@
-type dateInfo = {
+export type dateInfo = {
   date: string;
   time: string;
 };

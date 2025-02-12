@@ -3,7 +3,14 @@ import KeyPad from "../KeyPad";
 import { useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
-import { newExpenseInterface } from "../interfaces/expenseInterfaces";
+import {
+  handleExpenseInputErrors,
+  handleExpenseSubmitErrors,
+} from "../helpers/handleExpenseErrors";
+import {
+  newExpenseInterface,
+  ExpenseFormErrors,
+} from "../interfaces/expenseInterfaces";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { addNewExpense } from "../features/actions/expenses";
 import SmallLoadingMsg from "../SmallLoadingMsg";
@@ -19,6 +26,7 @@ type Props = {
 
 const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   const dispatch = useAppDispatch();
+
   const initialState: newExpenseInterface = {
     title: "",
     transaction: 0,
@@ -28,21 +36,24 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
     budget?.moneyAllocated || "",
     budget?.moneySpent || 0
   );
+  const initialErrors: ExpenseFormErrors = {
+    title: "",
+    transaction: "",
+    date: "",
+  };
   const [formData, setFormData] = useState<newExpenseInterface>(initialState);
-  const [keyPadError, setKeyPadError] = useState<boolean>(false);
   const originalMoney = useRef<string>(initialMoney);
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formErrors, setFormErrors] = useState(new Map<string, string>());
+  const [formErrors, setFormErrors] =
+    useState<ExpenseFormErrors>(initialErrors);
 
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
-      if (formErrors.get("transaction")) {
-        formErrors.delete("transaction");
-      }
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.transaction, num);
+      handleExpenseInputErrors("transaction", newNum, setFormErrors);
       let original = parseFloat(originalMoney.current) * 100;
       if (newNum <= original) {
         let newAvailableMoney = original - newNum;
@@ -52,61 +63,58 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
         }));
         setAvailableMoney((newAvailableMoney / 100).toFixed(2));
       } else {
-        setKeyPadError(true);
+        setFormErrors((data) => ({
+          ...data,
+          transaction:
+            "Expense transaction value cannot exceed available budget",
+        }));
+        setTimeout(() => {
+          setFormErrors((data) => ({
+            ...data,
+            transaction: "",
+          }));
+        }, 1500);
       }
     },
-    [formData, keyPadError, formErrors]
+    [formData, formErrors]
   );
 
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
-      if (formErrors.get("transaction")) {
-        formErrors.delete("transaction");
-      }
-
       let newNum: number = numPop(formData.transaction);
+      handleExpenseInputErrors("transaction", newNum, setFormErrors);
       setFormData((data) => ({
         ...data,
         transaction: newNum,
       }));
-      if (keyPadError) {
-        setKeyPadError(false);
-      }
       let newAvailableMoney = parseFloat(originalMoney.current) * 100 - newNum;
       setAvailableMoney((newAvailableMoney / 100).toFixed(2));
     },
-    [formData, keyPadError, formErrors]
+    [formData, formErrors]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    if (name === "title" && formErrors.get("title")) {
-      formErrors.delete("title");
-    }
+    handleExpenseInputErrors(name, value, setFormErrors);
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    setIsLoading(true);
     try {
-      // console.log(
-      //   new Date(formData.date).toLocaleDateString("en-US", { month: "long", day:"numeric",year:"numeric" })
-      // );
-      let submitData = {
-        ...formData,
-        budgetID: budget?._id,
-        transaction: formData.transaction / 100,
-      };
-
-      await dispatch(addNewExpense(submitData)).unwrap();
-      hideExpenseForm(e, "showExpenseForm");
+      if (handleExpenseSubmitErrors(formData, setFormErrors)) {
+        setIsLoading(true);
+        let submitData = {
+          ...formData,
+          budgetID: budget?._id,
+          transaction: formData.transaction / 100,
+        };
+        await dispatch(addNewExpense(submitData)).unwrap();
+        hideExpenseForm(e, "showExpenseForm");
+      }
     } catch (err) {
       setIsLoading(false);
-      if (Array.isArray(err)) {
-        setFormErrors(new Map(err));
-      }
     }
   };
 
@@ -119,9 +127,11 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
           <h2 className="text-2xl text-green-700 text-center">
             Add a New Expense!
           </h2>
-          <div className="available-funds text-lg text-center">
-            <h2>Available {budget.title} Budget Funds:</h2>
-            <h2>${availableMoney}</h2>
+          <div className="available-funds  text-center">
+            <h2 className="text-lg">Remaining {budget.title} Budget Funds:</h2>
+            <h2 className="text-3xl text-emerald-800 font-bold">
+              ${availableMoney}
+            </h2>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="title-div text-center mb-2">
@@ -129,19 +139,20 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 Expense Title:
               </label>
               <input
-                className="text-gray-900 text-center text-xl w-96 border-2 focus:outline-none focus:border-green-700"
+                className={`input ${
+                  formErrors.title ? "input-error" : "input-valid"
+                }`}
                 id="expense_title"
                 type="text"
                 name="title"
                 placeholder="What's this expense for?"
                 value={formData.title}
                 onChange={handleChange}
+                maxLength={30}
               />
-              {formErrors.get("title") && (
+              {formErrors.title && (
                 <div className="error-message">
-                  <p className="text-red-700 font-bold">
-                    {formErrors.get("title")}
-                  </p>
+                  <p className="text-red-700 font-bold">{formErrors.title}</p>
                 </div>
               )}
             </div>
@@ -151,12 +162,19 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
               </label>
               <input
                 type="datetime-local"
-                className="input"
+                className={`input ${
+                  formErrors.date ? "input-error" : "input-valid-date"
+                }`}
                 id="expense_date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
               />
+              {formErrors.date && (
+                <div className="error-message">
+                  <p className="text-red-700 font-bold">{formErrors.date}</p>
+                </div>
+              )}
             </div>
             <div className="transaction-div text-center mb-2">
               <label
@@ -166,7 +184,9 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 Transaction Value ($ U.S.):
               </label>
               <input
-                className="text-gray-900 text-xl text-center w-96 focus:outline-none "
+                className={`input ${
+                  formErrors.transaction ? "input-error" : ""
+                }`}
                 id="expense_transaction"
                 type="text"
                 name="trasaction"
@@ -174,10 +194,10 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 value={`$${(formData.transaction / 100).toFixed(2)}`}
                 readOnly
               />
-              {formErrors.get("transaction") && (
+              {formErrors.transaction && (
                 <div className="error-message">
                   <p className="text-red-700 font-bold">
-                    {formErrors.get("transaction")}
+                    {formErrors.transaction}
                   </p>
                 </div>
               )}
@@ -190,13 +210,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 num={formData.transaction}
               />
             </div>
-            {keyPadError && (
-              <div className="error-message text-center">
-                <p className="text-red-700 font-bold">
-                  Expense transaction value cannot exceed available budget
-                </p>
-              </div>
-            )}
+
             <div className="button-div flex justify-between m-2">
               <button className="add-expense-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
                 Add this Expense

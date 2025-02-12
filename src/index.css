@@ -15,6 +15,10 @@
     @apply focus:border-green-600;
   }
 
+  .input-valid-date {
+    @apply active:border-green-600;
+  }
+
   .striped .expense-card:nth-child(even) {
     @apply bg-green-200;
   }

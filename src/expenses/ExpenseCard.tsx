@@ -1,13 +1,11 @@
-import { useMemo, useRef } from "react";
-import { makeDateString } from "../helpers/makeDateString";
+import { useRef } from "react";
+import { makeDateString, dateInfo } from "../helpers/makeDateString";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 
 type infoInterface = {
   transaction: number;
   _id: string;
 };
-
-type dateInfo = { date: string; time: string };
 
 type Props = {
   expense: ExpenseInterface;
@@ -23,7 +21,7 @@ const ExpenseCard: React.FC<Props> = ({
   isFrontPage,
   deleteExpense,
 }) => {
-  const dateTime = useRef(makeDateString(expense.date));
+  const dateTime = useRef<dateInfo>(makeDateString(expense.date));
 
   return (
     <div className="expense-card grid grid-cols-4 px-4 py-4">
