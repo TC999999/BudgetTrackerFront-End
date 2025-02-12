@@ -1,23 +1,21 @@
-const monthes = new Map<number, string>([
-  [0, "Jan."],
-  [1, "Feb."],
-  [2, "Mar."],
-  [3, "Apr."],
-  [4, "May"],
-  [5, "Jun."],
-  [6, "Jul."],
-  [7, "August"],
-  [8, "Sep."],
-  [9, "Oct."],
-  [10, "Nov."],
-  [11, "Dec."],
-]);
+type dateInfo = {
+  date: string;
+  time: string;
+};
 
-export const makeDateString = (dateString: string): string => {
-  let date = new Date(dateString);
-  let m: number = date.getMonth();
-  let month: string = monthes.get(m)!;
-  let day: number = date.getDate();
-  let year: number = date.getFullYear();
-  return `${month} ${day}, ${year}`;
+export const makeDateString = (dateString: string): dateInfo => {
+  let d: Date = new Date(dateString);
+  let date: string = d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  let time: string = d.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return {
+    date,
+    time,
+  };
 };

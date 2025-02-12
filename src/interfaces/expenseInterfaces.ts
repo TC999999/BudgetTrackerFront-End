@@ -1,16 +1,16 @@
 export interface newExpenseInterface {
   title: string;
   transaction: number;
+  date: string;
 }
 
-type FrontPageExpenseInterface = {
+type ExpenseBudgetInterface = {
   _id: string;
   title: string;
 };
 
 export interface ExpenseInterface extends newExpenseInterface {
-  date: string;
-  budgetID?: FrontPageExpenseInterface;
+  budgetID?: ExpenseBudgetInterface;
   _id: string;
 }
 

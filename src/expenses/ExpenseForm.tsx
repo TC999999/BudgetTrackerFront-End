@@ -7,6 +7,7 @@ import { newExpenseInterface } from "../interfaces/expenseInterfaces";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { addNewExpense } from "../features/actions/expenses";
 import SmallLoadingMsg from "../SmallLoadingMsg";
+import { DateTime } from "luxon";
 
 type Props = {
   hideExpenseForm: (
@@ -21,6 +22,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   const initialState: newExpenseInterface = {
     title: "",
     transaction: 0,
+    date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
   };
   const initialMoney: string = getRemainingMoney(
     budget?.moneyAllocated || "",
@@ -78,10 +80,10 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (formErrors.get("title")) {
+    const { name, value } = e.target;
+    if (name === "title" && formErrors.get("title")) {
       formErrors.delete("title");
     }
-    const { name, value } = e.target;
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
@@ -89,11 +91,15 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
+      // console.log(
+      //   new Date(formData.date).toLocaleDateString("en-US", { month: "long", day:"numeric",year:"numeric" })
+      // );
       let submitData = {
         ...formData,
         budgetID: budget?._id,
         transaction: formData.transaction / 100,
       };
+
       await dispatch(addNewExpense(submitData)).unwrap();
       hideExpenseForm(e, "showExpenseForm");
     } catch (err) {
@@ -138,6 +144,19 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                   </p>
                 </div>
               )}
+            </div>
+            <div className="date-div text-center mb-2">
+              <label htmlFor="date" className="text-gray-700 text-lg block">
+                When was this transaction made?
+              </label>
+              <input
+                type="datetime-local"
+                className="input"
+                id="expense_date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+              />
             </div>
             <div className="transaction-div text-center mb-2">
               <label
