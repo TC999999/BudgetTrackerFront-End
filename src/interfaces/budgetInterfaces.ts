@@ -37,3 +37,8 @@ export type DeleteBudgetInterface = {
   budgetID: string;
   expenses: string[];
 };
+
+export type BudgetFormErrors = {
+  title: string;
+  moneyAllocated: string;
+};

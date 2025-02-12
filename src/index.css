@@ -19,6 +19,10 @@
     @apply active:border-green-600;
   }
 
+  .radio {
+    @apply w-4 h-4;
+  }
+
   .striped .expense-card:nth-child(even) {
     @apply bg-green-200;
   }

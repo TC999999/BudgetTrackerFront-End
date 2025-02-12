@@ -156,27 +156,43 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                   Are you adding or subtracting this amount from your available
                   assets?
                 </legend>
-                <div>
-                  <input
-                    type="radio"
-                    id="add"
-                    name="operation"
-                    value="add"
-                    onChange={handleRadio}
-                    checked={formData.operation === "add"}
-                  />
-                  <label htmlFor="add">Add to Funds</label>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    id="remove"
-                    name="operation"
-                    value="subtract"
-                    onChange={handleRadio}
-                    checked={formData.operation === "subtract"}
-                  />
-                  <label htmlFor="remove">Subtract from Funds</label>
+                <div className="border border-green-600 shadow-md rounded-full">
+                  <div
+                    className={`p-2 border-b border-green-600 rounded-t-full ${
+                      formData.operation === "add"
+                        ? "bg-green-100 font-bold"
+                        : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      id="add"
+                      name="operation"
+                      value="add"
+                      onChange={handleRadio}
+                      className="radio"
+                      checked={formData.operation === "add"}
+                    />
+                    <label htmlFor="add">Add to Funds</label>
+                  </div>
+                  <div
+                    className={`p-2 rounded-b-full ${
+                      formData.operation === "subtract"
+                        ? "bg-green-100 font-bold"
+                        : ""
+                    } `}
+                  >
+                    <input
+                      type="radio"
+                      id="remove"
+                      name="operation"
+                      value="subtract"
+                      onChange={handleRadio}
+                      className="radio"
+                      checked={formData.operation === "subtract"}
+                    />
+                    <label htmlFor="remove">Subtract from Funds</label>
+                  </div>
                 </div>
               </fieldset>
               {radioErrorMessage && (
