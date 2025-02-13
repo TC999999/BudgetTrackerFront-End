@@ -22,3 +22,7 @@ export interface UserInfoInterface extends UserInterface {
   expenses: ExpenseInterface[];
   budgets: BudgetInterface[];
 }
+
+export type UserEditErrors = {
+  value: string;
+};

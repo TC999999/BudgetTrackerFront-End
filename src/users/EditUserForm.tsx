@@ -2,11 +2,17 @@ import { useState, useCallback, useRef, useMemo } from "react";
 import {
   UserContextInterface,
   UserEditInterface,
+  UserEditErrors,
 } from "../interfaces/userInterfaces";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { calculateNewTotalAssetsUserDashboard } from "../helpers/calculateNewTotalAssets";
+import {
+  handleUserComparisons,
+  handleUserEditInputErrors,
+  handleEditUserSubmitErrors,
+} from "../helpers/handleUserEditErrors";
 import { addToAssets } from "../features/actions/users";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
@@ -30,12 +36,12 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
     value: 0,
     operation: "add",
   };
+  const initalErrors: UserEditErrors = { value: "" };
   const [formData, setFormData] = useState<FormInfo>(initialState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [radioErrorMessage, setRadioErrorMessage] = useState<string>("");
   const maxNum = useRef<number>(99999999999999);
-  const [keyPadError, setKeyPadError] = useState<boolean>(false);
-
+  const [formErrors, setFormErrors] = useState<UserEditErrors>(initalErrors);
+  const [flashInput, setFlashInput] = useState<boolean>(false);
   const newTotalAssets: string = useMemo<string>(() => {
     return calculateNewTotalAssetsUserDashboard(
       userStatus.user!.totalAssets,
@@ -49,20 +55,22 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.value, num);
-      if (newNum > maxNum.current) {
-        setKeyPadError(true);
-      } else if (
-        formData.operation === "subtract" &&
-        newNum > userStatus.user!.totalAssets * 100
-      ) {
-        setRadioErrorMessage(
-          "Cannot subtract a value greater than current total assets"
-        );
-      } else {
+      let errors = handleUserComparisons(
+        newNum,
+        setFormErrors,
+        formData.operation,
+        maxNum.current,
+        userStatus.user!.totalAssets * 100
+      );
+      if (!errors) {
         setFormData((data) => ({
           ...data,
           value: newNum,
         }));
+      } else {
+        setTimeout(() => {
+          setFormErrors((data) => ({ ...data, value: "" }));
+        }, 1500);
       }
     },
     [formData]
@@ -72,53 +80,56 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let newNum = numPop(formData.value);
+      handleUserEditInputErrors("value", newNum, setFormErrors);
       setFormData((data) => ({
         ...data,
         value: newNum,
       }));
-      if (keyPadError) {
-        setKeyPadError(false);
-      }
-      if (radioErrorMessage) {
-        setRadioErrorMessage("");
-      }
     },
-    [formData, keyPadError, radioErrorMessage]
+    [formData]
   );
 
   const handleRadio = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     if (
-      value === "subtract" &&
-      formData.value > userStatus.user!.totalAssets * 100
+      !handleUserComparisons(
+        formData.value,
+        setFormErrors,
+        value,
+        maxNum.current,
+        userStatus.user!.totalAssets * 100
+      )
     ) {
-      setRadioErrorMessage(
-        "Cannot subtract a value greater than current total assets"
-      );
-    } else {
       setFormData((data) => ({
         ...data,
         [name]: value,
       }));
-      if (radioErrorMessage) {
-        setRadioErrorMessage("");
-      }
+    } else {
+      setTimeout(() => {
+        setFormErrors((data) => ({ ...data, value: "" }));
+      }, 1500);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    setIsLoading(true);
     try {
-      const { value, operation } = formData;
-      const submitData: UserEditInterface = {
-        value: operation === "add" ? +value / 100 : -value / 100,
-      };
-      await dispatch(addToAssets(submitData)).unwrap();
-      hideForm(e);
+      if (handleEditUserSubmitErrors(formData, setFormErrors)) {
+        setIsLoading(true);
+        const { value, operation } = formData;
+        const submitData: UserEditInterface = {
+          value: operation === "add" ? +value / 100 : -value / 100,
+        };
+        await dispatch(addToAssets(submitData)).unwrap();
+        hideForm(e);
+      } else {
+        setFlashInput(true);
+        setTimeout(() => {
+          setFlashInput(false);
+        }, 500);
+      }
     } catch (err) {
       setIsLoading(false);
-      console.log(err);
     }
   };
 
@@ -130,7 +141,9 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
         <div className="add-to-assets-form modal-layer-3">
           <h1 className="text-xl text-center">Update Your Current Assets</h1>
           <div className="new-assets-value text-center">
-            <h2 className="text-lg text-center">New Assets:</h2>
+            <h2 className="text-lg text-center">
+              Your Updated Assets Will Be:
+            </h2>
             <h2 className="text-3xl text-green-700">${newTotalAssets}</h2>
           </div>
           <form onSubmit={handleSubmit}>
@@ -140,7 +153,9 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                 assets? ($ U.S.):{" "}
               </label>
               <input
-                className="text-gray-900 text-xl text-center mb-2"
+                className={`text-gray-900 text-xl text-center mb-2 ${
+                  formErrors.value ? "input-error" : ""
+                } ${flashInput ? "animate-blinkError" : ""}`}
                 id="added_assets"
                 type="text"
                 name="addedAssets"
@@ -149,6 +164,13 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                 required
                 readOnly
               />
+              {formErrors.value && (
+                <div className="error-message">
+                  <p className="text-lg text-center text-red-700 font-bold">
+                    {formErrors.value}
+                  </p>
+                </div>
+              )}
             </div>
             <div>
               <fieldset className="edit-budget-choices text-center">
@@ -192,11 +214,6 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                   </div>
                 </div>
               </fieldset>
-              {radioErrorMessage && (
-                <div className="text-lg text-center text-red-700 font-bold">
-                  <p>{radioErrorMessage}</p>
-                </div>
-              )}
             </div>
             <div className="keyPad-div px-2 py-2">
               <KeyPad
@@ -205,11 +222,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                 num={formData.value}
               />
             </div>
-            {keyPadError && (
-              <div className="text-red-700 font-bold text-center">
-                <p>You've reached the maximum asset value.</p>
-              </div>
-            )}
+
             <div className="button-div flex justify-between">
               <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
                 Update your Assets
