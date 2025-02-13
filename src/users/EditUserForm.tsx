@@ -190,7 +190,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                       name="operation"
                       value="add"
                       onChange={handleRadio}
-                      className="radio radio-add"
+                      className="radio radio-add form-radio"
                       checked={formData.operation === "add"}
                     />
 
@@ -207,7 +207,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                       name="operation"
                       value="subtract"
                       onChange={handleRadio}
-                      className="radio radio-subtract"
+                      className="radio radio-subtract form-radio"
                       checked={formData.operation === "subtract"}
                     />
                     <label htmlFor="remove">Subtract from Funds</label>
