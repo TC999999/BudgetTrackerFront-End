@@ -159,9 +159,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                 <div className="border border-green-600 shadow-md rounded-full">
                   <div
                     className={`p-2 border-b border-green-600 rounded-t-full ${
-                      formData.operation === "add"
-                        ? "bg-green-100 font-bold"
-                        : ""
+                      formData.operation === "add" ? "bg-green-100" : ""
                     }`}
                   >
                     <input
@@ -170,16 +168,15 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                       name="operation"
                       value="add"
                       onChange={handleRadio}
-                      className="radio"
+                      className="radio radio-add"
                       checked={formData.operation === "add"}
                     />
+
                     <label htmlFor="add">Add to Funds</label>
                   </div>
                   <div
                     className={`p-2 rounded-b-full ${
-                      formData.operation === "subtract"
-                        ? "bg-green-100 font-bold"
-                        : ""
+                      formData.operation === "subtract" ? "bg-red-100" : ""
                     } `}
                   >
                     <input
@@ -188,7 +185,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                       name="operation"
                       value="subtract"
                       onChange={handleRadio}
-                      className="radio"
+                      className="radio radio-subtract"
                       checked={formData.operation === "subtract"}
                     />
                     <label htmlFor="remove">Subtract from Funds</label>

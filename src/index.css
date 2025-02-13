@@ -20,7 +20,15 @@
   }
 
   .radio {
-    @apply w-4 h-4;
+    @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200;
+  }
+
+  .radio-add {
+    @apply text-green-600 hover:ring-green-600 focus:ring-green-600;
+  }
+
+  .radio-subtract {
+    @apply text-red-600 hover:ring-red-600 focus:ring-red-600;
   }
 
   .striped .expense-card:nth-child(even) {
