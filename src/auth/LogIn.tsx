@@ -10,6 +10,8 @@ import {
 } from "../helpers/handleLogInErrors";
 import { Link } from "react-router-dom";
 
+type flashErrors = { username: boolean; password: boolean };
+
 const LogIn: React.FC = () => {
   const initialState: LogInInterface = { username: "", password: "" };
   const initialErrors: LogInErrors = {
@@ -18,7 +20,11 @@ const LogIn: React.FC = () => {
   };
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<LogInInterface>(initialState);
-  const [logInErrors, setLogInErrors] = useState(initialErrors);
+  const [logInErrors, setLogInErrors] = useState<LogInErrors>(initialErrors);
+  const [flashInput, setFlashInput] = useState<flashErrors>({
+    username: false,
+    password: false,
+  });
 
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
@@ -56,6 +62,14 @@ const LogIn: React.FC = () => {
         );
         await dispatch(logInUser(logInInfo));
         localStorage.removeItem("userInputs");
+      } else {
+        if (logInErrors.username || formData.username === "")
+          setFlashInput((flash) => ({ ...flash, username: true }));
+        if (logInErrors.password || formData.password === "")
+          setFlashInput((flash) => ({ ...flash, password: true }));
+        setTimeout(() => {
+          setFlashInput({ username: false, password: false });
+        }, 500);
       }
     } catch (err) {
       console.log("error in login");
@@ -77,7 +91,9 @@ const LogIn: React.FC = () => {
               </label>
               <input
                 className={`input 
-                ${logInErrors.username ? "input-error" : "input-valid"}`}
+                ${logInErrors.username ? "input-error" : "input-valid"} ${
+                  flashInput.username && "animate-blinkError"
+                }`}
                 id="login_username"
                 type="text"
                 name="username"
@@ -98,7 +114,9 @@ const LogIn: React.FC = () => {
               </label>
               <input
                 className={`input 
-                  ${logInErrors.password ? "input-error" : "input-valid"}`}
+                  ${logInErrors.password ? "input-error" : "input-valid"} ${
+                  flashInput.password && "animate-blinkError"
+                }`}
                 id="login_password"
                 type="password"
                 name="password"
