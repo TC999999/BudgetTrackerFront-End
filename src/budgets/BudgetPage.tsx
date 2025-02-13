@@ -18,9 +18,15 @@ const BudgetPage: React.FC = () => {
   );
   const [showBudgetForm, setShowBudgetForm] = useState<boolean>(false);
 
-  const HideForm = useCallback((): void => {
-    setShowBudgetForm(false);
-  }, [showBudgetForm]);
+  const HideForm = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+    ): void => {
+      e.preventDefault();
+      setShowBudgetForm(false);
+    },
+    [showBudgetForm]
+  );
 
   return (
     <div className="budget-page">

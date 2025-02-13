@@ -15,7 +15,9 @@ import { addNewBudget } from "../features/actions/budgets";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 
 type Props = {
-  hideForm: () => void;
+  hideForm: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+  ) => void;
 };
 
 type flashErrors = {
@@ -100,7 +102,7 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
           moneyAllocated: formData.moneyAllocated / 100,
         };
         await dispatch(addNewBudget(submitData)).unwrap();
-        hideForm();
+        hideForm(e);
       } else {
         if (formErrors.title || formData.title === "")
           setFlashInput((flash) => ({ ...flash, title: true }));
@@ -159,7 +161,6 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
                 </p>
               </div>
             </div>
-
             <div className="allocated-funds-div text-center mb-2">
               <label className="text-gray-700 block" htmlFor="moneyAllocated">
                 Money Allocated ($ U.S.):
@@ -204,7 +205,7 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
               </button>
               <button
                 className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
-                onClick={hideForm}
+                onClick={(e) => hideForm(e)}
               >
                 Cancel
               </button>
