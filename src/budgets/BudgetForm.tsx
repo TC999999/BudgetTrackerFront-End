@@ -18,6 +18,11 @@ type Props = {
   hideForm: () => void;
 };
 
+type flashErrors = {
+  title: boolean;
+  moneyAllocated: boolean;
+};
+
 const BudgetForm: React.FC<Props> = ({ hideForm }) => {
   const dispatch = useAppDispatch();
   const userStatus: UserContextInterface = useAppSelector(
@@ -34,6 +39,10 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
   );
   const [formErrors, setFormErrors] = useState<BudgetFormErrors>(initialErrors);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [flashInput, setFlashInput] = useState<flashErrors>({
+    title: false,
+    moneyAllocated: false,
+  });
 
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -92,6 +101,14 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
         };
         await dispatch(addNewBudget(submitData)).unwrap();
         hideForm();
+      } else {
+        if (formErrors.title || formData.title === "")
+          setFlashInput((flash) => ({ ...flash, title: true }));
+        if (formErrors.moneyAllocated || formData.moneyAllocated === 0)
+          setFlashInput((flash) => ({ ...flash, moneyAllocated: true }));
+        setTimeout(() => {
+          setFlashInput({ title: false, moneyAllocated: false });
+        }, 500);
       }
     } catch (err: any) {
       setIsLoading(false);
@@ -123,7 +140,7 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
               <input
                 className={`input ${
                   formErrors.title ? "input-error" : "input-valid"
-                }`}
+                } ${flashInput.title ? "animate-blinkError" : ""}`}
                 id="budget_title"
                 type="text"
                 name="title"
@@ -150,7 +167,7 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
               <input
                 className={`input ${
                   formErrors.moneyAllocated ? "input-error" : ""
-                }`}
+                } } ${flashInput.moneyAllocated ? "animate-blinkError" : ""}`}
                 id="budget_allocation"
                 type="text"
                 name="moneyAllocated"
