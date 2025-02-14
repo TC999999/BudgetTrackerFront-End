@@ -27,6 +27,10 @@ type Props = {
   budget: BudgetInterface;
 };
 
+type flashErrors = {
+  title: boolean;
+};
+
 const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
   const dispatch = useAppDispatch();
   const userStatus: UserContextInterface = useAppSelector(
@@ -45,6 +49,7 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
   const [formData, setFormData] = useState<BudgetEditInterface>(initialState);
   const [formErrors, setFormErrors] =
     useState<UpdateBudgetFormErrors>(initialErrors);
+  const [flashInput, setFlashInput] = useState<flashErrors>({ title: false });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const remainingMoney = useRef<number>(
     +getRemainingMoney(budget.moneyAllocated, budget.moneySpent) * 100
@@ -136,10 +141,11 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    handleUpdateBudgetInputErrors(name, value.trim(), setFormErrors);
+    let trimVal = value.length > 1 ? value : value.trim();
+    handleUpdateBudgetInputErrors(name, trimVal, setFormErrors);
     setFormData((data) => ({
       ...data,
-      [name]: value.trim(),
+      [name]: trimVal,
     }));
   };
 
@@ -160,7 +166,11 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
         await dispatch(updateBudget(submitData)).unwrap();
         hideEditForm(e, "showEditForm");
       } else {
-        console.log("ERRORS ABOUND");
+        if (formErrors.title || formData.title === "")
+          setFlashInput({ title: true });
+        setTimeout(() => {
+          setFlashInput({ title: false });
+        }, 500);
       }
     } catch (err) {
       setIsLoading(false);
@@ -181,7 +191,7 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
             <p className="text-green-700 text-3xl"> ${newTotalAssets}</p>
             <h3> {budget.title} Budget Will Have a New Value of</h3>
             <p className="text-green-700 text-3xl">{newBudget}</p>
-            <h3>This Budget Will Have a Remaining Value of</h3>
+            <h3>{budget.title} Budget Will Have a Remaining Value of</h3>
             <p className="text-green-700 text-3xl">{newRemainingMoney}</p>
           </div>
           <form onSubmit={handleSubmit}>
@@ -192,7 +202,7 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
               <input
                 className={`input ${
                   formErrors.title ? "input-error" : "input-valid"
-                }`}
+                } ${flashInput.title && "animate-blinkError"}`}
                 id="budget_title"
                 type="text"
                 name="title"
@@ -239,6 +249,16 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
                   </p>
                 </div>
               )}
+              <div className="text-sm">
+                <p>
+                  If adding to budget, make sure new assets are equal to or less
+                  than your available assets.
+                </p>
+                <p>
+                  If subtracting from budget, make sure new assets are equal to
+                  or greater than your remaining budget value.
+                </p>
+              </div>
             </div>
             <div className="keyPad-div">
               <KeyPad
