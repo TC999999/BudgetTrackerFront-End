@@ -28,6 +28,7 @@ export interface SignUpInterface extends LogInInterface {
 export type SignUpErrors = {
   username: string;
   password: string;
-  totalAssets: string;
   [key: string]: string;
 };
+
+export type FlashErrors = { username: boolean; password: boolean };

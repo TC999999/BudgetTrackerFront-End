@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { removeUserError } from "../features/auth/authSlice";
 import { logInUser } from "../features/actions/auth";
-import { LogInInterface, LogInErrors } from "../interfaces/authInterfaces";
+import {
+  LogInInterface,
+  LogInErrors,
+  FlashErrors,
+} from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import {
@@ -9,8 +13,6 @@ import {
   handleLogInSubmitErrors,
 } from "../helpers/handleLogInErrors";
 import { Link } from "react-router-dom";
-
-type flashErrors = { username: boolean; password: boolean };
 
 const LogIn: React.FC = () => {
   const initialState: LogInInterface = { username: "", password: "" };
@@ -21,7 +23,7 @@ const LogIn: React.FC = () => {
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<LogInInterface>(initialState);
   const [logInErrors, setLogInErrors] = useState<LogInErrors>(initialErrors);
-  const [flashInput, setFlashInput] = useState<flashErrors>({
+  const [flashInput, setFlashInput] = useState<FlashErrors>({
     username: false,
     password: false,
   });
