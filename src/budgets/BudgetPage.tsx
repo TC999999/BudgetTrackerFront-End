@@ -34,7 +34,7 @@ const BudgetPage: React.FC = () => {
       <div className="buttons sticky top-0 bg-emerald-900 flex justify-around p-2 w-full">
         <div className="back-button">
           <button
-            className="border-2 border-gray-500 p-1 rounded-lg text-white bg-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-100"
+            className="border-2 border-gray-500 p-2 rounded-full text-white bg-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-100"
             onClick={() => navigate("/")}
           >
             Back Home
@@ -42,7 +42,7 @@ const BudgetPage: React.FC = () => {
         </div>
         <div className="add-budget-form-button">
           <button
-            className="border-2 border-green-500 p-1 rounded-lg bg-green-300 hover:bg-green-500 hover:text-white active:bg-green-200"
+            className="border-2 border-green-500 p-2 rounded-full bg-green-300 hover:bg-green-500 hover:text-white active:bg-green-200"
             onClick={() => setShowBudgetForm(true)}
           >
             Add a new Budget
