@@ -138,24 +138,24 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
   ) : (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
       <div className="modal-layer-2">
-        <div className="add-to-assets-form modal-layer-3">
-          <h1 className="text-xl text-center">Update Your Current Assets</h1>
-          <div className="new-assets-value text-center">
-            <h2 className="text-lg text-center">
-              Your Updated Assets Will Be:
-            </h2>
+        <div className="add-to-assets-form text-center modal-layer-3">
+          <h1 className="text-3xl text-green-800 underline">
+            Update Your Current Assets
+          </h1>
+          <div className="new-assets-value">
+            <h2 className="text-lg">Your New Assets Will Be:</h2>
             <h2 className="text-3xl text-green-700">${newTotalAssets}</h2>
           </div>
           <form onSubmit={handleSubmit}>
-            <div className="added-assets-div text-center">
+            <div className="added-assets-div">
               <label className="text-gray-700 block" htmlFor="addedAssets">
                 How much are you adding or subtracting from your current total
                 assets? ($ U.S.):{" "}
               </label>
               <input
-                className={`text-gray-900 text-xl text-center mb-2 ${
-                  formErrors.value ? "input-error" : ""
-                } ${flashInput ? "animate-blinkError" : ""}`}
+                className={`input ${formErrors.value ? "input-error" : ""} ${
+                  flashInput ? "animate-blinkError" : ""
+                }`}
                 id="added_assets"
                 type="text"
                 name="addedAssets"
@@ -166,14 +166,14 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
               />
               {formErrors.value && (
                 <div className="error-message">
-                  <p className="text-lg text-center text-red-700 font-bold">
+                  <p className="text-lg text-red-700 font-bold">
                     {formErrors.value}
                   </p>
                 </div>
               )}
             </div>
             <div>
-              <fieldset className="edit-budget-choices text-center">
+              <fieldset className="edit-budget-choices">
                 <legend className="font-bold">
                   Are you adding or subtracting this amount from your available
                   assets?
