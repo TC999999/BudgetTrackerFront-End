@@ -16,6 +16,8 @@ import { addNewExpense } from "../features/actions/expenses";
 import SmallLoadingMsg from "../SmallLoadingMsg";
 import { DateTime } from "luxon";
 
+type flashErrors = { title: boolean; transaction: boolean; date: boolean };
+
 type Props = {
   hideExpenseForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
@@ -47,6 +49,12 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formErrors, setFormErrors] =
     useState<ExpenseFormErrors>(initialErrors);
+
+  const [flashInput, setFlashInput] = useState<flashErrors>({
+    title: false,
+    transaction: false,
+    date: false,
+  });
 
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -112,6 +120,18 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
         };
         await dispatch(addNewExpense(submitData)).unwrap();
         hideExpenseForm(e, "showExpenseForm");
+      } else {
+        if (formErrors.title || formData.title === "")
+          setFlashInput((flash) => ({ ...flash, title: true }));
+        if (formErrors.date || formData.date === "")
+          setFlashInput((flash) => ({ ...flash, date: true }));
+
+        if (formErrors.transaction || formData.transaction === 0)
+          setFlashInput((flash) => ({ ...flash, transaction: true }));
+
+        setTimeout(() => {
+          setFlashInput({ title: false, date: false, transaction: false });
+        }, 500);
       }
     } catch (err) {
       setIsLoading(false);
@@ -141,7 +161,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
               <input
                 className={`input ${
                   formErrors.title ? "input-error" : "input-valid"
-                }`}
+                } ${flashInput.title && "animate-blinkError"}`}
                 id="expense_title"
                 type="text"
                 name="title"
@@ -164,7 +184,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 type="datetime-local"
                 className={`input ${
                   formErrors.date ? "input-error" : "input-valid-date"
-                }`}
+                } ${flashInput.date && "animate-blinkError"}`}
                 id="expense_date"
                 name="date"
                 value={formData.date}
@@ -186,7 +206,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
               <input
                 className={`input ${
                   formErrors.transaction ? "input-error" : ""
-                }`}
+                } ${flashInput.transaction && "animate-blinkError"}`}
                 id="expense_transaction"
                 type="text"
                 name="trasaction"
