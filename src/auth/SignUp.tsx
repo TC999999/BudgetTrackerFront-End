@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { removeUserError } from "../features/auth/authSlice";
 import { registerUser } from "../features/actions/auth";
-import { SignUpInterface, SignUpErrors } from "../interfaces/authInterfaces";
+import {
+  SignUpInterface,
+  SignUpErrors,
+  FlashErrors,
+} from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
@@ -22,7 +26,6 @@ const SignUp = () => {
   const initialErrors: SignUpErrors = {
     username: "",
     password: "",
-    totalAssets: "",
   };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -33,6 +36,10 @@ const SignUp = () => {
   const maxNum = useRef(99999999999999);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
   const [signUpErrors, setSignUpErrors] = useState(initialErrors);
+  const [FlashErrors, setFlashErrors] = useState<FlashErrors>({
+    username: false,
+    password: false,
+  });
 
   useEffect(() => {
     if (userStatus.userExists) {
@@ -71,6 +78,14 @@ const SignUp = () => {
         await dispatch(registerUser(signUpInfo)).unwrap();
         localStorage.removeItem("userInputs");
         navigate("/");
+      } else {
+        if (signUpErrors.username || formData.username === "")
+          setFlashErrors((flash) => ({ ...flash, username: true }));
+        if (signUpErrors.password || formData.password === "")
+          setFlashErrors((flash) => ({ ...flash, password: true }));
+        setTimeout(() => {
+          setFlashErrors({ username: false, password: false });
+        }, 500);
       }
     } catch (err) {}
   };
@@ -106,110 +121,114 @@ const SignUp = () => {
 
   return (
     <div className="register-page bg-[url('/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-full max-h-full">
-      <div className="register-form px-4 py-2 bg-white border-2 border-green-700 rounded-r-lg h-full">
-        <button onClick={() => navigate("/")}>Go Back</button>
-        <h1 className="text-3xl font-bold underline">Sign Up Here!</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="username-div py-4">
-            <label className="text-lg block" htmlFor="username">
-              Username:{" "}
-            </label>
-            <input
-              className={`input 
+      <div className="register-form px-4 py-2 bg-white border-2 border-green-700 rounded-r-lg h-full max-h-full overflow-auto">
+        <button
+          className="border border-gray-200 p-2 rounded-full bg-gray-400 shadow hover:bg-gray-200 transition-150 active:bg-gray-300"
+          onClick={() => navigate("/")}
+        >
+          Go Back
+        </button>
+        <h1 className="text-3xl font-bold underline text-emerald-600">
+          Sign Up Here!
+        </h1>
+        <div className="form-div">
+          <form onSubmit={handleSubmit}>
+            <div className="username-div py-4">
+              <label className="text-lg block" htmlFor="username">
+                Username:{" "}
+              </label>
+              <input
+                className={`input 
                 ${
                   signUpErrors.username || userStatus.error
                     ? "input-error"
                     : "input-valid"
-                }`}
-              id="signup_username"
-              type="text"
-              name="username"
-              placeholder="type your username here"
-              value={formData.username}
-              onChange={handleChange}
-              maxLength={30}
-            />
-            <div className="text-sm">
-              <p>Your username must be between 5-30 characters</p>
-            </div>
-            {signUpErrors.username && (
-              <div className="username-error text-red-600 font-bold">
-                <p>{signUpErrors.username}</p>
+                } ${FlashErrors.username && "animate-blinkError"}`}
+                id="signup_username"
+                type="text"
+                name="username"
+                placeholder="type your username here"
+                value={formData.username}
+                onChange={handleChange}
+                maxLength={30}
+              />
+              <div className="text-sm">
+                <p>Your username must be between 5-30 characters</p>
               </div>
-            )}
-            {typeof userStatus.error === "string" && (
-              <div className="username-error text-red-600 font-bold">
-                <p>{userStatus.error}</p>
-              </div>
-            )}
-          </div>
-          <div className="password-div py-4">
-            <label className="text-lg block" htmlFor="password">
-              Password:{" "}
-            </label>
-            <input
-              className={`input ${
-                signUpErrors.password ? "input-error" : "input-valid"
-              }`}
-              id="signup_password"
-              type="password"
-              name="password"
-              placeholder="type your password here"
-              value={formData.password}
-              onChange={handleChange}
-              maxLength={20}
-            />
-            <div className="text-sm">
-              <p>Your password must be between 8-20 characters</p>
+              {signUpErrors.username && (
+                <div className="username-error text-red-600 font-bold">
+                  <p>{signUpErrors.username}</p>
+                </div>
+              )}
+              {typeof userStatus.error === "string" && (
+                <div className="username-error text-red-600 font-bold">
+                  <p>{userStatus.error}</p>
+                </div>
+              )}
             </div>
-            {signUpErrors.password && (
-              <div className="password-error text-red-600 font-bold">
-                <p>{signUpErrors.password}</p>
+            <div className="password-div py-4">
+              <label className="text-lg block" htmlFor="password">
+                Password:{" "}
+              </label>
+              <input
+                className={`input ${
+                  signUpErrors.password ? "input-error" : "input-valid"
+                } ${FlashErrors.password && "animate-blinkError"}`}
+                id="signup_password"
+                type="password"
+                name="password"
+                placeholder="type your password here"
+                value={formData.password}
+                onChange={handleChange}
+                maxLength={20}
+              />
+              <div className="text-sm">
+                <p>Your password must be between 8-20 characters</p>
               </div>
-            )}
-          </div>
-          <div className="total-assets-div py-4">
-            <label className="text-lg block" htmlFor="moneyAllocated">
-              Total Assets: ($ U.S.):{" "}
-            </label>
-            <input
-              className="input input-valid"
-              id="total_assets"
-              type="text"
-              name="totalAssets"
-              placeholder="0.00"
-              value={`$${(formData.totalAssets / 100).toFixed(2)}`}
-              onChange={handleChange}
-              required
-              readOnly
-            />
-            <div className="text-sm">
-              <p>Your total assets must be $999999999999.99 or less</p>
+              {signUpErrors.password && (
+                <div className="password-error text-red-600 font-bold">
+                  <p>{signUpErrors.password}</p>
+                </div>
+              )}
             </div>
-            {keyPadError && (
-              <div className="text-green-700 font-bold text-sm">
-                <p>You've reached the maximum asset value.</p>
+            <div className="total-assets-div py-4">
+              <label className="text-lg block" htmlFor="moneyAllocated">
+                Total Assets: ($ U.S.):{" "}
+              </label>
+              <input
+                className="input"
+                id="total_assets"
+                type="text"
+                name="totalAssets"
+                placeholder="0.00"
+                value={`$${(formData.totalAssets / 100).toFixed(2)}`}
+                onChange={handleChange}
+                required
+                readOnly
+              />
+              <div className="text-sm">
+                <p>Your total assets must be $999999999999.99 or less</p>
               </div>
-            )}
-          </div>
-          <div className="keyPad-div flex justify-center m-5">
-            <KeyPad
-              handlePress={handlePress}
-              handleDelete={handleDelete}
-              num={formData.totalAssets}
-            />
-          </div>
-          <div className="button-div">
-            <button className="make-profile-button border-2 rounded-full border-green-500 bg-green-500 p-2">
-              Sign Up!
-            </button>
-          </div>{" "}
-          {/* {userStatus.error && (
-            <div className="error-message">
-              <p className="text-red-400">{userStatus.error}</p>
+              {keyPadError && (
+                <div className="text-green-700 font-bold text-sm">
+                  <p>You've reached the maximum asset value.</p>
+                </div>
+              )}
             </div>
-          )} */}
-        </form>
+            <div className="keyPad-div flex justify-center m-5">
+              <KeyPad
+                handlePress={handlePress}
+                handleDelete={handleDelete}
+                num={formData.totalAssets}
+              />
+            </div>
+            <div className="button-div text-center">
+              <button className="make-profile-button border-2 rounded-full border-green-500 bg-green-500 p-2">
+                Sign Up!
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
