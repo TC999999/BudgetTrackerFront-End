@@ -85,24 +85,19 @@ const SingleBudgetPage: React.FC = () => {
               </button>
             </div>
           </div>
-
           <BudgetPageCard budget={budget} />
-
           {formsState.showEditForm && (
             <EditBudgetForm hideEditForm={changeFormState} budget={budget} />
           )}
-
           {formsState.showDeleteForm && (
             <DeleteBudgetForm
               hideDeleteForm={changeFormState}
               budget={budget}
             />
           )}
-
           {formsState.showExpenseForm && (
             <ExpenseForm hideExpenseForm={changeFormState} budget={budget} />
           )}
-
           <ExpenseList
             expensesList={budget?.expenses}
             isFrontPage={false}

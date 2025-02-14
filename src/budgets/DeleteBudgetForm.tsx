@@ -73,59 +73,97 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
     <div className="delete-budget-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="delete-budget-form text-center modal-layer-3">
-          <h3 className="text-3xl text-red-700">Before You Delete</h3>
+          <h3 className="text-3xl font-bold text-red-700">Before You Delete</h3>
+          <div className="messages">
+            <p className="text-lg">
+              Please be aware that deleting the {budget.title} budget will also
+              delete all {budget.expenses.length} expenses made using its funds
+            </p>
+          </div>
           <div className="form-div">
             <form onSubmit={handleSubmit}>
               <fieldset className="delete-choices">
-                <legend className="text-xl">
+                <legend className="text-xl font-bold">
                   Are you returning any funds to your available assets?
                 </legend>
-                <div className="add-no-funds text-lg p-3">
-                  <input
-                    type="radio"
-                    id="none"
-                    name="addBackToAssets"
-                    value={0}
-                    onChange={handleChange}
-                    checked={formData.addBackToAssets === 0}
-                  />
-                  <label htmlFor="none">Return No Funds ($0.00)</label>
-                </div>
-                {remainingMoney !== budget.moneyAllocated && (
-                  <div className="add-remaining-funds text-lg p-3">
+                <div className="delete-budget-radio-buttons text-lg border border-green-600 shadow-md">
+                  <div
+                    className={`add-no-funds p-3 border-b border-green-600 ${
+                      formData.addBackToAssets === 0 ? "bg-gray-200" : ""
+                    }`}
+                  >
                     <input
                       type="radio"
-                      id="remaining"
+                      id="none"
                       name="addBackToAssets"
-                      value={remainingMoney}
+                      value={0}
+                      className="form-radio radio radio-none"
                       onChange={handleChange}
-                      checked={formData.addBackToAssets === +remainingMoney}
+                      checked={formData.addBackToAssets === 0}
                     />
-                    <label htmlFor="remaining">
-                      Return Remaining Funds Only (${remainingMoney})
+                    <label htmlFor="none">
+                      Return No Funds (
+                      <span className="font-bold text-green-700">$0.00</span>)
                     </label>
                   </div>
-                )}
-                <div className="add-all-funds text-lg p-3">
-                  <input
-                    type="radio"
-                    id="all"
-                    name="addBackToAssets"
-                    value={budget.moneyAllocated}
-                    onChange={handleChange}
-                    checked={
+                  {remainingMoney !== budget.moneyAllocated && (
+                    <div
+                      className={`add-remaining-funds p-3 border-b border-green-600 ${
+                        formData.addBackToAssets === +remainingMoney
+                          ? "bg-blue-100"
+                          : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        id="remaining"
+                        name="addBackToAssets"
+                        value={remainingMoney}
+                        className="form-radio radio radio-remaining"
+                        onChange={handleChange}
+                        checked={formData.addBackToAssets === +remainingMoney}
+                      />
+                      <label htmlFor="remaining">
+                        Return Remaining Funds Only (
+                        <span className="font-bold text-green-700">
+                          ${remainingMoney}
+                        </span>
+                        )
+                      </label>
+                    </div>
+                  )}
+                  <div
+                    className={`add-all-funds p-3 ${
                       formData.addBackToAssets === +budget.moneyAllocated
-                    }
-                  />
-                  <label htmlFor="all">
-                    Return All Funds (${budget.moneyAllocated})
-                  </label>
+                        ? "bg-green-100"
+                        : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      id="all"
+                      name="addBackToAssets"
+                      value={budget.moneyAllocated}
+                      className="form-radio radio radio-add"
+                      onChange={handleChange}
+                      checked={
+                        formData.addBackToAssets === +budget.moneyAllocated
+                      }
+                    />
+                    <label htmlFor="all">
+                      Return All Funds (
+                      <span className="font-bold text-green-700">
+                        ${budget.moneyAllocated}
+                      </span>
+                      )
+                    </label>
+                  </div>
                 </div>
               </fieldset>
 
-              <div className="new-assets text-green-600">
-                <p className="text-lg">Your New Available Assets Will Be</p>
-                <p className="text-2xl">${newAssets}</p>
+              <div className="new-assets">
+                <p className="text-lg p-1">Your New Available Assets Will Be</p>
+                <p className="text-3xl text-green-600 p-1">${newAssets}</p>
               </div>
               <div className="buttons flex justify-between m-2">
                 <div className="delete-button-div">
