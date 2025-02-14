@@ -172,8 +172,8 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                 </div>
               )}
             </div>
-            <div>
-              <fieldset className="edit-budget-choices">
+            <div className="edit-user-radio-buttons">
+              <fieldset className="edit-user-choices">
                 <legend className="font-bold">
                   Are you adding or subtracting this amount from your available
                   assets?
@@ -193,7 +193,6 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
                       className="radio radio-add form-radio"
                       checked={formData.operation === "add"}
                     />
-
                     <label htmlFor="add">Add to Funds</label>
                   </div>
                   <div

@@ -42,3 +42,8 @@ export type BudgetFormErrors = {
   title: string;
   moneyAllocated: string;
 };
+
+export type UpdateBudgetFormErrors = {
+  title: string;
+  addedMoney: string;
+};
