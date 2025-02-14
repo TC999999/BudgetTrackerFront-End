@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { makeDateString, dateInfo } from "../helpers/makeDateString";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 
@@ -22,6 +22,17 @@ const ExpenseCard: React.FC<Props> = ({
   deleteExpense,
 }) => {
   const dateTime = useRef<dateInfo>(makeDateString(expense.date));
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const deleteAndSetLoad = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setIsLoading(true);
+    deleteExpense(e, {
+      _id: expense._id,
+      transaction: expense.transaction,
+    });
+  };
 
   return (
     <div className="expense-card grid grid-cols-4 px-4 py-4">
@@ -42,17 +53,18 @@ const ExpenseCard: React.FC<Props> = ({
       </div>
       {!isFrontPage && (
         <div className="delete-expense-div p-1">
-          <button
-            onClick={(e) =>
-              deleteExpense(e, {
-                _id: expense._id,
-                transaction: expense.transaction,
-              })
-            }
-            className="delete-expense-button border-2 border-red-500 p-1 rounded-md bg-red-200 hover:bg-red-600 hover:text-white duration-300 active:bg-red-100 active:text-black"
-          >
-            Delete
-          </button>
+          {isLoading ? (
+            <div>
+              <p className="font-bold">Loading...</p>
+            </div>
+          ) : (
+            <button
+              onClick={(e) => deleteAndSetLoad(e)}
+              className="delete-expense-button border-2 border-red-500 p-1 rounded-md bg-red-200 hover:bg-red-600 hover:text-white duration-300 active:bg-red-100 active:text-black"
+            >
+              Delete
+            </button>
+          )}
         </div>
       )}
     </div>
