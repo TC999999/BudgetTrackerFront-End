@@ -62,4 +62,8 @@
   .cancel-button {
     @apply bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600;
   }
+
+  .budget-nav-button {
+    @apply border-2 p-1 text-sm sm:p-2 sm:text-base rounded-full duration-150;
+  }
 }

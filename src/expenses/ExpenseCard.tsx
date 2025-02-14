@@ -25,23 +25,23 @@ const ExpenseCard: React.FC<Props> = ({
 
   return (
     <div className="expense-card grid grid-cols-4 px-4 py-4">
-      <div className="expense-title">
+      <div className="expense-title p-1">
         <p>{expense.title}</p>
       </div>
-      <div className="expense-transaction">
+      <div className="expense-transaction p-1">
         <p>${expense.transaction}</p>
       </div>
       {isFrontPage && (
-        <div className="expense-budget-title">
+        <div className="expense-budget-title p-1">
           <p>{expense.budgetID?.title}</p>
         </div>
       )}
-      <div className="expense-date">
+      <div className="expense-date p-1">
         <p className="text-sm">{dateTime.current.date}</p>
         <p className="text-sm">{dateTime.current.time}</p>
       </div>
       {!isFrontPage && (
-        <div className="delete-expense-div">
+        <div className="delete-expense-div p-1">
           <button
             onClick={(e) =>
               deleteExpense(e, {
