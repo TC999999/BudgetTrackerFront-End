@@ -22,13 +22,21 @@ export type LogInErrors = {
 };
 
 export interface SignUpInterface extends LogInInterface {
+  email: string;
   totalAssets: number;
 }
 
 export type SignUpErrors = {
   username: string;
   password: string;
+  email: string;
   [key: string]: string;
+};
+
+export type SignUpFlashErrors = {
+  username: boolean;
+  password: boolean;
+  email: boolean;
 };
 
 export type FlashErrors = { username: boolean; password: boolean };

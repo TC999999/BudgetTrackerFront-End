@@ -1,5 +1,4 @@
 import { ExpenseInterface } from "./expenseInterfaces";
-import { BudgetInterface } from "./budgetInterfaces";
 
 export type UserContextInterface = {
   user: UserInfoInterface | null;
@@ -19,8 +18,7 @@ export interface UserInterface {
 }
 
 export interface UserInfoInterface extends UserInterface {
-  expenses: ExpenseInterface[];
-  budgets: BudgetInterface[];
+  recentExpenses: ExpenseInterface[];
 }
 
 export type UserEditErrors = {

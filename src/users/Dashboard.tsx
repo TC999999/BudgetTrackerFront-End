@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
           Your 10 Most Recent Expenses
         </h2>
         <ExpenseList
-          expensesList={user!.expenses}
+          expensesList={user!.recentExpenses}
           isFrontPage={true}
           budgetID={null}
         />

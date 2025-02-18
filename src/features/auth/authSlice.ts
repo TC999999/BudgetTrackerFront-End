@@ -6,9 +6,8 @@ import {
   logOutUser,
 } from "../actions/auth";
 import { getCurrentUser, addToAssets } from "../actions/users";
-import { addNewBudget, updateBudget, deleteBudget } from "../actions/budgets";
 import { addNewExpense, removeExpense } from "../actions/expenses";
-import { INITIAL_STATE } from "../config";
+import { AUTH_INITIAL_STATE } from "../config";
 
 type ActionInterface = {
   type: string;
@@ -17,7 +16,7 @@ type ActionInterface = {
 
 const authSlice = createSlice({
   name: "auth",
-  initialState: INITIAL_STATE,
+  initialState: AUTH_INITIAL_STATE,
   reducers: {
     setUserLoading: (state, action: ActionInterface) => {
       state.userInfo.loading = action.payload;
@@ -39,7 +38,7 @@ const authSlice = createSlice({
         state.hasTokenInfo.hasToken = true;
       })
       .addCase(registerUser.rejected, (state, action: any) => {
-        state.userInfo.user = INITIAL_STATE.userInfo.user;
+        state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
         state.userInfo.error = action.payload;
@@ -55,7 +54,7 @@ const authSlice = createSlice({
         state.hasTokenInfo.hasToken = true;
       })
       .addCase(logInUser.rejected, (state, action: any) => {
-        state.userInfo.user = INITIAL_STATE.userInfo.user;
+        state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
         state.userInfo.error = action.payload;
@@ -80,7 +79,7 @@ const authSlice = createSlice({
         state.userInfo.user = action.payload;
       })
       .addCase(getCurrentUser.rejected, (state, action: any) => {
-        state.userInfo.user = INITIAL_STATE.userInfo.user;
+        state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
         state.userInfo.error = action.payload;
@@ -94,7 +93,7 @@ const authSlice = createSlice({
         state.userInfo.loading = false;
         state.hasTokenInfo.hasToken = false;
         state.userInfo.userExists = false;
-        state.userInfo.user = INITIAL_STATE.userInfo.user;
+        state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
       })
       .addCase(logOutUser.rejected, (state, action: any) => {
         state.hasTokenInfo.loading = false;
@@ -104,27 +103,27 @@ const authSlice = createSlice({
       .addCase(addToAssets.fulfilled, (state, action: any) => {
         state.userInfo.user!.totalAssets = action.payload.totalAssets;
       })
-      .addCase(addNewBudget.fulfilled, (state, action: any) => {
-        state.userInfo.user!.budgets = action.payload.newUserBudgets;
-        state.userInfo.user!.totalAssets = action.payload.newAssets;
-      })
+      // .addCase(addNewBudget.fulfilled, (state, action: any) => {
+      //   state.userInfo.user!.budgets = action.payload.newUserBudgets;
+      //   state.userInfo.user!.totalAssets = action.payload.newAssets;
+      // })
 
-      .addCase(updateBudget.fulfilled, (state, action: any) => {
-        state.userInfo.user!.budgets = action.payload.newUserBudgets;
-        state.userInfo.user!.totalAssets = action.payload.newAssets;
-      })
-      .addCase(deleteBudget.fulfilled, (state, action: any) => {
-        state.userInfo.user!.budgets = action.payload.user.budgets;
-        state.userInfo.user!.expenses = action.payload.user.expenses;
-        state.userInfo.user!.totalAssets = action.payload.user.totalAssets;
-      })
+      // .addCase(updateBudget.fulfilled, (state, action: any) => {
+      //   state.userInfo.user!.budgets = action.payload.newUserBudgets;
+      //   state.userInfo.user!.totalAssets = action.payload.newAssets;
+      // })
+      // .addCase(deleteBudget.fulfilled, (state, action: any) => {
+      //   state.userInfo.user!.budgets = action.payload.user.budgets;
+      //   state.userInfo.user!.expenses = action.payload.user.expenses;
+      //   state.userInfo.user!.totalAssets = action.payload.user.totalAssets;
+      // })
       .addCase(addNewExpense.fulfilled, (state, action: any) => {
-        state.userInfo.user!.budgets = action.payload.newUserBudgets;
-        state.userInfo.user!.expenses = action.payload.newUserExpenses;
+        // state.userInfo.user!.budgets = action.payload.newUserBudgets;
+        state.userInfo.user!.recentExpenses = action.payload.newUserExpenses;
       })
       .addCase(removeExpense.fulfilled, (state, action: any) => {
-        state.userInfo.user!.budgets = action.payload.newUserBudgets;
-        state.userInfo.user!.expenses = action.payload.newUserExpenses;
+        // state.userInfo.user!.budgets = action.payload.newUserBudgets;
+        state.userInfo.user!.recentExpenses = action.payload.newUserExpenses;
       });
   },
 });

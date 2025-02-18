@@ -32,6 +32,10 @@ export interface BudgetInterface extends BaseBudgetInterface {
   expenses: ExpenseInterface[];
 }
 
+export type UserBudgetState = {
+  userBudgets: BudgetInterface[];
+};
+
 export type DeleteBudgetInterface = {
   addBackToAssets: number;
   budgetID: string;
