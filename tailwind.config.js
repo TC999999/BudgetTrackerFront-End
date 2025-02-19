@@ -14,7 +14,7 @@ export default {
         },
       },
       animation: {
-        blinkError: "blink 0.25s infinite",
+        blinkError: "blink 0.5s infinite",
       },
     },
   },
