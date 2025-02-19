@@ -54,7 +54,7 @@ const SingleBudgetPage: React.FC = () => {
           <div className="buttons sticky top-0 bg-emerald-900 flex justify-around p-2 w-full">
             <div className="back-button-div">
               <button
-                className="back-button budget-nav-button border-gray-300  bg-gray-400 hover:bg-gray-100 active:bg-gray-300"
+                className="back-button budget-nav-button border-gray-300 bg-gray-400 hover:bg-gray-100 active:bg-gray-300"
                 onClick={() => navigate("/budgets")}
               >
                 Back to Budgets

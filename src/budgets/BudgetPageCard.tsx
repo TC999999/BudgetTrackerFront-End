@@ -15,13 +15,13 @@ const BudgetPageCard: React.FC<Props> = ({ budget }) => {
 
   return (
     <div className="budget-page-card border-2 px-6 py-4 mx-4 my-4 shadow-md rounded-lg bg-white">
-      <h3 className="budget-title text-4xl text-center text-emerald-800 font-bold">
+      <h3 className="budget-title text-3xl sm:text-4xl text-center text-emerald-800 font-bold">
         {budget?.title}
       </h3>
 
       <div className="text-center">
         <p className="budget-allocated-money">Total Money Allocated:</p>
-        <p className="text-green-700 text-3xl font-bold">
+        <p className="text-green-700 text-3xl sm:text-5xl font-bold">
           ${budget?.moneyAllocated}
         </p>
       </div>
@@ -35,13 +35,15 @@ const BudgetPageCard: React.FC<Props> = ({ budget }) => {
       <div className="fraction-information grid grid-cols-5">
         <div className="budget-money-spend-div text-center col-start-1 col-end-3">
           <p className="budget-money-spend">Money Spent:</p>
-          <p className="text-green-700 text-xl font-bold">
+          <p className="text-green-700 text-xl font-bold sm:text-3xl duration-150">
             ${budget?.moneySpent}
           </p>
         </div>
         <div className="budget-money-remaining-div text-center col-start-4 col-end-6">
           <p className="budget-money-remaining">Money Remaining:</p>
-          <p className="text-green-700 text-xl font-bold"> ${moneyRemaining}</p>
+          <p className="text-green-700 text-xl font-bold sm:text-3xl duration-150">
+            ${moneyRemaining}
+          </p>
         </div>
       </div>
     </div>

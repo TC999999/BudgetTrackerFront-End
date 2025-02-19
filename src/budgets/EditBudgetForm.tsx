@@ -188,11 +188,16 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
               Edit {budget.title} Budget
             </h2>
             <h3>Your New Total Asset Value Will Be</h3>
-            <p className="text-green-700 text-3xl"> ${newTotalAssets}</p>
-            <h3> {budget.title} Budget Will Have a New Value of</h3>
-            <p className="text-green-700 text-3xl">{newBudget}</p>
-            <h3>{budget.title} Budget Will Have a Remaining Value of</h3>
-            <p className="text-green-700 text-3xl">{newRemainingMoney}</p>
+            <p className="text-green-700 text-3xl font-bold">
+              {" "}
+              ${newTotalAssets}
+            </p>
+            <h3> {budget.title} Budget Will Have a New Total Value of</h3>
+            <p className="text-green-700 text-3xl font-bold">{newBudget}</p>
+            <h3>{budget.title} Budget Will Have a New Remaining Value of</h3>
+            <p className="text-green-700 text-3xl font-bold">
+              {newRemainingMoney}
+            </p>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="title-div text-center mb-2">

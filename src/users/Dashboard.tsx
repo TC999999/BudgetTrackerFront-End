@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="dashboard-usercard border-2 bg-white border-emerald-900 px-4 py-4 mx-4 my-4 shadow-xl">
         <div className="dashboard-username text-emerald-600">
-          <h1 className="text-2xl text-center">{user?.username}</h1>
+          <h1 className="text-2xl text-center font-bold">{user?.username}</h1>
         </div>
         <div className="dashboard-totalAssets text-emerald-600 text-center">
           <p className="text-xl">Assets Available:</p>
@@ -72,7 +72,7 @@ const Dashboard: React.FC = () => {
       {showAssetForm && <EditUserForm hideForm={HideForm} />}
 
       <div className="recent-expenses-list">
-        <h2 className="recent-expenses-list-title text-center text-3xl underline text-emerald-600 mb-2">
+        <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 duration-150">
           Your 10 Most Recent Expenses
         </h2>
         <ExpenseList
