@@ -44,7 +44,7 @@ const ExpenseCard: React.FC<Props> = ({
       </div>
       {isFrontPage && (
         <div className="expense-budget-title p-1">
-          <p>{expense.budgetID?.title}</p>
+          <p>{expense.budget?.title}</p>
         </div>
       )}
       <div className="expense-date p-1">

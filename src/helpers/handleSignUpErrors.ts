@@ -1,4 +1,5 @@
 import { SignUpInterface, SignUpErrors } from "../interfaces/authInterfaces";
+import { isEmail } from "validator";
 
 const returnUsernameErrors = (value: string): string => {
   if (value.length > 30) {
@@ -22,6 +23,15 @@ const returnPasswordErrors = (value: string): string => {
   return "";
 };
 
+const returnEmailErrors = (value: string): string => {
+  if (value.length === 0) {
+    return "Email is Empty";
+  } else if (!isEmail(value)) {
+    return "Email is Invalid";
+  }
+  return "";
+};
+
 export const handleSignUpInputErrors = (
   name: string,
   value: string,
@@ -34,6 +44,11 @@ export const handleSignUpInputErrors = (
     case "password":
       setter((data) => ({ ...data, password: returnPasswordErrors(value) }));
       break;
+    case "email":
+      setter((data) => ({ ...data, email: returnEmailErrors(value) }));
+      break;
+    default:
+      break;
   }
 };
 
@@ -43,8 +58,10 @@ export const handleSignUpSubmitErrors = (
 ): boolean => {
   handleSignUpInputErrors("username", signUpInfo.username, setter);
   handleSignUpInputErrors("password", signUpInfo.password, setter);
+  handleSignUpInputErrors("email", signUpInfo.email, setter);
   return (
     returnUsernameErrors(signUpInfo.username) === "" &&
-    returnPasswordErrors(signUpInfo.password) === ""
+    returnPasswordErrors(signUpInfo.password) === "" &&
+    returnEmailErrors(signUpInfo.email) === ""
   );
 };

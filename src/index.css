@@ -7,6 +7,10 @@
     @apply text-gray-900 text-2xl text-center py-3 mb-2 w-96 border-2 focus:outline-none;
   }
 
+  .input-email {
+    @apply text-gray-900 text-lg text-center py-3 mb-2 w-96 border-2 focus:outline-none;
+  }
+
   .input-error {
     @apply bg-red-100 border-red-600;
   }

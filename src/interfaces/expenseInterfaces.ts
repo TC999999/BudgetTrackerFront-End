@@ -10,7 +10,7 @@ type ExpenseBudgetInterface = {
 };
 
 export interface ExpenseInterface extends newExpenseInterface {
-  budgetID?: ExpenseBudgetInterface;
+  budget?: ExpenseBudgetInterface;
   _id: string;
 }
 

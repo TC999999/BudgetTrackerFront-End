@@ -20,12 +20,14 @@ const SignUp = () => {
   const initialState: SignUpInterface = {
     username: "",
     password: "",
+    email: "",
     totalAssets: 0,
   };
 
   const initialErrors: SignUpErrors = {
     username: "",
     password: "",
+    email: "",
   };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -39,6 +41,7 @@ const SignUp = () => {
   const [FlashErrors, setFlashErrors] = useState<FlashErrors>({
     username: false,
     password: false,
+    email: false,
   });
 
   useEffect(() => {
@@ -63,11 +66,12 @@ const SignUp = () => {
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    const { username, password, totalAssets } = formData;
+    const { username, password, email, totalAssets } = formData;
     try {
       const signUpInfo: SignUpInterface = {
         username,
         password,
+        email,
         totalAssets: totalAssets / 100,
       };
       if (handleSignUpSubmitErrors(signUpInfo, setSignUpErrors)) {
@@ -83,8 +87,10 @@ const SignUp = () => {
           setFlashErrors((flash) => ({ ...flash, username: true }));
         if (signUpErrors.password || formData.password === "")
           setFlashErrors((flash) => ({ ...flash, password: true }));
+        if (signUpErrors.email || formData.email === "")
+          setFlashErrors((flash) => ({ ...flash, email: true }));
         setTimeout(() => {
-          setFlashErrors({ username: false, password: false });
+          setFlashErrors({ username: false, password: false, email: false });
         }, 500);
       }
     } catch (err) {}
@@ -188,6 +194,31 @@ const SignUp = () => {
               {signUpErrors.password && (
                 <div className="password-error text-red-600 font-bold">
                   <p>{signUpErrors.password}</p>
+                </div>
+              )}
+            </div>
+            <div className="email-div py-4">
+              <label className="text-lg block" htmlFor="email">
+                Email:{" "}
+              </label>
+              <input
+                className={`input-email 
+                ${signUpErrors.email ? "input-error" : "input-valid"} ${
+                  FlashErrors.email && "animate-blinkError"
+                }`}
+                id="signup_email"
+                type="text"
+                name="email"
+                placeholder="type your email here"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <div className="text-sm">
+                <p>Your email must be valid</p>
+              </div>
+              {signUpErrors.email && (
+                <div className="email-error text-red-600 font-bold">
+                  <p>{signUpErrors.email}</p>
                 </div>
               )}
             </div>

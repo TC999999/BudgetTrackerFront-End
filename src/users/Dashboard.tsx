@@ -7,7 +7,9 @@ import ExpenseList from "../expenses/ExpenseList";
 import { TfiMoney } from "react-icons/tfi";
 
 const Dashboard: React.FC = () => {
-  const { user } = useAppSelector((store) => store.user.userInfo);
+  const { user, recentExpenses } = useAppSelector(
+    (store) => store.user.userInfo
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showAssetForm, setShowAssetForm] = useState(false);
@@ -74,7 +76,7 @@ const Dashboard: React.FC = () => {
           Your 10 Most Recent Expenses
         </h2>
         <ExpenseList
-          expensesList={user!.expenses}
+          expensesList={recentExpenses}
           isFrontPage={true}
           budgetID={null}
         />

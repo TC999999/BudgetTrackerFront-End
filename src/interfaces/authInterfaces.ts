@@ -1,8 +1,10 @@
+import { ExpenseInterface } from "./expenseInterfaces";
 import { UserContextInterface } from "./userInterfaces";
 
 export type AuthInitialStateInterface = {
   userInfo: UserContextInterface;
   hasTokenInfo: hasTokenInterface;
+  // recentExpenses:ExpenseInterface[]
 };
 
 export type hasTokenInterface = {
@@ -23,12 +25,18 @@ export type LogInErrors = {
 
 export interface SignUpInterface extends LogInInterface {
   totalAssets: number;
+  email: string;
 }
 
 export type SignUpErrors = {
   username: string;
   password: string;
+  email: string;
   [key: string]: string;
 };
 
-export type FlashErrors = { username: boolean; password: boolean };
+export type FlashErrors = {
+  username: boolean;
+  password: boolean;
+  email: boolean;
+};

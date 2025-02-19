@@ -77,7 +77,8 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
           <div className="messages">
             <p className="text-lg">
               Please be aware that deleting the {budget.title} budget will also
-              delete all {budget.expenses.length} expenses made using its funds
+              delete every transaction ({budget.expenses.length}) made using its
+              funds
             </p>
           </div>
           <div className="form-div">

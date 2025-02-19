@@ -17,7 +17,7 @@ export const getCurrentUser = createAsyncThunk<UserInfoInterface, any>(
         withCredentials: true,
       });
 
-      return res.data.user;
+      return res.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response.data.error.message);
     }
