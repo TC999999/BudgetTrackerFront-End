@@ -1,10 +1,8 @@
-import { ExpenseInterface } from "./expenseInterfaces";
 import { UserContextInterface } from "./userInterfaces";
 
 export type AuthInitialStateInterface = {
   userInfo: UserContextInterface;
   hasTokenInfo: hasTokenInterface;
-  // recentExpenses:ExpenseInterface[]
 };
 
 export type hasTokenInterface = {
