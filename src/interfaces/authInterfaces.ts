@@ -38,3 +38,10 @@ export type LogInFlashErrors = {
 export interface SignUpFlashErrors extends LogInFlashErrors {
   email: boolean;
 }
+
+export type PasswordResetInfo = {
+  username: string;
+  email: string;
+};
+
+export type CurrentStep = "userInfo" | "oneTimeCode" | "newPassword";

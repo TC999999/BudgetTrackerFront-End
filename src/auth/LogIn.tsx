@@ -154,6 +154,16 @@ const LogIn: React.FC = () => {
             Make an account here!
           </Link>
         </p>
+
+        <p>
+          Forget your password?{" "}
+          <Link
+            className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
+            to="/resetPassword"
+          >
+            Reset it here!
+          </Link>
+        </p>
       </div>
     </div>
   );
