@@ -10,9 +10,14 @@ export type hasTokenInterface = {
   loading: boolean;
 };
 
-export interface LogInInterface {
+export type LogInInterface = {
   username: string;
   password: string;
+};
+
+export interface SignUpInterface extends LogInInterface {
+  totalAssets: number;
+  email: string;
 }
 
 export type LogInErrors = {
@@ -21,20 +26,15 @@ export type LogInErrors = {
   [key: string]: string;
 };
 
-export interface SignUpInterface extends LogInInterface {
-  totalAssets: number;
+export interface SignUpErrors extends LogInErrors {
   email: string;
 }
 
-export type SignUpErrors = {
-  username: string;
-  password: string;
-  email: string;
-  [key: string]: string;
-};
-
-export type FlashErrors = {
+export type LogInFlashErrors = {
   username: boolean;
   password: boolean;
-  email: boolean;
 };
+
+export interface SignUpFlashErrors extends LogInFlashErrors {
+  email: boolean;
+}

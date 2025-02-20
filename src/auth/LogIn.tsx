@@ -4,7 +4,7 @@ import { logInUser } from "../features/actions/auth";
 import {
   LogInInterface,
   LogInErrors,
-  FlashErrors,
+  LogInFlashErrors,
 } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
@@ -23,7 +23,7 @@ const LogIn: React.FC = () => {
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<LogInInterface>(initialState);
   const [logInErrors, setLogInErrors] = useState<LogInErrors>(initialErrors);
-  const [flashInput, setFlashInput] = useState<FlashErrors>({
+  const [flashInput, setFlashInput] = useState<LogInFlashErrors>({
     username: false,
     password: false,
   });

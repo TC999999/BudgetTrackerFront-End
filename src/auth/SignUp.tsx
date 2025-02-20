@@ -4,7 +4,7 @@ import { registerUser } from "../features/actions/auth";
 import {
   SignUpInterface,
   SignUpErrors,
-  FlashErrors,
+  SignUpFlashErrors,
 } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
@@ -38,7 +38,7 @@ const SignUp = () => {
   const maxNum = useRef(99999999999999);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
   const [signUpErrors, setSignUpErrors] = useState(initialErrors);
-  const [FlashErrors, setFlashErrors] = useState<FlashErrors>({
+  const [FlashErrors, setFlashErrors] = useState<SignUpFlashErrors>({
     username: false,
     password: false,
     email: false,
