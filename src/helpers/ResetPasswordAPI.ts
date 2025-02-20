@@ -23,7 +23,7 @@ export default class ResetPasswordAPI {
       });
       return res.data;
     } catch (err: any) {
-      return err;
+      throw new Error(err.response.data.error.message);
     }
   }
 

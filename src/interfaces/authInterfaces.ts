@@ -44,4 +44,28 @@ export type PasswordResetInfo = {
   email: string;
 };
 
+export type OneTimeCodeData = {
+  code: string;
+};
+
+type digits = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+
+export type OneTimeCodeFormData = {
+  0: digits;
+  1: digits;
+  2: digits;
+  3: digits;
+  4: digits;
+  5: digits;
+};
+
+export type OneTimeCodeSelect = {
+  0: boolean;
+  1: boolean;
+  2: boolean;
+  3: boolean;
+  4: boolean;
+  5: boolean;
+};
+
 export type CurrentStep = "userInfo" | "oneTimeCode" | "newPassword";
