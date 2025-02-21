@@ -3,11 +3,26 @@ import {
   OneTimeCodeFormData,
   OneTimeCodeSelect,
   OneTimeCodeData,
+  CurrentStep,
+  ConfirmUserInfo,
+  digits,
 } from "../interfaces/authInterfaces";
+import ResetPasswordAPI from "../helpers/ResetPasswordAPI";
 import { joinOTPCode } from "../helpers/joinOTPCode";
 import FullKeyPad from "../FullKeyPad";
+import SmallLoadingMsg from "../SmallLoadingMsg";
 
-const OneTimeCode = () => {
+type Props = {
+  changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
+  changeSubmitError: (e: React.FormEvent, newStep: string) => void;
+  currentUser: ConfirmUserInfo;
+};
+
+const OneTimeCode: React.FC<Props> = ({
+  changeStep,
+  changeSubmitError,
+  currentUser,
+}) => {
   const initialState: OneTimeCodeFormData = {
     0: "0",
     1: "0",
@@ -26,17 +41,18 @@ const OneTimeCode = () => {
     5: false,
   };
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<OneTimeCodeFormData>(initialState);
   const [formSelect, setFormSelect] =
     useState<OneTimeCodeSelect>(initialSelect);
   const [currPlace, setCurrPlace] = useState<number>(0);
 
   const handlePress = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, num: digits): void => {
       e.preventDefault();
-      let { value } = e.currentTarget;
+
       if (currPlace <= 5) {
-        setFormData((data) => ({ ...data, [currPlace]: value }));
+        setFormData((data) => ({ ...data, [currPlace]: num }));
         setFormSelect((data) => ({ ...data, [currPlace]: true }));
         setCurrPlace(currPlace + 1);
       }
@@ -50,7 +66,7 @@ const OneTimeCode = () => {
       if (currPlace > 0) {
         let backOnePlace = currPlace - 1;
         setFormData((data) => ({ ...data, [backOnePlace]: "0" }));
-        setFormSelect((data) => ({ ...data, [currPlace]: false }));
+        setFormSelect((data) => ({ ...data, [backOnePlace]: false }));
         setCurrPlace(backOnePlace);
       }
     },
@@ -62,19 +78,32 @@ const OneTimeCode = () => {
   ): Promise<void> => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       let code: string = joinOTPCode(formData);
-      let data: OneTimeCodeData = { code };
-      console.log(data);
+      let data: OneTimeCodeData = {
+        username: currentUser.username,
+        email: currentUser.email,
+        code,
+      };
+      await ResetPasswordAPI.confirmOTP(data);
+      changeStep(e, "newPassword");
+      changeSubmitError(e, "");
+      setIsLoading(false);
     } catch (err: any) {
-      console.log(err);
+      setIsLoading(false);
+      changeSubmitError(e, err.message);
     }
   };
   return (
     <div className="one-time-code-div">
+      {isLoading && <SmallLoadingMsg />}
       <div className="one-time-code">
-        <h1>
-          A 6-digit code was just sent to your linked email. This code will last
-          2 minutes. Enter code below.
+        <h1 className="text-center text-xl p-2">
+          One-Time-One-Use Verification Code
+        </h1>
+        <h1 className="font-bold text-center p-2">
+          A 6-digit verification code was just sent to your linked email. This
+          code will expire after 2 minutes. Please enter the code below.
         </h1>
         <div className="one-time-code-form">
           <div className="one-time-code-digits flex justify-center">
@@ -128,9 +157,14 @@ const OneTimeCode = () => {
             </div>
           </div>
           <FullKeyPad handlePress={handlePress} handleDelete={handleDelete} />
-          <button onClick={handleSubmit} className="submit-code">
-            Submit Code
-          </button>
+          <div className="submit-code-button text-center">
+            <button
+              onClick={handleSubmit}
+              className="submit-code border-2 text-gray-100 border-green-900 bg-green-500 p-2 rounded-full hover:bg-green-200 hover:text-black duration-150"
+            >
+              Submit Code
+            </button>
+          </div>
         </div>
       </div>
     </div>

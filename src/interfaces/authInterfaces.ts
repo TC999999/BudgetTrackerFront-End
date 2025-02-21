@@ -39,16 +39,31 @@ export interface SignUpFlashErrors extends LogInFlashErrors {
   email: boolean;
 }
 
-export type PasswordResetInfo = {
+export type CurrentStep = "userInfo" | "oneTimeCode" | "newPassword";
+
+export type ConfirmUserInfo = {
   username: string;
   email: string;
 };
 
+export type UserInfoErrors = {
+  username: string;
+  email: string;
+  [key: string]: string;
+};
+
+export type UserInfoFlashErrors = {
+  username: boolean;
+  email: boolean;
+};
+
 export type OneTimeCodeData = {
+  username: string;
+  email: string;
   code: string;
 };
 
-type digits = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+export type digits = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 
 export type OneTimeCodeFormData = {
   0: digits;
@@ -68,4 +83,7 @@ export type OneTimeCodeSelect = {
   5: boolean;
 };
 
-export type CurrentStep = "userInfo" | "oneTimeCode" | "newPassword";
+export type PasswordResetInfo = {
+  newPassword: string;
+  confirmNewPassword: string;
+};
