@@ -10,19 +10,20 @@ import {
 import ResetPasswordAPI from "../helpers/ResetPasswordAPI";
 import { joinOTPCode } from "../helpers/joinOTPCode";
 import FullKeyPad from "../FullKeyPad";
-import SmallLoadingMsg from "../SmallLoadingMsg";
 
 type Props = {
   changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
+  changeLoading: (loadingStatus: boolean) => void;
   changeSubmitError: (e: React.FormEvent, newStep: string) => void;
   currentUser: ConfirmUserInfo;
 };
 
 const OneTimeCode: React.FC<Props> = ({
   changeStep,
+  changeLoading,
   changeSubmitError,
   currentUser,
-}) => {
+}): JSX.Element => {
   const initialState: OneTimeCodeFormData = {
     0: "0",
     1: "0",
@@ -41,7 +42,6 @@ const OneTimeCode: React.FC<Props> = ({
     5: false,
   };
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<OneTimeCodeFormData>(initialState);
   const [formSelect, setFormSelect] =
     useState<OneTimeCodeSelect>(initialSelect);
@@ -50,7 +50,6 @@ const OneTimeCode: React.FC<Props> = ({
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, num: digits): void => {
       e.preventDefault();
-
       if (currPlace <= 5) {
         setFormData((data) => ({ ...data, [currPlace]: num }));
         setFormSelect((data) => ({ ...data, [currPlace]: true }));
@@ -78,7 +77,7 @@ const OneTimeCode: React.FC<Props> = ({
   ): Promise<void> => {
     e.preventDefault();
     try {
-      setIsLoading(true);
+      changeLoading(true);
       let code: string = joinOTPCode(formData);
       let data: OneTimeCodeData = {
         username: currentUser.username,
@@ -88,15 +87,14 @@ const OneTimeCode: React.FC<Props> = ({
       await ResetPasswordAPI.confirmOTP(data);
       changeStep(e, "newPassword");
       changeSubmitError(e, "");
-      setIsLoading(false);
+      changeLoading(false);
     } catch (err: any) {
-      setIsLoading(false);
+      changeLoading(false);
       changeSubmitError(e, err.message);
     }
   };
   return (
     <div className="one-time-code-div">
-      {isLoading && <SmallLoadingMsg />}
       <div className="one-time-code">
         <h1 className="text-center text-xl p-2">
           One-Time-One-Use Verification Code

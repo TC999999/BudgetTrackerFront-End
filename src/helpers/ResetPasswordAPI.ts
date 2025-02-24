@@ -1,9 +1,13 @@
-import { ConfirmUserInfo, OneTimeCodeData } from "../interfaces/authInterfaces";
+import {
+  ConfirmUserInfo,
+  OneTimeCodeData,
+  PasswordResetSubmit,
+} from "../interfaces/authInterfaces";
 import { API_URL } from "../features/config";
 import axios from "axios";
 import { AxiosResponse } from "axios";
 
-type Method = "get" | "post" | "patch" | "delete";
+type Method = "post" | "patch";
 
 type Endpoint = "confirmUserInfo" | "confirmOTP" | "resetPassword";
 
@@ -33,7 +37,12 @@ export default class ResetPasswordAPI {
   }
 
   static async confirmOTP(otcData: OneTimeCodeData): Promise<any> {
-    let res = await this.request("confirmOTP", otcData, "delete");
+    let res = await this.request("confirmOTP", otcData, "post");
+    return res;
+  }
+
+  static async resetPassword(resetData: PasswordResetSubmit): Promise<any> {
+    let res = await this.request("resetPassword", resetData, "patch");
     return res;
   }
 }

@@ -10,19 +10,20 @@ import {
   handleUserInfoInputErrors,
   handleUserInfoSubmitErrors,
 } from "../helpers/handleUserInfoErrors";
-import SmallLoadingMsg from "../SmallLoadingMsg";
 
 type Props = {
   changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
+  changeLoading: (loadingStatus: boolean) => void;
   changeSubmitError: (e: React.FormEvent, newSubmitError: string) => void;
   changeUser: (e: React.FormEvent, newUser: ConfirmUserInfo) => void;
 };
 
 const UserInfo: React.FC<Props> = ({
   changeStep,
+  changeLoading,
   changeSubmitError,
   changeUser,
-}) => {
+}): JSX.Element => {
   const initialState: ConfirmUserInfo = {
     username: "",
     email: "",
@@ -31,7 +32,6 @@ const UserInfo: React.FC<Props> = ({
     username: "",
     email: "",
   };
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<ConfirmUserInfo>(initialState);
   const [formErrors, setFormErrors] = useState<UserInfoErrors>(initialErrors);
   const [flashErrors, setFlashErrors] = useState<UserInfoFlashErrors>({
@@ -52,14 +52,14 @@ const UserInfo: React.FC<Props> = ({
 
     try {
       if (handleUserInfoSubmitErrors(formData, setFormErrors)) {
-        setIsLoading(true);
+        changeLoading(true);
         let res: ConfirmUserInfo = await ResetPasswordAPI.confirmUserInfo(
           formData
         );
         changeStep(e, "oneTimeCode");
         changeSubmitError(e, "");
         changeUser(e, res);
-        setIsLoading(false);
+        changeLoading(false);
       } else {
         if (formErrors.username || formData.username === "")
           setFlashErrors((flash) => ({ ...flash, username: true }));
@@ -70,14 +70,13 @@ const UserInfo: React.FC<Props> = ({
         }, 500);
       }
     } catch (err: any) {
-      setIsLoading(false);
+      changeLoading(false);
       changeSubmitError(e, err.message);
     }
   };
 
   return (
     <div className="user-info-form-page">
-      {isLoading && <SmallLoadingMsg />}
       <div className="user-info-form-div">
         <h1 className="text-center text-xl p-2">
           Confirm Your Information Here

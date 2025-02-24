@@ -4,7 +4,9 @@ import UserInfo from "./UserInfo";
 import OneTimeCode from "./OneTimeCode";
 import NewPassword from "./NewPassword";
 import ErrorWindow from "./ErrorWindow";
+import PasswordResetSuccess from "./PasswordResetSuccess";
 import { CurrentStep, ConfirmUserInfo } from "../interfaces/authInterfaces";
+import SmallLoadingMsg from "../SmallLoadingMsg";
 
 const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
@@ -12,9 +14,17 @@ const ResetPassword: React.FC = () => {
     username: "",
     email: "",
   };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<CurrentStep>("userInfo");
   const [submitError, setSubmitError] = useState<string>("");
   const [currentUser, setCurrentUser] = useState<ConfirmUserInfo>(initialUser);
+
+  const changeLoading = useCallback(
+    (loadingStatus: boolean): void => {
+      setIsLoading(loadingStatus);
+    },
+    [isLoading]
+  );
 
   const changeStep = useCallback(
     (e: React.FormEvent, newStep: CurrentStep): void => {
@@ -45,6 +55,7 @@ const ResetPassword: React.FC = () => {
 
   return (
     <div className="reset-password-page-div">
+      {isLoading && <SmallLoadingMsg />}
       <button
         className="border border-gray-200 p-2 rounded-full bg-gray-400 shadow hover:bg-gray-200 transition-150 active:bg-gray-300"
         onClick={() => navigate("/")}
@@ -53,11 +64,12 @@ const ResetPassword: React.FC = () => {
       </button>
       <div className="reset-password-page-forms bg-white p-2 m-2 border-4 border-green-600 rounded-lg">
         <h1 className="text-5xl text-center text-green-800 underline">
-          Reset Password Here
+          Reset Your Password
         </h1>
         {currentStep === "userInfo" && (
           <UserInfo
             changeStep={changeStep}
+            changeLoading={changeLoading}
             changeSubmitError={changeSubmitError}
             changeUser={changeUser}
           />
@@ -65,14 +77,20 @@ const ResetPassword: React.FC = () => {
         {currentStep === "oneTimeCode" && (
           <OneTimeCode
             changeStep={changeStep}
+            changeLoading={changeLoading}
             changeSubmitError={changeSubmitError}
             currentUser={currentUser}
           />
         )}
-        {currentStep === "newPassword" && <NewPassword />}
-        {/* <div className="submit-error-messages text-red-700 text-3xl font-bold text-center">
-          {submitError}
-        </div> */}
+        {currentStep === "newPassword" && (
+          <NewPassword
+            changeStep={changeStep}
+            changeLoading={changeLoading}
+            changeSubmitError={changeSubmitError}
+            currentUser={currentUser}
+          />
+        )}
+        {currentStep === "success" && <PasswordResetSuccess />}
         {submitError && (
           <ErrorWindow
             changeSubmitError={changeSubmitError}
