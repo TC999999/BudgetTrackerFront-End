@@ -16,7 +16,7 @@ import {
   handleSignUpSubmitErrors,
 } from "../helpers/handleSignUpErrors";
 
-const SignUp = () => {
+const SignUp = (): JSX.Element => {
   const initialState: SignUpInterface = {
     username: "",
     password: "",
@@ -156,11 +156,7 @@ const SignUp = () => {
                 placeholder="type your username here"
                 value={formData.username}
                 onChange={handleChange}
-                maxLength={30}
               />
-              <div className="text-sm">
-                <p>Your username must be between 5-30 characters</p>
-              </div>
               {signUpErrors.username && (
                 <div className="username-error text-red-600 font-bold">
                   <p>{signUpErrors.username}</p>
@@ -171,6 +167,12 @@ const SignUp = () => {
                   <p>{userStatus.error}</p>
                 </div>
               )}
+              <div className="text-sm">
+                <p>Your username must be between 6-30 characters.</p>
+                <p>Your username may include letters and numbers.</p>
+                <p>Your username cannot contain spaces or special characters</p>
+                <p>(e.g. !, ?, @, #, {}, [], /).</p>
+              </div>
             </div>
             <div className="password-div py-4">
               <label className="text-lg block" htmlFor="password">
@@ -186,16 +188,20 @@ const SignUp = () => {
                 placeholder="type your password here"
                 value={formData.password}
                 onChange={handleChange}
-                maxLength={20}
               />
-              <div className="text-sm">
-                <p>Your password must be between 8-20 characters</p>
-              </div>
               {signUpErrors.password && (
                 <div className="password-error text-red-600 font-bold">
                   <p>{signUpErrors.password}</p>
                 </div>
               )}
+              <div className="text-sm">
+                <p>Your password must be between 16-20 characters.</p>
+                <p>
+                  Your password may include letters, numbers, and special
+                  characters.
+                </p>
+                <p>Your password cannot contain spaces or brackets.</p>
+              </div>
             </div>
             <div className="email-div py-4">
               <label className="text-lg block" htmlFor="email">
@@ -213,14 +219,14 @@ const SignUp = () => {
                 value={formData.email}
                 onChange={handleChange}
               />
-              <div className="text-sm">
-                <p>Your email must be valid</p>
-              </div>
               {signUpErrors.email && (
                 <div className="email-error text-red-600 font-bold">
                   <p>{signUpErrors.email}</p>
                 </div>
               )}
+              <div className="text-sm">
+                <p>Your email must be valid</p>
+              </div>
             </div>
             <div className="total-assets-div py-4">
               <label className="text-lg block" htmlFor="moneyAllocated">

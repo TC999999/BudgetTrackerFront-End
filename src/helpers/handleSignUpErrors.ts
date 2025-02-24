@@ -4,7 +4,7 @@ import { isEmail } from "validator";
 const returnUsernameErrors = (value: string): string => {
   if (value.length > 30) {
     return "Username too long";
-  } else if (value.length < 5 && value.length > 0) {
+  } else if (value.length < 6 && value.length > 0) {
     return "Username too short";
   } else if (value.length === 0) {
     return "Username is Empty";
@@ -13,9 +13,11 @@ const returnUsernameErrors = (value: string): string => {
 };
 
 const returnPasswordErrors = (value: string): string => {
-  if (value.length > 20) {
+  if (value.includes(" ")) {
+    return "Password cannot contain spaces.";
+  } else if (value.length > 20) {
     return "Password too long";
-  } else if (value.length < 8 && value.length > 0) {
+  } else if (value.length < 16 && value.length > 0) {
     return "Password too short";
   } else if (value.length === 0) {
     return "Password is Empty";
