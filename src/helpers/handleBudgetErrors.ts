@@ -7,11 +7,15 @@ import {
 
 const handleBudgetTitleErrors = (title: string): string => {
   if (title.length === 0) {
-    return "Title input is empty";
+    return "Budget title input cannot be empty";
+  } else if (!/^[\w ]+$/i.test(title)) {
+    return "Budget title input contains invalid characters";
+  } else if (/^\s+|\s+$/g.test(title)) {
+    return "Budget title input cannot have spaces at beginning or end.";
   } else if (0 < title.length && title.length < 3) {
-    return "Title input is too short";
+    return "Budget title input is too short";
   } else if (title.length > 20) {
-    return "Title input is too long";
+    return "Budget title input is too long";
   } else {
     return "";
   }
@@ -62,7 +66,7 @@ export const handleUpdateBudgetComparisons = (
 };
 
 export const handleBudgetInputErrors = (
-  name: string,
+  name: "title" | "moneyAllocated",
   value: string | number,
   setter: React.Dispatch<React.SetStateAction<BudgetFormErrors>>
 ): void => {
@@ -86,7 +90,7 @@ export const handleBudgetInputErrors = (
 };
 
 export const handleUpdateBudgetInputErrors = (
-  name: string,
+  name: "title" | "addedMoney",
   value: string | number,
   setter: React.Dispatch<React.SetStateAction<UpdateBudgetFormErrors>>
 ): void => {

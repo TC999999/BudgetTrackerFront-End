@@ -88,8 +88,10 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    handleBudgetInputErrors(name, value, setFormErrors);
-    setFormData((data) => ({ ...data, [name]: value }));
+    if (name === "title" || name === "moneyAllocated") {
+      handleBudgetInputErrors(name, value, setFormErrors);
+      setFormData((data) => ({ ...data, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
@@ -124,12 +126,12 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
       <div className="modal-layer-2">
         <div className="new-budget-form modal-layer-3">
           <div className="headers text-center">
-            <h1 className="text-2xl mx-2 my-2 font-bold text-green-800">
+            <h1 className="text-3xl text-green-800 font-bold underline">
               Add a New Budget
             </h1>
             <div className="available-funds my-2">
               <h2 className="text-xl mx-2 ">Available Funds:</h2>
-              <h2 className="text-3xl font-bold text-green-900">
+              <h2 className="text-4xl font-bold text-green-700">
                 ${(availableFunds / 100).toFixed(2)}
               </h2>
             </div>
@@ -157,7 +159,14 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
               )}
               <div>
                 <p className="text-sm">
-                  Make sure your title has between 20 to 3 characters
+                  Make sure your title has between 20 to 3 characters.
+                </p>
+                <p className="text-sm">
+                  Your budget title may only include letters, numbers, and
+                  spaces.
+                </p>
+                <p className="text-sm">
+                  Spaces may only be between characters.
                 </p>
               </div>
             </div>

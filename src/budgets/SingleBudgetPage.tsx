@@ -15,7 +15,6 @@ type FormStateInterface = {
   showExpenseForm: boolean;
   showDeleteForm: boolean;
   showEditForm: boolean;
-  [key: string]: boolean;
 };
 
 const SingleBudgetPage: React.FC = () => {
@@ -39,10 +38,13 @@ const SingleBudgetPage: React.FC = () => {
   const changeFormState = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-      form: string
+      form: "showExpenseForm" | "showDeleteForm" | "showEditForm"
     ): void => {
       e.preventDefault();
-      setFormsState(() => ({ ...initialFormState, [form]: !formsState[form] }));
+      setFormsState((formState) => ({
+        ...formState,
+        [form]: !formsState[form],
+      }));
     },
     [formsState]
   );

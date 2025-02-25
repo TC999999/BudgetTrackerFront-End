@@ -9,7 +9,7 @@ const returnPasswordErrors = (value: string): string => {
 };
 
 export const handleLogInInputErrors = (
-  name: string,
+  name: "username" | "password",
   value: string,
   setter: React.Dispatch<React.SetStateAction<LogInErrors>>
 ): void => {

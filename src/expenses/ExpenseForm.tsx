@@ -21,7 +21,7 @@ type flashErrors = { title: boolean; transaction: boolean; date: boolean };
 type Props = {
   hideExpenseForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-    form: string
+    form: "showExpenseForm"
   ) => void;
   budget: BudgetInterface;
 };
@@ -143,18 +143,18 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   ) : (
     <div tabIndex={-1} className="new-expense-form-div modal-layer-1">
       <div className="modal-layer-2">
-        <div className="new-expense-form modal-layer-3">
-          <h2 className="text-2xl text-green-700 text-center">
+        <div className="new-expense-form modal-layer-3 text-center">
+          <h2 className="text-3xl text-green-800 font-bold underline">
             Add a New Expense!
           </h2>
-          <div className="available-funds  text-center">
+          <div className="available-funds">
             <h2 className="text-lg">Remaining {budget.title} Budget Funds:</h2>
-            <h2 className="text-3xl text-emerald-800 font-bold">
+            <h2 className="text-4xl text-green-700 font-bold">
               ${availableMoney}
             </h2>
           </div>
           <form onSubmit={handleSubmit}>
-            <div className="title-div text-center mb-2">
+            <div className="title-div mb-2">
               <label className="text-gray-700 text-lg block" htmlFor="title">
                 Expense Title:
               </label>
@@ -176,7 +176,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 </div>
               )}
             </div>
-            <div className="date-div text-center mb-2">
+            <div className="date-div mb-2">
               <label htmlFor="date" className="text-gray-700 text-lg block">
                 When was this transaction made?
               </label>
@@ -196,7 +196,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 </div>
               )}
             </div>
-            <div className="transaction-div text-center mb-2">
+            <div className="transaction-div mb-2">
               <label
                 htmlFor="transaction"
                 className="text-gray-700 text-lg block"

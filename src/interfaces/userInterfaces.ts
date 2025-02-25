@@ -21,7 +21,6 @@ export interface UserInterface {
 }
 
 export interface UserInfoInterface extends UserInterface {
-  // recentExpenses: ExpenseInterface[];
   budgets: BudgetInterface[];
 }
 

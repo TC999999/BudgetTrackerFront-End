@@ -2,40 +2,42 @@ import { SignUpInterface, SignUpErrors } from "../interfaces/authInterfaces";
 import { isEmail } from "validator";
 
 const returnUsernameErrors = (value: string): string => {
-  if (value.length > 30) {
-    return "Username too long";
+  if (value.length === 0) {
+    return "Username input cannot be empty.";
+  } else if (!/^[\w]+$/i.test(value)) {
+    return "Username input contains invalid characters.";
+  } else if (value.length > 30) {
+    return "Username input is too long.";
   } else if (value.length < 6 && value.length > 0) {
-    return "Username too short";
-  } else if (value.length === 0) {
-    return "Username is Empty";
+    return "Username input is too short.";
   }
   return "";
 };
 
 const returnPasswordErrors = (value: string): string => {
-  if (value.includes(" ")) {
-    return "Password cannot contain spaces.";
+  if (value.length === 0) {
+    return "Password input cannot be empty.";
+  } else if (!/^[\w!?&$#%]+$/i.test(value)) {
+    return "Password input contains invalid characters.";
   } else if (value.length > 20) {
-    return "Password too long";
+    return "Password input is too long.";
   } else if (value.length < 16 && value.length > 0) {
-    return "Password too short";
-  } else if (value.length === 0) {
-    return "Password is Empty";
+    return "Password input is too short.";
   }
   return "";
 };
 
 const returnEmailErrors = (value: string): string => {
   if (value.length === 0) {
-    return "Email is Empty";
+    return "Email Address input cannot be is empty.";
   } else if (!isEmail(value)) {
-    return "Email is Invalid";
+    return "Invalid Email Address";
   }
   return "";
 };
 
 export const handleSignUpInputErrors = (
-  name: string,
+  name: "username" | "password" | "email",
   value: string,
   setter: React.Dispatch<React.SetStateAction<SignUpErrors>>
 ): void => {

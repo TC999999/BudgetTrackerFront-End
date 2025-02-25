@@ -15,7 +15,7 @@ const returnEmailErrors = (value: string): string => {
 };
 
 export const handleUserInfoInputErrors = (
-  name: string,
+  name: "username" | "email",
   value: string,
   setter: React.Dispatch<React.SetStateAction<UserInfoErrors>>
 ): void => {

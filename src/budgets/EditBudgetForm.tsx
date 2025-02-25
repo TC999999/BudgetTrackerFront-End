@@ -22,7 +22,7 @@ import SmallLoadingMsg from "../SmallLoadingMsg";
 type Props = {
   hideEditForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-    form: string
+    form: "showEditForm"
   ) => void;
   budget: BudgetInterface;
 };
@@ -141,17 +141,19 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    let trimVal = value.length > 1 ? value : value.trim();
-    handleUpdateBudgetInputErrors(name, trimVal, setFormErrors);
-    setFormData((data) => ({
-      ...data,
-      [name]: trimVal,
-    }));
+    if (name === "title" || name === "addedMoney") {
+      handleUpdateBudgetInputErrors(name, value, setFormErrors);
+      setFormData((data) => ({
+        ...data,
+        [name]: value,
+      }));
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): Promise<void> => {
     e.preventDefault();
-
     try {
       if (handleUpdateBudgetSubmitErrors(formData, setFormErrors)) {
         setIsLoading(true);
@@ -180,153 +182,179 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
   return isLoading ? (
     <SmallLoadingMsg />
   ) : (
-    <div tabIndex={-1} className="budget-form-div modal-layer-1">
-      <div className="edit-budget-form-div modal-layer-2">
-        <div className="edit-budget-form modal-layer-3 overflow-auto">
-          <div className="headers text-center">
-            <h2 className="text-2xl text-green-700 font-bold">
+    <div tabIndex={-1} className="modal-layer-1">
+      <div className="modal-layer-2-lg">
+        <div className="edit-budget-form-div text-center modal-layer-3">
+          <div className="header">
+            <h2 className="text-3xl text-green-800 font-bold underline">
               Edit {budget.title} Budget
             </h2>
-            <h3>Your New Total Asset Value Will Be</h3>
-            <p className="text-green-700 text-3xl font-bold">
-              {" "}
-              ${newTotalAssets}
-            </p>
-            <h3> {budget.title} Budget Will Have a New Total Value of</h3>
-            <p className="text-green-700 text-3xl font-bold">{newBudget}</p>
-            <h3>{budget.title} Budget Will Have a New Remaining Value of</h3>
-            <p className="text-green-700 text-3xl font-bold">
-              {newRemainingMoney}
-            </p>
           </div>
-          <form onSubmit={handleSubmit}>
-            <div className="title-div text-center mb-2">
-              <label className="text-gray-700 text-lg block" htmlFor="title">
-                Budget Title:{" "}
-              </label>
-              <input
-                className={`input ${
-                  formErrors.title ? "input-error" : "input-valid"
-                } ${flashInput.title && "animate-blinkError"}`}
-                id="budget_title"
-                type="text"
-                name="title"
-                placeholder="What's this budget for?"
-                value={formData.title}
-                onChange={handleChange}
-                maxLength={20}
-              />
-              {formErrors.title && (
-                <div>
-                  <p className="text-lg text-red-700 font-bold">
-                    {formErrors.title}
+          <div className="info-and-form sm:flex sm:justify-center p-4">
+            <div className="value-information sm:text-lg sm:m-2 sm:flex sm:items-center">
+              <div className="sm:flex sm:flex-col justify-around sm:h-full w-full">
+                <div className="sm:border-2 sm:p-4 sm:shadow-md">
+                  <h3 className="text-md sm:text-2xl sm:underline">
+                    Your New Total Asset Value Will Be
+                  </h3>
+                  <p className="text-green-700 text-3xl sm:text-4xl font-bold">
+                    ${newTotalAssets}
                   </p>
                 </div>
-              )}
-              <div>
-                <p className="text-sm">
-                  Make sure your title has between 20 to 3 characters
-                </p>
-              </div>
-            </div>
-            <div className="added-funds-div text-center mb-2">
-              <label
-                className="text-gray-700 text-lg block"
-                htmlFor="moneyAllocated"
-              >
-                New Budget Funds($ U.S.):{" "}
-              </label>
-              <input
-                className={`input ${
-                  formErrors.addedMoney ? "input-error" : ""
-                }`}
-                id="added_budget_allocation"
-                type="text"
-                name="moneyAllocated"
-                placeholder="0.00"
-                value={`$${(formData.addedMoney / 100).toFixed(2)}`}
-                readOnly
-              />
-              {formErrors.addedMoney && (
-                <div>
-                  <p className="text-lg text-red-700 font-bold">
-                    {formErrors.addedMoney}
+                <div className="sm:border-2 sm:p-4 sm:shadow-md">
+                  <h3 className="text-md sm:text-2xl sm:underline">
+                    {budget.title} Budget Will Have a New Total Value of
+                  </h3>
+                  <p className="text-green-700 text-3xl sm:text-4xl  font-bold">
+                    {newBudget}
                   </p>
                 </div>
-              )}
-              <div className="text-sm">
-                <p>
-                  If adding to budget, make sure new assets are equal to or less
-                  than your available assets.
-                </p>
-                <p>
-                  If subtracting from budget, make sure new assets are equal to
-                  or greater than your remaining budget value.
-                </p>
+                <div className="sm:border-2 sm:p-4 sm:shadow-md">
+                  <h3 className="text-md sm:text-2xl sm:underline">
+                    {budget.title} Budget Will Have a New Remaining Value of
+                  </h3>
+                  <p className="text-green-700 text-3xl sm:text-4xl  font-bold">
+                    {newRemainingMoney}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="keyPad-div">
-              <KeyPad
-                handlePress={handlePress}
-                handleDelete={handleDelete}
-                num={formData.addedMoney}
-              />
-            </div>
-            <div className="edit-budget-radio-buttons">
-              <fieldset className="edit-budget-choices text-center">
-                <legend className="font-bold">
-                  Are you adding or subtracting this amount from the total
-                  funds?
-                </legend>
-                <div className="border border-green-600 shadow-md rounded-full">
-                  <div
-                    className={`p-2 border-b border-green-600 rounded-t-full ${
-                      formData.operation === "add" ? "bg-green-100" : ""
+            <div className="edit-budget-form">
+              <form>
+                <div className="title-div mb-2">
+                  <label
+                    className="text-gray-700 text-lg block"
+                    htmlFor="title"
+                  >
+                    Budget Title:{" "}
+                  </label>
+                  <input
+                    className={`input ${
+                      formErrors.title ? "input-error" : "input-valid"
+                    } ${flashInput.title && "animate-blinkError"}`}
+                    id="budget_title"
+                    type="text"
+                    name="title"
+                    placeholder="What's this budget for?"
+                    value={formData.title}
+                    onChange={handleChange}
+                  />
+                  {formErrors.title && (
+                    <div>
+                      <p className="text-lg text-red-700 font-bold">
+                        {formErrors.title}
+                      </p>
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-sm">
+                      Make sure your title has between 20 to 3 characters
+                    </p>
+                  </div>
+                </div>
+                <div className="added-funds-div mb-2">
+                  <label
+                    className="text-gray-700 text-lg block"
+                    htmlFor="moneyAllocated"
+                  >
+                    New Budget Funds($ U.S.):{" "}
+                  </label>
+                  <input
+                    className={`input ${
+                      formErrors.addedMoney ? "input-error" : ""
                     }`}
-                  >
-                    <input
-                      type="radio"
-                      id="add"
-                      name="operation"
-                      value="add"
-                      onChange={handleRadio}
-                      className="radio radio-add form-radio"
-                      checked={formData.operation === "add"}
-                    />
-                    <label htmlFor="add">Add to Funds</label>
-                  </div>
-                  <div
-                    className={`p-2 rounded-b-full ${
-                      formData.operation === "subtract" ? "bg-red-100" : ""
-                    } `}
-                  >
-                    <input
-                      type="radio"
-                      id="remove"
-                      name="operation"
-                      value="subtract"
-                      onChange={handleRadio}
-                      className="radio radio-subtract form-radio"
-                      checked={formData.operation === "subtract"}
-                    />
-                    <label htmlFor="remove">Subtract from Funds</label>
+                    id="added_budget_allocation"
+                    type="text"
+                    name="moneyAllocated"
+                    placeholder="0.00"
+                    value={`$${(formData.addedMoney / 100).toFixed(2)}`}
+                    readOnly
+                  />
+                  {formErrors.addedMoney && (
+                    <div>
+                      <p className="text-lg text-red-700 font-bold">
+                        {formErrors.addedMoney}
+                      </p>
+                    </div>
+                  )}
+                  <div className="text-sm">
+                    <p>
+                      If adding to budget, make sure new assets are equal to or
+                      less than your available assets.
+                    </p>
+                    <p>
+                      If subtracting from budget, make sure new assets are equal
+                      to or greater than your remaining budget value.
+                    </p>
                   </div>
                 </div>
-              </fieldset>
+                <div className="keyPad-div">
+                  <KeyPad
+                    handlePress={handlePress}
+                    handleDelete={handleDelete}
+                    num={formData.addedMoney}
+                  />
+                </div>
+                <div className="edit-budget-radio-buttons">
+                  <fieldset className="edit-budget-choices">
+                    <legend className="font-bold">
+                      Are you adding or subtracting this amount from the total
+                      funds?
+                    </legend>
+                    <div className="border border-green-600 shadow-md rounded-full">
+                      <div
+                        className={`p-2 border-b border-green-600 rounded-t-full ${
+                          formData.operation === "add" ? "bg-green-100" : ""
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          id="add"
+                          name="operation"
+                          value="add"
+                          onChange={handleRadio}
+                          className="radio radio-add form-radio"
+                          checked={formData.operation === "add"}
+                        />
+                        <label htmlFor="add">Add to Funds</label>
+                      </div>
+                      <div
+                        className={`p-2 rounded-b-full ${
+                          formData.operation === "subtract" ? "bg-red-100" : ""
+                        } `}
+                      >
+                        <input
+                          type="radio"
+                          id="remove"
+                          name="operation"
+                          value="subtract"
+                          onChange={handleRadio}
+                          className="radio radio-subtract form-radio"
+                          checked={formData.operation === "subtract"}
+                        />
+                        <label htmlFor="remove">Subtract from Funds</label>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </form>
             </div>
-            <div className="buttons flex justify-between m-2">
-              <div className="submit-button">
-                <button className="edit-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                  Edit Budget
-                </button>
-              </div>
-              <div className="cancel-button">
-                <button onClick={(e) => hideEditForm(e, "showEditForm")}>
-                  Cancel
-                </button>
-              </div>
+          </div>
+          <div className="buttons flex justify-between m-2">
+            <div className="cancel-button">
+              <button onClick={(e) => hideEditForm(e, "showEditForm")}>
+                Cancel
+              </button>
             </div>
-          </form>
+            <div className="submit-button">
+              <button
+                onClick={(e) => handleSubmit(e)}
+                className="edit-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900"
+              >
+                Edit Budget
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

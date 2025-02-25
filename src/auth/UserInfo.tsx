@@ -43,8 +43,10 @@ const UserInfo: React.FC<Props> = ({
     e: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     let { name, value } = e.target;
-    handleUserInfoInputErrors(name, value, setFormErrors);
-    setFormData((data) => ({ ...data, [name]: value }));
+    if (name === "username" || name === "email") {
+      handleUserInfoInputErrors(name, value, setFormErrors);
+      setFormData((data) => ({ ...data, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {

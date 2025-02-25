@@ -4,8 +4,16 @@ import {
 } from "../interfaces/expenseInterfaces";
 
 const handleExpenseTitleErrors = (title: string): string => {
-  if (title.length > 30 || title.length < 3) {
-    return "Title must be between 30 and 3 characters long";
+  if (title.length === 0) {
+    return "Expense title cannot be empty";
+  } else if (!/^[\w ]+$/i.test(title)) {
+    return "Expense title input contains invalid characters";
+  } else if (/^\s+|\s+$/g.test(title)) {
+    return "Expense title input cannot have spaces at beginning or end.";
+  } else if (0 < title.length && title.length < 3) {
+    return "Expense title too short";
+  } else if (20 < title.length) {
+    return "Expense title too long";
   } else {
     return "";
   }

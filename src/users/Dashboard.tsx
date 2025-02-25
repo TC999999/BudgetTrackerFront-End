@@ -51,13 +51,13 @@ const Dashboard: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="dashboard-usercard border-2 bg-white border-emerald-900 px-4 py-4 mx-4 my-4 shadow-xl">
-        <div className="dashboard-username text-emerald-600">
-          <h1 className="text-2xl text-center font-bold">{user?.username}</h1>
+      <div className="dashboard-usercard border-2 bg-white border-emerald-900 px-4 py-4 mx-4 my-4 shadow-xl text-center">
+        <div className="dashboard-username text-green-700">
+          <h1 className="text-2xl sm:text-4xl font-bold">{user?.username}</h1>
         </div>
-        <div className="dashboard-totalAssets text-emerald-600 text-center">
+        <div className="dashboard-totalAssets text-green-700">
           <p className="text-xl">Assets Available:</p>
-          <p className="text-3xl">${user?.totalAssets}</p>
+          <p className="text-3xl sm:text-5xl font-bold">${user?.totalAssets}</p>
         </div>
 
         <div className="add-asset-button flex justify-center m-4">
@@ -72,7 +72,7 @@ const Dashboard: React.FC = () => {
       {showAssetForm && <EditUserForm hideForm={HideForm} />}
 
       <div className="recent-expenses-list">
-        <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 duration-150">
+        <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
           Your 10 Most Recent Expenses
         </h2>
         <ExpenseList

@@ -50,7 +50,7 @@ export const handleUserComparisons = (
 };
 
 export const handleUserEditInputErrors = (
-  name: string,
+  name: "value",
   value: number,
   setter: React.Dispatch<React.SetStateAction<UserEditErrors>>
 ) => {

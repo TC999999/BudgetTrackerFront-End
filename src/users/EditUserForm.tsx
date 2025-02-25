@@ -139,12 +139,14 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="add-to-assets-form text-center modal-layer-3">
-          <h1 className="text-3xl text-green-800 underline">
+          <h1 className="text-3xl text-green-800 font-bold underline">
             Update Your Current Assets
           </h1>
           <div className="new-assets-value">
             <h2 className="text-lg">Your New Assets Will Be:</h2>
-            <h2 className="text-3xl text-green-700">${newTotalAssets}</h2>
+            <h2 className="text-4xl text-green-700 font-bold">
+              ${newTotalAssets}
+            </h2>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="added-assets-div">

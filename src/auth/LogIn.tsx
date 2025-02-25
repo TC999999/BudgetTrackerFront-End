@@ -45,7 +45,8 @@ const LogIn: React.FC = () => {
       dispatch(removeUserError());
     }
     const { name, value } = e.target;
-    handleLogInInputErrors(name, value, setLogInErrors);
+    if (name === "username" || name === "password")
+      handleLogInInputErrors(name, value, setLogInErrors);
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
@@ -139,7 +140,7 @@ const LogIn: React.FC = () => {
               </button>
             </div>
             {typeof userStatus.error === "string" && (
-              <div className="error-message text-red-500 font-bold">
+              <div className="error-message text-center text-red-500 text-xl font-bold">
                 <p>{userStatus.error}</p>
               </div>
             )}

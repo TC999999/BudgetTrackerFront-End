@@ -23,7 +23,6 @@ export interface SignUpInterface extends LogInInterface {
 export type LogInErrors = {
   username: string;
   password: string;
-  [key: string]: string;
 };
 
 export interface SignUpErrors extends LogInErrors {
@@ -53,7 +52,6 @@ export type ConfirmUserInfo = {
 export type UserInfoErrors = {
   username: string;
   email: string;
-  [key: string]: string;
 };
 
 export type UserInfoFlashErrors = {
@@ -95,7 +93,6 @@ export type PasswordResetInfo = {
 export type PasswordResetErrors = {
   newPassword: string;
   confirmNewPassword: string;
-  [key: string]: string;
 };
 
 export type PasswordResetFlashErrors = {

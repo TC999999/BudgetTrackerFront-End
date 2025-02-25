@@ -57,10 +57,12 @@ const SignUp = (): JSX.Element => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    if (userStatus.error && name === "username") {
-      dispatch(removeUserError());
+    if (name === "username") {
+      if (userStatus.error) dispatch(removeUserError());
+      handleSignUpInputErrors(name, value, setSignUpErrors);
+    } else if (name === "password" || name === "email") {
+      handleSignUpInputErrors(name, value, setSignUpErrors);
     }
-    handleSignUpInputErrors(name, value, setSignUpErrors);
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
@@ -171,7 +173,7 @@ const SignUp = (): JSX.Element => {
                 <p>Your username must be between 6-30 characters.</p>
                 <p>Your username may include letters and numbers.</p>
                 <p>Your username cannot contain spaces or special characters</p>
-                <p>(e.g. !, ?, @, #, {}, [], /).</p>
+                <p>(e.g. !, ?, @, #, () [], /).</p>
               </div>
             </div>
             <div className="password-div py-4">
@@ -197,15 +199,19 @@ const SignUp = (): JSX.Element => {
               <div className="text-sm">
                 <p>Your password must be between 16-20 characters.</p>
                 <p>
-                  Your password may include letters, numbers, and special
-                  characters.
+                  Your password may include letters, numbers, and the following
                 </p>
-                <p>Your password cannot contain spaces or brackets.</p>
+                <p>special characters only.</p>
+                <p>(!, ?, &, $, #, %).</p>
+                <p>
+                  Your password cannot contain spaces, slashes, or brackets.
+                </p>
+                <p>(e.g. [], (), /).</p>
               </div>
             </div>
             <div className="email-div py-4">
               <label className="text-lg block" htmlFor="email">
-                Email:{" "}
+                Email Address:{" "}
               </label>
               <input
                 className={`input-email 
@@ -225,7 +231,7 @@ const SignUp = (): JSX.Element => {
                 </div>
               )}
               <div className="text-sm">
-                <p>Your email must be valid</p>
+                <p>Your email address must be valid</p>
               </div>
             </div>
             <div className="total-assets-div py-4">
@@ -260,7 +266,7 @@ const SignUp = (): JSX.Element => {
               />
             </div>
             <div className="button-div text-center">
-              <button className="make-profile-button border-2 rounded-full border-green-500 bg-green-500 p-2">
+              <button className="make-profile-button border-2 rounded-full border-green-500 bg-green-500 text-white  py-2 px-4 hover:bg-green-200 hover:text-black duration-150 active:bg-green-400">
                 Sign Up!
               </button>
             </div>

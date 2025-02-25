@@ -15,7 +15,7 @@ import SmallLoadingMsg from "../SmallLoadingMsg";
 type Props = {
   hideDeleteForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    form: string
+    form: "showDeleteForm"
   ) => void;
   budget: BudgetInterface;
 };
@@ -73,9 +73,11 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
     <div className="delete-budget-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="delete-budget-form text-center modal-layer-3">
-          <h3 className="text-3xl font-bold text-red-700">Before You Delete</h3>
+          <h3 className="text-3xl sm:text-4xl font-bold text-red-700 underline duration-150">
+            Before You Delete
+          </h3>
           <div className="messages">
-            <p className="text-lg">
+            <p className="text-base sm:text-lg duration-150">
               Please be aware that deleting the {budget.title} budget will also
               delete every transaction ({budget.expenses.length}) made using its
               funds
@@ -84,7 +86,7 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
           <div className="form-div">
             <form onSubmit={handleSubmit}>
               <fieldset className="delete-choices">
-                <legend className="text-xl font-bold">
+                <legend className="text-lg sm:text-xl font-bold duration-150">
                   Are you returning any funds to your available assets?
                 </legend>
                 <div className="delete-budget-radio-buttons text-lg border border-green-600 shadow-md">
@@ -163,18 +165,22 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
               </fieldset>
 
               <div className="new-assets">
-                <p className="text-lg p-1">Your New Available Assets Will Be</p>
-                <p className="text-3xl text-green-600 p-1">${newAssets}</p>
+                <p className="text-lg p-1">
+                  Your New Available Assets Will Be:
+                </p>
+                <p className="text-3xl sm:text-4xl font-bold text-green-700 p-1 duration-150">
+                  ${newAssets}
+                </p>
               </div>
               <div className="buttons flex justify-between m-2">
                 <div className="delete-button-div">
-                  <button className="delete-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                  <button className="delete-button duration-150 bg-red-300 border-2 border-red-900 rounded-full px-2 py-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900">
                     Delete Budget
                   </button>
                 </div>
                 <div className="cancel-delete-budget">
                   <button
-                    className="cancel-button"
+                    className="cancel-button duration-150"
                     onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
                   >
                     Cancel
