@@ -44,6 +44,13 @@ export type CurrentStep =
   | "newPassword"
   | "success";
 
+export type StepCompleted = {
+  userInfo: boolean;
+  oneTimeCode: boolean;
+  newPassword: boolean;
+  success: boolean;
+};
+
 export type ConfirmUserInfo = {
   username: string;
   email: string;

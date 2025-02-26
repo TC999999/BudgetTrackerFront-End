@@ -1,12 +1,18 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import UserInfo from "./UserInfo";
 import OneTimeCode from "./OneTimeCode";
 import NewPassword from "./NewPassword";
 import ErrorWindow from "./ErrorWindow";
 import PasswordResetSuccess from "./PasswordResetSuccess";
-import { CurrentStep, ConfirmUserInfo } from "../interfaces/authInterfaces";
 import SmallLoadingMsg from "../SmallLoadingMsg";
+import {
+  CurrentStep,
+  ConfirmUserInfo,
+  StepCompleted,
+} from "../interfaces/authInterfaces";
+import { setResetProgress } from "../helpers/setResetProgress";
+import { CiCircleCheck } from "react-icons/ci";
 
 const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
@@ -14,10 +20,22 @@ const ResetPassword: React.FC = () => {
     username: "",
     email: "",
   };
+  const initiaStepList: StepCompleted = {
+    userInfo: false,
+    oneTimeCode: false,
+    newPassword: false,
+    success: false,
+  };
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<CurrentStep>("userInfo");
   const [submitError, setSubmitError] = useState<string>("");
   const [currentUser, setCurrentUser] = useState<ConfirmUserInfo>(initialUser);
+  const [stepList, setStepList] = useState<StepCompleted>(initiaStepList);
+
+  const currentProgress: number = useMemo<number>(
+    () => setResetProgress(currentStep),
+    [currentStep]
+  );
 
   const changeLoading = useCallback(
     (loadingStatus: boolean): void => {
@@ -30,6 +48,7 @@ const ResetPassword: React.FC = () => {
     (e: React.FormEvent, newStep: CurrentStep): void => {
       e.preventDefault();
       setCurrentStep(newStep);
+      setStepList((steps) => ({ ...steps, [newStep]: true }));
     },
     [currentStep]
   );
@@ -62,10 +81,64 @@ const ResetPassword: React.FC = () => {
       >
         Go Back
       </button>
+
       <div className="reset-password-page-forms bg-white p-2 m-2 border-4 border-green-600 rounded-lg">
         <h1 className="text-5xl text-center text-green-800 underline">
           Reset Your Password
         </h1>
+        <div className="reset-password-set-progress-div border-4 my-2 border-green-700 rounded-lg relative">
+          <div className="progress-headers grid grid-cols-4">
+            <div
+              className={`confirm-info-header pt-4 pb-8 flex justify-center items-center rounded-l-lg border-r-2 ${
+                currentStep === "userInfo"
+                  ? "underline text-green-500 bg-green-100"
+                  : ""
+              }`}
+            >
+              <p>Confirm Info</p>
+              <CiCircleCheck className="text-xl" />
+            </div>
+            <div
+              className={`verification-code-header pt-4 pb-8 flex justify-center items-center border-r-2 ${
+                currentStep === "oneTimeCode"
+                  ? "underline text-green-500 bg-green-100"
+                  : ""
+              }`}
+            >
+              <p>Verification Code</p>
+              <CiCircleCheck className="text-xl" />
+            </div>
+            <div
+              className={`reset-header-header pt-4 pb-8 flex justify-center items-center border-r-2${
+                currentStep === "newPassword"
+                  ? "underline text-green-500 bg-green-100"
+                  : ""
+              }`}
+            >
+              <p>Reset Password</p>
+              <CiCircleCheck className="text-xl" />
+            </div>
+            <div
+              className={`success-header pt-4 pb-8 flex justify-center items-center rounded-r-lg ${
+                currentStep === "success"
+                  ? "underline text-green-500 bg-green-100"
+                  : ""
+              }`}
+            >
+              <p>Success</p>
+              <CiCircleCheck className="text-xl" />
+            </div>
+          </div>
+
+          <div className="reset-password-set-progress-bar absolute bottom-0 w-full">
+            <progress
+              className="w-full  [&::-webkit-progress-value]:bg-green-700"
+              max={100}
+              value={currentProgress}
+            ></progress>
+          </div>
+        </div>
+
         {currentStep === "userInfo" && (
           <UserInfo
             changeStep={changeStep}
