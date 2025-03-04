@@ -1,4 +1,5 @@
 import { UserContextInterface } from "./userInterfaces";
+import { SubmitIncomeSignUp } from "./incomeInterfaces";
 
 export type AuthInitialStateInterface = {
   userInfo: UserContextInterface;
@@ -18,6 +19,7 @@ export type LogInInterface = {
 export interface SignUpInterface extends LogInInterface {
   totalAssets: number;
   email: string;
+  incomes: SubmitIncomeSignUp[];
 }
 
 export type LogInErrors = {

@@ -3,6 +3,7 @@ import NotFound from "./NotFound";
 import HomePage from "./users/HomePage";
 import BudgetPage from "./budgets/BudgetPage";
 import SingleBudgetPage from "./budgets/SingleBudgetPage";
+import IncomePage from "./incomes/IncomePage";
 import BudgetErrorPage from "./budgets/BudgetErrorPage";
 import SignUp from "./auth/SignUp";
 import ResetPassword from "./auth/ResetPassword";
@@ -13,6 +14,7 @@ const RoutesList = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/register" element={<SignUp />} />
       <Route path="/resetPassword" element={<ResetPassword />} />
+      <Route path="/incomes" element={<IncomePage />} />
       <Route path="/budgets" element={<BudgetPage />} />
       <Route path="/budgets/:id" element={<SingleBudgetPage />} />
       <Route path="/budgets/error/unauthorized" element={<BudgetErrorPage />} />

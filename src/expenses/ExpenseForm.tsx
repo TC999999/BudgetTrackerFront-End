@@ -222,7 +222,6 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 </div>
               )}
             </div>
-
             <div className="keyPad-div">
               <KeyPad
                 handlePress={handlePress}

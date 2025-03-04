@@ -7,9 +7,12 @@ import {
   SignUpFlashErrors,
 } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
+import { SubmitIncomeSignUp } from "../interfaces/incomeInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import KeyPad from "../KeyPad";
+import NewIncomeForm from "../incomes/NewIncomeForm";
+import SignUpIncomeCard from "../incomes/SignUpIncomeCard";
 import { useNavigate } from "react-router-dom";
 import {
   handleSignUpInputErrors,
@@ -22,6 +25,7 @@ const SignUp = (): JSX.Element => {
     password: "",
     email: "",
     totalAssets: 0,
+    incomes: [],
   };
 
   const initialErrors: SignUpErrors = {
@@ -35,6 +39,7 @@ const SignUp = (): JSX.Element => {
     (store) => store.user.userInfo
   );
   const [formData, setFormData] = useState<SignUpInterface>(initialState);
+  const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
   const maxNum = useRef(99999999999999);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
   const [signUpErrors, setSignUpErrors] = useState(initialErrors);
@@ -66,17 +71,40 @@ const SignUp = (): JSX.Element => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
+  const changeIncomeFormState = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+    ): void => {
+      e.preventDefault();
+      setShowIncomeForm(!showIncomeForm);
+    },
+    [showIncomeForm]
+  );
+
+  const handleIncomes = useCallback(
+    (e: React.FormEvent, income: SubmitIncomeSignUp): void => {
+      e.preventDefault();
+      setFormData((data) => ({
+        ...data,
+        incomes: [...formData.incomes, income],
+      }));
+    },
+    [formData.incomes]
+  );
+
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    const { username, password, email, totalAssets } = formData;
+    const { username, password, email, totalAssets, incomes } = formData;
     try {
       const signUpInfo: SignUpInterface = {
         username,
         password,
         email,
         totalAssets: totalAssets / 100,
+        incomes,
       };
       if (handleSignUpSubmitErrors(signUpInfo, setSignUpErrors)) {
+        // console.log(signUpInfo);
         localStorage.setItem(
           "userInputs",
           JSON.stringify({ ...formData, password: "" })
@@ -140,6 +168,12 @@ const SignUp = (): JSX.Element => {
           Sign Up Here!
         </h1>
         <div className="form-div">
+          {showIncomeForm && (
+            <NewIncomeForm
+              changeIncomeFormState={changeIncomeFormState}
+              handleIncomes={handleIncomes}
+            />
+          )}
           <form onSubmit={handleSubmit}>
             <div className="username-div py-4">
               <label className="text-lg block" htmlFor="username">
@@ -264,6 +298,26 @@ const SignUp = (): JSX.Element => {
                 handleDelete={handleDelete}
                 num={formData.totalAssets}
               />
+            </div>
+            <div className="incomes-div">
+              <h1 className="text-lg block">Incomes:</h1>
+              <div className="new-income-list">
+                {formData.incomes.length ? (
+                  formData.incomes.map((i, index) => (
+                    <SignUpIncomeCard key={`new-income-${index}`} income={i} />
+                  ))
+                ) : (
+                  <i>No Incomes</i>
+                )}
+              </div>
+              <div className="add-income-button">
+                <button
+                  className="bg-green-600 p-2 m-2 border-2 border-green-600 rounded-full text-white hover:bg-green-300 hover:text-black active:bg-green-600"
+                  onClick={(e) => changeIncomeFormState(e)}
+                >
+                  Add an Income
+                </button>
+              </div>
             </div>
             <div className="button-div text-center">
               <button className="make-profile-button border-2 rounded-full border-green-500 bg-green-500 text-white  py-2 px-4 hover:bg-green-200 hover:text-black duration-150 active:bg-green-400">

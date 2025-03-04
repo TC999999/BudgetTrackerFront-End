@@ -34,10 +34,18 @@ const Dashboard: React.FC = () => {
       <div className="buttons flex justify-around p-2 bg-emerald-900 sticky top-0">
         <div className="logout-button">
           <button
-            className="border border-blue-200 bg-blue-300 p-2 rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900"
+            className="border border-gray-200 bg-gray-300 p-2 rounded-full hover:bg-gray-600 hover:text-white active:bg-gray-100 active:text-gray-900"
             onClick={logOutAnNavigate}
           >
             Log Out
+          </button>
+        </div>
+        <div className="to-incomes-button">
+          <button
+            className="border border-blue-200 bg-blue-300 p-2 rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900"
+            onClick={() => navigate("/incomes")}
+          >
+            Check out your incomes
           </button>
         </div>
         <div className="to-budgets-button">
