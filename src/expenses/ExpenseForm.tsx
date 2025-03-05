@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import KeyPad from "../KeyPad";
-import { useAppDispatch } from "../features/hooks";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import {
@@ -13,7 +13,6 @@ import {
 } from "../interfaces/expenseInterfaces";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { addNewExpense } from "../features/actions/expenses";
-import SmallLoadingMsg from "../SmallLoadingMsg";
 import { DateTime } from "luxon";
 
 type flashErrors = { title: boolean; transaction: boolean; date: boolean };
@@ -28,6 +27,7 @@ type Props = {
 
 const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   const dispatch = useAppDispatch();
+  const userStatus = useAppSelector((store) => store.user.userInfo);
 
   const initialState: newExpenseInterface = {
     title: "",
@@ -46,7 +46,6 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   const [formData, setFormData] = useState<newExpenseInterface>(initialState);
   const originalMoney = useRef<string>(initialMoney);
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formErrors, setFormErrors] =
     useState<ExpenseFormErrors>(initialErrors);
 
@@ -112,7 +111,6 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
     e.preventDefault();
     try {
       if (handleExpenseSubmitErrors(formData, setFormErrors)) {
-        setIsLoading(true);
         let submitData = {
           ...formData,
           budgetID: budget?._id,
@@ -134,13 +132,11 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
         }, 500);
       }
     } catch (err) {
-      setIsLoading(false);
+      console.log(err);
     }
   };
 
-  return isLoading ? (
-    <SmallLoadingMsg />
-  ) : (
+  return !userStatus.smallLoading ? (
     <div tabIndex={-1} className="new-expense-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="new-expense-form modal-layer-3 text-center">
@@ -245,7 +241,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default ExpenseForm;

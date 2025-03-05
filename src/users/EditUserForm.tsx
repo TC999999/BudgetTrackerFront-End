@@ -14,7 +14,6 @@ import {
   handleEditUserSubmitErrors,
 } from "../helpers/handleUserEditErrors";
 import { addToAssets } from "../features/actions/users";
-import SmallLoadingMsg from "../SmallLoadingMsg";
 
 type Props = {
   hideForm: (
@@ -38,7 +37,6 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
   };
   const initalErrors: UserEditErrors = { value: "" };
   const [formData, setFormData] = useState<FormInfo>(initialState);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const maxNum = useRef<number>(99999999999999);
   const [formErrors, setFormErrors] = useState<UserEditErrors>(initalErrors);
   const [flashInput, setFlashInput] = useState<boolean>(false);
@@ -115,7 +113,6 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
     e.preventDefault();
     try {
       if (handleEditUserSubmitErrors(formData, setFormErrors)) {
-        setIsLoading(true);
         const { value, operation } = formData;
         const submitData: UserEditInterface = {
           value: operation === "add" ? +value / 100 : -value / 100,
@@ -129,13 +126,11 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
         }, 500);
       }
     } catch (err) {
-      setIsLoading(false);
+      console.log(err);
     }
   };
 
-  return isLoading ? (
-    <SmallLoadingMsg />
-  ) : (
+  return !userStatus.smallLoading ? (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="add-to-assets-form text-center modal-layer-3">
@@ -236,7 +231,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default EditUserForm;

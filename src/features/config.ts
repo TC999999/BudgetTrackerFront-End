@@ -7,6 +7,7 @@ export const INITIAL_STATE: AuthInitialStateInterface = {
     user: null,
     recentExpenses: [],
     loading: true,
+    smallLoading: false,
     userExists: false,
     error: "",
   },

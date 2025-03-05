@@ -17,7 +17,6 @@ import {
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { updateBudget } from "../features/actions/budgets";
-import SmallLoadingMsg from "../SmallLoadingMsg";
 
 type Props = {
   hideEditForm: (
@@ -50,7 +49,6 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
   const [formErrors, setFormErrors] =
     useState<UpdateBudgetFormErrors>(initialErrors);
   const [flashInput, setFlashInput] = useState<flashErrors>({ title: false });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const remainingMoney = useRef<number>(
     +getRemainingMoney(budget.moneyAllocated, budget.moneySpent) * 100
   );
@@ -156,7 +154,6 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
     e.preventDefault();
     try {
       if (handleUpdateBudgetSubmitErrors(formData, setFormErrors)) {
-        setIsLoading(true);
         let submitData = {
           budgetID: budget._id,
           title: formData.title,
@@ -175,13 +172,11 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
         }, 500);
       }
     } catch (err) {
-      setIsLoading(false);
+      console.log(err);
     }
   };
 
-  return isLoading ? (
-    <SmallLoadingMsg />
-  ) : (
+  return !userStatus.smallLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="edit-budget-form-div text-center modal-layer-3">
@@ -358,7 +353,7 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default EditBudgetForm;

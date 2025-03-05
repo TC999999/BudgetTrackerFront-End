@@ -12,7 +12,6 @@ import {
   handleBudgetSubmitErrors,
 } from "../helpers/handleBudgetErrors";
 import { addNewBudget } from "../features/actions/budgets";
-import SmallLoadingMsg from "../SmallLoadingMsg";
 
 type Props = {
   hideForm: (
@@ -40,7 +39,6 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
     userStatus.user!.totalAssets * 100
   );
   const [formErrors, setFormErrors] = useState<BudgetFormErrors>(initialErrors);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [flashInput, setFlashInput] = useState<flashErrors>({
     title: false,
     moneyAllocated: false,
@@ -98,7 +96,6 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
     e.preventDefault();
     try {
       if (handleBudgetSubmitErrors(formData, setFormErrors)) {
-        setIsLoading(true);
         let submitData: newBudgetInterface = {
           ...formData,
           moneyAllocated: formData.moneyAllocated / 100,
@@ -115,13 +112,11 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
         }, 500);
       }
     } catch (err: any) {
-      setIsLoading(false);
+      console.log(err);
     }
   };
 
-  return isLoading ? (
-    <SmallLoadingMsg />
-  ) : (
+  return !userStatus.smallLoading ? (
     <div tabIndex={-1} className="budget-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="new-budget-form modal-layer-3">
@@ -223,7 +218,7 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default BudgetForm;

@@ -156,7 +156,7 @@ const SignUp = (): JSX.Element => {
   );
 
   return (
-    <div className="register-page bg-[url('/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-full max-h-full">
+    <main className="register-page bg-[url('/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-full max-h-full">
       <div className="register-form px-4 py-2 bg-white border-2 border-green-700 rounded-r-lg h-full max-h-full overflow-auto">
         <button
           className="border border-gray-200 p-2 rounded-full bg-gray-400 shadow hover:bg-gray-200 transition-150 active:bg-gray-300"
@@ -164,9 +164,11 @@ const SignUp = (): JSX.Element => {
         >
           Go Back
         </button>
-        <h1 className="text-3xl font-bold underline text-emerald-600">
-          Sign Up Here!
-        </h1>
+        <header>
+          <h1 className="text-3xl font-bold underline text-emerald-600">
+            Sign Up Here!
+          </h1>
+        </header>
         <div className="form-div">
           {showIncomeForm && (
             <NewIncomeForm
@@ -327,7 +329,7 @@ const SignUp = (): JSX.Element => {
           </form>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

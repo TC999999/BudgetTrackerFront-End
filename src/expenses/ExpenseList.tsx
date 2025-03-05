@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import ExpenseCard from "./ExpenseCard";
 import {
   ExpenseInterface,
@@ -6,7 +6,6 @@ import {
 } from "../interfaces/expenseInterfaces";
 import { useAppDispatch } from "../features/hooks";
 import { removeExpense } from "../features/actions/expenses";
-import SmallLoadingMsg from "../SmallLoadingMsg";
 
 type Props = {
   expensesList: ExpenseInterface[];
@@ -25,7 +24,6 @@ const ExpenseList: React.FC<Props> = ({
   budgetID,
 }) => {
   const dispatch = useAppDispatch();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const deleteExpense = useCallback(
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -33,16 +31,14 @@ const ExpenseList: React.FC<Props> = ({
     ): Promise<void> => {
       try {
         e.preventDefault();
-        setIsLoading(true);
         let submitData: deleteExpenseInterface = {
           ...info,
           transaction: info.transaction,
           budgetID,
         };
         await dispatch(removeExpense(submitData)).unwrap();
-        setIsLoading(false);
       } catch (err) {
-        setIsLoading(false);
+        console.log(err);
       }
     },
     [dispatch]
@@ -50,7 +46,6 @@ const ExpenseList: React.FC<Props> = ({
 
   return (
     <div className="expense-list">
-      {isLoading && <SmallLoadingMsg />}
       <div className="bg-white border-2 border-green-500 m-2 rounded-md">
         <div className="expense-list-headers grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2">
           <div className="text-sm sm:text-base duration-150 text-center content-center">

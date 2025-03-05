@@ -7,6 +7,7 @@ export type UserContextInterface = {
   userExists: boolean;
   recentExpenses: ExpenseInterface[];
   loading: boolean;
+  smallLoading: boolean;
   error: string[][] | string | null;
 };
 

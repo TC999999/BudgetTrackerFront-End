@@ -6,6 +6,7 @@ import {
   UpdateTime,
   FlashIncomeErrors,
 } from "../interfaces/incomeInterfaces";
+import { UserContextInterface } from "../interfaces/userInterfaces";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
@@ -15,11 +16,10 @@ import {
   handleIncomeInputErrors,
   handleIncomeSubmitErrors,
 } from "../helpers/handleIncomeErrors";
-// import { makeCronDates } from "../helpers/makeCronDates";
 import { addNewIncome } from "../features/actions/incomes";
 import KeyPad from "../KeyPad";
-import SmallLoadingMsg from "../SmallLoadingMsg";
-import { useAppDispatch } from "../features/hooks";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { setSmallLoading } from "../features/auth/authSlice";
 
 type Props = {
   changeIncomeFormState: (
@@ -32,6 +32,11 @@ const NewIncomeForm: React.FC<Props> = ({
   changeIncomeFormState,
   handleIncomes,
 }) => {
+  const dispatch = useAppDispatch();
+  const userStatus: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo
+  );
+
   const initialState: NewIncome = {
     title: "",
     salary: 0,
@@ -50,12 +55,10 @@ const NewIncomeForm: React.FC<Props> = ({
   };
 
   const initialFlashErrors: FlashIncomeErrors = { title: false, salary: false };
-  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<NewIncome>(initialState);
   const [formErrors, setFormErrors] = useState<IncomeErrors>(initialErrors);
   const [flashErrors, setFlashErrors] =
     useState<FlashIncomeErrors>(initialFlashErrors);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const readableUpdateTimeString: string = useMemo(
     () => makeReadableUpdateTimeString(formData.updateTime),
     [formData.updateTime]
@@ -146,7 +149,6 @@ const NewIncomeForm: React.FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (handleIncomeSubmitErrors(formData, setFormErrors)) {
-      setIsLoading(true);
       let { title, salary, updateTime } = formData;
       let cronString: string = makeCronString(updateTime);
       let submitData: SubmitIncomeSignUp = {
@@ -156,7 +158,9 @@ const NewIncomeForm: React.FC<Props> = ({
         readableUpdateTimeString,
       };
       if (handleIncomes) {
+        dispatch(setSmallLoading(true));
         handleIncomes(e, submitData);
+        dispatch(setSmallLoading(false));
       } else {
         await dispatch(addNewIncome(submitData)).unwrap();
       }
@@ -172,9 +176,7 @@ const NewIncomeForm: React.FC<Props> = ({
     }
   };
 
-  return isLoading ? (
-    <SmallLoadingMsg />
-  ) : (
+  return !userStatus.smallLoading ? (
     <div className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="modal-layer-3 text-center">
@@ -451,7 +453,7 @@ const NewIncomeForm: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default NewIncomeForm;

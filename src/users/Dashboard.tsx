@@ -31,43 +31,34 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-homepage">
-      <div className="buttons flex justify-around p-2 bg-emerald-900 sticky top-0">
-        <div className="logout-button">
-          <button
-            className="border border-gray-200 bg-gray-300 p-2 rounded-full hover:bg-gray-600 hover:text-white active:bg-gray-100 active:text-gray-900"
-            onClick={logOutAnNavigate}
-          >
-            Log Out
-          </button>
-        </div>
-        <div className="to-incomes-button">
-          <button
-            className="border border-blue-200 bg-blue-300 p-2 rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900"
-            onClick={() => navigate("/incomes")}
-          >
-            Check out your incomes
-          </button>
-        </div>
-        <div className="to-budgets-button">
-          <button
-            onClick={() => navigate("/budgets")}
-            className="border-2 border-green-600 bg-green-700 rounded-full p-2 flex justify-center hover:bg-green-300 active:bg-gray-100 active:text-green-700"
-          >
-            <TfiMoney className="text-lg my-1" />
-            <span>Check out your budgets </span>
-            <TfiMoney className="text-lg my-1" />
-          </button>
-        </div>
-      </div>
+      <nav className="buttons flex justify-around p-2 bg-emerald-900 sticky top-0">
+        <button
+          className="logout-button border border-gray-200 bg-gray-300 p-2 rounded-full hover:bg-gray-600 hover:text-white active:bg-gray-100 active:text-gray-900"
+          onClick={logOutAnNavigate}
+        >
+          Log Out
+        </button>
+        <button
+          className="to-incomes-button border border-blue-200 bg-blue-300 p-2 rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900"
+          onClick={() => navigate("/incomes")}
+        >
+          Check out your incomes
+        </button>
+        <button
+          onClick={() => navigate("/budgets")}
+          className="to-budgets-button border-2 border-green-600 bg-green-700 rounded-full p-2 flex justify-center hover:bg-green-300 active:bg-gray-100 active:text-green-700"
+        >
+          <TfiMoney className="text-lg my-1" />
+          <span>Check out your budgets </span>
+          <TfiMoney className="text-lg my-1" />
+        </button>
+      </nav>
       <div className="dashboard-usercard border-2 bg-white border-emerald-900 px-4 py-4 mx-4 my-4 shadow-xl text-center">
-        <div className="dashboard-username text-green-700">
+        <header className="dashboard-information text-green-700">
           <h1 className="text-2xl sm:text-4xl font-bold">{user?.username}</h1>
-        </div>
-        <div className="dashboard-totalAssets text-green-700">
           <p className="text-xl">Assets Available:</p>
           <p className="text-3xl sm:text-5xl font-bold">${user?.totalAssets}</p>
-        </div>
-
+        </header>
         <div className="add-asset-button flex justify-center m-4">
           <button
             className="border rounded-full bg-green-700 px-2 py-2 hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"

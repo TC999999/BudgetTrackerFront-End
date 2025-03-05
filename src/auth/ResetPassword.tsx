@@ -1,11 +1,13 @@
 import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { setSmallLoading } from "../features/auth/authSlice";
+import { UserContextInterface } from "../interfaces/userInterfaces";
 import UserInfo from "./UserInfo";
 import OneTimeCode from "./OneTimeCode";
 import NewPassword from "./NewPassword";
 import ErrorWindow from "./ErrorWindow";
 import PasswordResetSuccess from "./PasswordResetSuccess";
-import SmallLoadingMsg from "../SmallLoadingMsg";
 import {
   CurrentStep,
   ConfirmUserInfo,
@@ -16,6 +18,10 @@ import { CiCircleCheck } from "react-icons/ci";
 
 const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const userStatus: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo
+  );
   const initialUser: ConfirmUserInfo = {
     username: "",
     email: "",
@@ -26,7 +32,7 @@ const ResetPassword: React.FC = () => {
     newPassword: false,
     success: false,
   };
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [currentStep, setCurrentStep] = useState<CurrentStep>("userInfo");
   const [submitError, setSubmitError] = useState<string>("");
   const [currentUser, setCurrentUser] = useState<ConfirmUserInfo>(initialUser);
@@ -39,9 +45,9 @@ const ResetPassword: React.FC = () => {
 
   const changeLoading = useCallback(
     (loadingStatus: boolean): void => {
-      setIsLoading(loadingStatus);
+      dispatch(setSmallLoading(loadingStatus));
     },
-    [isLoading]
+    [userStatus.smallLoading]
   );
 
   const changeStep = useCallback(
@@ -74,7 +80,6 @@ const ResetPassword: React.FC = () => {
 
   return (
     <div className="reset-password-page-div">
-      {isLoading && <SmallLoadingMsg />}
       <button
         className="border border-gray-200 p-2 rounded-full bg-gray-400 shadow hover:bg-gray-200 transition-150 active:bg-gray-300"
         onClick={() => navigate("/")}

@@ -7,6 +7,7 @@ import { findToken } from "./features/actions/auth";
 import { getCurrentUser } from "./features/actions/users";
 import { useAppSelector } from "./features/hooks";
 import LoadingMsg from "./LoadingUserMsg";
+import SmallLoadingMsg from "./SmallLoadingMsg";
 import { hasTokenInterface } from "./interfaces/authInterfaces";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 
@@ -53,6 +54,7 @@ function App() {
   return (
     <div className="App">
       <LoadingMsg />
+      <SmallLoadingMsg />
       {!userStatus.loading && <RoutesList />}
     </div>
   );

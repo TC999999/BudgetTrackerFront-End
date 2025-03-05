@@ -23,6 +23,9 @@ const authSlice = createSlice({
     setUserLoading: (state, action: ActionInterface) => {
       state.userInfo.loading = action.payload;
     },
+    setSmallLoading: (state, action: ActionInterface) => {
+      state.userInfo.smallLoading = action.payload;
+    },
     removeUserError: (state) => {
       state.userInfo.error = null;
     },
@@ -107,39 +110,98 @@ const authSlice = createSlice({
         state.userInfo.loading = false;
         state.userInfo.error = action.payload;
       })
+      .addCase(addToAssets.pending, (state) => {
+        state.userInfo.smallLoading = true;
+      })
       .addCase(addToAssets.fulfilled, (state, action: any) => {
         state.userInfo.user!.totalAssets = action.payload.totalAssets;
+        state.userInfo.smallLoading = false;
       })
+      .addCase(addToAssets.rejected, (state) => {
+        state.userInfo.smallLoading = false;
+      })
+
+      .addCase(addNewIncome.pending, (state) => {
+        state.userInfo.smallLoading = true;
+      })
+
       .addCase(addNewIncome.fulfilled, (state, action: any) => {
         state.userInfo.user!.incomes = action.payload.newUserIncomes;
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(addNewIncome.rejected, (state) => {
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(removeIncome.pending, (state) => {
+        state.userInfo.smallLoading = true;
       })
       .addCase(removeIncome.fulfilled, (state, action: any) => {
         state.userInfo.user!.incomes = action.payload.newUserIncomes;
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(removeIncome.rejected, (state) => {
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(addNewBudget.pending, (state) => {
+        state.userInfo.smallLoading = true;
       })
       .addCase(addNewBudget.fulfilled, (state, action: any) => {
         state.userInfo.user!.budgets = action.payload.newUserBudgets;
         state.userInfo.user!.totalAssets = action.payload.newAssets;
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(addNewBudget.rejected, (state) => {
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(updateBudget.pending, (state) => {
+        state.userInfo.smallLoading = true;
       })
       .addCase(updateBudget.fulfilled, (state, action: any) => {
         state.userInfo.user!.budgets = action.payload.newUserBudgets;
         state.userInfo.user!.totalAssets = action.payload.newAssets;
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(updateBudget.rejected, (state) => {
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(deleteBudget.pending, (state) => {
+        state.userInfo.smallLoading = true;
       })
       .addCase(deleteBudget.fulfilled, (state, action: any) => {
         state.userInfo.user!.budgets = action.payload.user.budgets;
         state.userInfo.recentExpenses = action.payload.recentExpenses;
         state.userInfo.user!.totalAssets = action.payload.user.totalAssets;
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(deleteBudget.rejected, (state) => {
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(addNewExpense.pending, (state) => {
+        state.userInfo.smallLoading = true;
       })
       .addCase(addNewExpense.fulfilled, (state, action: any) => {
         state.userInfo.user!.budgets = action.payload.newUserBudgets;
         state.userInfo.recentExpenses = action.payload.newUserExpenses;
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(addNewExpense.rejected, (state) => {
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(removeExpense.pending, (state) => {
+        state.userInfo.smallLoading = true;
       })
       .addCase(removeExpense.fulfilled, (state, action: any) => {
         state.userInfo.user!.budgets = action.payload.newUserBudgets;
         state.userInfo.recentExpenses = action.payload.newUserExpenses;
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(removeExpense.rejected, (state) => {
+        state.userInfo.smallLoading = false;
       });
   },
 });
 
-export const { setUserLoading, removeUserError } = authSlice.actions;
+export const { setUserLoading, setSmallLoading, removeUserError } =
+  authSlice.actions;
 
 export default authSlice.reducer;

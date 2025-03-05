@@ -1,7 +1,12 @@
+import { useAppSelector } from "./features/hooks";
+import { UserContextInterface } from "./interfaces/userInterfaces";
 import { FaRegHourglass } from "react-icons/fa";
 
 const SmallLoadingMsg: React.FC = () => {
-  return (
+  const userStatus: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo
+  );
+  return userStatus.smallLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2">
         <div className="submit-form-loading-msg p-10 flex justify-center relative bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 w-full">
@@ -17,7 +22,7 @@ const SmallLoadingMsg: React.FC = () => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default SmallLoadingMsg;

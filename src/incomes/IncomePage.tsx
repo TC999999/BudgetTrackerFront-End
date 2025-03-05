@@ -25,15 +25,22 @@ const IncomePage = (): JSX.Element => {
 
   return (
     <div>
-      <button onClick={() => navigate("/")}>Back to Home</button>
-      <button onClick={(e) => changeIncomeFormState(e)}>Add New Income</button>
-      <h1 className="text-center text-3xl text-green-700 underline font-bold">
-        Your Current Incomes
-      </h1>
-      {showIncomeForm && (
-        <NewIncomeForm changeIncomeFormState={changeIncomeFormState} />
-      )}
-      <IncomeList incomeList={userStatus.user!.incomes} />
+      <nav>
+        <button onClick={() => navigate("/")}>Back to Home</button>
+        <button onClick={(e) => changeIncomeFormState(e)}>
+          Add New Income
+        </button>
+      </nav>
+      <main>
+        <h1 className="text-center text-3xl text-green-700 underline font-bold">
+          Your Current Incomes
+        </h1>
+        {showIncomeForm && (
+          <NewIncomeForm changeIncomeFormState={changeIncomeFormState} />
+        )}
+
+        <IncomeList incomeList={userStatus.user!.incomes} />
+      </main>
     </div>
   );
 };
