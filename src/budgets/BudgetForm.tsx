@@ -120,17 +120,15 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
     <div tabIndex={-1} className="budget-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="new-budget-form modal-layer-3">
-          <div className="headers text-center">
+          <header className="headers text-center">
             <h1 className="text-3xl text-green-800 font-bold underline">
               Add a New Budget
             </h1>
-            <div className="available-funds my-2">
-              <h2 className="text-xl mx-2 ">Available Funds:</h2>
-              <h2 className="text-4xl font-bold text-green-700">
-                ${(availableFunds / 100).toFixed(2)}
-              </h2>
-            </div>
-          </div>
+            <h2 className="text-2xl mx-2">Available Funds:</h2>
+            <h2 className="text-5xl font-bold text-green-700">
+              ${(availableFunds / 100).toFixed(2)}
+            </h2>
+          </header>
           <form onSubmit={handleSubmit}>
             <div className="title-div text-center mb-2">
               <label className="text-gray-700 block" htmlFor="title">
@@ -152,17 +150,15 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
                   <p className="text-red-700 font-bold">{formErrors.title}</p>
                 </div>
               )}
-              <div>
-                <p className="text-sm">
+              <div className="flex flex-col">
+                <small>
                   Make sure your title has between 20 to 3 characters.
-                </p>
-                <p className="text-sm">
+                </small>
+                <small>
                   Your budget title may only include letters, numbers, and
                   spaces.
-                </p>
-                <p className="text-sm">
-                  Spaces may only be between characters.
-                </p>
+                </small>
+                <small> Spaces may only be between characters.</small>
               </div>
             </div>
             <div className="allocated-funds-div text-center mb-2">
@@ -190,10 +186,10 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
                     </p>
                   </div>
                 )}
-                <p className="text-sm">
+                <small>
                   Make sure the funds for this budget does not exceed your
                   current available assets
-                </p>
+                </small>
               </div>
             </div>
             <div className="keyPad-div">
@@ -203,12 +199,12 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
                 num={formData.moneyAllocated}
               />
             </div>
-            <div className="button-div flex justify-between m-2">
-              <button className="add-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+            <div className="button flex justify-between m-2">
+              <button className="add-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900 duration-150">
                 Add this Budget
               </button>
               <button
-                className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600"
+                className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600 duration-150"
                 onClick={(e) => hideForm(e)}
               >
                 Cancel

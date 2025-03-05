@@ -6,9 +6,9 @@ const HomePage = () => {
   const userStatus = useAppSelector((store) => store.user.userInfo);
 
   return (
-    <main className="Home-Page">
+    <div className="Home-Page">
       {userStatus.userExists ? <Dashboard /> : <LogIn />}
-    </main>
+    </div>
   );
 };
 

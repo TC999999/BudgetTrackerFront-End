@@ -35,14 +35,14 @@ const ExpenseCard: React.FC<Props> = ({
   return (
     <div className="expense-card grid grid-cols-4 px-4 py-4">
       <div className="expense-title p-1 text-sm sm:text-base duration-150 text-center content-center">
-        <p>{expense.title}</p>
+        {expense.title}
       </div>
       <div className="expense-transaction p-1 text-sm sm:text-base duration-150 text-center content-center">
-        <p>${expense.transaction}</p>
+        ${expense.transaction}
       </div>
       {isFrontPage && (
         <div className="expense-budget-title p-1 text-sm sm:text-base duration-150 text-center content-center">
-          <p>{expense.budget?.title}</p>
+          {expense.budget?.title}
         </div>
       )}
       <div className="expense-date p-1 text-sm sm:text-base duration-150 text-center content-center">

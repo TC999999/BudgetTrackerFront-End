@@ -45,6 +45,9 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   };
   const [formData, setFormData] = useState<newExpenseInterface>(initialState);
   const originalMoney = useRef<string>(initialMoney);
+  const currentDate = useRef<string>(
+    DateTime.now().toFormat("yyyy-MM-dd'T00:00'")
+  );
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
   const [formErrors, setFormErrors] =
     useState<ExpenseFormErrors>(initialErrors);
@@ -140,15 +143,15 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
     <div tabIndex={-1} className="new-expense-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="new-expense-form modal-layer-3 text-center">
-          <h2 className="text-3xl text-green-800 font-bold underline">
-            Add a New Expense!
-          </h2>
-          <div className="available-funds">
+          <header>
+            <h2 className="text-3xl text-green-800 font-bold underline">
+              Add a New Expense!
+            </h2>
             <h2 className="text-lg">Remaining {budget.title} Budget Funds:</h2>
             <h2 className="text-4xl text-green-700 font-bold">
               ${availableMoney}
             </h2>
-          </div>
+          </header>
           <form onSubmit={handleSubmit}>
             <div className="title-div mb-2">
               <label className="text-gray-700 text-lg block" htmlFor="title">
@@ -171,6 +174,16 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                   <p className="text-red-700 font-bold">{formErrors.title}</p>
                 </div>
               )}
+              <div className="flex flex-col">
+                <small>
+                  Make sure your title has between 20 to 3 characters.
+                </small>
+                <small>
+                  Your budget title may only include letters, numbers, and
+                  spaces.
+                </small>
+                <small>Spaces may only be between characters.</small>
+              </div>
             </div>
             <div className="date-div mb-2">
               <label htmlFor="date" className="text-gray-700 text-lg block">
@@ -185,12 +198,14 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
+                max={currentDate.current}
               />
               {formErrors.date && (
                 <div className="error-message">
                   <p className="text-red-700 font-bold">{formErrors.date}</p>
                 </div>
               )}
+              <small>The date may not be later that today's date</small>
             </div>
             <div className="transaction-div mb-2">
               <label
@@ -217,6 +232,9 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                   </p>
                 </div>
               )}
+              <small>
+                Transaction may not exceed remaining funds for {budget.title}
+              </small>
             </div>
             <div className="keyPad-div">
               <KeyPad

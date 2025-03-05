@@ -30,25 +30,22 @@ const BudgetPage: React.FC = () => {
 
   return (
     <div className="budget-page">
-      {" "}
-      <div className="buttons sticky top-0 bg-emerald-900 flex justify-around p-2 w-full">
-        <div className="back-button">
+      <header>
+        <nav className="buttons sticky top-0 bg-emerald-900 flex justify-around p-2 w-full">
           <button
-            className="border-2 border-gray-500 p-2 rounded-full text-white bg-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-100"
+            className="back-button border-2 border-gray-500 p-1 sm:p-2 rounded-full text-white bg-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-100"
             onClick={() => navigate("/")}
           >
             Back Home
           </button>
-        </div>
-        <div className="add-budget-form-button">
           <button
-            className="border-2 border-green-500 p-2 rounded-full bg-green-300 hover:bg-green-500 hover:text-white active:bg-green-200"
+            className="add-budget-form-button border-2 border-green-500 p-1 sm:p-2 rounded-full bg-green-300 hover:bg-green-500 hover:text-white active:bg-green-200"
             onClick={() => setShowBudgetForm(true)}
           >
             Add a new Budget
           </button>
-        </div>
-      </div>
+        </nav>
+      </header>
       {showBudgetForm && <BudgetForm hideForm={HideForm} />}
       <BudgetList allBudgets={budgetList} />
     </div>

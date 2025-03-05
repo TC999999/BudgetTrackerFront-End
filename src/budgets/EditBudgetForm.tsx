@@ -180,11 +180,11 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="edit-budget-form-div text-center modal-layer-3">
-          <div className="header">
+          <header>
             <h2 className="text-3xl text-green-800 font-bold underline">
               Edit {budget.title} Budget
             </h2>
-          </div>
+          </header>
           <div className="info-and-form sm:flex sm:justify-center p-4">
             <div className="value-information sm:text-lg sm:m-2 sm:flex sm:items-center">
               <div className="sm:flex sm:flex-col justify-around sm:h-full w-full">
@@ -241,11 +241,10 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
                       </p>
                     </div>
                   )}
-                  <div>
-                    <p className="text-sm">
-                      Make sure your title has between 20 to 3 characters
-                    </p>
-                  </div>
+
+                  <small>
+                    Make sure your title has between 20 to 3 characters
+                  </small>
                 </div>
                 <div className="added-funds-div mb-2">
                   <label
@@ -272,15 +271,15 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
                       </p>
                     </div>
                   )}
-                  <div className="text-sm">
-                    <p>
+                  <div className="flex flex-col">
+                    <small>
                       If adding to budget, make sure new assets are equal to or
                       less than your available assets.
-                    </p>
-                    <p>
+                    </small>
+                    <small>
                       If subtracting from budget, make sure new assets are equal
                       to or greater than your remaining budget value.
-                    </p>
+                    </small>
                   </div>
                 </div>
                 <div className="keyPad-div">

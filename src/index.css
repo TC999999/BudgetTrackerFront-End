@@ -47,8 +47,26 @@
     @apply bg-green-200;
   }
 
-  .stripedBudgets .budget-card:nth-child(even) {
-    @apply bg-green-300;
+  .stripedBudgets li:nth-child(even) .budget-card {
+    @apply bg-green-500 border-white text-white;
+  }
+
+  .stripedBudgets li:nth-child(even) h3.budget-title {
+    @apply hover:text-gray-500 active:text-gray-400;
+  }
+
+  .stripedBudgets li:nth-child(even) progress.budget-progress-bar {
+    @apply [&::-webkit-progress-bar]:bg-green-200 [&::-webkit-progress-value]:bg-slate-400;
+  }
+
+  .stripedBudgets
+    li:nth-child(even)
+    :is(
+      p.budget-money-allocation-value,
+      p.budget-money-spent-value,
+      p.budget-money-remaining-value
+    ) {
+    @apply text-slate-200;
   }
 
   .keypad-key-buttons .button {

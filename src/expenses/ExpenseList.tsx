@@ -45,47 +45,45 @@ const ExpenseList: React.FC<Props> = ({
   );
 
   return (
-    <div className="expense-list">
-      <div className="bg-white border-2 border-green-500 m-2 rounded-md">
-        <div className="expense-list-headers grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2">
-          <div className="text-sm sm:text-base duration-150 text-center content-center">
-            Title
-          </div>
-          <div className="text-sm sm:text-base duration-150 text-center content-center">
-            Transaction
-          </div>
-          {isFrontPage && (
-            <div className="text-sm sm:text-base duration-150 text-center content-center">
-              Budget
-            </div>
-          )}
+    <div className="expense-list bg-white border-2 border-green-500 m-2 rounded-md">
+      <header className="expense-list-headers grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2">
+        <b className="text-sm sm:text-base duration-150 text-center content-center">
+          Name
+        </b>
+        <b className="text-sm sm:text-base duration-150 text-center content-center">
+          Money Spent
+        </b>
+        {isFrontPage && (
+          <b className="text-sm sm:text-base duration-150 text-center content-center">
+            Budget Title
+          </b>
+        )}
 
-          <div className="text-sm sm:text-base duration-150 text-center content-center">
-            Date
+        <b className="text-sm sm:text-base duration-150 text-center content-center">
+          Date
+        </b>
+        {!isFrontPage && (
+          <b className="text-sm sm:text-base duration-150 text-center content-center">
+            Delete
+          </b>
+        )}
+      </header>
+      <div className="expense-card-list striped">
+        {expensesList.map((e) => {
+          return (
+            <ExpenseCard
+              key={e._id}
+              expense={e}
+              isFrontPage={isFrontPage}
+              deleteExpense={deleteExpense}
+            />
+          );
+        })}
+        {!expensesList.length && (
+          <div className="no-expenses text-center text-xl p-6">
+            <p className="italic">No Expenses Yet</p>
           </div>
-          {!isFrontPage && (
-            <div className="text-sm sm:text-base duration-150 text-center content-center">
-              Delete
-            </div>
-          )}
-        </div>
-        <div className="expense-card-list striped">
-          {expensesList.map((e) => {
-            return (
-              <ExpenseCard
-                key={e._id}
-                expense={e}
-                isFrontPage={isFrontPage}
-                deleteExpense={deleteExpense}
-              />
-            );
-          })}
-          {!expensesList.length && (
-            <div className="no-expenses text-center text-xl p-6">
-              <p className="italic">No Expenses Yet</p>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

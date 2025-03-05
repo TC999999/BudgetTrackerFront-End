@@ -205,11 +205,13 @@ const SignUp = (): JSX.Element => {
                   <p>{userStatus.error}</p>
                 </div>
               )}
-              <div className="text-sm">
-                <p>Your username must be between 6-30 characters.</p>
-                <p>Your username may include letters and numbers.</p>
-                <p>Your username cannot contain spaces or special characters</p>
-                <p>(e.g. !, ?, @, #, () [], /).</p>
+              <div className="flex flex-col">
+                <small>Your username must be between 6-30 characters.</small>
+                <small>Your username may include letters and numbers.</small>
+                <small>
+                  Your username cannot contain spaces or special characters
+                </small>
+                <small>(e.g. !, ?, @, #, () [], /).</small>
               </div>
             </div>
             <div className="password-div py-4">
@@ -232,17 +234,17 @@ const SignUp = (): JSX.Element => {
                   <p>{signUpErrors.password}</p>
                 </div>
               )}
-              <div className="text-sm">
-                <p>Your password must be between 16-20 characters.</p>
-                <p>
+              <div className="flex flex-col">
+                <small>Your password must be between 16-20 characters.</small>
+                <small>
                   Your password may include letters, numbers, and the following
-                </p>
-                <p>special characters only.</p>
-                <p>(!, ?, &, $, #, %).</p>
-                <p>
+                </small>
+                <small>special characters only.</small>
+                <small>(!, ?, &, $, #, %).</small>
+                <small>
                   Your password cannot contain spaces, slashes, or brackets.
-                </p>
-                <p>(e.g. [], (), /).</p>
+                </small>
+                <small>(e.g. [], (), /).</small>
               </div>
             </div>
             <div className="email-div py-4">
@@ -282,12 +284,9 @@ const SignUp = (): JSX.Element => {
                 placeholder="0.00"
                 value={`$${(formData.totalAssets / 100).toFixed(2)}`}
                 onChange={handleChange}
-                required
                 readOnly
               />
-              <div className="text-sm">
-                <p>Your total assets must be $999999999999.99 or less</p>
-              </div>
+              <small>Your total assets must be $999999999999.99 or less</small>
               {keyPadError && (
                 <div className="text-green-700 font-bold text-sm">
                   <p>You've reached the maximum asset value.</p>

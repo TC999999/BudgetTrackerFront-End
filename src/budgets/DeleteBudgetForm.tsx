@@ -66,18 +66,16 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
     <div className="delete-budget-form-div modal-layer-1">
       <div className="modal-layer-2">
         <div className="delete-budget-form text-center modal-layer-3">
-          <section className="messages">
-            <header className="text-3xl sm:text-4xl font-bold text-red-700 underline duration-150">
-              <h3>Before You Delete</h3>
-            </header>
-
-            <p className="text-base sm:text-lg duration-150">
+          <header className="duration-150">
+            <h3 className="text-3xl sm:text-4xl font-bold text-red-700 underline">
+              Before You Delete
+            </h3>
+            <h2 className="text-base sm:text-lg">
               Please be aware that deleting the {budget.title} budget will also
               delete every transaction ({budget.expenses.length} transaction(s))
               made using its funds
-            </p>
-          </section>
-
+            </h2>
+          </header>
           <form onSubmit={handleSubmit}>
             <fieldset className="delete-choices">
               <legend className="text-lg sm:text-xl font-bold duration-150">
@@ -157,7 +155,6 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
                 </div>
               </div>
             </fieldset>
-
             <div className="new-assets">
               <p className="text-lg p-1">Your New Available Assets Will Be:</p>
               <p className="text-3xl sm:text-4xl font-bold text-green-700 p-1 duration-150">
@@ -165,19 +162,15 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
               </p>
             </div>
             <div className="buttons flex justify-between m-2">
-              <div className="delete-button-div">
-                <button className="delete-button duration-150 bg-red-300 border-2 border-red-900 rounded-full px-2 py-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900">
-                  Delete Budget
-                </button>
-              </div>
-              <div className="cancel-delete-budget">
-                <button
-                  className="cancel-button duration-150"
-                  onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
-                >
-                  Cancel
-                </button>
-              </div>
+              <button className="delete-button duration-150 bg-red-300 border-2 border-red-900 rounded-full px-2 py-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900">
+                Delete Budget
+              </button>
+              <button
+                className="cancel-button duration-150"
+                onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>

@@ -26,15 +26,13 @@ const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
     []
   );
   return (
-    <div className="income-list-div flex flex-wrap justify-center">
+    <ul className="income-list flex flex-wrap justify-center">
       {incomeList.map((i) => (
-        <IncomeCard
-          key={`income-${i._id}`}
-          income={i}
-          deleteIncome={deleteIncome}
-        />
+        <li key={`income-${i._id}`}>
+          <IncomeCard income={i} deleteIncome={deleteIncome} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
 
