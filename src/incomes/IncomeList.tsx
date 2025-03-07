@@ -1,8 +1,9 @@
-import { useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Income, deleteIncomeType } from "../interfaces/incomeInterfaces";
 import { removeIncome } from "../features/actions/incomes";
 import { useAppDispatch } from "../features/hooks";
 import IncomeCard from "./IncomeCard";
+import UpdateIncomeForm from "./UpdateIncomeForm";
 
 type Props = {
   incomeList: Income[];
@@ -10,6 +11,19 @@ type Props = {
 
 const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
   const dispatch = useAppDispatch();
+  const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
+  const selectIncome = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+      income: Income | null
+    ): void => {
+      e.preventDefault();
+      console.log(income);
+      setSelectedIncome(income);
+    },
+    [selectedIncome]
+  );
+
   const deleteIncome = useCallback(
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -26,13 +40,22 @@ const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
     []
   );
   return (
-    <ul className="income-list flex flex-wrap justify-center">
-      {incomeList.map((i) => (
-        <li key={`income-${i._id}`}>
-          <IncomeCard income={i} deleteIncome={deleteIncome} />
-        </li>
-      ))}
-    </ul>
+    <div className="income-list-and-edit-form">
+      {selectedIncome && (
+        <UpdateIncomeForm income={selectedIncome} selectIncome={selectIncome} />
+      )}
+      <ul className="income-list flex flex-wrap justify-center">
+        {incomeList.map((i) => (
+          <li key={`income-${i._id}`}>
+            <IncomeCard
+              income={i}
+              deleteIncome={deleteIncome}
+              selectIncome={selectIncome}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

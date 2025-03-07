@@ -6,7 +6,7 @@ import {
   logOutUser,
 } from "../actions/auth";
 import { getCurrentUser, addToAssets } from "../actions/users";
-import { addNewIncome, removeIncome } from "../actions/incomes";
+import { addNewIncome, updateIncome, removeIncome } from "../actions/incomes";
 import { addNewBudget, updateBudget, deleteBudget } from "../actions/budgets";
 import { addNewExpense, removeExpense } from "../actions/expenses";
 import { INITIAL_STATE } from "../config";
@@ -120,16 +120,24 @@ const authSlice = createSlice({
       .addCase(addToAssets.rejected, (state) => {
         state.userInfo.smallLoading = false;
       })
-
       .addCase(addNewIncome.pending, (state) => {
         state.userInfo.smallLoading = true;
       })
-
       .addCase(addNewIncome.fulfilled, (state, action: any) => {
         state.userInfo.user!.incomes = action.payload.newUserIncomes;
         state.userInfo.smallLoading = false;
       })
       .addCase(addNewIncome.rejected, (state) => {
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(updateIncome.pending, (state) => {
+        state.userInfo.smallLoading = true;
+      })
+      .addCase(updateIncome.fulfilled, (state, action: any) => {
+        state.userInfo.user!.incomes = action.payload.newUserIncomes;
+        state.userInfo.smallLoading = false;
+      })
+      .addCase(updateIncome.rejected, (state) => {
         state.userInfo.smallLoading = false;
       })
       .addCase(removeIncome.pending, (state) => {

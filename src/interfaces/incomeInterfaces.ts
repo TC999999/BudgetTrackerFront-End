@@ -10,6 +10,7 @@ export type Income = {
   _id: string;
   title: string;
   salary: string;
+  cronString: string;
   readableUpdateTimeString: string;
   lastReceived: string;
   nextReceived: string;
@@ -22,6 +23,21 @@ export type NewIncome = {
 };
 
 export type SubmitIncomeSignUp = {
+  title: string;
+  salary: number;
+  cronString: string;
+  readableUpdateTimeString: string;
+};
+
+export type UpdateIncome = {
+  _id: string;
+  title: string;
+  salary: number;
+  updateTime: UpdateTime;
+};
+
+export type SubmitUpdateIncome = {
+  _id: string;
   title: string;
   salary: number;
   cronString: string;

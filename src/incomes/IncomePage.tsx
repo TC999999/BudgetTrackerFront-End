@@ -50,7 +50,6 @@ const IncomePage = (): JSX.Element => {
             Your Current Incomes
           </h1>
         </header>
-
         <IncomeList incomeList={userStatus.user!.incomes} />
       </main>
     </div>

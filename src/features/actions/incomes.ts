@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   SubmitIncomeSignUp,
+  SubmitUpdateIncome,
   deleteIncomeType,
 } from "../../interfaces/incomeInterfaces";
 import { API_URL } from "../config";
@@ -13,6 +14,23 @@ export const addNewIncome = createAsyncThunk<any, SubmitIncomeSignUp>(
       let res = await axios({
         method: "post",
         url: `${API_URL}/incomes/add/new`,
+        data,
+        withCredentials: true,
+      });
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data.error.message);
+    }
+  }
+);
+
+export const updateIncome = createAsyncThunk<any, SubmitUpdateIncome>(
+  "incomes/update",
+  async (data: SubmitUpdateIncome, thunkAPI) => {
+    try {
+      let res = await axios({
+        method: "patch",
+        url: `${API_URL}/incomes/update/${data._id}`,
         data,
         withCredentials: true,
       });

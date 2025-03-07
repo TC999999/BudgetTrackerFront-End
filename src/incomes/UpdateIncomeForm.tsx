@@ -1,10 +1,11 @@
 import { useCallback, useState, useMemo } from "react";
 import {
-  NewIncome,
+  UpdateIncome,
   IncomeErrors,
-  SubmitIncomeSignUp,
+  SubmitUpdateIncome,
   UpdateTime,
   FlashIncomeErrors,
+  Income,
 } from "../interfaces/incomeInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
@@ -12,41 +13,34 @@ import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
 import { makeCronString } from "../helpers/makeCronString";
 import { makeReadableUpdateTimeString } from "../helpers/makeReadableUpdateTimeString";
+import { constructUpdateTimeObj } from "../helpers/constructUpdateTimeObj";
 import {
   handleIncomeInputErrors,
   handleIncomeSubmitErrors,
 } from "../helpers/handleIncomeErrors";
-import { addNewIncome } from "../features/actions/incomes";
+import { updateIncome } from "../features/actions/incomes";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { setSmallLoading } from "../features/auth/authSlice";
 
 type Props = {
-  changeIncomeFormState: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+  income: Income;
+  selectIncome: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+    income: null
   ) => void;
-  handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
 };
 
-const NewIncomeForm: React.FC<Props> = ({
-  changeIncomeFormState,
-  handleIncomes,
-}) => {
+const UpdateIncomeForm: React.FC<Props> = ({ income, selectIncome }) => {
   const dispatch = useAppDispatch();
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
 
-  const initialState: NewIncome = {
-    title: "",
-    salary: 0,
-    updateTime: {
-      minute: "0",
-      hour: "0",
-      dayOfMonth: "*",
-      month: "*",
-      dayOfWeek: "*",
-    },
+  const initialState: UpdateIncome = {
+    _id: income._id,
+    title: income.title,
+    salary: +income.salary * 100,
+    updateTime: constructUpdateTimeObj(income.cronString),
   };
 
   const initialErrors: IncomeErrors = {
@@ -55,7 +49,7 @@ const NewIncomeForm: React.FC<Props> = ({
   };
 
   const initialFlashErrors: FlashIncomeErrors = { title: false, salary: false };
-  const [formData, setFormData] = useState<NewIncome>(initialState);
+  const [formData, setFormData] = useState<UpdateIncome>(initialState);
   const [formErrors, setFormErrors] = useState<IncomeErrors>(initialErrors);
   const [flashErrors, setFlashErrors] =
     useState<FlashIncomeErrors>(initialFlashErrors);
@@ -151,20 +145,16 @@ const NewIncomeForm: React.FC<Props> = ({
     if (handleIncomeSubmitErrors(formData, setFormErrors)) {
       let { title, salary, updateTime } = formData;
       let cronString: string = makeCronString(updateTime);
-      let submitData: SubmitIncomeSignUp = {
+      let submitData: SubmitUpdateIncome = {
+        _id: income._id,
         title,
         salary: salary / 100,
         cronString,
         readableUpdateTimeString,
       };
-      if (handleIncomes) {
-        dispatch(setSmallLoading(true));
-        handleIncomes(e, submitData);
-        dispatch(setSmallLoading(false));
-      } else {
-        await dispatch(addNewIncome(submitData)).unwrap();
-      }
-      changeIncomeFormState(e);
+      console.log(submitData);
+      await dispatch(updateIncome(submitData)).unwrap();
+      selectIncome(e, null);
     } else {
       if (formData.title === "" || formErrors.title)
         setFlashErrors((flash) => ({ ...flash, title: true }));
@@ -182,7 +172,7 @@ const NewIncomeForm: React.FC<Props> = ({
         <div className="modal-layer-3 text-center">
           <header>
             <h1 className="text-3xl text-green-800 font-bold underline">
-              Add a New Income
+              Update {income.title} Income
             </h1>
           </header>
           <form className="new-income-form" onSubmit={handleSubmit}>
@@ -441,13 +431,13 @@ const NewIncomeForm: React.FC<Props> = ({
             <div className="buttons flex justify-between m-2">
               <button
                 className="cancel-button"
-                onClick={(e) => changeIncomeFormState(e)}
+                onClick={(e) => selectIncome(e, null)}
               >
                 Cancel
               </button>
 
               <button className="submit-button bg-green-300 border-2 border-green-700 rounded-full p-2 hover:bg-green-600 hover:text-white active:bg-green-700">
-                Add Income
+                Update Income
               </button>
             </div>
           </form>
@@ -457,4 +447,4 @@ const NewIncomeForm: React.FC<Props> = ({
   ) : null;
 };
 
-export default NewIncomeForm;
+export default UpdateIncomeForm;
