@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import RoutesList from "./RoutesList";
 import { useAppDispatch } from "./features/hooks";
-import { setUserLoading, removeUserError } from "./features/auth/authSlice";
+import {
+  setUserLoading,
+  removeUserError,
+  incomeUpdate,
+} from "./features/auth/authSlice";
 import { findToken } from "./features/actions/auth";
 import { getCurrentUser } from "./features/actions/users";
 import { useAppSelector } from "./features/hooks";
@@ -42,7 +46,32 @@ function App() {
       }
     };
     getUserInfo();
-  }, [dispatch, tokenStatus]);
+  }, [dispatch, tokenStatus.hasToken, tokenStatus.loading]);
+
+  useEffect(() => {
+    if (userStatus.user?._id && !userStatus.loading) {
+      const es = new EventSource(
+        `http://localhost:3001/events/${userStatus.user?._id}`
+      );
+
+      es.onopen = () => {
+        console.log("Connection Established");
+      };
+
+      es.onmessage = (e) => {
+        let data = JSON.parse(e.data);
+        if (data.newTotalAssets && data.newUserIncomes) {
+          dispatch(incomeUpdate(data));
+        }
+      };
+
+      es.onerror = (e) => {
+        console.log(e);
+      };
+
+      return () => es.close();
+    }
+  }, [userStatus.user?._id, userStatus.loading]);
 
   useEffect(() => {
     if (location.pathname !== currPath) {

@@ -18,7 +18,6 @@ const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
       income: Income | null
     ): void => {
       e.preventDefault();
-      console.log(income);
       setSelectedIncome(income);
     },
     [selectedIncome]

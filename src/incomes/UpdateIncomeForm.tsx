@@ -152,7 +152,6 @@ const UpdateIncomeForm: React.FC<Props> = ({ income, selectIncome }) => {
         cronString,
         readableUpdateTimeString,
       };
-      console.log(submitData);
       await dispatch(updateIncome(submitData)).unwrap();
       selectIncome(e, null);
     } else {

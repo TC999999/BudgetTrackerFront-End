@@ -29,6 +29,11 @@ const authSlice = createSlice({
     removeUserError: (state) => {
       state.userInfo.error = null;
     },
+    incomeUpdate: (state, action: ActionInterface) => {
+      state.userInfo.user!.incomes = action.payload.newUserIncomes;
+      state.userInfo.user!.totalAssets =
+        action.payload.newTotalAssets.totalAssets;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -71,7 +76,7 @@ const authSlice = createSlice({
       })
       .addCase(findToken.fulfilled, (state, action: any) => {
         state.hasTokenInfo.loading = false;
-        state.hasTokenInfo.hasToken = action.payload.token ? true : false;
+        state.hasTokenInfo.hasToken = action.payload.token;
       })
       .addCase(findToken.rejected, (state) => {
         state.hasTokenInfo.loading = false;
@@ -209,7 +214,11 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUserLoading, setSmallLoading, removeUserError } =
-  authSlice.actions;
+export const {
+  setUserLoading,
+  setSmallLoading,
+  removeUserError,
+  incomeUpdate,
+} = authSlice.actions;
 
 export default authSlice.reducer;

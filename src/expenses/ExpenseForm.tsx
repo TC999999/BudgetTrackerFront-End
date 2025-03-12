@@ -45,9 +45,9 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   };
   const [formData, setFormData] = useState<newExpenseInterface>(initialState);
   const originalMoney = useRef<string>(initialMoney);
-  const currentDate = useRef<string>(
-    DateTime.now().toFormat("yyyy-MM-dd'T00:00'")
-  );
+  // const currentDate = useRef<string>(
+  //   DateTime.now().toFormat("yyyy-MM-dd'T00:00'")
+  // );
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
   const [formErrors, setFormErrors] =
     useState<ExpenseFormErrors>(initialErrors);
@@ -198,7 +198,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                max={currentDate.current}
+                // max={currentDate.current}
               />
               {formErrors.date && (
                 <div className="error-message">
