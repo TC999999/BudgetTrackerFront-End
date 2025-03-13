@@ -9,6 +9,7 @@ import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getNewBudgetValue } from "../helpers/showBudgetValue";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { calculateNewTotalAssets } from "../helpers/calculateNewTotalAssets";
+import { createUpdateBudgetString } from "../helpers/createNotificationString";
 import {
   handleUpdateBudgetInputErrors,
   handleUpdateBudgetSubmitErrors,
@@ -17,6 +18,7 @@ import {
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { updateBudget } from "../features/actions/budgets";
+import { toast } from "react-toastify";
 
 type Props = {
   hideEditForm: (
@@ -32,6 +34,8 @@ type flashErrors = {
 
 const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
   const dispatch = useAppDispatch();
+  const notify = (notificationString: string) =>
+    toast.success(notificationString);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -164,6 +168,7 @@ const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
         };
         await dispatch(updateBudget(submitData)).unwrap();
         hideEditForm(e, "showEditForm");
+        notify(createUpdateBudgetString(budget.title, formData));
       } else {
         if (formErrors.title || formData.title === "")
           setFlashInput({ title: true });

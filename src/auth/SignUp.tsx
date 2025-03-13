@@ -18,6 +18,7 @@ import {
   handleSignUpInputErrors,
   handleSignUpSubmitErrors,
 } from "../helpers/handleSignUpErrors";
+import { toast } from "react-toastify";
 
 const SignUp = (): JSX.Element => {
   const initialState: SignUpInterface = {
@@ -35,6 +36,8 @@ const SignUp = (): JSX.Element => {
   };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const notify = () =>
+    toast.error("You have reached the maximum number of allowed incomes!");
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -71,6 +74,17 @@ const SignUp = (): JSX.Element => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
+  const showIncomeFormState = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void => {
+    e.preventDefault();
+    if (formData.incomes.length < 5) {
+      setShowIncomeForm(true);
+    } else {
+      notify();
+    }
+  };
+
   const changeIncomeFormState = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
@@ -92,6 +106,23 @@ const SignUp = (): JSX.Element => {
     [formData.incomes]
   );
 
+  const removeIncome = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+      index: number
+    ): void => {
+      e.preventDefault();
+      let newIncomes = formData.incomes.filter((v, i) => {
+        if (i !== index) return v;
+      });
+      setFormData((data) => ({
+        ...data,
+        incomes: newIncomes,
+      }));
+    },
+    [formData.incomes]
+  );
+
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     const { username, password, email, totalAssets, incomes } = formData;
@@ -104,7 +135,6 @@ const SignUp = (): JSX.Element => {
         incomes,
       };
       if (handleSignUpSubmitErrors(signUpInfo, setSignUpErrors)) {
-        // console.log(signUpInfo);
         localStorage.setItem(
           "userInputs",
           JSON.stringify({ ...formData, password: "" })
@@ -172,7 +202,7 @@ const SignUp = (): JSX.Element => {
         <div className="form-div">
           {showIncomeForm && (
             <NewIncomeForm
-              changeIncomeFormState={changeIncomeFormState}
+              hideIncomeFormState={changeIncomeFormState}
               handleIncomes={handleIncomes}
             />
           )}
@@ -286,7 +316,9 @@ const SignUp = (): JSX.Element => {
                 onChange={handleChange}
                 readOnly
               />
-              <small>Your total assets must be $999999999999.99 or less</small>
+              <small>
+                Your total assets must between $999999999999.99 and $0.00
+              </small>
               {keyPadError && (
                 <div className="text-green-700 font-bold text-sm">
                   <p>You've reached the maximum asset value.</p>
@@ -300,12 +332,21 @@ const SignUp = (): JSX.Element => {
                 num={formData.totalAssets}
               />
             </div>
-            <div className="incomes-div">
-              <h1 className="text-lg block">Incomes:</h1>
+            <section className="incomes-section">
+              <header>
+                <h1 className="text-lg block">
+                  Incomes ({formData.incomes.length}/5):
+                </h1>
+              </header>
               <div className="new-income-list">
                 {formData.incomes.length ? (
                   formData.incomes.map((i, index) => (
-                    <SignUpIncomeCard key={`new-income-${index}`} income={i} />
+                    <SignUpIncomeCard
+                      key={`new-income-${index}`}
+                      income={i}
+                      removeIncome={removeIncome}
+                      index={index}
+                    />
                   ))
                 ) : (
                   <i>No Incomes</i>
@@ -313,13 +354,17 @@ const SignUp = (): JSX.Element => {
               </div>
               <div className="add-income-button">
                 <button
-                  className="bg-green-600 p-2 m-2 border-2 border-green-600 rounded-full text-white hover:bg-green-300 hover:text-black active:bg-green-600"
-                  onClick={(e) => changeIncomeFormState(e)}
+                  className={`bg-green-600 p-2 m-2 border-2 border-green-600 rounded-full text-white ${
+                    formData.incomes.length < 5
+                      ? "hover:bg-green-300 hover:text-black active:bg-green-600"
+                      : "cursor-not-allowed"
+                  } `}
+                  onClick={(e) => showIncomeFormState(e)}
                 >
                   Add an Income
                 </button>
               </div>
-            </div>
+            </section>
             <div className="button-div text-center">
               <button className="make-profile-button border-2 rounded-full border-green-500 bg-green-500 text-white  py-2 px-4 hover:bg-green-200 hover:text-black duration-150 active:bg-green-400">
                 Sign Up!

@@ -13,7 +13,9 @@ import {
   handleUserEditInputErrors,
   handleEditUserSubmitErrors,
 } from "../helpers/handleUserEditErrors";
+import { createUpdateUserString } from "../helpers/createNotificationString";
 import { addToAssets } from "../features/actions/users";
+import { toast } from "react-toastify";
 
 type Props = {
   hideForm: (
@@ -28,6 +30,7 @@ type FormInfo = {
 
 const EditUserForm: React.FC<Props> = ({ hideForm }) => {
   const dispatch = useAppDispatch();
+  const notify = (notificaation: string) => toast.success(notificaation);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -119,6 +122,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }) => {
         };
         await dispatch(addToAssets(submitData)).unwrap();
         hideForm(e);
+        notify(createUpdateUserString(submitData));
       } else {
         setFlashInput(true);
         setTimeout(() => {

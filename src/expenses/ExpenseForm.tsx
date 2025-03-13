@@ -14,6 +14,7 @@ import {
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { addNewExpense } from "../features/actions/expenses";
 import { DateTime } from "luxon";
+import { toast } from "react-toastify";
 
 type flashErrors = { title: boolean; transaction: boolean; date: boolean };
 
@@ -27,6 +28,12 @@ type Props = {
 
 const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   const dispatch = useAppDispatch();
+  const notify = (title: string, transaction: number) =>
+    toast.success(
+      `${title} expense created successfully! $${transaction.toFixed(
+        2
+      )} spent. $${availableMoney} remaining in ${budget.title}.`
+    );
   const userStatus = useAppSelector((store) => store.user.userInfo);
 
   const initialState: newExpenseInterface = {
@@ -45,9 +52,6 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
   };
   const [formData, setFormData] = useState<newExpenseInterface>(initialState);
   const originalMoney = useRef<string>(initialMoney);
-  // const currentDate = useRef<string>(
-  //   DateTime.now().toFormat("yyyy-MM-dd'T00:00'")
-  // );
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
   const [formErrors, setFormErrors] =
     useState<ExpenseFormErrors>(initialErrors);
@@ -121,6 +125,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
         };
         await dispatch(addNewExpense(submitData)).unwrap();
         hideExpenseForm(e, "showExpenseForm");
+        notify(submitData.title, submitData.transaction);
       } else {
         if (formErrors.title || formData.title === "")
           setFlashInput((flash) => ({ ...flash, title: true }));

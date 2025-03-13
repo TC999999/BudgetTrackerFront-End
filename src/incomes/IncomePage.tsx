@@ -4,29 +4,45 @@ import { useAppSelector } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import IncomeList from "./IncomeList";
 import NewIncomeForm from "./NewIncomeForm";
+import { toast } from "react-toastify";
 
 const IncomePage = (): JSX.Element => {
   const navigate = useNavigate();
+  const notify = () =>
+    toast.error("You have reached the maximum number of incomes");
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
 
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
 
-  const changeIncomeFormState = useCallback(
+  const showIncomeFormState = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void => {
+    e.preventDefault();
+    if (userStatus.user!.incomes.length < 5) {
+      setShowIncomeForm(true);
+    } else {
+      console.log("HUH");
+      console.log(userStatus.user!.incomes);
+      notify();
+    }
+  };
+
+  const hideIncomeFormState = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
     ): void => {
       e.preventDefault();
-      setShowIncomeForm(!showIncomeForm);
+      setShowIncomeForm(false);
     },
     [showIncomeForm]
   );
 
   return (
     <div className="income-page">
-      <header>
-        <nav className="buttons sticky top-0 bg-emerald-900 flex justify-around p-2 w-full">
+      <header className="buttons sticky top-0 bg-emerald-900 ">
+        <nav className="flex justify-around p-2 w-full">
           <button
             className="border-2 border-gray-500 p-1 sm:p-2 text-sm sm:text-base rounded-full text-white bg-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-100 duration-150"
             onClick={() => navigate("/")}
@@ -34,8 +50,12 @@ const IncomePage = (): JSX.Element => {
             Back to Home
           </button>
           <button
-            className="border-2 border-green-500 p-1 sm:p-2 text-sm sm:text-base rounded-full bg-green-400 hover:bg-green-700 hover:text-white active:bg-green-500 duration-150"
-            onClick={(e) => changeIncomeFormState(e)}
+            className={`border-2 border-green-500 p-1 sm:p-2 text-sm sm:text-base rounded-full bg-green-400 ${
+              userStatus.user!.incomes.length < 5
+                ? "hover:bg-green-700 hover:text-white active:bg-green-500 duration-150"
+                : "cursor-not-allowed"
+            }`}
+            onClick={(e) => showIncomeFormState(e)}
           >
             Add New Income
           </button>
@@ -43,11 +63,11 @@ const IncomePage = (): JSX.Element => {
       </header>
       <main>
         {showIncomeForm && (
-          <NewIncomeForm changeIncomeFormState={changeIncomeFormState} />
+          <NewIncomeForm hideIncomeFormState={hideIncomeFormState} />
         )}
         <header>
           <h1 className="text-center text-xl sm:text-3xl text-green-700 underline font-bold">
-            Your Current Incomes
+            Your Current Incomes ({userStatus.user!.incomes.length}/5)
           </h1>
         </header>
         <IncomeList incomeList={userStatus.user!.incomes} />

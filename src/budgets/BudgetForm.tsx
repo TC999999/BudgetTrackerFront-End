@@ -12,6 +12,7 @@ import {
   handleBudgetSubmitErrors,
 } from "../helpers/handleBudgetErrors";
 import { addNewBudget } from "../features/actions/budgets";
+import { toast } from "react-toastify";
 
 type Props = {
   hideForm: (
@@ -26,6 +27,12 @@ type flashErrors = {
 
 const BudgetForm: React.FC<Props> = ({ hideForm }) => {
   const dispatch = useAppDispatch();
+  const notify = (title: string, moneyAllocated: number) =>
+    toast.success(
+      `${title} budget created successfully! $${moneyAllocated.toFixed(
+        2
+      )} allocated to this budget.`
+    );
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -102,6 +109,7 @@ const BudgetForm: React.FC<Props> = ({ hideForm }) => {
         };
         await dispatch(addNewBudget(submitData)).unwrap();
         hideForm(e);
+        notify(submitData.title, submitData.moneyAllocated);
       } else {
         if (formErrors.title || formData.title === "")
           setFlashInput((flash) => ({ ...flash, title: true }));

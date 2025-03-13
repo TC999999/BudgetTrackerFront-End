@@ -10,6 +10,7 @@ import { deleteBudget } from "../features/actions/budgets";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { makeExpenseIDList } from "../helpers/makeExpenseIDList";
 import { calculateNewTotalAssetsWithoutOperation } from "../helpers/calculateNewTotalAssets";
+import { toast } from "react-toastify";
 
 type Props = {
   hideDeleteForm: (
@@ -22,6 +23,12 @@ type Props = {
 const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const notify = (title: string, addBackToAssets: number) =>
+    toast.success(
+      `${title} budget deleted successfully! $${addBackToAssets.toFixed(
+        2
+      )} added to available assets.`
+    );
 
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
@@ -58,6 +65,7 @@ const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
     try {
       await dispatch(deleteBudget(formData)).unwrap();
       navigate("/budgets");
+      notify(budget.title, formData.addBackToAssets);
     } catch (err) {
       console.log(err);
     }

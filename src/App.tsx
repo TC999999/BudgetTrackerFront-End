@@ -14,10 +14,12 @@ import LoadingMsg from "./LoadingUserMsg";
 import SmallLoadingMsg from "./SmallLoadingMsg";
 import { hasTokenInterface } from "./interfaces/authInterfaces";
 import { UserContextInterface } from "./interfaces/userInterfaces";
+import { ToastContainer, toast } from "react-toastify";
 
 function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const notify = (message: string) => toast.success(message);
   const location = useLocation();
   const [currPath, setCurrPath] = useState<string>("/");
 
@@ -62,6 +64,9 @@ function App() {
         let data = JSON.parse(e.data);
         if (data.newTotalAssets && data.newUserIncomes) {
           dispatch(incomeUpdate(data));
+          notify(
+            `Recieved Income! Your Total Assets are now $${data.newTotalAssets.totalAssets} `
+          );
         }
       };
 
@@ -84,6 +89,7 @@ function App() {
     <div className="App">
       <LoadingMsg />
       <SmallLoadingMsg />
+      <ToastContainer />
       {!userStatus.loading && <RoutesList />}
     </div>
   );

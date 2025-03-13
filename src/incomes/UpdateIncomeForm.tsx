@@ -18,9 +18,11 @@ import {
   handleIncomeInputErrors,
   handleIncomeSubmitErrors,
 } from "../helpers/handleIncomeErrors";
+import { createUpdateIncomeString } from "../helpers/createNotificationString";
 import { updateIncome } from "../features/actions/incomes";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { toast } from "react-toastify";
 
 type Props = {
   income: Income;
@@ -32,6 +34,7 @@ type Props = {
 
 const UpdateIncomeForm: React.FC<Props> = ({ income, selectIncome }) => {
   const dispatch = useAppDispatch();
+  const notify = (notification: string) => toast.success(notification);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -153,6 +156,7 @@ const UpdateIncomeForm: React.FC<Props> = ({ income, selectIncome }) => {
         readableUpdateTimeString,
       };
       await dispatch(updateIncome(submitData)).unwrap();
+      notify(createUpdateIncomeString(income, submitData));
       selectIncome(e, null);
     } else {
       if (formData.title === "" || formErrors.title)

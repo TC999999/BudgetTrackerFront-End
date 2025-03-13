@@ -20,19 +20,22 @@ import { addNewIncome } from "../features/actions/incomes";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { setSmallLoading } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 type Props = {
-  changeIncomeFormState: (
+  hideIncomeFormState: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
 };
 
 const NewIncomeForm: React.FC<Props> = ({
-  changeIncomeFormState,
+  hideIncomeFormState,
   handleIncomes,
 }) => {
   const dispatch = useAppDispatch();
+  const notify = (incomeTitle: string) =>
+    toast.success(`${incomeTitle} income successfully created`);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -163,8 +166,9 @@ const NewIncomeForm: React.FC<Props> = ({
         dispatch(setSmallLoading(false));
       } else {
         await dispatch(addNewIncome(submitData)).unwrap();
+        notify(submitData.title);
       }
-      changeIncomeFormState(e);
+      hideIncomeFormState(e);
     } else {
       if (formData.title === "" || formErrors.title)
         setFlashErrors((flash) => ({ ...flash, title: true }));
@@ -441,7 +445,7 @@ const NewIncomeForm: React.FC<Props> = ({
             <div className="buttons flex justify-between m-2">
               <button
                 className="cancel-button"
-                onClick={(e) => changeIncomeFormState(e)}
+                onClick={(e) => hideIncomeFormState(e)}
               >
                 Cancel
               </button>

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { makeDateString, dateInfo } from "../helpers/makeDateString";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { FaTrashAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 type infoInterface = {
   transaction: number;
@@ -23,6 +24,8 @@ const ExpenseCard: React.FC<Props> = ({
   deleteExpense,
 }) => {
   const dateTime = useRef<dateInfo>(makeDateString(expense.date));
+  const notify = () =>
+    toast.success(`${expense.title} expense successfully deleted`);
   const deleteTransaction = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -30,6 +33,7 @@ const ExpenseCard: React.FC<Props> = ({
       _id: expense._id,
       transaction: expense.transaction,
     });
+    notify();
   };
 
   return (

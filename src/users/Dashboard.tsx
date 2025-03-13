@@ -5,6 +5,7 @@ import { logOutUser } from "../features/actions/auth";
 import EditUserForm from "./EditUserForm";
 import ExpenseList from "../expenses/ExpenseList";
 import { TfiMoney } from "react-icons/tfi";
+import { toast } from "react-toastify";
 
 const Dashboard: React.FC = () => {
   const { user, recentExpenses } = useAppSelector(
@@ -12,7 +13,19 @@ const Dashboard: React.FC = () => {
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const notify = () => toast.error("You have reached the maximum asset value");
   const [showAssetForm, setShowAssetForm] = useState(false);
+
+  const ShowForm = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+  ): void => {
+    e.preventDefault();
+    if (+user!.totalAssets < 999999999999.99) {
+      setShowAssetForm(true);
+    } else {
+      notify();
+    }
+  };
 
   const HideForm = useCallback(
     (
@@ -31,8 +44,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-homepage">
-      <header>
-        <nav className="buttons flex justify-around p-2 bg-emerald-900 sticky top-0">
+      <header className="sticky top-0">
+        <nav className="buttons flex justify-around p-2 bg-emerald-900 ">
           <button
             className="logout-button border border-gray-200 bg-gray-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-gray-600 hover:text-white active:bg-gray-100 active:text-gray-900"
             onClick={logOutAnNavigate}
@@ -67,7 +80,7 @@ const Dashboard: React.FC = () => {
           <div className="add-asset-button flex justify-center m-4">
             <button
               className="border rounded-full bg-green-700 p-1 sm:p-2 text-sm sm:text-base hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"
-              onClick={() => setShowAssetForm(true)}
+              onClick={(e) => ShowForm(e)}
             >
               Update Your Available Assets
             </button>
