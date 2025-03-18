@@ -53,8 +53,8 @@ const ResetPassword: React.FC = () => {
   const changeStep = useCallback(
     (e: React.FormEvent, newStep: CurrentStep): void => {
       e.preventDefault();
+      setStepList((steps) => ({ ...steps, [currentStep]: true }));
       setCurrentStep(newStep);
-      setStepList((steps) => ({ ...steps, [newStep]: true }));
     },
     [currentStep]
   );
@@ -94,11 +94,11 @@ const ResetPassword: React.FC = () => {
         <div className="reset-password-set-progress-div border-4 my-2 border-green-700 rounded-lg relative">
           <div className="progress-headers grid grid-cols-4">
             <div
-              className={`confirm-info-header pt-4 pb-8 flex justify-center items-center rounded-l-lg border-r-2 ${
+              className={`confirm-info-header pt-4 pb-8 flex justify-center items-center rounded-l-sm border-r-2 ${
                 currentStep === "userInfo"
                   ? "underline text-green-500 bg-green-100"
                   : ""
-              }`}
+              } ${stepList.userInfo ? "text-green-700 bg-green-500" : ""}`}
             >
               <p>Confirm Info</p>
               <CiCircleCheck className="text-xl" />
@@ -108,7 +108,7 @@ const ResetPassword: React.FC = () => {
                 currentStep === "oneTimeCode"
                   ? "underline text-green-500 bg-green-100"
                   : ""
-              }`}
+              } ${stepList.oneTimeCode ? "text-green-700 bg-green-500" : ""}`}
             >
               <p>Verification Code</p>
               <CiCircleCheck className="text-xl" />
@@ -118,17 +118,17 @@ const ResetPassword: React.FC = () => {
                 currentStep === "newPassword"
                   ? "underline text-green-500 bg-green-100"
                   : ""
-              }`}
+              } ${stepList.newPassword ? "text-green-700 bg-green-500" : ""}`}
             >
               <p>Reset Password</p>
               <CiCircleCheck className="text-xl" />
             </div>
             <div
-              className={`success-header pt-4 pb-8 flex justify-center items-center rounded-r-lg ${
+              className={`success-header pt-4 pb-8 flex justify-center items-center rounded-r-sm ${
                 currentStep === "success"
                   ? "underline text-green-500 bg-green-100"
                   : ""
-              }`}
+              } ${stepList.success ? "text-green-700 bg-green-500" : ""}`}
             >
               <p>Success</p>
               <CiCircleCheck className="text-xl" />

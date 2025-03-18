@@ -153,8 +153,10 @@ const NewPassword: React.FC<Props> = ({
               <p>Type the same new password you typed above.</p>
             </div>
           </div>
-          <div className="submit-button">
-            <button>Reset Password</button>
+          <div className="submit-button text-center">
+            <button className="border-2 text-gray-100 border-green-900 bg-green-500 p-2 rounded-full hover:bg-green-200 hover:text-black duration-150">
+              Reset Password
+            </button>
           </div>
         </form>
       </div>
