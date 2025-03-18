@@ -22,7 +22,7 @@ const ExpenseCard: React.FC<Props> = ({
   expense,
   isFrontPage,
   deleteExpense,
-}) => {
+}): JSX.Element => {
   const dateTime = useRef<dateInfo>(makeDateString(expense.date));
   const notify = () =>
     toast.success(`${expense.title} expense successfully deleted`);

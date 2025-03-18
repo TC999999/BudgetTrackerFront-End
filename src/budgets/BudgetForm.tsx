@@ -25,7 +25,7 @@ type flashErrors = {
   moneyAllocated: boolean;
 };
 
-const BudgetForm: React.FC<Props> = ({ hideForm }) => {
+const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (title: string, moneyAllocated: number) =>
     toast.success(

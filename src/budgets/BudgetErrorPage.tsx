@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-const BudgetErrorPage = () => {
+const BudgetErrorPage = (): JSX.Element => {
   return (
     <div className="budget-error-page text-center p-2">
       <h1 className="text-9xl text-emerald-900 underline">401 ERROR</h1>

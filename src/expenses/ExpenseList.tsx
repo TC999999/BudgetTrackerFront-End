@@ -22,7 +22,7 @@ const ExpenseList: React.FC<Props> = ({
   expensesList,
   isFrontPage,
   budgetID,
-}) => {
+}): JSX.Element => {
   const dispatch = useAppDispatch();
   const deleteExpense = useCallback(
     async (

@@ -8,7 +8,7 @@ import { makeBudgetList } from "../helpers/makeBudgetList";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 import { toast } from "react-toastify";
 
-const BudgetPage: React.FC = () => {
+const BudgetPage = (): JSX.Element => {
   const navigate = useNavigate();
   const notify = () =>
     toast.error("You have reached the maximum number of allowed budgets");

@@ -1,11 +1,11 @@
 import BudgetCard from "./BudgetCard";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 
-interface Props {
+type Props = {
   allBudgets: BudgetListInterface[] | null;
-}
+};
 
-const BudgetList: React.FC<Props> = ({ allBudgets }) => {
+const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
   return (
     <main>
       <header>

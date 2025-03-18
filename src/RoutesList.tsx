@@ -8,7 +8,7 @@ import BudgetErrorPage from "./budgets/BudgetErrorPage";
 import SignUp from "./auth/SignUp";
 import ResetPassword from "./auth/ResetPassword";
 
-const RoutesList = () => {
+const RoutesList = (): JSX.Element => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />

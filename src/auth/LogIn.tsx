@@ -14,7 +14,7 @@ import {
 } from "../helpers/handleLogInErrors";
 import { Link } from "react-router-dom";
 
-const LogIn: React.FC = () => {
+const LogIn = (): JSX.Element => {
   const initialState: LogInInterface = { username: "", password: "" };
   const initialErrors: LogInErrors = {
     username: "",

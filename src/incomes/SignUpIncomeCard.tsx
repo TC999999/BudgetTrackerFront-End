@@ -10,7 +10,11 @@ type Props = {
   index: number;
 };
 
-const SignUpIncomeCard: React.FC<Props> = ({ income, removeIncome, index }) => {
+const SignUpIncomeCard: React.FC<Props> = ({
+  income,
+  removeIncome,
+  index,
+}): JSX.Element => {
   return (
     <div className="submit-income-card border-2 p-2 border-green-600 rounded-lg bg-gray-200 m-2">
       <div className="flex justify-between">

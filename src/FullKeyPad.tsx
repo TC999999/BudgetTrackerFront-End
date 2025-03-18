@@ -8,7 +8,10 @@ type Props = {
   handleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-const FullKeyPad: React.FC<Props> = ({ handlePress, handleDelete }) => {
+const FullKeyPad: React.FC<Props> = ({
+  handlePress,
+  handleDelete,
+}): JSX.Element => {
   return (
     <div className="keypad-div flex justify-center p-4">
       <div className="nums-above-zero w-40 keypad-key-buttons grid grid-cols-3 gap-1">

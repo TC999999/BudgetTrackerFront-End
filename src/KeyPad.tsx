@@ -4,7 +4,11 @@ type Props = {
   num: number;
 };
 
-const KeyPad: React.FC<Props> = ({ handlePress, handleDelete, num }) => {
+const KeyPad: React.FC<Props> = ({
+  handlePress,
+  handleDelete,
+  num,
+}): JSX.Element => {
   return (
     <div className="keypad-div flex justify-center">
       <div>

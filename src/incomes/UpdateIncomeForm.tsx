@@ -32,7 +32,10 @@ type Props = {
   ) => void;
 };
 
-const UpdateIncomeForm: React.FC<Props> = ({ income, selectIncome }) => {
+const UpdateIncomeForm: React.FC<Props> = ({
+  income,
+  selectIncome,
+}): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notification: string) => toast.success(notification);
   const userStatus: UserContextInterface = useAppSelector(

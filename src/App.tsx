@@ -16,7 +16,7 @@ import { hasTokenInterface } from "./interfaces/authInterfaces";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { ToastContainer, toast } from "react-toastify";
 
-function App() {
+function App(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const notify = (message: string) => toast.success(message);

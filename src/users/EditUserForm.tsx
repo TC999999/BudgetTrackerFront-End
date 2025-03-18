@@ -28,7 +28,7 @@ type FormInfo = {
   operation: string;
 };
 
-const EditUserForm: React.FC<Props> = ({ hideForm }) => {
+const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notificaation: string) => toast.success(notificaation);
   const userStatus: UserContextInterface = useAppSelector(

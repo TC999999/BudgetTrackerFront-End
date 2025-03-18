@@ -2,7 +2,7 @@ import { useAppSelector } from "./features/hooks";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { FaRegHourglass } from "react-icons/fa";
 
-const LoadingMsg = () => {
+const LoadingMsg = (): JSX.Element | null => {
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );

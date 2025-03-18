@@ -20,7 +20,10 @@ type Props = {
   budget: BudgetInterface;
 };
 
-const DeleteBudgetForm: React.FC<Props> = ({ hideDeleteForm, budget }) => {
+const DeleteBudgetForm: React.FC<Props> = ({
+  hideDeleteForm,
+  budget,
+}): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const notify = (title: string, addBackToAssets: number) =>

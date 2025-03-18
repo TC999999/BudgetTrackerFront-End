@@ -7,7 +7,7 @@ import ExpenseList from "../expenses/ExpenseList";
 import { TfiMoney } from "react-icons/tfi";
 import { toast } from "react-toastify";
 
-const Dashboard: React.FC = () => {
+const Dashboard = (): JSX.Element => {
   const { user, recentExpenses } = useAppSelector(
     (store) => store.user.userInfo
   );

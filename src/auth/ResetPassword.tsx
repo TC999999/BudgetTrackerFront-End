@@ -16,7 +16,7 @@ import {
 import { setResetProgress } from "../helpers/setResetProgress";
 import { CiCircleCheck } from "react-icons/ci";
 
-const ResetPassword: React.FC = () => {
+const ResetPassword = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userStatus: UserContextInterface = useAppSelector(

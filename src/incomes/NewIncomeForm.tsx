@@ -32,7 +32,7 @@ type Props = {
 const NewIncomeForm: React.FC<Props> = ({
   hideIncomeFormState,
   handleIncomes,
-}) => {
+}): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (incomeTitle: string) =>
     toast.success(`${incomeTitle} income successfully created`);

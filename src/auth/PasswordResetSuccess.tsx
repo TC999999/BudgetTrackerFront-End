@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const PasswordResetSuccess = () => {
+const PasswordResetSuccess = (): JSX.Element => {
   const navigate = useNavigate();
 
   const navigateToLoginPage = (): void => {

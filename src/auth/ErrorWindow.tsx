@@ -5,7 +5,10 @@ type Props = {
   submitError: string;
 };
 
-const ErrorWindow: React.FC<Props> = ({ changeSubmitError, submitError }) => {
+const ErrorWindow: React.FC<Props> = ({
+  changeSubmitError,
+  submitError,
+}): JSX.Element => {
   return (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2">

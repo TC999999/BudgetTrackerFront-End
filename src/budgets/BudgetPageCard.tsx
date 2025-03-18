@@ -6,7 +6,7 @@ type Props = {
   budget: BudgetInterface | null;
 };
 
-const BudgetPageCard: React.FC<Props> = ({ budget }) => {
+const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
   const moneyRemaining: string = useMemo<string>(
     () =>
       getRemainingMoney(budget?.moneyAllocated || "", budget?.moneySpent || 0),

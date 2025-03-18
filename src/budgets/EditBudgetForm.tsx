@@ -32,7 +32,10 @@ type flashErrors = {
   title: boolean;
 };
 
-const EditBudgetForm: React.FC<Props> = ({ hideEditForm, budget }) => {
+const EditBudgetForm: React.FC<Props> = ({
+  hideEditForm,
+  budget,
+}): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notificationString: string) =>
     toast.success(notificationString);

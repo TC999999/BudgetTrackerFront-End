@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const NotFound = () => {
+const NotFound = (): JSX.Element => {
   return (
     <div className="not-found-page text-center p-2">
       <h1 className="text-9xl text-emerald-900 underline">404 ERROR</h1>

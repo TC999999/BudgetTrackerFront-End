@@ -18,7 +18,7 @@ type FormStateInterface = {
   showEditForm: boolean;
 };
 
-const SingleBudgetPage: React.FC = () => {
+const SingleBudgetPage = (): JSX.Element => {
   const { id } = useParams();
   const navigate = useNavigate();
   const notify = () =>

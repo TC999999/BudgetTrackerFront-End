@@ -26,7 +26,10 @@ type Props = {
   budget: BudgetInterface;
 };
 
-const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
+const ExpenseForm: React.FC<Props> = ({
+  hideExpenseForm,
+  budget,
+}): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (title: string, transaction: number) =>
     toast.success(
