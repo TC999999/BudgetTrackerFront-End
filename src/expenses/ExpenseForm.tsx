@@ -184,7 +184,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                   Make sure your title has between 20 to 3 characters.
                 </small>
                 <small>
-                  Your budget title may only include letters, numbers, and
+                  Your new expense title may only include letters, numbers, and
                   spaces.
                 </small>
                 <small>Spaces may only be between characters.</small>
@@ -192,7 +192,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
             </div>
             <div className="date-div mb-2">
               <label htmlFor="date" className="text-gray-700 text-lg block">
-                When was this transaction made?
+                Expense Date
               </label>
               <input
                 type="datetime-local"
@@ -203,21 +203,19 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                // max={currentDate.current}
               />
               {formErrors.date && (
                 <div className="error-message">
                   <p className="text-red-700 font-bold">{formErrors.date}</p>
                 </div>
               )}
-              <small>The date may not be later that today's date</small>
             </div>
             <div className="transaction-div mb-2">
               <label
                 htmlFor="transaction"
                 className="text-gray-700 text-lg block"
               >
-                Transaction Value ($ U.S.):
+                Expense Value ($ U.S.):
               </label>
               <input
                 className={`input ${
@@ -238,7 +236,7 @@ const ExpenseForm: React.FC<Props> = ({ hideExpenseForm, budget }) => {
                 </div>
               )}
               <small>
-                Transaction may not exceed remaining funds for {budget.title}
+                Expense may not exceed remaining funds for {budget.title}
               </small>
             </div>
             <div className="keyPad-div">

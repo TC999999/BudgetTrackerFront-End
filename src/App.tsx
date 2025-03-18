@@ -89,7 +89,7 @@ function App() {
     <div className="App">
       <LoadingMsg />
       <SmallLoadingMsg />
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       {!userStatus.loading && <RoutesList />}
     </div>
   );
