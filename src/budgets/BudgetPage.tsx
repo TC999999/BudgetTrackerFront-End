@@ -8,6 +8,7 @@ import { makeBudgetList } from "../helpers/makeBudgetList";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 import { toast } from "react-toastify";
 
+// returns page for list of all budgets the user currently has
 const BudgetPage = (): JSX.Element => {
   const navigate = useNavigate();
   const notify = () =>
@@ -15,12 +16,15 @@ const BudgetPage = (): JSX.Element => {
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
+
+  // creates list of budgets that changes based on redux state
   const budgetList: BudgetListInterface[] = useMemo<BudgetListInterface[]>(
     () => makeBudgetList(userStatus.user!.budgets),
     [userStatus.user!.budgets]
   );
   const [showBudgetForm, setShowBudgetForm] = useState<boolean>(false);
 
+  // shows form for adding a new budget, unless the user's current budget list is equal to 10
   const showForm = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
@@ -32,6 +36,7 @@ const BudgetPage = (): JSX.Element => {
     }
   };
 
+  // hides form for adding a new budget
   const HideForm = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent

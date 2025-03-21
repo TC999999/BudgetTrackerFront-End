@@ -9,6 +9,8 @@ type infoInterface = {
   _id: string;
 };
 
+// If isFrontPage is true, shows name of budget; if not, shows
+// delete button instead
 type Props = {
   expense: ExpenseInterface;
   isFrontPage: boolean;
@@ -18,14 +20,20 @@ type Props = {
   ) => Promise<void>;
 };
 
+// returns expense card to be used for expense list
 const ExpenseCard: React.FC<Props> = ({
   expense,
   isFrontPage,
   deleteExpense,
 }): JSX.Element => {
+  // makes readable date/time string to be displayed on card
+  //    month day, year
+  //    time
   const dateTime = useRef<dateInfo>(makeDateString(expense.date));
   const notify = () =>
     toast.success(`${expense.title} expense successfully deleted`);
+
+  // uses callback function from expense list to delete expense from both redux state and db
   const deleteTransaction = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

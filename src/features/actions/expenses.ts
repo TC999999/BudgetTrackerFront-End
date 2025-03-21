@@ -6,6 +6,8 @@ import {
   deleteExpenseInterface,
 } from "../../interfaces/expenseInterfaces";
 
+// sends new expense data to db to add to expense collection and returns a new list of user recent expenses
+// and budgets that contain that new expense
 export const addNewExpense = createAsyncThunk<any, newExpenseInterface>(
   "expenses/add/new",
   async (data, thunkAPI) => {
@@ -23,6 +25,8 @@ export const addNewExpense = createAsyncThunk<any, newExpenseInterface>(
   }
 );
 
+// sends expense data to db to be deleted from expense collection and returns a new list of user recent
+// expenses and budgets that do not contain deleted expense
 export const removeExpense = createAsyncThunk<any, deleteExpenseInterface>(
   "expenses/delete",
   async (data, thunkAPI) => {

@@ -32,6 +32,7 @@ type Props = {
   ) => void;
 };
 
+// returns a form for users to update their own incomes
 const UpdateIncomeForm: React.FC<Props> = ({
   income,
   selectIncome,
@@ -42,6 +43,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     (store) => store.user.userInfo
   );
 
+  // update time is used to construct a new cron string to be sent to backend for update
   const initialState: UpdateIncome = {
     _id: income._id,
     title: income.title,
@@ -55,21 +57,31 @@ const UpdateIncomeForm: React.FC<Props> = ({
   };
 
   const initialFlashErrors: FlashIncomeErrors = { title: false, salary: false };
+
+  // state for form data used to update income
   const [formData, setFormData] = useState<UpdateIncome>(initialState);
+  // state for form input error strings
   const [formErrors, setFormErrors] = useState<IncomeErrors>(initialErrors);
+  // state for flashing inputs when input errors are present upon submission
   const [flashErrors, setFlashErrors] =
     useState<FlashIncomeErrors>(initialFlashErrors);
+  // creates a new readable interval string based on the update time in form data
   const readableUpdateTimeString: string = useMemo(
     () => makeReadableUpdateTimeString(formData.updateTime),
     [formData.updateTime]
   );
 
+  // updates the title value in the form data state, if there is an error in the title input (e.g. title
+  // length is too long, title has spaces at start and end) also updates form error state
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     handleIncomeInputErrors("title", value, setFormErrors);
     setFormData((data) => ({ ...data, title: value }));
   };
 
+  // callback function for keypad component to update salary value in form data state. Pushes number pressed
+  // to the right of the current salary value. If there are any errors in input (e.g. salary value too high),
+  // also updates form error state
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -81,6 +93,9 @@ const UpdateIncomeForm: React.FC<Props> = ({
     [formData.salary]
   );
 
+  // callback function for keypad component to update salary value in form data state. Pops number from the
+  // right of the current salary value. If there are any errors in input (e.g. salary value at $0.00),
+  // also updates form error state
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -95,6 +110,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     [formData.salary]
   );
 
+  // updates either minute or hour values in the updateTime value of the form data state
   const handleTime = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     const { name, value } = e.target;
@@ -104,6 +120,8 @@ const UpdateIncomeForm: React.FC<Props> = ({
     }));
   };
 
+  // updates day of the month value in the updateTime value of the form data state. Also sets day of the week
+  // and month values back to default.
   const handleDate = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     let { value } = e.target;
@@ -118,6 +136,8 @@ const UpdateIncomeForm: React.FC<Props> = ({
     }));
   };
 
+  // updates month value in the updateTime value of the form data state. Also sets day of the week
+  // values back to default.
   const handleMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     let { value } = e.target;
@@ -131,6 +151,8 @@ const UpdateIncomeForm: React.FC<Props> = ({
     }));
   };
 
+  // updates day of the week value in the updateTime value of the form data state. Also sets day of the month
+  // and month values back to default.
   const handleWeek = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     let { value } = e.target;
@@ -146,6 +168,9 @@ const UpdateIncomeForm: React.FC<Props> = ({
     }));
   };
 
+  // creates cron string from updateTime value and submits income data to db to be updated.
+  // If any input errors are present (e.g. title is empty or contains invalid characters,
+  // salary at $0.00), does not send data and insteads flashes erroneous inputs at user
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (handleIncomeSubmitErrors(formData, setFormErrors)) {

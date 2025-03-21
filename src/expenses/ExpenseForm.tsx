@@ -53,18 +53,27 @@ const ExpenseForm: React.FC<Props> = ({
     transaction: "",
     date: "",
   };
-  const [formData, setFormData] = useState<newExpenseInterface>(initialState);
+
+  // sets ref for the original amount of remaining money that the budget for this expense has
   const originalMoney = useRef<string>(initialMoney);
+  // form data state for new expense
+  const [formData, setFormData] = useState<newExpenseInterface>(initialState);
+  // sets state for the changing amount of remaining money that the budget for this expense has if expense
+  // was to be applied
   const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
+  // sets error strings for expense form to be shown to user
   const [formErrors, setFormErrors] =
     useState<ExpenseFormErrors>(initialErrors);
 
+  // booleans for form errors to be flashed on submission
   const [flashInput, setFlashInput] = useState<flashErrors>({
     title: false,
     transaction: false,
     date: false,
   });
 
+  // pushes number on the key clicked by user to the right side of the new expense's transaction value and
+  // returns a new string
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -96,6 +105,8 @@ const ExpenseForm: React.FC<Props> = ({
     [formData, formErrors]
   );
 
+  // pops number from the right side of the new expense's transaction value and
+  // returns a new string
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -111,12 +122,16 @@ const ExpenseForm: React.FC<Props> = ({
     [formData, formErrors]
   );
 
+  // updates form data values based on user input, if input contains errors (e.g. expense title too long),
+  // updates form error state and lets user know
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     handleExpenseInputErrors(name, value, setFormErrors);
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
+  // sends new expense data to backend to be added to db and updates user state. If any inputs
+  // contain errors, does not send data and flashes errorful inputs
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {
@@ -134,10 +149,8 @@ const ExpenseForm: React.FC<Props> = ({
           setFlashInput((flash) => ({ ...flash, title: true }));
         if (formErrors.date || formData.date === "")
           setFlashInput((flash) => ({ ...flash, date: true }));
-
         if (formErrors.transaction || formData.transaction === 0)
           setFlashInput((flash) => ({ ...flash, transaction: true }));
-
         setTimeout(() => {
           setFlashInput({ title: false, date: false, transaction: false });
         }, 500);

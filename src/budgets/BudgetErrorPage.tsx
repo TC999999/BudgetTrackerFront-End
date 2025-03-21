@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+
+// returns unauthorized error page if user attempts to use url to find a budget that
+// either does not belong them or does not exist
 const BudgetErrorPage = (): JSX.Element => {
   return (
     <div className="budget-error-page text-center p-2">

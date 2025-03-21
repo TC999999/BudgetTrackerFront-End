@@ -5,6 +5,7 @@ type Props = {
   allBudgets: BudgetListInterface[] | null;
 };
 
+// shows a list of budget cards for all budgets a user currently has
 const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
   return (
     <main>

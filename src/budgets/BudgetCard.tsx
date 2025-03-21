@@ -5,6 +5,7 @@ type Props = {
   budget: BudgetListInterface;
 };
 
+// returns budget card to be displayed in BudgetList component
 const BudgetCard: React.FC<Props> = ({ budget }): JSX.Element => {
   return (
     <div className="budget-card border-2 border-green-400 p-8 m-4 shadow-md bg-white rounded-md">

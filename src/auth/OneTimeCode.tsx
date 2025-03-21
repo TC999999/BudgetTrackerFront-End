@@ -18,12 +18,14 @@ type Props = {
   currentUser: ConfirmUserInfo;
 };
 
+// returns page to enter one time
 const OneTimeCode: React.FC<Props> = ({
   changeStep,
   changeLoading,
   changeSubmitError,
   currentUser,
 }): JSX.Element => {
+  // initial numbers for each number box
   const initialState: OneTimeCodeFormData = {
     0: "0",
     1: "0",
@@ -33,6 +35,7 @@ const OneTimeCode: React.FC<Props> = ({
     5: "0",
   };
 
+  // for whether the separate number boxes has been given an inputted number and be given a green background
   const initialSelect: OneTimeCodeSelect = {
     0: false,
     1: false,
@@ -45,8 +48,10 @@ const OneTimeCode: React.FC<Props> = ({
   const [formData, setFormData] = useState<OneTimeCodeFormData>(initialState);
   const [formSelect, setFormSelect] =
     useState<OneTimeCodeSelect>(initialSelect);
+  //to let the user know which number box is currently selected
   const [currPlace, setCurrPlace] = useState<number>(0);
 
+  // sets the current place number to whatever key the user pressed and increases the current place by one
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, num: digits): void => {
       e.preventDefault();
@@ -58,7 +63,7 @@ const OneTimeCode: React.FC<Props> = ({
     },
     [formData]
   );
-
+  // sets the current place number to 0 and decreases the current place by one
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -72,6 +77,8 @@ const OneTimeCode: React.FC<Props> = ({
     [formData]
   );
 
+  // submits user inputted one time code to db and checks if they match; if they do not match, they are
+  // returned to this page, otherwise they move on to the next step
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): Promise<void> => {

@@ -2,11 +2,13 @@ import { useAppSelector } from "./features/hooks";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { FaRegHourglass } from "react-icons/fa";
 
+// Loading message for refreshes, logging in, and registering users
 const LoadingMsg = (): JSX.Element | null => {
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
 
+  // message only shows when app refreshes or retrieving user data, otherwise is null
   return userStatus.loading ? (
     <div
       tabIndex={-1}

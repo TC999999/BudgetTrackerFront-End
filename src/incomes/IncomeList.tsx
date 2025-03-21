@@ -9,9 +9,14 @@ type Props = {
   incomeList: Income[];
 };
 
+// returns a list on income cards that can be viewed, edited, or deleted
 const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
   const dispatch = useAppDispatch();
+
+  // to use for editing a single income, retrieve info to be used for income edit
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
+
+  // changes state for selected income for edit
   const selectIncome = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
@@ -23,6 +28,7 @@ const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
     [selectedIncome]
   );
 
+  // delete a single income
   const deleteIncome = useCallback(
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -38,6 +44,7 @@ const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
     },
     []
   );
+
   return (
     <div className="income-list-and-edit-form">
       {selectedIncome && (

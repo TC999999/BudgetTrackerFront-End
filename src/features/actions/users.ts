@@ -6,6 +6,7 @@ import {
 import { API_URL } from "../config";
 import axios from "axios";
 
+// returns the data for the current user from the id stored in the refresh_token stored in cookies
 export const getCurrentUser = createAsyncThunk<UserInfoInterface, any>(
   "users/get/currentuser",
   async (data: any = {}, thunkAPI) => {
@@ -24,6 +25,7 @@ export const getCurrentUser = createAsyncThunk<UserInfoInterface, any>(
   }
 );
 
+// updates a user's total assets based on the value in sent data
 export const addToAssets = createAsyncThunk<
   UserInfoInterface,
   UserEditInterface

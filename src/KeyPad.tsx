@@ -4,6 +4,7 @@ type Props = {
   num: number;
 };
 
+// keypad to input monetary values to ensure the input is always a number
 const KeyPad: React.FC<Props> = ({
   handlePress,
   handleDelete,

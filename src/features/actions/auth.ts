@@ -7,6 +7,7 @@ import {
 import { UserInfoInterface } from "../../interfaces/userInterfaces";
 import axios from "axios";
 
+// sends new user data to backend and returns data to be used by redux state
 export const registerUser = createAsyncThunk<
   UserInfoInterface,
   SignUpInterface
@@ -24,6 +25,8 @@ export const registerUser = createAsyncThunk<
   }
 });
 
+// finds out if front end has a token or not (does not return token, returns a boolean on whether it
+//  exists in cookies)
 export const findToken = createAsyncThunk(
   "auth/token",
   async (data: any = {}, thunkAPI) => {
@@ -41,6 +44,7 @@ export const findToken = createAsyncThunk(
   }
 );
 
+// authenticates user by sending username and password and returns all user data for redux state
 export const logInUser = createAsyncThunk<UserInfoInterface, LogInInterface>(
   "auth/login",
   async (
@@ -62,6 +66,7 @@ export const logInUser = createAsyncThunk<UserInfoInterface, LogInInterface>(
   }
 );
 
+// manually removes refresh_token cookie from front end and refreshes page without retrieving user information
 export const logOutUser = createAsyncThunk(
   "auth/logout",
   async (data: any = {}, thunkAPI) => {

@@ -16,6 +16,7 @@ import {
 import { setResetProgress } from "../helpers/setResetProgress";
 import { CiCircleCheck } from "react-icons/ci";
 
+// main page for users attempting to reset password
 const ResetPassword = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -33,16 +34,24 @@ const ResetPassword = (): JSX.Element => {
     success: false,
   };
 
+  // when the current step changes, also changes the form being shown
   const [currentStep, setCurrentStep] = useState<CurrentStep>("userInfo");
+  // state error (if user does not exist, if one time code is wrong, if new passwords don't match)
   const [submitError, setSubmitError] = useState<string>("");
+  // form data user information to submit to database
   const [currentUser, setCurrentUser] = useState<ConfirmUserInfo>(initialUser);
+  // for progress bar: if step is true, step in progress bar will be given a green background
   const [stepList, setStepList] = useState<StepCompleted>(initiaStepList);
 
+  // returns value for progress bar out of a max value of 100
   const currentProgress: number = useMemo<number>(
     () => setResetProgress(currentStep),
     [currentStep]
   );
 
+  // changes display state of small loading message when a form is submiited (since we are not
+  // changing the user or token states in redux and making API calls with regular functiins instead
+  // of thunk actions, this is needed)
   const changeLoading = useCallback(
     (loadingStatus: boolean): void => {
       dispatch(setSmallLoading(loadingStatus));
@@ -50,6 +59,8 @@ const ResetPassword = (): JSX.Element => {
     [userStatus.smallLoading]
   );
 
+  // changes current step in step list and marks previous step completion as true, shows a new form and
+  // increases the value of progress bar
   const changeStep = useCallback(
     (e: React.FormEvent, newStep: CurrentStep): void => {
       e.preventDefault();
@@ -59,6 +70,7 @@ const ResetPassword = (): JSX.Element => {
     [currentStep]
   );
 
+  // changes submit error state and causes error window to appear
   const changeSubmitError = useCallback(
     (
       e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -70,6 +82,8 @@ const ResetPassword = (): JSX.Element => {
     [submitError]
   );
 
+  // sets user attempting to reset password in state in this component to be passed down to other
+  // password reset forms
   const changeUser = useCallback(
     (e: React.FormEvent, newUser: ConfirmUserInfo): void => {
       e.preventDefault();

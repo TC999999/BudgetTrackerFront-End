@@ -20,6 +20,7 @@ import {
 } from "../helpers/handleSignUpErrors";
 import { toast } from "react-toastify";
 
+// returns window allowing users to create a new account
 const SignUp = (): JSX.Element => {
   const initialState: SignUpInterface = {
     username: "",
@@ -41,9 +42,12 @@ const SignUp = (): JSX.Element => {
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
-  const [formData, setFormData] = useState<SignUpInterface>(initialState);
-  const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
+
+  // max value for total assets
   const maxNum = useRef(99999999999999);
+
+  // states for form data values, strings for form errors, and whether to flash errorful inputs to user
+  const [formData, setFormData] = useState<SignUpInterface>(initialState);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
   const [signUpErrors, setSignUpErrors] = useState(initialErrors);
   const [FlashErrors, setFlashErrors] = useState<SignUpFlashErrors>({
@@ -51,6 +55,9 @@ const SignUp = (): JSX.Element => {
     password: false,
     email: false,
   });
+
+  // state to show form to add initial incomes
+  const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
 
   useEffect(() => {
     if (userStatus.userExists) {
@@ -63,6 +70,8 @@ const SignUp = (): JSX.Element => {
     }
   }, [userStatus]);
 
+  // updates form data when user inputs data, if there are any errors in inputs, lets the user know
+  // (e.g. username contains spaces betwwen characters, password length too long, email address is invalid)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     if (name === "username") {
@@ -74,6 +83,7 @@ const SignUp = (): JSX.Element => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
+  // make for state visible unless income list already has 5 incomes
   const showIncomeFormState = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
@@ -85,6 +95,7 @@ const SignUp = (): JSX.Element => {
     }
   };
 
+  // make for state invisible
   const changeIncomeFormState = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
@@ -95,6 +106,7 @@ const SignUp = (): JSX.Element => {
     [showIncomeForm]
   );
 
+  // add new income from form to list of incomes in sign up form data
   const handleIncomes = useCallback(
     (e: React.FormEvent, income: SubmitIncomeSignUp): void => {
       e.preventDefault();
@@ -106,6 +118,7 @@ const SignUp = (): JSX.Element => {
     [formData.incomes]
   );
 
+  // remove income from form from list of incomes in sign up form data
   const removeIncome = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -123,6 +136,11 @@ const SignUp = (): JSX.Element => {
     [formData.incomes]
   );
 
+  // sends new user info to db and creates a new account for user; automatially loggs them in as well. If there
+  // are any errors in inputs, does not submit data and flashes errorful inputs. If backend error occurs,
+  // returns to this page (e.g. username or email already exist).
+  // Additionally, temporarily saves info into localstorage since submitting data causes the page to rerender,
+  // so this is used to prevent the information (except password) from being cleared.
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     const { username, password, email, totalAssets, incomes } = formData;
@@ -156,6 +174,8 @@ const SignUp = (): JSX.Element => {
     } catch (err) {}
   };
 
+  // when user clicks key on in-app keypad, pushes number clicked onto the formData's totalAssets field and
+  // creates a new string, unless the new currency is greater than the allowed max asset value
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -170,6 +190,7 @@ const SignUp = (): JSX.Element => {
     [formData]
   );
 
+  // removes the rightmost number from the formData's totalAssets string and creates a new string
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();

@@ -14,6 +14,7 @@ import {
 } from "../helpers/handleLogInErrors";
 import { Link } from "react-router-dom";
 
+// returns login form for users to login to their accounts
 const LogIn = (): JSX.Element => {
   const initialState: LogInInterface = { username: "", password: "" };
   const initialErrors: LogInErrors = {
@@ -28,10 +29,13 @@ const LogIn = (): JSX.Element => {
     password: false,
   });
 
+  // this is used to grab an error for invalid username/password
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
 
+  // since submitting the login form causes a rerender, we store the inputted information into localstorage
+  // and grab it after the rerender and sets the form data
   useEffect(() => {
     let inputs: string | null = localStorage.getItem("userInputs");
     if (inputs) {
@@ -40,6 +44,8 @@ const LogIn = (): JSX.Element => {
     }
   }, []);
 
+  // handles changes to login form, if user makes any errors while inputting data, the frontend lets them know
+  // Additionally, if the redux user status has an error, removes that error.
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (userStatus.error) {
       dispatch(removeUserError());
@@ -50,6 +56,12 @@ const LogIn = (): JSX.Element => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
+  // submits login information and retrieves user data. If there are any errors in the inputs (username has
+  // spaces between characters or password length too short), does not submit data and the errorful inputs
+  // flash red.
+  // Additionally, temporarily sets username info into local storage in case username and password is invalid since
+  // submitting login form causes page to rerender and formdata to clear so user does not need to reenter
+  // username.
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     const { username, password } = formData;

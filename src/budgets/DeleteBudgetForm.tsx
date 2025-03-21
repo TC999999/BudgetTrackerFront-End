@@ -20,6 +20,7 @@ type Props = {
   budget: BudgetInterface;
 };
 
+// returns a form that allows the user to make a decision before deleting a budget
 const DeleteBudgetForm: React.FC<Props> = ({
   hideDeleteForm,
   budget,
@@ -37,18 +38,24 @@ const DeleteBudgetForm: React.FC<Props> = ({
     (store) => store.user.userInfo
   );
 
+  // constant used if user chooses to return the remaining funds of the budget only
   let remainingMoney: string = getRemainingMoney(
     budget.moneyAllocated,
     +budget.moneySpent
   );
+  // initial form data for deleting a budget, the first two remain constant while the last one changes
+  // based on which radio button the user selects
   let deleteBudgetData: DeleteBudgetInterface = {
     budgetID: budget._id,
     expenses: makeExpenseIDList(budget.expenses),
     addBackToAssets: 0,
   };
+
+  // sets state for data to be submitting to backend that will be used to update db
   const [formData, setFormData] =
     useState<DeleteBudgetInterface>(deleteBudgetData);
 
+  // calculates what the user's new total asset value will be before submitting the form
   let newAssets: string = useMemo<string>(
     () =>
       calculateNewTotalAssetsWithoutOperation(
@@ -58,11 +65,14 @@ const DeleteBudgetForm: React.FC<Props> = ({
     [formData.addBackToAssets]
   );
 
+  // updates form data based on which radio button the user has selected
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData((data) => ({ ...data, [name]: +value }));
   };
 
+  // sends data to backend to delete budget and all expenses made using its funds and navigate back to
+  // the budget list page
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {
@@ -73,6 +83,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
       console.log(err);
     }
   };
+
   return !userStatus.smallLoading ? (
     <div className="delete-budget-form-div modal-layer-1">
       <div className="modal-layer-2">

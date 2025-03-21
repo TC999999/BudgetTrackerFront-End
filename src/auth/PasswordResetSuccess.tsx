@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
+// returns page letting the user know that their password reset was succesful and gives them a link to go back
+// to the login page
 const PasswordResetSuccess = (): JSX.Element => {
   const navigate = useNavigate();
 

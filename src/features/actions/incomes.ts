@@ -7,6 +7,8 @@ import {
 import { API_URL } from "../config";
 import axios from "axios";
 
+// sends new income data to the db to be added to incomes collection and scheduler and returns a
+// new list of the user's incomes that contain the new income.
 export const addNewIncome = createAsyncThunk<any, SubmitIncomeSignUp>(
   "incomes/add/new",
   async (data: SubmitIncomeSignUp, thunkAPI) => {
@@ -24,6 +26,8 @@ export const addNewIncome = createAsyncThunk<any, SubmitIncomeSignUp>(
   }
 );
 
+// sends new income data to the db to update an income on the incomes collection and scheduler and
+// returns a new list of the user's incomes that contain the updated income.
 export const updateIncome = createAsyncThunk<any, SubmitUpdateIncome>(
   "incomes/update",
   async (data: SubmitUpdateIncome, thunkAPI) => {
@@ -41,6 +45,8 @@ export const updateIncome = createAsyncThunk<any, SubmitUpdateIncome>(
   }
 );
 
+// sends income data to be deleted from the db and scheduler and returns a new list of the user's incomes that
+// do not contain the deleted income.
 export const removeIncome = createAsyncThunk<any, deleteIncomeType>(
   "incomes/delete",
   async (data: deleteIncomeType, thunkAPI) => {

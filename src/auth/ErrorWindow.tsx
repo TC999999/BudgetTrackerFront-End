@@ -5,6 +5,7 @@ type Props = {
   submitError: string;
 };
 
+// Error window for ResetPassword.tsx
 const ErrorWindow: React.FC<Props> = ({
   changeSubmitError,
   submitError,

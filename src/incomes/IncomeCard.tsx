@@ -14,16 +14,19 @@ type Props = {
   ) => void;
 };
 
+// Card for IncomePage.tsx, shows the title, salary, update interval, and when the next income update is
 const IncomeCard: React.FC<Props> = ({
   income,
   deleteIncome,
   selectIncome,
 }): JSX.Element => {
+  // makes readable date string for last time income was received
   const lastDate = useMemo<dateInfo>(
     () => makeDateString(income.lastReceived),
     [income.lastReceived]
   );
 
+  // makes readable date string for next time income will be received
   const nextDate = useMemo<dateInfo>(
     () => makeDateString(income.nextReceived),
     [income.nextReceived]

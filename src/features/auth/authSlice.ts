@@ -16,19 +16,24 @@ type ActionInterface = {
   payload: any;
 };
 
+// redux slice for global user state
 const authSlice = createSlice({
   name: "auth",
   initialState: INITIAL_STATE,
   reducers: {
+    // changes loading state for retrieving or creating all user information
     setUserLoading: (state, action: ActionInterface) => {
       state.userInfo.loading = action.payload;
     },
+    // changes loading state for smaller CRUD actions
     setSmallLoading: (state, action: ActionInterface) => {
       state.userInfo.smallLoading = action.payload;
     },
+    // removes state for errors involving errors loading user information
     removeUserError: (state) => {
       state.userInfo.error = null;
     },
+    // changes income state when a SSE is heard
     incomeUpdate: (state, action: ActionInterface) => {
       state.userInfo.user!.incomes = action.payload.newUserIncomes;
       state.userInfo.user!.totalAssets =
@@ -45,7 +50,8 @@ const authSlice = createSlice({
         state.userInfo.userExists = true;
         state.userInfo.user = action.payload;
         state.userInfo.error = null;
-        state.hasTokenInfo.hasToken = true;
+        state.hasTokenInfo.hasRefreshToken = true;
+        state.hasTokenInfo.hasAccessToken = true;
       })
       .addCase(registerUser.rejected, (state, action: any) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
@@ -62,7 +68,8 @@ const authSlice = createSlice({
         state.userInfo.user = action.payload.newUser;
         state.userInfo.recentExpenses = action.payload.recentExpenses;
         state.userInfo.error = null;
-        state.hasTokenInfo.hasToken = true;
+        state.hasTokenInfo.hasRefreshToken = true;
+        state.hasTokenInfo.hasAccessToken = true;
       })
       .addCase(logInUser.rejected, (state, action: any) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
@@ -76,11 +83,13 @@ const authSlice = createSlice({
       })
       .addCase(findToken.fulfilled, (state, action: any) => {
         state.hasTokenInfo.loading = false;
-        state.hasTokenInfo.hasToken = action.payload.token;
+        state.hasTokenInfo.hasRefreshToken = action.payload.token;
+        state.hasTokenInfo.hasAccessToken = action.payload.token;
       })
       .addCase(findToken.rejected, (state) => {
         state.hasTokenInfo.loading = false;
-        state.hasTokenInfo.hasToken = false;
+        state.hasTokenInfo.hasRefreshToken = false;
+        state.hasTokenInfo.hasAccessToken = false;
       })
       .addCase(getCurrentUser.pending, (state) => {
         state.userInfo.loading = true;
@@ -105,7 +114,8 @@ const authSlice = createSlice({
       .addCase(logOutUser.fulfilled, (state) => {
         state.hasTokenInfo.loading = false;
         state.userInfo.loading = false;
-        state.hasTokenInfo.hasToken = false;
+        state.hasTokenInfo.hasRefreshToken = false;
+        state.hasTokenInfo.hasAccessToken = false;
         state.userInfo.userExists = false;
         state.userInfo.user = INITIAL_STATE.userInfo.user;
         state.userInfo.recentExpenses = INITIAL_STATE.userInfo.recentExpenses;

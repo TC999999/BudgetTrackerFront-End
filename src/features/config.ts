@@ -1,7 +1,9 @@
 import { AuthInitialStateInterface } from "../interfaces/authInterfaces";
 
+// backend API string
 export const API_URL: string = "http://localhost:3001";
 
+// typing for redux store
 export const INITIAL_STATE: AuthInitialStateInterface = {
   userInfo: {
     user: null,
@@ -11,5 +13,9 @@ export const INITIAL_STATE: AuthInitialStateInterface = {
     userExists: false,
     error: "",
   },
-  hasTokenInfo: { hasToken: false, loading: true },
+  hasTokenInfo: {
+    hasRefreshToken: false,
+    hasAccessToken: false,
+    loading: true,
+  },
 };

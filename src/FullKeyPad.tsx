@@ -8,6 +8,8 @@ type Props = {
   handleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
+// works similarly to the regular keypad, except that the delete and 0 keys are always shown, used for
+// inputting one time verification code
 const FullKeyPad: React.FC<Props> = ({
   handlePress,
   handleDelete,

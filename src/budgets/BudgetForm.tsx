@@ -25,6 +25,7 @@ type flashErrors = {
   moneyAllocated: boolean;
 };
 
+// returns form for creating a new budget
 const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (title: string, moneyAllocated: number) =>
@@ -41,16 +42,24 @@ const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     moneyAllocated: 0,
   };
   const initialErrors: BudgetFormErrors = { title: "", moneyAllocated: "" };
+
+  // sets state for new budget form data
   const [formData, setFormData] = useState<newBudgetInterface>(initialState);
+  // sets state for available funds that changes if the new budget fund value changes
   const [availableFunds, setAvailableFunds] = useState<number>(
     userStatus.user!.totalAssets * 100
   );
+  // sets state for errors in the form inputs, updates if errors are detcted
   const [formErrors, setFormErrors] = useState<BudgetFormErrors>(initialErrors);
+  // sets state for if errors should be flashed if user attempts to submit errorful data
   const [flashInput, setFlashInput] = useState<flashErrors>({
     title: false,
     moneyAllocated: false,
   });
 
+  // Pushes a number on the key pressed by the user to the right of the new budget funds value and creates
+  // a new string. If the new budget value exceeds the user's current total asset value, the new budget funds
+  // value will not update.
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -77,6 +86,8 @@ const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     [formData]
   );
 
+  // Pops the rightmost number on the new budget funds value and creates
+  // a new string without that number.
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -91,6 +102,8 @@ const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     [formData]
   );
 
+  // updates the values of the form data on user input. If the inputs contain any errors, updates form errors
+  // state and lets user know that errors exist
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     if (name === "title" || name === "moneyAllocated") {
@@ -99,6 +112,8 @@ const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     }
   };
 
+  // sends new budget info to db and updates user state in redux with new budget. If inputs contain errors on
+  // submission, does not send data and flashes errorful inputs for user.
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {

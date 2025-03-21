@@ -2,10 +2,13 @@ import { useAppSelector } from "./features/hooks";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { FaRegHourglass } from "react-icons/fa";
 
+// Loading Message for regular form submissions other than logging in and registering users
 const SmallLoadingMsg = (): JSX.Element | null => {
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
+
+  // message only shows when making smaller CRUD requests, otherwise is null
   return userStatus.smallLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2">

@@ -30,7 +30,8 @@ type FormInfo = {
 
 const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   const dispatch = useAppDispatch();
-  const notify = (notificaation: string) => toast.success(notificaation);
+  const notify = (notification: string) => toast.success(notification);
+  const errorNotify = (err: any) => toast.error(err);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -129,8 +130,8 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
           setFlashInput(false);
         }, 500);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      errorNotify(err);
     }
   };
 

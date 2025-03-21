@@ -52,14 +52,22 @@ const EditBudgetForm: React.FC<Props> = ({
     title: "",
     addedMoney: "",
   };
+
+  // sets state for form data used to update this budget
   const [formData, setFormData] = useState<BudgetEditInterface>(initialState);
+  // sets state for input errors from form data
   const [formErrors, setFormErrors] =
     useState<UpdateBudgetFormErrors>(initialErrors);
+  // sets state form if the inputs should flash when users attempt to submit errorful data
   const [flashInput, setFlashInput] = useState<flashErrors>({ title: false });
+  // calculates the initial remaining funds value for this budget
   const remainingMoney = useRef<number>(
     +getRemainingMoney(budget.moneyAllocated, budget.moneySpent) * 100
   );
 
+  // calculates the new remaining funds value for this budget based on the initial remaining money,
+  // the change of money by the user, and whether the user intends to add to or subtract from the initial
+  // value
   const newRemainingMoney: string = useMemo<string>(() => {
     return getNewBudgetValue(
       (remainingMoney.current / 100).toFixed(2),
@@ -68,6 +76,9 @@ const EditBudgetForm: React.FC<Props> = ({
     );
   }, [formData]);
 
+  // calculates the new total funds value for this budget based on the budget's allocated funds,
+  // the change of money by the user, and whether the user intends to add to or subtract from the initial
+  // value
   const newBudget: string = useMemo<string>(() => {
     return getNewBudgetValue(
       budget.moneyAllocated,
@@ -76,6 +87,9 @@ const EditBudgetForm: React.FC<Props> = ({
     );
   }, [formData.addedMoney, formData.operation]);
 
+  // calculates the new total assets value  based on the original total asset value,
+  // the change of money by the user, and whether the user intends to add to or subtract from the initial
+  // value
   const newTotalAssets: string = useMemo<string>(() => {
     return calculateNewTotalAssets(
       userStatus.user!.totalAssets,
@@ -84,6 +98,10 @@ const EditBudgetForm: React.FC<Props> = ({
     );
   }, [formData.addedMoney, formData.operation]);
 
+  // pushes number on the key pressed by tbe userto the right of the current money change value and
+  // creates a new money change string. If the the created string contains any errors (e.g. the added value
+  // is greater than the user's total assets or the subtracted value is greater than the budget's remaining
+  // value), the form data will not update
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -108,6 +126,8 @@ const EditBudgetForm: React.FC<Props> = ({
     [formData]
   );
 
+  // pops the rightmost number from the money change string, creates a new string, and updates the form data's
+  // money change value
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -122,6 +142,8 @@ const EditBudgetForm: React.FC<Props> = ({
     [formData]
   );
 
+  // updates the form data state's operation value to either add or subtract; when the form is submitted,
+  // checks operation value if we should subtract from or add to total assets
   const handleRadio = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     if (
@@ -144,6 +166,8 @@ const EditBudgetForm: React.FC<Props> = ({
     }
   };
 
+  // updates the title value of form data. If input contains an error, updates form errors state and changes
+  // front end to show user the error
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     if (name === "title" || name === "addedMoney") {
@@ -155,6 +179,8 @@ const EditBudgetForm: React.FC<Props> = ({
     }
   };
 
+  // submits the new budget information to backed to be updated to the db. If the inputs contain errors
+  // (e.g. title length is too long), does not send data and flashes the erroneous inputs to the user.
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): Promise<void> => {

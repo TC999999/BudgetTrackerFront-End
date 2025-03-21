@@ -16,6 +16,8 @@ const Dashboard = (): JSX.Element => {
   const notify = () => toast.error("You have reached the maximum asset value");
   const [showAssetForm, setShowAssetForm] = useState(false);
 
+  // updates state for showing the update asset form to true, unless the user's current total asset value equals the
+  // maximum allowed value
   const ShowForm = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ): void => {
@@ -27,6 +29,7 @@ const Dashboard = (): JSX.Element => {
     }
   };
 
+  // updates state for showing the update asset form to false
   const HideForm = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
@@ -37,9 +40,14 @@ const Dashboard = (): JSX.Element => {
     [showAssetForm]
   );
 
-  const logOutAnNavigate = (): void => {
-    dispatch(logOutUser({}));
-    navigate("/");
+  // removes the user token from cookies and navigates back to log in page
+  const logOutAnNavigate = async (): Promise<void> => {
+    try {
+      await dispatch(logOutUser({})).unwrap();
+      navigate("/");
+    } catch (err) {
+      console.log("HERE IS ERROR", err);
+    }
   };
 
   return (

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+// Error page for 404 errors
 const NotFound = (): JSX.Element => {
   return (
     <div className="not-found-page text-center p-2">

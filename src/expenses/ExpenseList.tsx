@@ -7,6 +7,7 @@ import {
 import { useAppDispatch } from "../features/hooks";
 import { removeExpense } from "../features/actions/expenses";
 
+// isFrontPage prop tells frontend if user is on dashboard or single budget page; passes down to expense card.
 type Props = {
   expensesList: ExpenseInterface[];
   isFrontPage: boolean;
@@ -18,12 +19,16 @@ type infoInterface = {
   _id: string;
 };
 
+// returns expense list to be used for budget expenses on a single budget page and a user's most recent
+// expenses on the dashboard
 const ExpenseList: React.FC<Props> = ({
   expensesList,
   isFrontPage,
   budgetID,
 }): JSX.Element => {
   const dispatch = useAppDispatch();
+
+  // deletes expense from user redux state and db
   const deleteExpense = useCallback(
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,

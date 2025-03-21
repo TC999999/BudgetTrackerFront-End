@@ -18,20 +18,26 @@ type Props = {
   changeUser: (e: React.FormEvent, newUser: ConfirmUserInfo) => void;
 };
 
+// For to input user email and username to make a request for a one time verification
+// code if the user has forgotten their password.
 const UserInfo: React.FC<Props> = ({
   changeStep,
   changeLoading,
   changeSubmitError,
   changeUser,
 }): JSX.Element => {
+  // initial state for confirm user info
   const initialState: ConfirmUserInfo = {
     username: "",
     email: "",
   };
+  // initial error strings for confirming user info
   const initialErrors: UserInfoErrors = {
     username: "",
     email: "",
   };
+
+  // states for form data values, strings for form errors, and whether to flash errorful inputs to user
   const [formData, setFormData] = useState<ConfirmUserInfo>(initialState);
   const [formErrors, setFormErrors] = useState<UserInfoErrors>(initialErrors);
   const [flashErrors, setFlashErrors] = useState<UserInfoFlashErrors>({
@@ -39,6 +45,8 @@ const UserInfo: React.FC<Props> = ({
     email: false,
   });
 
+  // changes form data, if there are any errors in user input, the error object state is updated and shown to
+  // the user
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
@@ -49,9 +57,11 @@ const UserInfo: React.FC<Props> = ({
     }
   };
 
+  // checks if inputted user data matches what's in db and makes a request
+  // for a one time verification code. If an error is found in the inputs, the data
+  // is not submitted and the errorful inputs flash red
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-
     try {
       if (handleUserInfoSubmitErrors(formData, setFormErrors)) {
         changeLoading(true);

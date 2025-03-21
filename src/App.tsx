@@ -20,6 +20,7 @@ function App(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const notify = (message: string) => toast.success(message);
+
   const location = useLocation();
   const [currPath, setCurrPath] = useState<string>("/");
 
@@ -31,33 +32,37 @@ function App(): JSX.Element {
     (store) => store.user.hasTokenInfo
   );
 
+  // checks to see if there's a refresh JWT stored in cookies, retrives access JWT
   useEffect(() => {
     const getTokenInfo = async () => {
-      await dispatch(findToken({}));
+      await dispatch(findToken({})).unwrap();
     };
     getTokenInfo();
   }, [dispatch]);
 
+  // if an access JWT is found in cookies, retrieves the information tied to that user from the db and stores in redux
   useEffect(() => {
     const getUserInfo = async () => {
-      if (tokenStatus.hasToken && !tokenStatus.loading) {
+      if (tokenStatus.hasAccessToken && !tokenStatus.loading) {
         await dispatch(getCurrentUser({}));
-      } else if (!tokenStatus.hasToken && !tokenStatus.loading) {
+      } else if (!tokenStatus.hasAccessToken && !tokenStatus.loading) {
         dispatch(setUserLoading(false));
         navigate("/");
       }
     };
     getUserInfo();
-  }, [dispatch, tokenStatus.hasToken, tokenStatus.loading]);
+  }, [dispatch, tokenStatus.hasAccessToken, tokenStatus.loading]);
 
+  // if user information is found in redux, opens an event source connection to the server to listen
+  // for live updates
   useEffect(() => {
     if (userStatus.user?._id && !userStatus.loading) {
       const es = new EventSource(
-        `http://localhost:3001/events/${userStatus.user?._id}`
+        `http://localhost:3001/events/${userStatus.user._id}`
       );
 
       es.onopen = () => {
-        console.log("Connection Established");
+        console.log("SSE Connection Established");
       };
 
       es.onmessage = (e) => {
@@ -72,12 +77,14 @@ function App(): JSX.Element {
 
       es.onerror = (e) => {
         console.log(e);
+        // es.close();
       };
 
       return () => es.close();
     }
-  }, [userStatus.user?._id, userStatus.loading]);
+  }, [dispatch, userStatus.user?._id, userStatus.loading]);
 
+  // removes user error if the path name in the url changes
   useEffect(() => {
     if (location.pathname !== currPath) {
       dispatch(removeUserError());
@@ -85,6 +92,7 @@ function App(): JSX.Element {
     }
   }, [location]);
 
+  // returns loading messages, toast notifications, and routes list
   return (
     <div className="App">
       <LoadingMsg />

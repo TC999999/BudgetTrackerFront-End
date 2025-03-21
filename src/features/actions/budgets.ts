@@ -7,6 +7,8 @@ import {
   SubmitBudgetUpdateInterface,
 } from "../../interfaces/budgetInterfaces";
 
+// sends new budget data to db for budgets and user collections and retrieves new list of budgets
+// for a single user that contains the new income
 export const addNewBudget = createAsyncThunk<any, newBudgetInterface>(
   "budgets/add/new",
   async (data: newBudgetInterface, thunkAPI) => {
@@ -24,6 +26,8 @@ export const addNewBudget = createAsyncThunk<any, newBudgetInterface>(
   }
 );
 
+// sends budget data for updating the db for budgets and user collections and retrieves new list of budgets
+// for a single user that contains the updated income
 export const updateBudget = createAsyncThunk<any, SubmitBudgetUpdateInterface>(
   "budgets/update",
   async (data: SubmitBudgetUpdateInterface, thunkAPI) => {
@@ -41,6 +45,9 @@ export const updateBudget = createAsyncThunk<any, SubmitBudgetUpdateInterface>(
   }
 );
 
+// sends budget data for deleting from the db for budgets and user collections as well as all expenses
+// made with that budget and retrieves new list of budgets or a single userthat does not contain the
+// deleted income
 export const deleteBudget = createAsyncThunk<any, DeleteBudgetInterface>(
   "budgets/delete",
   async (data: any = {}, thunkAPI) => {

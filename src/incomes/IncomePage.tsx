@@ -6,6 +6,7 @@ import IncomeList from "./IncomeList";
 import NewIncomeForm from "./NewIncomeForm";
 import { toast } from "react-toastify";
 
+// Shows the list of incomes the current user has
 const IncomePage = (): JSX.Element => {
   const navigate = useNavigate();
   const notify = () =>
@@ -14,8 +15,10 @@ const IncomePage = (): JSX.Element => {
     (store) => store.user.userInfo
   );
 
+  // state that shows the form to add a new income
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
 
+  // Shows income form unless the user already has 5 incomes
   const showIncomeFormState = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
@@ -23,12 +26,11 @@ const IncomePage = (): JSX.Element => {
     if (userStatus.user!.incomes.length < 5) {
       setShowIncomeForm(true);
     } else {
-      console.log("HUH");
-      console.log(userStatus.user!.incomes);
       notify();
     }
   };
 
+  // Hides income form
   const hideIncomeFormState = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent

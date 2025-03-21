@@ -18,6 +18,7 @@ type FormStateInterface = {
   showEditForm: boolean;
 };
 
+// returns page for a single user's budget based on budget id ("/budgets/:id")
 const SingleBudgetPage = (): JSX.Element => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ const SingleBudgetPage = (): JSX.Element => {
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
+
+  // retrieves budget from user budget list based on id string in url parameters
   const budget: BudgetInterface = useMemo<BudgetInterface>(
     () => getCurrentBudget(userStatus.user!.budgets, id || ""),
     [userStatus.user!.budgets]
@@ -38,6 +41,8 @@ const SingleBudgetPage = (): JSX.Element => {
   const [formsState, setFormsState] =
     useState<FormStateInterface>(initialFormState);
 
+  // sets state for which form should be shown. Will not show expense form if total budget funds and money
+  // spent with budget funds are equal
   const showFormState = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
     form: "showExpenseForm" | "showDeleteForm" | "showEditForm"
@@ -57,6 +62,7 @@ const SingleBudgetPage = (): JSX.Element => {
     }
   };
 
+  // callback function to hide forms when cancelling or after submission
   const changeFormState = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,

@@ -1,5 +1,6 @@
 import { CurrentStep } from "../interfaces/authInterfaces";
 
+// sets value of progress bar out of a max value of 100
 export const setResetProgress = (step: CurrentStep): number => {
   switch (step) {
     case "userInfo":
