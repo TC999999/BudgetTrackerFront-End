@@ -3,6 +3,8 @@ export type dateInfo = {
   time: string;
 };
 
+// takes dateTime string and converts it into and returns two separate strings for both the date
+// and the time
 export const makeDateString = (dateString: string): dateInfo => {
   let d: Date = new Date(dateString);
   let date: string = d.toLocaleDateString("en-US", {

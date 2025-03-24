@@ -1,5 +1,6 @@
 import { NewIncome, IncomeErrors } from "../interfaces/incomeInterfaces";
 
+// returns custom strings for input errors for income forms title input (new or update)
 const returnTitleErrors = (title: string): string => {
   if (title.length === 0) return "Income title cannot be empty";
   else if (!/^[\w ]+$/i.test(title))
@@ -12,11 +13,13 @@ const returnTitleErrors = (title: string): string => {
   else return "";
 };
 
+// returns custom strings for input errors for income forms salary input (new or update)
 const returnSalaryErrors = (salary: number): string => {
   if (salary === 0) return "Income salary must be greater than $0.00";
   else return "";
 };
 
+// updates form error state on income forms (new or update) when input value changes
 export const handleIncomeInputErrors = (
   name: "title" | "salary",
   value: string | number,
@@ -38,6 +41,8 @@ export const handleIncomeInputErrors = (
   }
 };
 
+// updates form error state on income forms (new or update) when form is submitted, returns true if all inputs
+// are error-free
 export const handleIncomeSubmitErrors = (
   newIncomeInfo: NewIncome,
   setter: React.Dispatch<React.SetStateAction<IncomeErrors>>

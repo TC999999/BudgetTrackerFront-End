@@ -28,6 +28,7 @@ type FormInfo = {
   operation: string;
 };
 
+// returns form for users to update their current savings value if necessary
 const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notification: string) => toast.success(notification);
@@ -40,10 +41,18 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     operation: "add",
   };
   const initalErrors: UserEditErrors = { value: "" };
+  // sets state for initial form data
   const [formData, setFormData] = useState<FormInfo>(initialState);
+  // reference hook for maximum value for new asset value
   const maxNum = useRef<number>(99999999999999);
+  // sets state for input errors in form
   const [formErrors, setFormErrors] = useState<UserEditErrors>(initalErrors);
+  // sets state for flashing inputs after attempting to submit errorful data in form
   const [flashInput, setFlashInput] = useState<boolean>(false);
+
+  // calcuates new asset value based on original asset value, the inputted monetary value to be added or
+  // subtracted from the original, and the operation that changes with the press of a radio button. Used to
+  // display on the form window for users.
   const newTotalAssets: string = useMemo<string>(() => {
     return calculateNewTotalAssetsUserDashboard(
       userStatus.user!.totalAssets,
@@ -52,19 +61,22 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     );
   }, [formData.value, formData.operation]);
 
+  // updates form data state when a user presses a key on keypad: pushes the number on the key to the right
+  // most side of the current inputted value and handles input errors (input value too high or at $0.00)
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.value, num);
-      let errors = handleUserComparisons(
-        newNum,
-        setFormErrors,
-        formData.operation,
-        maxNum.current,
-        userStatus.user!.totalAssets * 100
-      );
-      if (!errors) {
+      if (
+        !handleUserComparisons(
+          newNum,
+          setFormErrors,
+          formData.operation,
+          maxNum.current,
+          userStatus.user!.totalAssets * 100
+        )
+      ) {
         setFormData((data) => ({
           ...data,
           value: newNum,
@@ -78,6 +90,8 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     [formData]
   );
 
+  // updates form data state when user clicks on delete key: pops the right-most number of the current added
+  // asset value
   const handleDelete = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -91,6 +105,9 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     [formData]
   );
 
+  // updates form data state when user clicks on radio button: changes operation to either add or subtract.
+  // If click error occurs (e.g. add value exceeds maximum value or subtract value exceeds original asset
+  // value), neither button nor state changes
   const handleRadio = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     if (
@@ -113,6 +130,9 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     }
   };
 
+  // sends data to update to backend, sets new total asset value in redux state. If input errors occur,
+  // (e.g. value to be added exceeds maximum value or value to be subtracted exceeds original asset
+  // value), does not send data and erroneous inputs flash at user
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {

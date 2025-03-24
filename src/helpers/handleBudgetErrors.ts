@@ -5,6 +5,7 @@ import {
   BudgetEditInterface,
 } from "../interfaces/budgetInterfaces";
 
+// returns custom strings for input errors in budget form title
 const handleBudgetTitleErrors = (title: string): string => {
   if (title.length === 0) {
     return "Budget title input cannot be empty";
@@ -21,16 +22,19 @@ const handleBudgetTitleErrors = (title: string): string => {
   }
 };
 
+// returns custom strings for input errors in budget form allocated fund value
 const handleBudgetFundsErrors = (funds: number): string => {
   return funds <= 0 ? "Allocated budget funds must be greater than $0.00" : "";
 };
 
+// returns custom strings for input errors in budget form radio select if selected value is add
 const handleAddErrors = (newAssets: number, totalAssets: number): string => {
   return newAssets > totalAssets
     ? "New funds cannot be more that total assets"
     : "";
 };
 
+// returns custom strings for input errors in budget form radio select if selected value is subtract
 const handleSubtractErrors = (
   newAssets: number,
   remainingMoney: number
@@ -40,6 +44,7 @@ const handleSubtractErrors = (
     : "";
 };
 
+// updates form errors state when a radio button is clicked
 export const handleUpdateBudgetComparisons = (
   newNum: number,
   totalAssets: number,
@@ -65,6 +70,7 @@ export const handleUpdateBudgetComparisons = (
   return errorExists;
 };
 
+// updates form errors on new budget form state when input value changes
 export const handleBudgetInputErrors = (
   name: "title" | "moneyAllocated",
   value: string | number,
@@ -89,6 +95,7 @@ export const handleBudgetInputErrors = (
   }
 };
 
+// updates form errors on update budget form state when input value changes
 export const handleUpdateBudgetInputErrors = (
   name: "title" | "addedMoney",
   value: string | number,
@@ -113,6 +120,8 @@ export const handleUpdateBudgetInputErrors = (
   }
 };
 
+// updates form errors on new budget form state when form is submitted, returns true if all inputs
+// are error-free
 export const handleBudgetSubmitErrors = (
   newBudgetInfo: newBudgetInterface,
   setter: React.Dispatch<React.SetStateAction<BudgetFormErrors>>
@@ -129,6 +138,8 @@ export const handleBudgetSubmitErrors = (
   );
 };
 
+// updates form errors on update budget form state when form is submitted, returns true if all inputs
+// are error-free
 export const handleUpdateBudgetSubmitErrors = (
   newBudgetInfo: BudgetEditInterface,
   setter: React.Dispatch<React.SetStateAction<UpdateBudgetFormErrors>>

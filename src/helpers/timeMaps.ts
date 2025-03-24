@@ -1,3 +1,5 @@
+// hashmap for minutes to be used for income forms on the select inputs when setting the update time
+// for income updates
 export const minutes = new Map<string, string>([
   ["0", "00"],
   ["1", "01"],
@@ -61,6 +63,8 @@ export const minutes = new Map<string, string>([
   ["59", "59"],
 ]);
 
+// hashmap for hours to be used for income forms on the select inputs when setting the update time
+// for income updates
 export const hours = new Map<string, string>([
   ["0", "12 a.m."],
   ["1", "1 a.m."],
@@ -88,6 +92,8 @@ export const hours = new Map<string, string>([
   ["23", "11 p.m."],
 ]);
 
+// hashmap for minutes when to be used for constructing readbale update times to be displayed on the form
+// after selecting the hour and to be sent to db
 export const stringHours = new Map<string, string>([
   ["0", "12"],
   ["1", "01"],
@@ -115,8 +121,10 @@ export const stringHours = new Map<string, string>([
   ["23", "11"],
 ]);
 
+// the different maximum number of days in one month
 export type monthDays = "31" | "30" | "29";
 
+// array of month numbers that contain 31 days
 export const thirtyOneDays: string[] = [
   "*",
   "1",
@@ -128,6 +136,8 @@ export const thirtyOneDays: string[] = [
   "12",
 ];
 
+// hashmap for days of the month to be used for income forms on the select inputs when setting the update time
+// for income updates when month is selcted from above array
 export const daysOfMonth1 = new Map<string, string>([
   ["*", "any day"],
   ["1", "1"],
@@ -163,8 +173,11 @@ export const daysOfMonth1 = new Map<string, string>([
   ["31", "31"],
 ]);
 
+// array of month numbers that contain 30 days
 export const thirtyDays: string[] = ["4", "6", "9", "11"];
 
+// hashmap for days of the month to be used for income forms on the select inputs when setting the update time
+// for income updates when month is selcted from above array
 export const daysOfMonth2 = new Map<string, string>([
   ["*", "any day"],
   ["1", "1"],
@@ -199,6 +212,8 @@ export const daysOfMonth2 = new Map<string, string>([
   ["30", "30"],
 ]);
 
+// hashmap for days of the month to be used for income forms on the select inputs when setting the update time
+// for income updates when the selcted month is February
 export const dayOfMonthFeb = new Map<string, string>([
   ["*", "any day"],
   ["1", "1"],
@@ -232,6 +247,8 @@ export const dayOfMonthFeb = new Map<string, string>([
   ["29", "29"],
 ]);
 
+// hashmap for days of the month when to be used for constructing readbale update times to be
+// displayed on the form after selecting the day of the month and to be sent to db
 export const daysString = new Map<string, string>([
   ["*", " on every day"],
   ["1", " on the 1st day"],
@@ -267,6 +284,8 @@ export const daysString = new Map<string, string>([
   ["31", " on the 31st day"],
 ]);
 
+// hashmap for months to be used for income forms on the select inputs when setting the update time
+// for income updates
 export const months = new Map<string, string>([
   ["*", "any month"],
   ["1", "January"],
@@ -283,6 +302,8 @@ export const months = new Map<string, string>([
   ["12", "December"],
 ]);
 
+// hashmap for months when to be used for constructing readbale update times to be
+// displayed on the form after selecting the month and to be sent to db
 export const monthString = new Map<string, string>([
   ["*", " of every month"],
   ["1", " of January"],
@@ -299,6 +320,8 @@ export const monthString = new Map<string, string>([
   ["12", " of December"],
 ]);
 
+// hashmap for days of the week to be used for income forms on the select inputs when setting
+// the update time or income updates
 export const daysOfWeek = new Map<string, string>([
   ["*", "any day of the week"],
   ["0", "Sunday"],
@@ -310,6 +333,8 @@ export const daysOfWeek = new Map<string, string>([
   ["6", "Saturday"],
 ]);
 
+// hashmap for days of the week when to be used for constructing readbale update times to be
+// displayed on the form after selecting the day of the week and to be sent to db
 export const daysOfWeekString = new Map<string, string>([
   ["*", ""],
   ["0", " on every Sunday"],

@@ -8,6 +8,7 @@ import BudgetErrorPage from "./budgets/BudgetErrorPage";
 import SignUp from "./auth/SignUp";
 import ResetPassword from "./auth/ResetPassword";
 
+// main frontend route list for application
 const RoutesList = (): JSX.Element => {
   return (
     <Routes>

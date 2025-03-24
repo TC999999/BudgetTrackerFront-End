@@ -1,6 +1,7 @@
 import { SignUpInterface, SignUpErrors } from "../interfaces/authInterfaces";
 import { isEmail } from "validator";
 
+// returns custom strings for username input value errors in sign up form
 const returnUsernameErrors = (value: string): string => {
   if (value.length === 0) {
     return "Username input cannot be empty.";
@@ -14,6 +15,7 @@ const returnUsernameErrors = (value: string): string => {
   return "";
 };
 
+// returns custom strings for password input value errors in sign up form
 const returnPasswordErrors = (value: string): string => {
   if (value.length === 0) {
     return "Password input cannot be empty.";
@@ -27,6 +29,7 @@ const returnPasswordErrors = (value: string): string => {
   return "";
 };
 
+// returns custom strings for email input value errors in sign up form
 const returnEmailErrors = (value: string): string => {
   if (value.length === 0) {
     return "Email Address input cannot be is empty.";
@@ -36,6 +39,7 @@ const returnEmailErrors = (value: string): string => {
   return "";
 };
 
+// updates sign up form errors state when input value changes
 export const handleSignUpInputErrors = (
   name: "username" | "password" | "email",
   value: string,
@@ -56,6 +60,7 @@ export const handleSignUpInputErrors = (
   }
 };
 
+// updates sign up form errors state when form is submitted; returns true if all input values are error free
 export const handleSignUpSubmitErrors = (
   signUpInfo: SignUpInterface,
   setter: React.Dispatch<React.SetStateAction<SignUpErrors>>

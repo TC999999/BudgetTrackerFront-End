@@ -2,6 +2,7 @@ import { UserEditInterface } from "../interfaces/userInterfaces";
 import { Income, SubmitUpdateIncome } from "../interfaces/incomeInterfaces";
 import { BudgetEditInterface } from "../interfaces/budgetInterfaces";
 
+// returns custom strings for notifications when updating users' total assets
 export const createUpdateUserString = (
   submitData: UserEditInterface
 ): string => {
@@ -12,6 +13,7 @@ export const createUpdateUserString = (
   return "Succssfully updated assets! " + addOrRemove;
 };
 
+// returns custom strings for notifications when updating users' incomes
 export const createUpdateIncomeString = (
   income: Income,
   submitData: SubmitUpdateIncome
@@ -37,6 +39,7 @@ export const createUpdateIncomeString = (
   );
 };
 
+// returns custom strings for notifications when updating users' budgets
 export const createUpdateBudgetString = (
   originalTitle: string,
   submitData: BudgetEditInterface
@@ -49,14 +52,18 @@ export const createUpdateBudgetString = (
   }
 
   if (submitData.addedMoney > 0) {
-    addOrRemove =
-      submitData.operation === "add"
-        ? `Added $${(submitData.addedMoney / 100).toFixed(
-            2
-          )} from available assets.`
-        : `Removed $${(submitData.addedMoney / 100).toFixed(
-            2
-          )} and added it to available assets.`;
+    switch (submitData.operation) {
+      case "add":
+        addOrRemove = `Added $${(submitData.addedMoney / 100).toFixed(
+          2
+        )} from available assets.`;
+        break;
+      case "subtract":
+        addOrRemove = `Removed $${(submitData.addedMoney / 100).toFixed(
+          2
+        )} and added it to available assets.`;
+        break;
+    }
   }
 
   return `${originalTitle} budget updated successfully! ${titleChange} ${addOrRemove}`;

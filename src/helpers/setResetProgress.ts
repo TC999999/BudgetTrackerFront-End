@@ -1,6 +1,7 @@
 import { CurrentStep } from "../interfaces/authInterfaces";
 
-// sets value of progress bar out of a max value of 100
+// used for password reset pagesets value of progress bar out of a max value of 100 based on value of
+// current step
 export const setResetProgress = (step: CurrentStep): number => {
   switch (step) {
     case "userInfo":

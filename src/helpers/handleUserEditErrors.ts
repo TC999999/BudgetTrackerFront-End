@@ -3,10 +3,12 @@ import {
   UserEditInterface,
 } from "../interfaces/userInterfaces";
 
+// returns custom string error if new funds value is 0 or less
 const handleUserAssetsErrors = (newAssets: number): string => {
   return newAssets <= 0 ? "New assets must be greater than $0.00" : "";
 };
 
+// returns custom string error if operation is subtract when new asset value exceeds original asset value
 const handleSubtractErrors = (
   newAssets: number,
   totalAssets: number
@@ -16,10 +18,12 @@ const handleSubtractErrors = (
     : "";
 };
 
+// returns custom string error if operation is add when new asset value exceeds maximum asset value
 const handleAddErrors = (newAssets: number, maxVal: number): string => {
   return newAssets > maxVal ? "You've reached the maximum asset value." : "";
 };
 
+// updates user update form errors state when a radio button is selected
 export const handleUserComparisons = (
   newAssets: number,
   setter: React.Dispatch<React.SetStateAction<UserEditErrors>>,
@@ -49,6 +53,7 @@ export const handleUserComparisons = (
   return errorExists;
 };
 
+// updates user update form errors state when an input value changes
 export const handleUserEditInputErrors = (
   name: "value",
   value: number,
@@ -63,6 +68,8 @@ export const handleUserEditInputErrors = (
   }
 };
 
+// updates user update form errors state when the form is submitted; returns true if all inputs are error
+// free
 export const handleEditUserSubmitErrors = (
   newAssetInfo: UserEditInterface,
   setter: React.Dispatch<React.SetStateAction<UserEditErrors>>

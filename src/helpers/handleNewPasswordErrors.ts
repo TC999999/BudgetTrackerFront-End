@@ -3,6 +3,7 @@ import {
   PasswordResetErrors,
 } from "../interfaces/authInterfaces";
 
+// returns custom strings for input errors for new password form password input
 const returnNewPasswordErrors = (newPassword: string): string => {
   if (newPassword.length === 0) {
     return "New Password is Empty.";
@@ -16,18 +17,20 @@ const returnNewPasswordErrors = (newPassword: string): string => {
   return "";
 };
 
+// returns custom strings for input errors for new password form confirmation input
 const returnConfirmPasswordErrors = (
   newPassword: string,
   confirmNewPassword: string
 ): string => {
   if (confirmNewPassword === "") {
-    return "New Password confirmation cannot be empty";
+    return "New password confirmation cannot be empty";
   } else if (confirmNewPassword !== newPassword) {
     return "Does not match new password above!";
   }
   return "";
 };
 
+// updates new password form error state when input values change
 export const handleConfirmPasswordInputErrors = (
   name: "newPassword" | "confirmNewPassword",
   newPassword: string,
@@ -53,6 +56,7 @@ export const handleConfirmPasswordInputErrors = (
   }
 };
 
+// updates new password form error state when form is submitted; returns true if all inputs are error free
 export const handleConfirmPasswordSubmitErrors = (
   newPasswordInfo: PasswordResetInfo,
   setter: React.Dispatch<React.SetStateAction<PasswordResetErrors>>

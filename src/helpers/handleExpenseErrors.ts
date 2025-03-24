@@ -3,6 +3,7 @@ import {
   ExpenseFormErrors,
 } from "../interfaces/expenseInterfaces";
 
+// returns custom strings for input errors in expense form title
 const handleExpenseTitleErrors = (title: string): string => {
   if (title.length === 0) {
     return "Expense title cannot be empty";
@@ -19,14 +20,17 @@ const handleExpenseTitleErrors = (title: string): string => {
   }
 };
 
+// returns custom strings for input errors in expense form transaction value
 const handleExpenseTransactionErrors = (transaction: number): string => {
   return transaction <= 0 ? "Transaction value must be greater than $0.00" : "";
 };
 
+// returns custom strings for input errors in expense form date
 const handleExpenseDateErrors = (date: string): string => {
   return date.length <= 0 ? "Transaction Date is Required" : "";
 };
 
+// updates form errors state on expense form when input value changes
 export const handleExpenseInputErrors = (
   name: string,
   value: string | number,
@@ -51,12 +55,13 @@ export const handleExpenseInputErrors = (
         setter((data) => ({ ...data, date: handleExpenseDateErrors(value) }));
       }
       break;
-
     default:
       break;
   }
 };
 
+// updates form errors on new expense form state when form is submitted, returns true if all inputs
+// are error-free
 export const handleExpenseSubmitErrors = (
   newExpenseInfo: newExpenseInterface,
   setter: React.Dispatch<React.SetStateAction<ExpenseFormErrors>>

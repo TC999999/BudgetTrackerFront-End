@@ -7,6 +7,7 @@ import ExpenseList from "../expenses/ExpenseList";
 import { TfiMoney } from "react-icons/tfi";
 import { toast } from "react-toastify";
 
+// returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
   const { user, recentExpenses } = useAppSelector(
     (store) => store.user.userInfo

@@ -51,7 +51,6 @@ const authSlice = createSlice({
         state.userInfo.user = action.payload;
         state.userInfo.error = null;
         state.hasTokenInfo.hasRefreshToken = true;
-        state.hasTokenInfo.hasAccessToken = true;
       })
       .addCase(registerUser.rejected, (state, action: any) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
@@ -69,7 +68,6 @@ const authSlice = createSlice({
         state.userInfo.recentExpenses = action.payload.recentExpenses;
         state.userInfo.error = null;
         state.hasTokenInfo.hasRefreshToken = true;
-        state.hasTokenInfo.hasAccessToken = true;
       })
       .addCase(logInUser.rejected, (state, action: any) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
@@ -84,12 +82,10 @@ const authSlice = createSlice({
       .addCase(findToken.fulfilled, (state, action: any) => {
         state.hasTokenInfo.loading = false;
         state.hasTokenInfo.hasRefreshToken = action.payload.token;
-        state.hasTokenInfo.hasAccessToken = action.payload.token;
       })
       .addCase(findToken.rejected, (state) => {
         state.hasTokenInfo.loading = false;
         state.hasTokenInfo.hasRefreshToken = false;
-        state.hasTokenInfo.hasAccessToken = false;
       })
       .addCase(getCurrentUser.pending, (state) => {
         state.userInfo.loading = true;
@@ -115,7 +111,6 @@ const authSlice = createSlice({
         state.hasTokenInfo.loading = false;
         state.userInfo.loading = false;
         state.hasTokenInfo.hasRefreshToken = false;
-        state.hasTokenInfo.hasAccessToken = false;
         state.userInfo.userExists = false;
         state.userInfo.user = INITIAL_STATE.userInfo.user;
         state.userInfo.recentExpenses = INITIAL_STATE.userInfo.recentExpenses;

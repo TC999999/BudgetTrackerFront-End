@@ -16,6 +16,7 @@ import { hasTokenInterface } from "./interfaces/authInterfaces";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { ToastContainer, toast } from "react-toastify";
 
+//renders whole application
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function App(): JSX.Element {
     (store) => store.user.hasTokenInfo
   );
 
-  // checks to see if there's a refresh JWT stored in cookies, retrives access JWT
+  // checks to see if there's a refresh JWT stored in cookies, sets access JWT in cookies
   useEffect(() => {
     const getTokenInfo = async () => {
       await dispatch(findToken({})).unwrap();
@@ -40,18 +41,18 @@ function App(): JSX.Element {
     getTokenInfo();
   }, [dispatch]);
 
-  // if an access JWT is found in cookies, retrieves the information tied to that user from the db and stores in redux
+  // if a refresh JWT is found in cookies, retrieves the information tied to that user from the db and stores in redux
   useEffect(() => {
     const getUserInfo = async () => {
-      if (tokenStatus.hasAccessToken && !tokenStatus.loading) {
+      if (tokenStatus.hasRefreshToken && !tokenStatus.loading) {
         await dispatch(getCurrentUser({}));
-      } else if (!tokenStatus.hasAccessToken && !tokenStatus.loading) {
+      } else if (!tokenStatus.hasRefreshToken && !tokenStatus.loading) {
         dispatch(setUserLoading(false));
         navigate("/");
       }
     };
     getUserInfo();
-  }, [dispatch, tokenStatus.hasAccessToken, tokenStatus.loading]);
+  }, [dispatch, tokenStatus.hasRefreshToken, tokenStatus.loading]);
 
   // if user information is found in redux, opens an event source connection to the server to listen
   // for live updates
@@ -77,7 +78,7 @@ function App(): JSX.Element {
 
       es.onerror = (e) => {
         console.log(e);
-        // es.close();
+        es.close();
       };
 
       return () => es.close();
