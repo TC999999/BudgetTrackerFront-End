@@ -31,7 +31,10 @@ export const addToAssets = createAsyncThunk<
   UserEditInterface
 >(
   "user/update/assets",
-  async (updateInfo: UserEditInterface = { value: 0 }, thunkAPI) => {
+  async (
+    updateInfo: UserEditInterface = { title: "", value: 0, date: "" },
+    thunkAPI
+  ) => {
     try {
       let res = await axios({
         method: "patch",

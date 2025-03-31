@@ -7,7 +7,7 @@ import {
   PasswordResetSubmit,
   CurrentStep,
 } from "../interfaces/authInterfaces";
-import ResetPasswordAPI from "../helpers/ResetPasswordAPI";
+import ResetPasswordAPI from "../apis/ResetPasswordAPI";
 import {
   handleConfirmPasswordInputErrors,
   handleConfirmPasswordSubmitErrors,

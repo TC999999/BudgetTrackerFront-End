@@ -127,11 +127,7 @@ const SingleBudgetPage = (): JSX.Element => {
           <h1 className="expense-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
             Expenses Made
           </h1>
-          <ExpenseList
-            expensesList={budget?.expenses}
-            isFrontPage={false}
-            budgetID={id || null}
-          />
+          <ExpenseList expensesList={budget?.expenses} budgetID={id || null} />
         </section>
       </main>
     </div>

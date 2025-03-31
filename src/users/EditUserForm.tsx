@@ -15,6 +15,7 @@ import {
 } from "../helpers/handleUserEditErrors";
 import { createUpdateUserString } from "../helpers/createNotificationString";
 import { addToAssets } from "../features/actions/users";
+import { DateTime } from "luxon";
 import { toast } from "react-toastify";
 
 type Props = {
@@ -24,9 +25,13 @@ type Props = {
 };
 
 type FormInfo = {
+  title: string;
   value: number;
   operation: string;
+  date: string;
 };
+
+type flashErrors = { title: boolean; value: boolean; date: boolean };
 
 // returns form for users to update their current savings value if necessary
 const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
@@ -37,10 +42,12 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     (store) => store.user.userInfo
   );
   const initialState: FormInfo = {
+    title: "",
     value: 0,
     operation: "add",
+    date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
   };
-  const initalErrors: UserEditErrors = { value: "" };
+  const initalErrors: UserEditErrors = { title: "", value: "", date: "" };
   // sets state for initial form data
   const [formData, setFormData] = useState<FormInfo>(initialState);
   // reference hook for maximum value for new asset value
@@ -48,7 +55,11 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   // sets state for input errors in form
   const [formErrors, setFormErrors] = useState<UserEditErrors>(initalErrors);
   // sets state for flashing inputs after attempting to submit errorful data in form
-  const [flashInput, setFlashInput] = useState<boolean>(false);
+  const [flashInput, setFlashInput] = useState<flashErrors>({
+    title: false,
+    value: false,
+    date: false,
+  });
 
   // calcuates new asset value based on original asset value, the inputted monetary value to be added or
   // subtracted from the original, and the operation that changes with the press of a radio button. Used to
@@ -60,6 +71,14 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
       formData.operation
     );
   }, [formData.value, formData.operation]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    if (name === "title" || name === "date") {
+      handleUserEditInputErrors(name, value, setFormErrors);
+      setFormData((data) => ({ ...data, [name]: value }));
+    }
+  };
 
   // updates form data state when a user presses a key on keypad: pushes the number on the key to the right
   // most side of the current inputted value and handles input errors (input value too high or at $0.00)
@@ -139,15 +158,21 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
       if (handleEditUserSubmitErrors(formData, setFormErrors)) {
         const { value, operation } = formData;
         const submitData: UserEditInterface = {
+          ...formData,
           value: operation === "add" ? +value / 100 : -value / 100,
         };
         await dispatch(addToAssets(submitData)).unwrap();
         hideForm(e);
         notify(createUpdateUserString(submitData));
       } else {
-        setFlashInput(true);
+        if (formErrors.title || formData.title === "")
+          setFlashInput((flash) => ({ ...flash, title: true }));
+        if (formErrors.date || formData.date === "")
+          setFlashInput((flash) => ({ ...flash, date: true }));
+        if (formErrors.value || formData.value === 0)
+          setFlashInput((flash) => ({ ...flash, value: true }));
         setTimeout(() => {
-          setFlashInput(false);
+          setFlashInput({ title: false, date: false, value: false });
         }, 500);
       }
     } catch (err: any) {
@@ -157,95 +182,156 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
 
   return !userStatus.smallLoading ? (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
-      <div className="modal-layer-2">
+      <div className="modal-layer-2-lg">
         <div className="add-to-assets-form text-center modal-layer-3">
           <header>
             <h1 className="text-3xl text-green-800 font-bold underline">
-              Update Your Current Assets
+              Document a Miscellaneous Transaction
             </h1>
-            <h2 className="text-lg">Your New Assets Will Be:</h2>
+            <h2 className="text-lg">Your New Total Savings Value Will Be:</h2>
             <h2 className="text-4xl text-green-700 font-bold">
               ${newTotalAssets}
             </h2>
           </header>
           <form onSubmit={handleSubmit}>
-            <div className="added-assets-div">
-              <label className="text-gray-700 block" htmlFor="addedAssets">
-                How much are you adding or subtracting from your current total
-                assets? ($ U.S.):{" "}
-              </label>
-              <input
-                className={`input ${formErrors.value ? "input-error" : ""} ${
-                  flashInput ? "animate-blinkError" : ""
-                }`}
-                id="added_assets"
-                type="text"
-                name="addedAssets"
-                placeholder="0.00"
-                value={`$${(formData.value / 100).toFixed(2)}`}
-                required
-                readOnly
-              />
-              {formErrors.value && (
-                <div className="error-message">
-                  <p className="text-lg text-red-700 font-bold">
-                    {formErrors.value}
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="edit-user-radio-buttons">
-              <fieldset className="edit-user-choices">
-                <legend className="font-bold">
-                  Are you adding or subtracting this amount from your available
-                  assets?
-                </legend>
-                <div className="border border-green-600 shadow-md rounded-full">
-                  <div
-                    className={`p-2 border-b border-green-600 rounded-t-full ${
-                      formData.operation === "add" ? "bg-green-100" : ""
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      id="add"
-                      name="operation"
-                      value="add"
-                      onChange={handleRadio}
-                      className="radio radio-add form-radio"
-                      checked={formData.operation === "add"}
-                    />
-                    <label htmlFor="add">Add to Funds</label>
-                  </div>
-                  <div
-                    className={`p-2 rounded-b-full ${
-                      formData.operation === "subtract" ? "bg-red-100" : ""
-                    } `}
-                  >
-                    <input
-                      type="radio"
-                      id="remove"
-                      name="operation"
-                      value="subtract"
-                      onChange={handleRadio}
-                      className="radio radio-subtract form-radio"
-                      checked={formData.operation === "subtract"}
-                    />
-                    <label htmlFor="remove">Subtract from Funds</label>
+            <div id="form_information" className="sm:flex sm:justify-center">
+              <div id="title_and_date_inputs">
+                <div className="transaction-title-div">
+                  <label className="text-gray-700 block" htmlFor="title">
+                    Transaction Title:{" "}
+                  </label>
+                  <input
+                    className={`input sm:text-sm md:text-base ${
+                      formErrors.title ? "input-error" : ""
+                    } ${flashInput.title ? "animate-blinkError" : ""}`}
+                    id="title"
+                    type="text"
+                    name="title"
+                    placeholder="What is the reason for this transaction?"
+                    value={formData.title}
+                    onChange={handleChange}
+                  />
+                  {formErrors.title && (
+                    <div className="error-message">
+                      <p className="text-lg text-red-700 font-bold">
+                        {formErrors.title}
+                      </p>
+                    </div>
+                  )}
+                  <div className="flex flex-col">
+                    <small>
+                      Make sure your title has between 20 to 3 characters.
+                    </small>
+                    <small>
+                      Your transaction title may only include letters, numbers,
+                      and spaces.
+                    </small>
+                    <small> Spaces may only be between characters.</small>
                   </div>
                 </div>
-              </fieldset>
+                <div className="date-div mb-2">
+                  <label htmlFor="date" className="text-gray-700 text-lg block">
+                    Transaction Date
+                  </label>
+                  <input
+                    type="datetime-local"
+                    className={`input  ${
+                      formErrors.date ? "input-error" : "input-valid-date"
+                    } ${flashInput.date && "animate-blinkError"}`}
+                    id="expense_date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                  />
+                  {formErrors.date && (
+                    <div className="error-message">
+                      <p className="text-red-700 font-bold">
+                        {formErrors.date}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div id="transaction_inputs">
+                <div className="added-assets-div">
+                  <label className="text-gray-700 block" htmlFor="addedAssets">
+                    What is the value of this transaction? ($ U.S.):{" "}
+                  </label>
+                  <input
+                    className={`input sm:text-sm sm:w-64 md:text-base md:w-96  ${
+                      formErrors.value ? "input-error" : ""
+                    } ${flashInput.value ? "animate-blinkError" : ""}`}
+                    id="added_assets"
+                    type="text"
+                    name="addedAssets"
+                    placeholder="0.00"
+                    value={`$${(formData.value / 100).toFixed(2)}`}
+                    required
+                    readOnly
+                  />
+                  {formErrors.value && (
+                    <div className="error-message">
+                      <p className="text-lg text-red-700 font-bold">
+                        {formErrors.value}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="keyPad-div p-2">
+                  <KeyPad
+                    handlePress={handlePress}
+                    handleDelete={handleDelete}
+                    num={formData.value}
+                  />
+                </div>
+                <div className="edit-user-radio-buttons p-2">
+                  <fieldset className="edit-user-choices">
+                    <legend className="font-bold">
+                      Does this transaction add to or subtract from your total
+                      savings?
+                    </legend>
+                    <div className="border border-green-600 shadow-md rounded-full">
+                      <div
+                        className={`p-2 border-b border-green-600 rounded-t-full ${
+                          formData.operation === "add" ? "bg-green-100" : ""
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          id="add"
+                          name="operation"
+                          value="add"
+                          onChange={handleRadio}
+                          className="radio radio-add form-radio"
+                          checked={formData.operation === "add"}
+                        />
+                        <label htmlFor="add">Add to Savings</label>
+                      </div>
+                      <div
+                        className={`p-2 rounded-b-full ${
+                          formData.operation === "subtract" ? "bg-red-100" : ""
+                        } `}
+                      >
+                        <input
+                          type="radio"
+                          id="remove"
+                          name="operation"
+                          value="subtract"
+                          onChange={handleRadio}
+                          className="radio radio-subtract form-radio"
+                          checked={formData.operation === "subtract"}
+                        />
+                        <label htmlFor="remove">Subtract from Savings</label>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
             </div>
-            <div className="keyPad-div px-2 py-2">
-              <KeyPad
-                handlePress={handlePress}
-                handleDelete={handleDelete}
-                num={formData.value}
-              />
-            </div>
+
             <div className="button-div flex justify-between">
               <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                Update your Assets
+                Add this Transaction
               </button>
               <button className="cancel-button" onClick={(e) => hideForm(e)}>
                 Cancel

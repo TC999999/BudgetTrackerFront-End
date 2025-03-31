@@ -5,7 +5,7 @@ import {
   UserInfoErrors,
   UserInfoFlashErrors,
 } from "../interfaces/authInterfaces";
-import ResetPasswordAPI from "../helpers/ResetPasswordAPI";
+import ResetPasswordAPI from "../apis/ResetPasswordAPI";
 import {
   handleUserInfoInputErrors,
   handleUserInfoSubmitErrors,

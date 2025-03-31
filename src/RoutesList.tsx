@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import NotFound from "./NotFound";
 import HomePage from "./users/HomePage";
+import TransactionHistory from "./transactions/transactionHistory";
 import BudgetPage from "./budgets/BudgetPage";
 import SingleBudgetPage from "./budgets/SingleBudgetPage";
 import IncomePage from "./incomes/IncomePage";
@@ -15,6 +16,7 @@ const RoutesList = (): JSX.Element => {
       <Route path="/" element={<HomePage />} />
       <Route path="/register" element={<SignUp />} />
       <Route path="/resetPassword" element={<ResetPassword />} />
+      <Route path="transactions" element={<TransactionHistory />} />
       <Route path="/incomes" element={<IncomePage />} />
       <Route path="/budgets" element={<BudgetPage />} />
       <Route path="/budgets/:id" element={<SingleBudgetPage />} />

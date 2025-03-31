@@ -47,6 +47,10 @@
     @apply bg-green-200;
   }
 
+  .stripedTransactions .transaction-card:nth-child(even) {
+    @apply bg-green-200;
+  }
+
   .stripedBudgets li:nth-child(even) .budget-card {
     @apply bg-green-500 border-white text-white;
   }

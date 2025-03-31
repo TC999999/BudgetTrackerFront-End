@@ -10,7 +10,6 @@ import { removeExpense } from "../features/actions/expenses";
 // isFrontPage prop tells frontend if user is on dashboard or single budget page; passes down to expense card.
 type Props = {
   expensesList: ExpenseInterface[];
-  isFrontPage: boolean;
   budgetID: string | null;
 };
 
@@ -23,7 +22,6 @@ type infoInterface = {
 // expenses on the dashboard
 const ExpenseList: React.FC<Props> = ({
   expensesList,
-  isFrontPage,
   budgetID,
 }): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -56,22 +54,16 @@ const ExpenseList: React.FC<Props> = ({
           Name
         </b>
         <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Money Spent
+          Transaction
         </b>
-        {isFrontPage && (
-          <b className="text-sm sm:text-base duration-150 text-center content-center">
-            Budget Title
-          </b>
-        )}
 
         <b className="text-sm sm:text-base duration-150 text-center content-center">
           Date
         </b>
-        {!isFrontPage && (
-          <b className="text-sm sm:text-base duration-150 text-center content-center">
-            Delete
-          </b>
-        )}
+
+        <b className="text-sm sm:text-base duration-150 text-center content-center">
+          Delete
+        </b>
       </header>
       <div className="expense-card-list striped">
         {expensesList.map((e) => {
@@ -79,7 +71,6 @@ const ExpenseList: React.FC<Props> = ({
             <ExpenseCard
               key={e._id}
               expense={e}
-              isFrontPage={isFrontPage}
               deleteExpense={deleteExpense}
             />
           );

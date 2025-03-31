@@ -65,13 +65,11 @@ const authSlice = createSlice({
         state.userInfo.loading = false;
         state.userInfo.userExists = true;
         state.userInfo.user = action.payload.newUser;
-        state.userInfo.recentExpenses = action.payload.recentExpenses;
         state.userInfo.error = null;
         state.hasTokenInfo.hasRefreshToken = true;
       })
       .addCase(logInUser.rejected, (state, action: any) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
-        state.userInfo.recentExpenses = INITIAL_STATE.userInfo.recentExpenses;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
         state.userInfo.error = action.payload;
@@ -94,11 +92,9 @@ const authSlice = createSlice({
         state.userInfo.loading = false;
         state.userInfo.userExists = true;
         state.userInfo.user = action.payload.user;
-        state.userInfo.recentExpenses = action.payload.recentExpenses;
       })
       .addCase(getCurrentUser.rejected, (state, action: any) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
-        state.userInfo.recentExpenses = INITIAL_STATE.userInfo.recentExpenses;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
         state.userInfo.error = action.payload;
@@ -113,7 +109,6 @@ const authSlice = createSlice({
         state.hasTokenInfo.hasRefreshToken = false;
         state.userInfo.userExists = false;
         state.userInfo.user = INITIAL_STATE.userInfo.user;
-        state.userInfo.recentExpenses = INITIAL_STATE.userInfo.recentExpenses;
       })
       .addCase(logOutUser.rejected, (state, action: any) => {
         state.hasTokenInfo.loading = false;
@@ -187,7 +182,6 @@ const authSlice = createSlice({
       })
       .addCase(deleteBudget.fulfilled, (state, action: any) => {
         state.userInfo.user!.budgets = action.payload.user.budgets;
-        state.userInfo.recentExpenses = action.payload.recentExpenses;
         state.userInfo.user!.totalAssets = action.payload.user.totalAssets;
         state.userInfo.smallLoading = false;
       })
@@ -199,7 +193,6 @@ const authSlice = createSlice({
       })
       .addCase(addNewExpense.fulfilled, (state, action: any) => {
         state.userInfo.user!.budgets = action.payload.newUserBudgets;
-        state.userInfo.recentExpenses = action.payload.newUserExpenses;
         state.userInfo.smallLoading = false;
       })
       .addCase(addNewExpense.rejected, (state) => {
@@ -210,7 +203,6 @@ const authSlice = createSlice({
       })
       .addCase(removeExpense.fulfilled, (state, action: any) => {
         state.userInfo.user!.budgets = action.payload.newUserBudgets;
-        state.userInfo.recentExpenses = action.payload.newUserExpenses;
         state.userInfo.smallLoading = false;
       })
       .addCase(removeExpense.rejected, (state) => {

@@ -7,7 +7,7 @@ import {
   ConfirmUserInfo,
   digits,
 } from "../interfaces/authInterfaces";
-import ResetPasswordAPI from "../helpers/ResetPasswordAPI";
+import ResetPasswordAPI from "../apis/ResetPasswordAPI";
 import { joinOTPCode } from "../helpers/joinOTPCode";
 import FullKeyPad from "../FullKeyPad";
 

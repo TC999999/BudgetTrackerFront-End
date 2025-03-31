@@ -1,21 +1,37 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { Transaction } from "../interfaces/transactionInterfaces";
 import { logOutUser } from "../features/actions/auth";
 import EditUserForm from "./EditUserForm";
-import ExpenseList from "../expenses/ExpenseList";
+import TransactionList from "../transactions/transactionList";
+import TransactionAPI from "../apis/TransactionAPI";
+import { setSmallLoading } from "../features/auth/authSlice";
 import { TfiMoney } from "react-icons/tfi";
 import { toast } from "react-toastify";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
-  const { user, recentExpenses } = useAppSelector(
-    (store) => store.user.userInfo
-  );
+  const { user } = useAppSelector((store) => store.user.userInfo);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const notify = () => toast.error("You have reached the maximum asset value");
   const [showAssetForm, setShowAssetForm] = useState(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    const getRecentTransactions = async () => {
+      dispatch(setSmallLoading(true));
+      if (user?._id) {
+        const recentTransactions: Transaction[] =
+          await TransactionAPI.getRecentUserTransactions(user._id);
+        setTransactions(recentTransactions);
+      }
+
+      dispatch(setSmallLoading(false));
+    };
+    getRecentTransactions();
+  }, [user?._id, user?.totalAssets]);
 
   // updates state for showing the update asset form to true, unless the user's current total asset value equals the
   // maximum allowed value
@@ -56,23 +72,30 @@ const Dashboard = (): JSX.Element => {
       <header className="sticky top-0">
         <nav className="buttons flex justify-around p-2 bg-emerald-900 ">
           <button
-            className="logout-button border border-gray-200 bg-gray-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-gray-600 hover:text-white active:bg-gray-100 active:text-gray-900"
+            className="logout-button border border-gray-200 bg-gray-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-gray-600 hover:text-white active:bg-gray-100 active:text-gray-900 transition duration-150"
             onClick={logOutAnNavigate}
           >
             Log Out
           </button>
+
           <button
-            className="to-incomes-button border border-blue-200 bg-blue-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900"
+            className="to-transactions-button border border-amber-200 bg-amber-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-amber-600 hover:text-white active:bg-amber-100 active:text-gray-900 transition duration-150"
+            onClick={() => navigate("/transactions")}
+          >
+            Transactions
+          </button>
+          <button
+            className="to-incomes-button border border-blue-200 bg-blue-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900 transition duration-150"
             onClick={() => navigate("/incomes")}
           >
-            Check out your incomes
+            Incomes
           </button>
           <button
             onClick={() => navigate("/budgets")}
-            className="to-budgets-button border border-green-600 bg-green-700 p-1 sm:p-2 text-sm sm:text-lg rounded-full flex justify-center hover:bg-green-300 active:bg-gray-100 active:text-green-700"
+            className="to-budgets-button border border-green-600 bg-green-700 p-1 sm:p-2 text-sm sm:text-lg rounded-full flex justify-center hover:bg-green-300 active:bg-gray-100 active:text-green-700 transition duration-150"
           >
             <TfiMoney className="my-1" />
-            <span>Check out your budgets </span>
+            <span>Budgets </span>
             <TfiMoney className="my-1" />
           </button>
         </nav>
@@ -91,7 +114,7 @@ const Dashboard = (): JSX.Element => {
               className="border rounded-full bg-green-700 p-1 sm:p-2 text-sm sm:text-base hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"
               onClick={(e) => ShowForm(e)}
             >
-              Update Your Available Assets
+              Document a Miscellaneous Transaction
             </button>
           </div>
         </header>
@@ -99,14 +122,10 @@ const Dashboard = (): JSX.Element => {
         <section className="recent-expenses-list">
           <header>
             <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
-              Your 10 Most Recent Expenses
+              Your 10 Most Recent Transactions
             </h2>
           </header>
-          <ExpenseList
-            expensesList={recentExpenses}
-            isFrontPage={true}
-            budgetID={null}
-          />
+          <TransactionList transactions={transactions} />
         </section>
       </main>
     </div>
