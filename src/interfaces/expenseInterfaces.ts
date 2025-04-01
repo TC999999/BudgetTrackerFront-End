@@ -4,6 +4,13 @@ export interface newExpenseInterface {
   date: string;
 }
 
+export type submitNewExpense = {
+  budgetID: string;
+  title: string;
+  transaction: number;
+  date: string;
+};
+
 type ExpenseBudgetInterface = {
   _id: string;
   title: string;
@@ -24,10 +31,6 @@ export type TransactionExpense = {
   budget: TransactionExpenseBudget;
   transaction: string;
   date: string;
-};
-
-export type ExpenseListInterface = {
-  expenseList: ExpenseInterface[];
 };
 
 export type deleteExpenseInterface = {

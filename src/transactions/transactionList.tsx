@@ -1,4 +1,3 @@
-import { useAppSelector } from "../features/hooks";
 import { TransactionExpenseList } from "../interfaces/transactionInterfaces";
 import TransactionCard from "./transactionCard";
 
@@ -8,17 +7,12 @@ type Props = {
 
 // returns a list of transactions to be used for both the dashboard and the transaction history page
 const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
-  const { smallLoading } = useAppSelector((store) => store.user.userInfo);
-
-  if (!transactions.length && smallLoading) {
-    return <div>LOADING TRANSACTIONS</div>;
-  }
   return (
     <div
       id="transactions-list"
       className="bg-white border-2 border-green-500 m-2 rounded-md"
     >
-      <header className="expense-list-headers grid grid-cols-6 bg-green-200 border-b-2 border-green-500 px-4 py-2">
+      <header className="expense-list-headers grid grid-cols-5 bg-green-200 border-b-2 border-green-500 px-4 py-2">
         <b className="text-sm sm:text-base duration-150 text-center content-center">
           Name
         </b>
@@ -27,9 +21,6 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
         </b>
         <b className="text-sm sm:text-base duration-150 text-center content-center">
           Date
-        </b>
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Budget
         </b>
         <b className="text-sm sm:text-base duration-150 text-center content-center">
           Income
@@ -50,7 +41,9 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
           })}
         </div>
       ) : (
-        <p>THERE ARE NO TRANSACTIONS</p>
+        <div className="no-transactions text-center text-xl p-6">
+          <p className="italic">No Transactions Yet</p>
+        </div>
       )}
     </div>
   );

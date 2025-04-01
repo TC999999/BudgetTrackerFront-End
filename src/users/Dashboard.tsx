@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { Transaction } from "../interfaces/transactionInterfaces";
+import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { logOutUser } from "../features/actions/auth";
 import EditUserForm from "./EditUserForm";
 import TransactionList from "../transactions/transactionList";
@@ -9,6 +10,8 @@ import TransactionAPI from "../apis/TransactionAPI";
 import { setSmallLoading } from "../features/auth/authSlice";
 import { TfiMoney } from "react-icons/tfi";
 import { toast } from "react-toastify";
+import ExpenseAPI from "../apis/ExpenseAPI";
+import ExpenseList from "../expenses/ExpenseList";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
@@ -18,6 +21,7 @@ const Dashboard = (): JSX.Element => {
   const notify = () => toast.error("You have reached the maximum asset value");
   const [showAssetForm, setShowAssetForm] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
 
   useEffect(() => {
     const getRecentTransactions = async () => {
@@ -26,6 +30,9 @@ const Dashboard = (): JSX.Element => {
         const recentTransactions: Transaction[] =
           await TransactionAPI.getRecentUserTransactions(user._id);
         setTransactions(recentTransactions);
+        const recentExpenses: ExpenseInterface[] =
+          await ExpenseAPI.getRecentUserExpenses(user._id);
+        setExpenses(recentExpenses);
       }
 
       dispatch(setSmallLoading(false));
@@ -104,7 +111,7 @@ const Dashboard = (): JSX.Element => {
         <header className="dashboard-usercard border-2 bg-white border-emerald-900 p-4 m-4 shadow-xl text-center">
           <div className="dashboard-information text-green-700">
             <h1 className="text-2xl sm:text-4xl font-bold">{user?.username}</h1>
-            <p className="text-xl">Assets Available:</p>
+            <p className="text-xl">Total Savings Available:</p>
             <p className="text-3xl sm:text-5xl font-bold">
               ${user?.totalAssets}
             </p>
@@ -119,13 +126,27 @@ const Dashboard = (): JSX.Element => {
           </div>
         </header>
         {showAssetForm && <EditUserForm hideForm={HideForm} />}
-        <section className="recent-expenses-list">
+        <section className="recent-transactions-list">
           <header>
-            <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
-              Your 10 Most Recent Transactions
+            <h2 className="recent-transactions-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
+              Your 5 Most Recent Miscellaneous Transactions
             </h2>
           </header>
           <TransactionList transactions={transactions} />
+        </section>
+
+        <section className="recent-expenses-list">
+          <header>
+            <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
+              Your 5 Most Recent Budget Expenses
+            </h2>
+          </header>
+          {/* <TransactionList transactions={transactions} /> */}
+          <ExpenseList
+            expensesList={expenses}
+            isFrontPage={true}
+            budgetID={null}
+          />
         </section>
       </main>
     </div>

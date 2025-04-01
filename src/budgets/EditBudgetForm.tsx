@@ -3,6 +3,7 @@ import {
   BudgetInterface,
   BudgetEditInterface,
   UpdateBudgetFormErrors,
+  SubmitBudgetUpdateInterface,
 } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
@@ -187,7 +188,8 @@ const EditBudgetForm: React.FC<Props> = ({
     e.preventDefault();
     try {
       if (handleUpdateBudgetSubmitErrors(formData, setFormErrors)) {
-        let submitData = {
+        let submitData: SubmitBudgetUpdateInterface = {
+          userID: userStatus.user!._id,
           budgetID: budget._id,
           title: formData.title,
           addedMoney:

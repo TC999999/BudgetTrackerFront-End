@@ -10,6 +10,8 @@ import {
 import {
   newExpenseInterface,
   ExpenseFormErrors,
+  submitNewExpense,
+  ExpenseInterface,
 } from "../interfaces/expenseInterfaces";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { addNewExpense } from "../features/actions/expenses";
@@ -24,11 +26,13 @@ type Props = {
     form: "showExpenseForm"
   ) => void;
   budget: BudgetInterface;
+  addExpense: (newExpense: ExpenseInterface) => void;
 };
 
 const ExpenseForm: React.FC<Props> = ({
   hideExpenseForm,
   budget,
+  addExpense,
 }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (title: string, transaction: number) =>
@@ -136,12 +140,15 @@ const ExpenseForm: React.FC<Props> = ({
     e.preventDefault();
     try {
       if (handleExpenseSubmitErrors(formData, setFormErrors)) {
-        let submitData = {
+        let submitData: submitNewExpense = {
           ...formData,
           budgetID: budget?._id,
           transaction: formData.transaction / 100,
         };
-        await dispatch(addNewExpense(submitData)).unwrap();
+        const { newBudgetExpense } = await dispatch(
+          addNewExpense(submitData)
+        ).unwrap();
+        addExpense(newBudgetExpense);
         hideExpenseForm(e, "showExpenseForm");
         notify(submitData.title, submitData.transaction);
       } else {

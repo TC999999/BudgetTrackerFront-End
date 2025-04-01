@@ -23,7 +23,7 @@ const TransactionCard: React.FC<Props> = ({ transaction }): JSX.Element => {
   );
 
   return (
-    <div className="transaction-card grid grid-cols-6 px-4 py-4">
+    <div className="transaction-card grid grid-cols-5 px-4 py-4">
       <div className="transaction-title p-1 text-sm sm:text-base duration-150 text-center content-center">
         {transaction.title}
       </div>
@@ -38,10 +38,6 @@ const TransactionCard: React.FC<Props> = ({ transaction }): JSX.Element => {
       <div className="transaction-date p-1 text-sm sm:text-base duration-150 text-center content-center">
         <p>{dateTime.current.date}</p>
         <p>{dateTime.current.time}</p>
-      </div>
-
-      <div className="transaction-budget p-1 text-sm sm:text-base duration-150 text-center content-center">
-        {"budget" in transaction ? <p>{transaction.budget.title}</p> : <p>-</p>}
       </div>
 
       <div className="transaction-incomme p-1 text-sm sm:text-base duration-150 text-center content-center">

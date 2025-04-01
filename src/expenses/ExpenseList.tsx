@@ -10,7 +10,9 @@ import { removeExpense } from "../features/actions/expenses";
 // isFrontPage prop tells frontend if user is on dashboard or single budget page; passes down to expense card.
 type Props = {
   expensesList: ExpenseInterface[];
+  isFrontPage: boolean;
   budgetID: string | null;
+  filterExpense?: (delExpense: ExpenseInterface) => void;
 };
 
 type infoInterface = {
@@ -22,11 +24,19 @@ type infoInterface = {
 // expenses on the dashboard
 const ExpenseList: React.FC<Props> = ({
   expensesList,
+  isFrontPage,
   budgetID,
+  filterExpense,
 }): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  // deletes expense from user redux state and db
+  const callFilterExpense = (delExpense: ExpenseInterface) => {
+    if (filterExpense) {
+      filterExpense(delExpense);
+    }
+  };
+
+  // deletes expense from db and filters from budget page
   const deleteExpense = useCallback(
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -39,7 +49,8 @@ const ExpenseList: React.FC<Props> = ({
           transaction: info.transaction,
           budgetID,
         };
-        await dispatch(removeExpense(submitData)).unwrap();
+        let { delExpense } = await dispatch(removeExpense(submitData)).unwrap();
+        callFilterExpense(delExpense);
       } catch (err) {
         console.log(err);
       }
@@ -53,17 +64,26 @@ const ExpenseList: React.FC<Props> = ({
         <b className="text-sm sm:text-base duration-150 text-center content-center">
           Name
         </b>
+
         <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Transaction
+          Cost
         </b>
+
+        {isFrontPage && (
+          <b className="text-sm sm:text-base duration-150 text-center content-center">
+            Budget
+          </b>
+        )}
 
         <b className="text-sm sm:text-base duration-150 text-center content-center">
           Date
         </b>
 
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Delete
-        </b>
+        {!isFrontPage && (
+          <b className="text-sm sm:text-base duration-150 text-center content-center">
+            Delete
+          </b>
+        )}
       </header>
       <div className="expense-card-list striped">
         {expensesList.map((e) => {
@@ -71,6 +91,7 @@ const ExpenseList: React.FC<Props> = ({
             <ExpenseCard
               key={e._id}
               expense={e}
+              isFrontPage={isFrontPage}
               deleteExpense={deleteExpense}
             />
           );

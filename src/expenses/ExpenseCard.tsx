@@ -13,6 +13,7 @@ type infoInterface = {
 // delete button instead
 type Props = {
   expense: ExpenseInterface;
+  isFrontPage: boolean;
   deleteExpense: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     info: infoInterface
@@ -22,6 +23,7 @@ type Props = {
 // returns expense card to be used for expense list
 const ExpenseCard: React.FC<Props> = ({
   expense,
+  isFrontPage,
   deleteExpense,
 }): JSX.Element => {
   // makes readable date/time string to be displayed on card
@@ -51,19 +53,27 @@ const ExpenseCard: React.FC<Props> = ({
         -${expense.transaction}
       </div>
 
+      {isFrontPage && (
+        <div className="expense-budget-title p-1 text-sm sm:text-base duration-150 text-center content-center">
+          {expense.budget?.title}
+        </div>
+      )}
+
       <div className="expense-date p-1 text-sm sm:text-base duration-150 text-center content-center">
         <p>{dateTime.current.date}</p>
         <p>{dateTime.current.time}</p>
       </div>
 
-      <div className="delete-expense-div text-center content-center">
-        <button
-          onClick={(e) => deleteTransaction(e)}
-          className="delete-expense-button border-2 border-red-500 p-2 sm:px-5 rounded-md bg-red-200 hover:bg-red-600 hover:text-white active:bg-red-100 active:text-black text-sm sm:text-base duration-150"
-        >
-          <FaTrashAlt />
-        </button>
-      </div>
+      {!isFrontPage && (
+        <div className="delete-expense-div text-center content-center">
+          <button
+            onClick={(e) => deleteTransaction(e)}
+            className="delete-expense-button border-2 border-red-500 p-2 sm:px-5 rounded-md bg-red-200 hover:bg-red-600 hover:text-white active:bg-red-100 active:text-black text-sm sm:text-base duration-150"
+          >
+            <FaTrashAlt />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

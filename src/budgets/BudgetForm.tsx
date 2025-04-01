@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import {
   newBudgetInterface,
+  submitBudget,
   BudgetFormErrors,
 } from "../interfaces/budgetInterfaces";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
@@ -118,7 +119,8 @@ const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     e.preventDefault();
     try {
       if (handleBudgetSubmitErrors(formData, setFormErrors)) {
-        let submitData: newBudgetInterface = {
+        let submitData: submitBudget = {
+          userID: userStatus.user!._id,
           ...formData,
           moneyAllocated: formData.moneyAllocated / 100,
         };

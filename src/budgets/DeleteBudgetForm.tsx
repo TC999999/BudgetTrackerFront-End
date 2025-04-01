@@ -8,7 +8,6 @@ import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { deleteBudget } from "../features/actions/budgets";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
-import { makeExpenseIDList } from "../helpers/makeExpenseIDList";
 import { calculateNewTotalAssetsWithoutOperation } from "../helpers/calculateNewTotalAssets";
 import { toast } from "react-toastify";
 
@@ -47,7 +46,6 @@ const DeleteBudgetForm: React.FC<Props> = ({
   // based on which radio button the user selects
   let deleteBudgetData: DeleteBudgetInterface = {
     budgetID: budget._id,
-    expenses: makeExpenseIDList(budget.expenses),
     addBackToAssets: 0,
   };
 
@@ -93,9 +91,8 @@ const DeleteBudgetForm: React.FC<Props> = ({
               Before You Delete
             </h3>
             <h2 className="text-base sm:text-lg">
-              Please be aware that deleting the {budget.title} budget will also
-              delete every transaction ({budget.expenses.length} transaction(s))
-              made using its funds
+              Please be aware that deleting the {budget.title} budget will not
+              delete the record of the expenses made using its funds.
             </h2>
           </header>
           <form onSubmit={handleSubmit}>

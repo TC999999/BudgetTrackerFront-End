@@ -2,20 +2,20 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { API_URL } from "../config";
 import axios from "axios";
 import {
-  newBudgetInterface,
+  submitBudget,
   DeleteBudgetInterface,
   SubmitBudgetUpdateInterface,
 } from "../../interfaces/budgetInterfaces";
 
 // sends new budget data to db for budgets and user collections and retrieves new list of budgets
 // for a single user that contains the new income
-export const addNewBudget = createAsyncThunk<any, newBudgetInterface>(
-  "budgets/add/new",
-  async (data: newBudgetInterface, thunkAPI) => {
+export const addNewBudget = createAsyncThunk<any, submitBudget>(
+  "budgets/add",
+  async (data: submitBudget, thunkAPI) => {
     try {
       let res = await axios({
         method: "post",
-        url: `${API_URL}/budgets/add/new`,
+        url: `${API_URL}/budgets/add/user/${data.userID}`,
         data,
         withCredentials: true,
       });
@@ -34,7 +34,7 @@ export const updateBudget = createAsyncThunk<any, SubmitBudgetUpdateInterface>(
     try {
       let res = await axios({
         method: "patch",
-        url: `${API_URL}/budgets/update/${data.budgetID}`,
+        url: `${API_URL}/budgets/update/${data.budgetID}/user/${data.userID}`,
         data,
         withCredentials: true,
       });
@@ -50,7 +50,7 @@ export const updateBudget = createAsyncThunk<any, SubmitBudgetUpdateInterface>(
 // deleted income
 export const deleteBudget = createAsyncThunk<any, DeleteBudgetInterface>(
   "budgets/delete",
-  async (data: any = {}, thunkAPI) => {
+  async (data: DeleteBudgetInterface, thunkAPI) => {
     try {
       let res = await axios({
         method: "delete",

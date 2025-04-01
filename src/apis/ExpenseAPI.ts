@@ -6,13 +6,13 @@ type Method = "get";
 
 // sends data to backend for operations invloving rretrieving user transactions; since we are not performing
 // any major updates to the redux state, we are doing this instead of a thunk action
-export default class TransactionAPI {
+export default class ExpenseAPI {
   static async request(
     endpoint: string,
     method: Method,
     data = {}
   ): Promise<any> {
-    const url = `${API_URL}/transactions/${endpoint}`;
+    const url = `${API_URL}/expenses/${endpoint}`;
     try {
       let res: AxiosResponse = await axios({
         method: method,
@@ -26,15 +26,15 @@ export default class TransactionAPI {
     }
   }
 
-  // gets all transactions that a user has
-  static async getUserTransactions(id: string): Promise<any> {
-    let res = await this.request(`user/${id}`, "get");
-    return res.transactions;
+  // gets all expenses in a budget
+  static async getAllBudgetExpenses(id: string): Promise<any> {
+    let res = await this.request(`budget/${id}`, "get");
+    return res.expenses;
   }
 
-  // gets the ten most recent transactions a user has
-  static async getRecentUserTransactions(id: string): Promise<any> {
+  // gets all expenses in a budget
+  static async getRecentUserExpenses(id: string): Promise<any> {
     let res = await this.request(`user/${id}/recent`, "get");
-    return res.transactions;
+    return res.expenses;
   }
 }

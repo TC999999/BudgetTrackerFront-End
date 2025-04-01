@@ -1,6 +1,12 @@
-import { ExpenseInterface } from "./expenseInterfaces";
+// import { ExpenseInterface } from "./expenseInterfaces";
 
 export type newBudgetInterface = {
+  title: string;
+  moneyAllocated: number;
+};
+
+export type submitBudget = {
+  userID: string;
   title: string;
   moneyAllocated: number;
 };
@@ -12,30 +18,26 @@ export type BudgetEditInterface = {
 };
 
 export type SubmitBudgetUpdateInterface = {
+  userID: string;
   title: string;
   addedMoney: number;
   budgetID: string;
 };
 
-interface BaseBudgetInterface {
+export interface BudgetInterface {
   _id: string;
   title: string;
   moneyAllocated: string;
   moneySpent: number;
 }
 
-export interface BudgetListInterface extends BaseBudgetInterface {
+export interface BudgetListInterface extends BudgetInterface {
   moneyRemaining: string;
-}
-
-export interface BudgetInterface extends BaseBudgetInterface {
-  expenses: ExpenseInterface[];
 }
 
 export type DeleteBudgetInterface = {
   addBackToAssets: number;
   budgetID: string;
-  expenses: string[];
 };
 
 export type BudgetFormErrors = {
