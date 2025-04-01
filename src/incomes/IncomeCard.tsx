@@ -1,5 +1,9 @@
 import { Income } from "../interfaces/incomeInterfaces";
-import { makeDateString, dateInfo } from "../helpers/makeDateString";
+import {
+  makeDateString,
+  dateInfo,
+  makeDateStringIncomeCard,
+} from "../helpers/makeDateString";
 import { useMemo } from "react";
 
 type Props = {
@@ -21,8 +25,8 @@ const IncomeCard: React.FC<Props> = ({
   selectIncome,
 }): JSX.Element => {
   // makes readable date string for last time income was received
-  const lastDate = useMemo<dateInfo>(
-    () => makeDateString(income.lastReceived),
+  const lastDate = useMemo<string>(
+    () => makeDateStringIncomeCard(income.lastReceived),
     [income.lastReceived]
   );
 
@@ -49,9 +53,7 @@ const IncomeCard: React.FC<Props> = ({
       <div className="next-and-last-received-dates text-lg sm:text-2xl">
         <div className="last-received-date">
           <p className="font-bold">Last Received On: </p>
-          <p>
-            {lastDate.date} at {lastDate.time}
-          </p>
+          <p>{lastDate}</p>
         </div>
         <div className="next-received-date">
           <p className="font-bold">Next Received On: </p>
