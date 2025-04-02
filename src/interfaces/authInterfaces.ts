@@ -9,6 +9,7 @@ export type AuthInitialStateInterface = {
 export type hasTokenInterface = {
   hasRefreshToken: boolean;
   loading: boolean;
+  tokenError: string;
 };
 
 export type LogInInterface = {

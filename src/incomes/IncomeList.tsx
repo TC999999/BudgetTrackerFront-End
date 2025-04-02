@@ -39,7 +39,7 @@ const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
         let submitData: deleteIncomeType = { id };
         await dispatch(removeIncome(submitData)).unwrap();
       } catch (err) {
-        console.log("err");
+        console.log(err);
       }
     },
     []

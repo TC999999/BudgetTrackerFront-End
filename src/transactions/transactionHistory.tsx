@@ -7,7 +7,8 @@ import {
   TransactionExpenseList,
 } from "../interfaces/transactionInterfaces";
 import TransactionList from "./transactionList";
-import { setSmallLoading } from "../features/auth/authSlice";
+import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
+import Logo from "../Logo";
 
 // returns a list of all transactions and expenses the user has made
 const TransactionHistory = (): JSX.Element => {
@@ -24,9 +25,9 @@ const TransactionHistory = (): JSX.Element => {
         let transactions: Transaction[] =
           await TransactionAPI.getUserTransactions(user!._id);
         setTransactions(transactions);
-        dispatch(setSmallLoading(false));
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        dispatch(setTokenError(err.message));
+      } finally {
         dispatch(setSmallLoading(false));
       }
     }
@@ -35,8 +36,9 @@ const TransactionHistory = (): JSX.Element => {
 
   return (
     <div className="transaction-history-page">
-      <header className="sticky top-0">
-        <nav className="buttons p-2 bg-emerald-900 ">
+      <header className="sticky top-0 p-2 bg-emerald-900">
+        <Logo />
+        <nav className="buttons">
           <button
             className="home-button border border-blue-200 bg-blue-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900 transition duration-150"
             onClick={() => navigate("/")}

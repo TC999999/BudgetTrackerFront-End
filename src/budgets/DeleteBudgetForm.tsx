@@ -91,14 +91,14 @@ const DeleteBudgetForm: React.FC<Props> = ({
               Before You Delete
             </h3>
             <h2 className="text-base sm:text-lg">
-              Please be aware that deleting the {budget.title} budget will not
-              delete the record of the expenses made using its funds.
+              Please be aware that deleting the {budget.title} budget will also
+              delete all records of the expenses made using its funds.
             </h2>
           </header>
           <form onSubmit={handleSubmit}>
             <fieldset className="delete-choices">
               <legend className="text-lg sm:text-xl font-bold duration-150">
-                Are you returning any funds to your available assets?
+                Are you returning any funds to your total savings?
               </legend>
               <div className="delete-budget-radio-buttons text-lg border border-green-600 shadow-md">
                 <div
@@ -175,21 +175,47 @@ const DeleteBudgetForm: React.FC<Props> = ({
               </div>
             </fieldset>
             <div className="new-assets">
-              <p className="text-lg p-1">Your New Available Assets Will Be:</p>
+              <p className="text-lg p-1">Your New Total Savings Will Be:</p>
               <p className="text-3xl sm:text-4xl font-bold text-green-700 p-1 duration-150">
                 ${newAssets}
               </p>
             </div>
-            <div className="buttons flex justify-between m-2">
-              <button className="delete-button duration-150 bg-red-300 border-2 border-red-900 rounded-full px-2 py-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900">
-                Delete Budget
-              </button>
-              <button
-                className="cancel-button duration-150"
-                onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
-              >
-                Cancel
-              </button>
+
+            <div>
+              <ul className="list-disc list-inside">
+                <small>
+                  <span className="text-red-600">WARNING:</span> Once you click
+                  "Delete Budget", you not be able to:
+                </small>
+                <li>
+                  <small>
+                    Retrieve any of the data created for this budget (including
+                    expenses made).
+                  </small>
+                </li>
+                <li>
+                  <small>
+                    Create any new data for this budget (including expenses).
+                  </small>
+                </li>
+                <li>
+                  <small>
+                    Retrieve any funds you chose not to recover on deletion.
+                  </small>
+                </li>
+              </ul>
+
+              <div className="buttons flex justify-between m-2">
+                <button className="delete-button duration-150 bg-red-300 border-2 border-red-900 rounded-full px-2 py-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900">
+                  Delete Budget
+                </button>
+                <button
+                  className="cancel-button duration-150"
+                  onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </form>
         </div>

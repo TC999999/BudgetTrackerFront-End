@@ -4,6 +4,7 @@ import { useAppSelector } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import IncomeList from "./IncomeList";
 import NewIncomeForm from "./NewIncomeForm";
+import Logo from "../Logo";
 import { toast } from "react-toastify";
 
 // Shows the list of incomes the current user has
@@ -18,12 +19,12 @@ const IncomePage = (): JSX.Element => {
   // state that shows the form to add a new income
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
 
-  // Shows income form unless the user already has 5 incomes
+  // Shows income form unless the user already has 3 incomes
   const showIncomeFormState = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     e.preventDefault();
-    if (userStatus.user!.incomes.length < 5) {
+    if (userStatus.user!.incomes.length < 3) {
       setShowIncomeForm(true);
     } else {
       notify();
@@ -42,9 +43,10 @@ const IncomePage = (): JSX.Element => {
   );
 
   return (
-    <div className="income-page">
-      <header className="buttons sticky top-0 bg-emerald-900 ">
-        <nav className="flex justify-around p-2 w-full">
+    <div id="income-page">
+      <header className="sticky top-0 p-2 bg-emerald-900">
+        <Logo />
+        <nav className="buttons flex justify-around w-full">
           <button
             className="border-2 border-gray-500 p-1 sm:p-2 text-sm sm:text-base rounded-full text-white bg-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-100 duration-150"
             onClick={() => navigate("/")}
@@ -53,7 +55,7 @@ const IncomePage = (): JSX.Element => {
           </button>
           <button
             className={`border-2 border-green-500 p-1 sm:p-2 text-sm sm:text-base rounded-full bg-green-400 ${
-              userStatus.user!.incomes.length < 5
+              userStatus.user!.incomes.length < 3
                 ? "hover:bg-green-700 hover:text-white active:bg-green-500 duration-150"
                 : "cursor-not-allowed"
             }`}
@@ -69,7 +71,7 @@ const IncomePage = (): JSX.Element => {
         )}
         <header>
           <h1 className="text-center text-xl sm:text-3xl text-green-700 underline font-bold">
-            Your Current Incomes ({userStatus.user!.incomes.length}/5)
+            Your Current Incomes ({userStatus.user!.incomes.length}/3)
           </h1>
         </header>
         <IncomeList incomeList={userStatus.user!.incomes} />

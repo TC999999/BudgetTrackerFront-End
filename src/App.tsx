@@ -12,6 +12,7 @@ import { getCurrentUser } from "./features/actions/users";
 import { useAppSelector } from "./features/hooks";
 import LoadingMsg from "./LoadingUserMsg";
 import SmallLoadingMsg from "./SmallLoadingMsg";
+import TokenErrorMsg from "./TokenErrorMsg";
 import { hasTokenInterface } from "./interfaces/authInterfaces";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { ToastContainer, toast } from "react-toastify";
@@ -98,6 +99,7 @@ function App(): JSX.Element {
     <div className="App">
       <LoadingMsg />
       <SmallLoadingMsg />
+      <TokenErrorMsg />
       <ToastContainer position="bottom-right" />
       {!userStatus.loading && <RoutesList />}
     </div>

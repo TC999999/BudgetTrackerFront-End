@@ -7,11 +7,12 @@ import { logOutUser } from "../features/actions/auth";
 import EditUserForm from "./EditUserForm";
 import TransactionList from "../transactions/transactionList";
 import TransactionAPI from "../apis/TransactionAPI";
-import { setSmallLoading } from "../features/auth/authSlice";
+import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 import { TfiMoney } from "react-icons/tfi";
 import { toast } from "react-toastify";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import ExpenseList from "../expenses/ExpenseList";
+import Logo from "../Logo";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
@@ -26,16 +27,20 @@ const Dashboard = (): JSX.Element => {
   useEffect(() => {
     const getRecentTransactions = async () => {
       dispatch(setSmallLoading(true));
-      if (user?._id) {
-        const recentTransactions: Transaction[] =
-          await TransactionAPI.getRecentUserTransactions(user._id);
-        setTransactions(recentTransactions);
-        const recentExpenses: ExpenseInterface[] =
-          await ExpenseAPI.getRecentUserExpenses(user._id);
-        setExpenses(recentExpenses);
+      try {
+        if (user?._id) {
+          const recentTransactions: Transaction[] =
+            await TransactionAPI.getRecentUserTransactions(user._id);
+          setTransactions(recentTransactions);
+          const recentExpenses: ExpenseInterface[] =
+            await ExpenseAPI.getRecentUserExpenses(user._id);
+          setExpenses(recentExpenses);
+        }
+      } catch (err: any) {
+        dispatch(setTokenError(err.message));
+      } finally {
+        dispatch(setSmallLoading(false));
       }
-
-      dispatch(setSmallLoading(false));
     };
     getRecentTransactions();
   }, [user?._id, user?.totalAssets]);
@@ -76,8 +81,9 @@ const Dashboard = (): JSX.Element => {
 
   return (
     <div className="dashboard-homepage">
-      <header className="sticky top-0">
-        <nav className="buttons flex justify-around p-2 bg-emerald-900 ">
+      <header className="sticky top-0 p-2 bg-emerald-900">
+        <Logo />
+        <nav className="buttons flex justify-around ">
           <button
             className="logout-button border border-gray-200 bg-gray-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-gray-600 hover:text-white active:bg-gray-100 active:text-gray-900 transition duration-150"
             onClick={logOutAnNavigate}
@@ -91,6 +97,7 @@ const Dashboard = (): JSX.Element => {
           >
             Transactions
           </button>
+
           <button
             className="to-incomes-button border border-blue-200 bg-blue-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900 transition duration-150"
             onClick={() => navigate("/incomes")}

@@ -37,7 +37,7 @@ const IncomeCard: React.FC<Props> = ({
   );
 
   return (
-    <div className="p-2 m-4 text-center border-4 border-green-700 bg-white rounded-lg">
+    <div className="p-2 m-4 w-96 text-center border-4 border-green-700 bg-white rounded-lg">
       <header>
         <h1 className="text-2xl sm:text-4xl text-green-600 underline">
           {income.title}

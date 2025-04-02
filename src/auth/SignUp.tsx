@@ -83,12 +83,12 @@ const SignUp = (): JSX.Element => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  // make for state visible unless income list already has 5 incomes
+  // make for state visible unless income list already has 3 incomes
   const showIncomeFormState = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     e.preventDefault();
-    if (formData.incomes.length < 5) {
+    if (formData.incomes.length < 3) {
       setShowIncomeForm(true);
     } else {
       notify();
@@ -376,7 +376,7 @@ const SignUp = (): JSX.Element => {
               <div className="add-income-button">
                 <button
                   className={`bg-green-600 p-2 m-2 border-2 border-green-600 rounded-full text-white ${
-                    formData.incomes.length < 5
+                    formData.incomes.length < 3
                       ? "hover:bg-green-300 hover:text-black active:bg-green-600"
                       : "cursor-not-allowed"
                   } `}

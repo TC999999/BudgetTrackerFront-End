@@ -329,13 +329,35 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
               </div>
             </div>
 
-            <div className="button-div flex justify-between">
-              <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                Add this Transaction
-              </button>
-              <button className="cancel-button" onClick={(e) => hideForm(e)}>
-                Cancel
-              </button>
+            <div>
+              <p>
+                <small>
+                  <span className="text-red-600">WARNING:</span> Once you submit
+                  this transaction data, you will not be able to change or
+                  delete any of it after the fact.
+                </small>
+              </p>
+              <p>
+                <small>
+                  So make sure all of the above information is correct before
+                  clicking "Add this Transaction"
+                </small>
+              </p>
+              <div className="button-div flex justify-between">
+                <div>
+                  <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                    Add this Transaction
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className="cancel-button"
+                    onClick={(e) => hideForm(e)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
           </form>
         </div>

@@ -9,10 +9,11 @@ import BudgetErrorPage from "./BudgetErrorPage";
 import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
 import EditBudgetForm from "./EditBudgetForm";
+import Logo from "../Logo";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import ExpenseAPI from "../apis/ExpenseAPI";
-import { setSmallLoading } from "../features/auth/authSlice";
+import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 
 type FormStateInterface = {
@@ -35,12 +36,17 @@ const SingleBudgetPage = (): JSX.Element => {
 
   useEffect(() => {
     const getExpenses = async () => {
-      dispatch(setSmallLoading(true));
-      if (id) {
-        let expenses = await ExpenseAPI.getAllBudgetExpenses(id);
-        setExpenses(expenses);
+      try {
+        dispatch(setSmallLoading(true));
+        if (id) {
+          let expenses = await ExpenseAPI.getAllBudgetExpenses(id);
+          setExpenses(expenses);
+        }
+      } catch (err: any) {
+        dispatch(setTokenError(err.message));
+      } finally {
+        dispatch(setSmallLoading(false));
       }
-      dispatch(setSmallLoading(false));
     };
     getExpenses();
   }, [id]);
@@ -106,8 +112,6 @@ const SingleBudgetPage = (): JSX.Element => {
   // from the db
   const filterExpense = useCallback(
     (delExpense: ExpenseInterface): void => {
-      // console.log(expenses);
-      // console.log(delExpense);
       let newExpenses = expenses.filter((expense) => {
         return expense._id !== delExpense._id;
       });
@@ -117,9 +121,10 @@ const SingleBudgetPage = (): JSX.Element => {
   );
 
   return budget ? (
-    <div className="budget-page">
-      <header>
-        <nav className="buttons sticky top-0 bg-emerald-900 flex justify-around p-2 w-full">
+    <div id="budget-page">
+      <header className="sticky top-0 p-2 bg-emerald-900 ">
+        <Logo />
+        <nav className="buttons flex justify-around w-full">
           <button
             className="back-button budget-nav-button border-gray-300 bg-gray-400 hover:bg-gray-100 active:bg-gray-300"
             onClick={() => navigate("/budgets")}

@@ -15,5 +15,6 @@ export const INITIAL_STATE: AuthInitialStateInterface = {
   hasTokenInfo: {
     hasRefreshToken: false,
     loading: true,
+    tokenError: "",
   },
 };

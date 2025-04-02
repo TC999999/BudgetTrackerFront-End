@@ -29,9 +29,13 @@ const authSlice = createSlice({
     setSmallLoading: (state, action: ActionInterface) => {
       state.userInfo.smallLoading = action.payload;
     },
-    // removes state for errors involving errors loading user information
+    // removes state for errors involving loading user information
     removeUserError: (state) => {
       state.userInfo.error = null;
+    },
+    //sets state for errors involving tokens
+    setTokenError: (state, action: ActionInterface) => {
+      state.hasTokenInfo.tokenError = action.payload;
     },
     // changes income state when a SSE is heard
     incomeUpdate: (state, action: ActionInterface) => {
@@ -119,7 +123,8 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(addToAssets.fulfilled, (state, action: any) => {
-        state.userInfo.user!.totalAssets = action.payload.totalAssets;
+        let { totalAssets } = action.payload;
+        state.userInfo.user!.totalAssets = totalAssets;
         state.userInfo.smallLoading = false;
       })
       .addCase(addToAssets.rejected, (state) => {
@@ -129,7 +134,11 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(addNewIncome.fulfilled, (state, action: any) => {
-        state.userInfo.user!.incomes = action.payload.newUserIncomes;
+        let { newUserIncome } = action.payload;
+        state.userInfo.user!.incomes = [
+          ...state.userInfo.user!.incomes,
+          newUserIncome,
+        ];
         state.userInfo.smallLoading = false;
       })
       .addCase(addNewIncome.rejected, (state) => {
@@ -139,7 +148,10 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(updateIncome.fulfilled, (state, action: any) => {
-        state.userInfo.user!.incomes = action.payload.newUserIncomes;
+        let { newUserIncome } = action.payload;
+        state.userInfo.user!.incomes = state.userInfo.user!.incomes.map((i) =>
+          newUserIncome._id === i._id ? newUserIncome : i
+        );
         state.userInfo.smallLoading = false;
       })
       .addCase(updateIncome.rejected, (state) => {
@@ -149,7 +161,12 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(removeIncome.fulfilled, (state, action: any) => {
-        state.userInfo.user!.incomes = action.payload.newUserIncomes;
+        let { delIncome } = action.payload;
+        state.userInfo.user!.incomes = state.userInfo.user!.incomes.filter(
+          (i) => {
+            return i._id !== delIncome._id;
+          }
+        );
         state.userInfo.smallLoading = false;
       })
       .addCase(removeIncome.rejected, (state) => {
@@ -159,11 +176,12 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(addNewBudget.fulfilled, (state, action: any) => {
+        let { newUserBudget, newAssets } = action.payload;
         state.userInfo.user!.budgets = [
           ...state.userInfo.user!.budgets,
-          action.payload.newUserBudget,
+          newUserBudget,
         ];
-        state.userInfo.user!.totalAssets = action.payload.newAssets;
+        state.userInfo.user!.totalAssets = newAssets;
         state.userInfo.smallLoading = false;
       })
       .addCase(addNewBudget.rejected, (state) => {
@@ -232,6 +250,7 @@ export const {
   setUserLoading,
   setSmallLoading,
   removeUserError,
+  setTokenError,
   incomeUpdate,
 } = authSlice.actions;
 
