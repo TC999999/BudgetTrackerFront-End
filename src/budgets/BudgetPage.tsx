@@ -1,8 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
-import Logo from "../Logo";
 import { useAppSelector } from "../features/hooks";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { makeBudgetList } from "../helpers/makeBudgetList";
@@ -11,7 +9,6 @@ import { toast } from "react-toastify";
 
 // returns page for list of all budgets the user currently has
 const BudgetPage = (): JSX.Element => {
-  const navigate = useNavigate();
   const notify = () =>
     toast.error("You have reached the maximum number of allowed budgets");
   const userStatus: UserContextInterface = useAppSelector(
@@ -50,17 +47,11 @@ const BudgetPage = (): JSX.Element => {
 
   return (
     <div className="budget-page">
-      <header className="sticky top-0 p-2 bg-emerald-900">
-        <Logo />
+      <header className="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
           <button
-            className="back-button border-2 border-gray-500 p-1 sm:p-2 rounded-full text-white bg-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-100"
-            onClick={() => navigate("/")}
-          >
-            Back Home
-          </button>
-          <button
-            className={`show-budget-form-button border-2 border-green-500 p-1 sm:p-2 rounded-full bg-green-300 ${
+            id="show-budget-form-button"
+            className={`nav-button border-green-500 bg-green-300 ${
               budgetList.length < 10
                 ? "hover:bg-green-500 hover:text-white active:bg-green-200"
                 : "cursor-not-allowed"

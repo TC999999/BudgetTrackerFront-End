@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import TransactionAPI from "../apis/TransactionAPI";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import {
@@ -8,11 +8,9 @@ import {
 } from "../interfaces/transactionInterfaces";
 import TransactionList from "./transactionList";
 import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
-import Logo from "../Logo";
 
 // returns a list of all transactions and expenses the user has made
 const TransactionHistory = (): JSX.Element => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((store) => store.user.userInfo);
   const [transactions, setTransactions] = useState<TransactionExpenseList>([]);
@@ -36,17 +34,6 @@ const TransactionHistory = (): JSX.Element => {
 
   return (
     <div className="transaction-history-page">
-      <header className="sticky top-0 p-2 bg-emerald-900">
-        <Logo />
-        <nav className="buttons">
-          <button
-            className="home-button border border-blue-200 bg-blue-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900 transition duration-150"
-            onClick={() => navigate("/")}
-          >
-            Go Back
-          </button>
-        </nav>
-      </header>
       <section>
         <header>
           <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">

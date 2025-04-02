@@ -1,24 +1,19 @@
 import { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
-import { logOutUser } from "../features/actions/auth";
 import EditUserForm from "./EditUserForm";
 import TransactionList from "../transactions/transactionList";
 import TransactionAPI from "../apis/TransactionAPI";
 import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
-import { TfiMoney } from "react-icons/tfi";
 import { toast } from "react-toastify";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import ExpenseList from "../expenses/ExpenseList";
-import Logo from "../Logo";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
   const { user } = useAppSelector((store) => store.user.userInfo);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const notify = () => toast.error("You have reached the maximum asset value");
   const [showAssetForm, setShowAssetForm] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -69,51 +64,8 @@ const Dashboard = (): JSX.Element => {
     [showAssetForm]
   );
 
-  // removes the user token from cookies and navigates back to log in page
-  const logOutAnNavigate = async (): Promise<void> => {
-    try {
-      await dispatch(logOutUser({})).unwrap();
-      navigate("/");
-    } catch (err) {
-      console.log("HERE IS ERROR", err);
-    }
-  };
-
   return (
     <div className="dashboard-homepage">
-      <header className="sticky top-0 p-2 bg-emerald-900">
-        <Logo />
-        <nav className="buttons flex justify-around ">
-          <button
-            className="logout-button border border-gray-200 bg-gray-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-gray-600 hover:text-white active:bg-gray-100 active:text-gray-900 transition duration-150"
-            onClick={logOutAnNavigate}
-          >
-            Log Out
-          </button>
-
-          <button
-            className="to-transactions-button border border-amber-200 bg-amber-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-amber-600 hover:text-white active:bg-amber-100 active:text-gray-900 transition duration-150"
-            onClick={() => navigate("/transactions")}
-          >
-            Transactions
-          </button>
-
-          <button
-            className="to-incomes-button border border-blue-200 bg-blue-300 p-1 sm:p-2 text-sm sm:text-lg rounded-full hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900 transition duration-150"
-            onClick={() => navigate("/incomes")}
-          >
-            Incomes
-          </button>
-          <button
-            onClick={() => navigate("/budgets")}
-            className="to-budgets-button border border-green-600 bg-green-700 p-1 sm:p-2 text-sm sm:text-lg rounded-full flex justify-center hover:bg-green-300 active:bg-gray-100 active:text-green-700 transition duration-150"
-          >
-            <TfiMoney className="my-1" />
-            <span>Budgets </span>
-            <TfiMoney className="my-1" />
-          </button>
-        </nav>
-      </header>
       <main>
         <header className="dashboard-usercard border-2 bg-white border-emerald-900 p-4 m-4 shadow-xl text-center">
           <div className="dashboard-information text-green-700">
@@ -148,7 +100,6 @@ const Dashboard = (): JSX.Element => {
               Your 5 Most Recent Budget Expenses
             </h2>
           </header>
-          {/* <TransactionList transactions={transactions} /> */}
           <ExpenseList
             expensesList={expenses}
             isFrontPage={true}

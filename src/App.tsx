@@ -13,6 +13,7 @@ import { useAppSelector } from "./features/hooks";
 import LoadingMsg from "./LoadingUserMsg";
 import SmallLoadingMsg from "./SmallLoadingMsg";
 import TokenErrorMsg from "./TokenErrorMsg";
+import Navbar from "./Navbar";
 import { hasTokenInterface } from "./interfaces/authInterfaces";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { ToastContainer, toast } from "react-toastify";
@@ -101,6 +102,7 @@ function App(): JSX.Element {
       <SmallLoadingMsg />
       <TokenErrorMsg />
       <ToastContainer position="bottom-right" />
+      <Navbar />
       {!userStatus.loading && <RoutesList />}
     </div>
   );

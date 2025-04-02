@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { getCurrentBudget } from "../helpers/getCurrentBudget";
 import { UserContextInterface } from "../interfaces/userInterfaces";
@@ -9,7 +9,6 @@ import BudgetErrorPage from "./BudgetErrorPage";
 import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
 import EditBudgetForm from "./EditBudgetForm";
-import Logo from "../Logo";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import ExpenseAPI from "../apis/ExpenseAPI";
@@ -25,7 +24,6 @@ type FormStateInterface = {
 // returns page for a single user's budget based on budget id ("/budgets/:id")
 const SingleBudgetPage = (): JSX.Element => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const notify = () =>
     toast.error("You have used all of the allocated funds for this budget");
@@ -122,29 +120,25 @@ const SingleBudgetPage = (): JSX.Element => {
 
   return budget ? (
     <div id="budget-page">
-      <header className="sticky top-0 p-2 bg-emerald-900 ">
-        <Logo />
+      <header className="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
           <button
-            className="back-button budget-nav-button border-gray-300 bg-gray-400 hover:bg-gray-100 active:bg-gray-300"
-            onClick={() => navigate("/budgets")}
-          >
-            Back to Budgets
-          </button>
-          <button
-            className="edit-budget-form-button budget-nav-button border-orange-300 text-white bg-orange-400 hover:bg-orange-200 hover:text-black active:bg-orange-300"
+            id="edit-budget-form-button"
+            className="nav-button border-orange-300 text-white bg-orange-400 hover:bg-orange-200 hover:text-black active:bg-orange-300"
             onClick={(e) => showFormState(e, "showEditForm")}
           >
             Update Budget
           </button>
           <button
-            className="delete-budget-form-button budget-nav-button border-red-500 bg-red-600 hover:bg-red-400 hover:text-white active:bg-red-100"
+            id="delete-budget-form-button"
+            className="nav-button border-red-500 bg-red-600 hover:bg-red-400 hover:text-white active:bg-red-100"
             onClick={(e) => showFormState(e, "showDeleteForm")}
           >
             Delete Budget
           </button>
           <button
-            className={`add-expense-form-button budget-nav-button border-green-300 bg-green-500
+            id="add-expense-form-button"
+            className={`nav-button border-green-300 bg-green-500
               ${
                 +budget.moneyAllocated === +budget.moneySpent
                   ? "cursor-not-allowed"
