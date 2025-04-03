@@ -75,7 +75,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
     e.preventDefault();
     try {
       await dispatch(deleteBudget(formData)).unwrap();
-      navigate("/budgets");
+      navigate(`/budgets/user/${userStatus.user?._id}`);
       notify(budget.title, formData.addBackToAssets);
     } catch (err) {
       console.log(err);
