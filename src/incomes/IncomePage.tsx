@@ -1,27 +1,76 @@
-import { useState, useCallback } from "react";
-import { useAppSelector } from "../features/hooks";
-import { UserContextInterface } from "../interfaces/userInterfaces";
+import { useState, useCallback, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useAppDispatch } from "../features/hooks";
+import { Income } from "../interfaces/incomeInterfaces";
+import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
+import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
 import NewIncomeForm from "./NewIncomeForm";
 import { toast } from "react-toastify";
 
 // Shows the list of incomes the current user has
 const IncomePage = (): JSX.Element => {
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
   const notify = () =>
     toast.error("You have reached the maximum number of incomes");
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
-  );
 
   // state that shows the form to add a new income
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
+  const [incomes, setIncomes] = useState<Income[]>([]);
+
+  useEffect(() => {
+    const getIncomes = async () => {
+      try {
+        dispatch(setSmallLoading(true));
+        if (id) {
+          let newIncomes: Income[] = await IncomeAPI.getAllUserIncomes(id);
+          setIncomes(newIncomes);
+        }
+      } catch (err: any) {
+        dispatch(setTokenError(err.message));
+      } finally {
+        dispatch(setSmallLoading(false));
+      }
+    };
+    getIncomes();
+  }, [id]);
+
+  const addToIncomeState = useCallback(
+    (income: Income): void => {
+      setIncomes((incomes) => [...incomes, income]);
+    },
+    [incomes]
+  );
+
+  const updateIncomeState = useCallback(
+    (income: Income): void => {
+      setIncomes((incomes) =>
+        incomes.map((i) => {
+          return i._id === income._id ? income : i;
+        })
+      );
+    },
+    [incomes]
+  );
+
+  const removeFromIncomeState = useCallback(
+    (id: string): void => {
+      setIncomes((incomes) =>
+        incomes.filter((i) => {
+          return i._id !== id;
+        })
+      );
+    },
+    [incomes]
+  );
 
   // Shows income form unless the user already has 3 incomes
   const showIncomeFormState = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     e.preventDefault();
-    if (userStatus.user!.incomes.length < 3) {
+    if (incomes.length < 3) {
       setShowIncomeForm(true);
     } else {
       notify();
@@ -45,7 +94,7 @@ const IncomePage = (): JSX.Element => {
         <nav className="buttons flex justify-around w-full">
           <button
             className={`nav-button border-green-500 bg-green-400 ${
-              userStatus.user!.incomes.length < 3
+              incomes.length < 3
                 ? "hover:bg-green-700 hover:text-white active:bg-green-500 duration-150"
                 : "cursor-not-allowed"
             }`}
@@ -57,14 +106,21 @@ const IncomePage = (): JSX.Element => {
       </header>
       <main>
         {showIncomeForm && (
-          <NewIncomeForm hideIncomeFormState={hideIncomeFormState} />
+          <NewIncomeForm
+            hideIncomeFormState={hideIncomeFormState}
+            addToIncomeState={addToIncomeState}
+          />
         )}
         <header>
           <h1 className="text-center text-xl sm:text-3xl text-green-700 underline font-bold">
-            Your Current Incomes ({userStatus.user!.incomes.length}/3)
+            Your Current Incomes ({incomes.length}/3)
           </h1>
         </header>
-        <IncomeList incomeList={userStatus.user!.incomes} />
+        <IncomeList
+          incomeList={incomes}
+          removeFromIncomeState={removeFromIncomeState}
+          updateIncomeState={updateIncomeState}
+        />
       </main>
     </div>
   );

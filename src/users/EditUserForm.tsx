@@ -213,7 +213,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
                   />
                   {formErrors.title && (
                     <div className="error-message">
-                      <p className="text-lg text-red-700 font-bold">
+                      <p className="text-sm text-red-700 font-bold">
                         {formErrors.title}
                       </p>
                     </div>
@@ -245,7 +245,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
                   />
                   {formErrors.date && (
                     <div className="error-message">
-                      <p className="text-red-700 font-bold">
+                      <p className="text-sm text-red-700 font-bold">
                         {formErrors.date}
                       </p>
                     </div>
@@ -271,7 +271,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
                   />
                   {formErrors.value && (
                     <div className="error-message">
-                      <p className="text-lg text-red-700 font-bold">
+                      <p className="text-sm text-red-700 font-bold">
                         {formErrors.value}
                       </p>
                     </div>

@@ -7,7 +7,7 @@ import { logOutUser } from "./features/actions/auth";
 const Navbar = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { userExists } = useAppSelector((store) => store.user.userInfo);
+  const { userExists, user } = useAppSelector((store) => store.user.userInfo);
 
   // removes the user token from cookies and navigates back to log in page
   const logOutAnNavigate = async (): Promise<void> => {
@@ -34,7 +34,7 @@ const Navbar = (): JSX.Element | null => {
         <button
           id="to-transactions-button"
           className="nav-button border-amber-200 bg-amber-300 hover:bg-amber-600 hover:text-white active:bg-amber-100 active:text-gray-900"
-          onClick={() => navigate("/transactions")}
+          onClick={() => navigate(`/transactions/user/${user?._id}`)}
         >
           Transactions
         </button>
@@ -42,14 +42,14 @@ const Navbar = (): JSX.Element | null => {
         <button
           id="to-incomes-button"
           className="nav-button border-blue-200 bg-blue-300 hover:bg-blue-600 hover:text-white active:bg-blue-100 active:text-gray-900"
-          onClick={() => navigate("/incomes")}
+          onClick={() => navigate(`/incomes/user/${user?._id}`)}
         >
           Incomes
         </button>
         <button
           id="to-budgets-button"
           className="nav-button border-green-600 bg-green-700 hover:bg-green-300 active:bg-green-100 active:text-green-700"
-          onClick={() => navigate("/budgets")}
+          onClick={() => navigate(`/budgets/user/${user?._id}`)}
         >
           Budgets
         </button>

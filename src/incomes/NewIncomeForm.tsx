@@ -1,6 +1,7 @@
 import { useCallback, useState, useMemo } from "react";
 import {
   NewIncome,
+  Income,
   IncomeErrors,
   SubmitIncomeSignUp,
   UpdateTime,
@@ -16,22 +17,24 @@ import {
   handleIncomeInputErrors,
   handleIncomeSubmitErrors,
 } from "../helpers/handleIncomeErrors";
-import { addNewIncome } from "../features/actions/incomes";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { setSmallLoading } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import IncomeAPI from "../apis/IncomeAPI";
 
 type Props = {
   hideIncomeFormState: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
+  addToIncomeState?: (income: Income) => void;
   handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
 };
 
 // returns form to add new income, used for both registration and the income page
 const NewIncomeForm: React.FC<Props> = ({
   hideIncomeFormState,
+  addToIncomeState,
   handleIncomes,
 }): JSX.Element | null => {
   const dispatch = useAppDispatch();
@@ -190,8 +193,14 @@ const NewIncomeForm: React.FC<Props> = ({
         dispatch(setSmallLoading(true));
         handleIncomes(e, submitData);
         dispatch(setSmallLoading(false));
-      } else {
-        await dispatch(addNewIncome(submitData)).unwrap();
+      } else if (addToIncomeState && userStatus.user?._id) {
+        dispatch(setSmallLoading(true));
+        let newIncome: Income = await IncomeAPI.addNewUserIncome(
+          submitData,
+          userStatus.user?._id
+        );
+        addToIncomeState(newIncome);
+        dispatch(setSmallLoading(false));
         notify(submitData.title);
       }
       hideIncomeFormState(e);

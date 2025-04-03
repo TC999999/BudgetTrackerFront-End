@@ -16,10 +16,13 @@ const RoutesList = (): JSX.Element => {
       <Route path="/" element={<HomePage />} />
       <Route path="/register" element={<SignUp />} />
       <Route path="/resetPassword" element={<ResetPassword />} />
-      <Route path="transactions" element={<TransactionHistory />} />
-      <Route path="/incomes" element={<IncomePage />} />
-      <Route path="/budgets" element={<BudgetPage />} />
-      <Route path="/budgets/:id" element={<SingleBudgetPage />} />
+      <Route path="transactions/user/:id" element={<TransactionHistory />} />
+      <Route path="/incomes/user/:id" element={<IncomePage />} />
+      <Route path="/budgets/user/:id" element={<BudgetPage />} />
+      <Route
+        path="/budgets/:budgetID/user/:id"
+        element={<SingleBudgetPage />}
+      />
       <Route path="/budgets/error/unauthorized" element={<BudgetErrorPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

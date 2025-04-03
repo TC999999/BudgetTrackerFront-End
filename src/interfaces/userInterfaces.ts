@@ -1,5 +1,4 @@
 import { BudgetInterface } from "./budgetInterfaces";
-import { Income } from "./incomeInterfaces";
 
 export type UserContextInterface = {
   user: UserInfoInterface | null;
@@ -21,7 +20,6 @@ export interface UserInfoInterface {
   email: string;
   totalAssets: number;
   budgets: BudgetInterface[];
-  incomes: Income[];
 }
 
 export type UserEditErrors = {

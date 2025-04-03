@@ -6,7 +6,7 @@ import {
   logOutUser,
 } from "../actions/auth";
 import { getCurrentUser, addToAssets } from "../actions/users";
-import { addNewIncome, updateIncome, removeIncome } from "../actions/incomes";
+// import { addNewIncome, updateIncome, removeIncome } from "../actions/incomes";
 import { addNewBudget, updateBudget, deleteBudget } from "../actions/budgets";
 import { addNewExpense, removeExpense } from "../actions/expenses";
 import { INITIAL_STATE } from "../config";
@@ -37,11 +37,10 @@ const authSlice = createSlice({
     setTokenError: (state, action: ActionInterface) => {
       state.hasTokenInfo.tokenError = action.payload;
     },
-    // changes income state when a SSE is heard
+    // changes income state when an SSE is heard
     incomeUpdate: (state, action: ActionInterface) => {
-      state.userInfo.user!.incomes = action.payload.newUserIncomes;
-      state.userInfo.user!.totalAssets =
-        action.payload.newTotalAssets.totalAssets;
+      let { newTotalAssets } = action.payload;
+      state.userInfo.user!.totalAssets = newTotalAssets.totalAssets;
     },
   },
   extraReducers: (builder) => {
@@ -128,48 +127,6 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = false;
       })
       .addCase(addToAssets.rejected, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(addNewIncome.pending, (state) => {
-        state.userInfo.smallLoading = true;
-      })
-      .addCase(addNewIncome.fulfilled, (state, action: any) => {
-        let { newUserIncome } = action.payload;
-        state.userInfo.user!.incomes = [
-          ...state.userInfo.user!.incomes,
-          newUserIncome,
-        ];
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(addNewIncome.rejected, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(updateIncome.pending, (state) => {
-        state.userInfo.smallLoading = true;
-      })
-      .addCase(updateIncome.fulfilled, (state, action: any) => {
-        let { newUserIncome } = action.payload;
-        state.userInfo.user!.incomes = state.userInfo.user!.incomes.map((i) =>
-          newUserIncome._id === i._id ? newUserIncome : i
-        );
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(updateIncome.rejected, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(removeIncome.pending, (state) => {
-        state.userInfo.smallLoading = true;
-      })
-      .addCase(removeIncome.fulfilled, (state, action: any) => {
-        let { delIncome } = action.payload;
-        state.userInfo.user!.incomes = state.userInfo.user!.incomes.filter(
-          (i) => {
-            return i._id !== delIncome._id;
-          }
-        );
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(removeIncome.rejected, (state) => {
         state.userInfo.smallLoading = false;
       })
       .addCase(addNewBudget.pending, (state) => {

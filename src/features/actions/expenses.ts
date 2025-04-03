@@ -2,7 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { API_URL } from "../config";
 import axios from "axios";
 import {
-  // newExpenseInterface,
   submitNewExpense,
   deleteExpenseInterface,
 } from "../../interfaces/expenseInterfaces";

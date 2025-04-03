@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-
+import { useParams } from "react-router-dom";
 import TransactionAPI from "../apis/TransactionAPI";
-import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { useAppDispatch } from "../features/hooks";
 import {
   Transaction,
   TransactionExpenseList,
@@ -11,8 +11,8 @@ import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 
 // returns a list of all transactions and expenses the user has made
 const TransactionHistory = (): JSX.Element => {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((store) => store.user.userInfo);
   const [transactions, setTransactions] = useState<TransactionExpenseList>([]);
 
   // since this is potentially a large amount of data, we will be calling
@@ -20,9 +20,11 @@ const TransactionHistory = (): JSX.Element => {
     async function getUserTransactions() {
       try {
         dispatch(setSmallLoading(true));
-        let transactions: Transaction[] =
-          await TransactionAPI.getUserTransactions(user!._id);
-        setTransactions(transactions);
+        if (id) {
+          let transactions: Transaction[] =
+            await TransactionAPI.getUserTransactions(id);
+          setTransactions(transactions);
+        }
       } catch (err: any) {
         dispatch(setTokenError(err.message));
       } finally {
@@ -30,7 +32,7 @@ const TransactionHistory = (): JSX.Element => {
       }
     }
     getUserTransactions();
-  }, [user]);
+  }, [id]);
 
   return (
     <div className="transaction-history-page">

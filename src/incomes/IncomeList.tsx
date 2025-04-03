@@ -1,17 +1,26 @@
 import { useState, useCallback } from "react";
 import { Income, deleteIncomeType } from "../interfaces/incomeInterfaces";
-import { removeIncome } from "../features/actions/incomes";
-import { useAppDispatch } from "../features/hooks";
+import { useAppSelector, useAppDispatch } from "../features/hooks";
 import IncomeCard from "./IncomeCard";
 import UpdateIncomeForm from "./UpdateIncomeForm";
+import IncomeAPI from "../apis/IncomeAPI";
+import { setSmallLoading } from "../features/auth/authSlice";
 
 type Props = {
   incomeList: Income[];
+  removeFromIncomeState: (id: string) => void;
+  updateIncomeState: (income: Income) => void;
 };
 
 // returns a list on income cards that can be viewed, edited, or deleted
-const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
+const IncomeList: React.FC<Props> = ({
+  incomeList,
+  removeFromIncomeState,
+  updateIncomeState,
+}): JSX.Element => {
   const dispatch = useAppDispatch();
+
+  const { user } = useAppSelector((store) => store.user.userInfo);
 
   // to use for editing a single income, retrieve info to be used for income edit
   const [selectedIncome, setSelectedIncome] = useState<Income | null>(null);
@@ -35,11 +44,17 @@ const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
       id: string
     ): Promise<void> => {
       try {
+        dispatch(setSmallLoading(true));
         e.preventDefault();
         let submitData: deleteIncomeType = { id };
-        await dispatch(removeIncome(submitData)).unwrap();
+        if (user?._id) {
+          await IncomeAPI.deleteUserIncome(submitData, user._id);
+          removeFromIncomeState(id);
+        }
       } catch (err) {
         console.log(err);
+      } finally {
+        dispatch(setSmallLoading(false));
       }
     },
     []
@@ -48,7 +63,11 @@ const IncomeList: React.FC<Props> = ({ incomeList }): JSX.Element => {
   return (
     <div className="income-list-and-edit-form">
       {selectedIncome && (
-        <UpdateIncomeForm income={selectedIncome} selectIncome={selectIncome} />
+        <UpdateIncomeForm
+          income={selectedIncome}
+          selectIncome={selectIncome}
+          updateIncomeState={updateIncomeState}
+        />
       )}
       <ul className="income-list flex flex-wrap justify-center">
         {incomeList.map((i) => (

@@ -23,7 +23,7 @@ type FormStateInterface = {
 
 // returns page for a single user's budget based on budget id ("/budgets/:id")
 const SingleBudgetPage = (): JSX.Element => {
-  const { id } = useParams();
+  const { budgetID } = useParams();
   const dispatch = useAppDispatch();
   const notify = () =>
     toast.error("You have used all of the allocated funds for this budget");
@@ -36,8 +36,8 @@ const SingleBudgetPage = (): JSX.Element => {
     const getExpenses = async () => {
       try {
         dispatch(setSmallLoading(true));
-        if (id) {
-          let expenses = await ExpenseAPI.getAllBudgetExpenses(id);
+        if (budgetID) {
+          let expenses = await ExpenseAPI.getAllBudgetExpenses(budgetID);
           setExpenses(expenses);
         }
       } catch (err: any) {
@@ -47,13 +47,14 @@ const SingleBudgetPage = (): JSX.Element => {
       }
     };
     getExpenses();
-  }, [id]);
+  }, [budgetID]);
 
   // retrieves budget from user budget list based on id string in url parameters
   const budget: BudgetInterface = useMemo<BudgetInterface>(
-    () => getCurrentBudget(userStatus.user!.budgets, id || ""),
+    () => getCurrentBudget(userStatus.user!.budgets, budgetID || ""),
     [userStatus.user!.budgets]
   );
+
   const initialFormState: FormStateInterface = {
     showExpenseForm: false,
     showDeleteForm: false,
@@ -172,7 +173,7 @@ const SingleBudgetPage = (): JSX.Element => {
           <ExpenseList
             expensesList={expenses}
             isFrontPage={false}
-            budgetID={id || null}
+            budgetID={budgetID || null}
             filterExpense={filterExpense}
           />
         </section>

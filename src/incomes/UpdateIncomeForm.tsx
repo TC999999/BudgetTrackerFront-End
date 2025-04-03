@@ -19,10 +19,11 @@ import {
   handleIncomeSubmitErrors,
 } from "../helpers/handleIncomeErrors";
 import { createUpdateIncomeString } from "../helpers/createNotificationString";
-import { updateIncome } from "../features/actions/incomes";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { toast } from "react-toastify";
+import IncomeAPI from "../apis/IncomeAPI";
+import { setSmallLoading } from "../features/auth/authSlice";
 
 type Props = {
   income: Income;
@@ -30,12 +31,14 @@ type Props = {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
     income: null
   ) => void;
+  updateIncomeState: (income: Income) => void;
 };
 
 // returns a form for users to update their own incomes
 const UpdateIncomeForm: React.FC<Props> = ({
   income,
   selectIncome,
+  updateIncomeState,
 }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notification: string) => toast.success(notification);
@@ -174,18 +177,31 @@ const UpdateIncomeForm: React.FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (handleIncomeSubmitErrors(formData, setFormErrors)) {
-      let { title, salary, updateTime } = formData;
-      let cronString: string = makeCronString(updateTime);
-      let submitData: SubmitUpdateIncome = {
-        _id: income._id,
-        title,
-        salary: salary / 100,
-        cronString,
-        readableUpdateTimeString,
-      };
-      await dispatch(updateIncome(submitData)).unwrap();
-      notify(createUpdateIncomeString(income, submitData));
-      selectIncome(e, null);
+      try {
+        dispatch(setSmallLoading(true));
+        let { title, salary, updateTime } = formData;
+        let cronString: string = makeCronString(updateTime);
+        let submitData: SubmitUpdateIncome = {
+          _id: income._id,
+          title,
+          salary: salary / 100,
+          cronString,
+          readableUpdateTimeString,
+        };
+        if (userStatus.user?._id) {
+          let updatedIncome: Income = await IncomeAPI.updateUserIncome(
+            submitData,
+            userStatus.user?._id
+          );
+          updateIncomeState(updatedIncome);
+        }
+        notify(createUpdateIncomeString(income, submitData));
+        selectIncome(e, null);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        dispatch(setSmallLoading(false));
+      }
     } else {
       if (formData.title === "" || formErrors.title)
         setFlashErrors((flash) => ({ ...flash, title: true }));

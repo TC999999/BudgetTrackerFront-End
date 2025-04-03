@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../features/hooks";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 
 type Props = {
@@ -7,11 +8,15 @@ type Props = {
 
 // returns budget card to be displayed in BudgetList component
 const BudgetCard: React.FC<Props> = ({ budget }): JSX.Element => {
+  const { user } = useAppSelector((store) => store.user.userInfo);
+
   return (
     <div className="budget-card border-2 border-green-400 p-8 m-4 shadow-md bg-white rounded-md">
       <header className="text-center">
         <h3 className="budget-title font-bold text-xl hover:text-green-600 hover:underline active:text-green-100 duration-150">
-          <Link to={`/budgets/${budget._id}`}>{budget.title}</Link>
+          <Link to={`/budgets/${budget._id}/user/${user?._id}`}>
+            {budget.title}
+          </Link>
         </h3>
         <p className="budget-money-allocation font-mono">
           Total Funds Allocated:

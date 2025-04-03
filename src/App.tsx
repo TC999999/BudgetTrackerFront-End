@@ -70,7 +70,7 @@ function App(): JSX.Element {
 
       es.onmessage = (e) => {
         let data = JSON.parse(e.data);
-        if (data.newTotalAssets && data.newUserIncomes) {
+        if (data.newTotalAssets) {
           dispatch(incomeUpdate(data));
           notify(
             `Recieved Income! Your Total Assets are now $${data.newTotalAssets.totalAssets} `
