@@ -7,6 +7,7 @@ import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
 import EditBudgetForm from "./EditBudgetForm";
 import OnPageLoading from "../OnPageLoading";
+import { addNewExpense } from "../helpers/addNewExpense";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
@@ -118,7 +119,7 @@ const SingleBudgetPage = (): JSX.Element => {
   // adds a new expense to the budget state after successfully adding it to the db
   const addExpense = useCallback(
     (newExpense: ExpenseInterface): void => {
-      setExpenses((expenses) => [newExpense, ...expenses]);
+      setExpenses((expenses) => addNewExpense(expenses, [newExpense]));
     },
     [expenses]
   );
