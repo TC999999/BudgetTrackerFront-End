@@ -1,26 +1,59 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useAppDispatch } from "../features/hooks";
+import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
-import { useAppSelector } from "../features/hooks";
-import { UserContextInterface } from "../interfaces/userInterfaces";
+import OnPageLoading from "../OnPageLoading";
 import { makeBudgetList } from "../helpers/makeBudgetList";
-import { BudgetListInterface } from "../interfaces/budgetInterfaces";
+import {
+  BudgetInterface,
+  BudgetListInterface,
+} from "../interfaces/budgetInterfaces";
 import { toast } from "react-toastify";
+import BudgetAPI from "../apis/BudgetAPI";
 
 // returns page for list of all budgets the user currently has
 const BudgetPage = (): JSX.Element => {
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
   const notify = () =>
     toast.error("You have reached the maximum number of allowed budgets");
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
-  );
 
-  // creates list of budgets that changes based on redux state
+  const [budgets, setBudgets] = useState<BudgetInterface[]>([]);
+
+  // retrieves a list of budgets for a specific user on initial render
+  useEffect(() => {
+    const getBudgets = async () => {
+      try {
+        dispatch(setSmallLoading(true));
+        if (id) {
+          const budgets = await BudgetAPI.getAllBudgets(id);
+          setBudgets(budgets);
+        }
+      } catch (err: any) {
+        dispatch(setTokenError(err.message));
+      } finally {
+        dispatch(setSmallLoading(false));
+      }
+    };
+    getBudgets();
+  }, []);
+
+  // creates list of budgets that changes based on state
   const budgetList: BudgetListInterface[] = useMemo<BudgetListInterface[]>(
-    () => makeBudgetList(userStatus.user!.budgets),
-    [userStatus.user!.budgets]
+    () => makeBudgetList(budgets),
+    [budgets]
   );
   const [showBudgetForm, setShowBudgetForm] = useState<boolean>(false);
+
+  // adds a new budget to the state after a form submission
+  const addBudget = useCallback(
+    (newBudget: BudgetInterface): void => {
+      setBudgets((prevBudgets) => [...prevBudgets, newBudget]);
+    },
+    [budgets]
+  );
 
   // shows form for adding a new budget, unless the user's current budget list is equal to 10
   const showForm = (
@@ -45,7 +78,7 @@ const BudgetPage = (): JSX.Element => {
     [showBudgetForm]
   );
 
-  return (
+  return budgetList.length ? (
     <div className="budget-page">
       <header className="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
@@ -63,9 +96,13 @@ const BudgetPage = (): JSX.Element => {
         </nav>
       </header>
 
-      {showBudgetForm && <BudgetForm hideForm={HideForm} />}
+      {showBudgetForm && (
+        <BudgetForm hideForm={HideForm} addBudget={addBudget} />
+      )}
       <BudgetList allBudgets={budgetList} />
     </div>
+  ) : (
+    <OnPageLoading loadingMsg="Budgets" />
   );
 };
 

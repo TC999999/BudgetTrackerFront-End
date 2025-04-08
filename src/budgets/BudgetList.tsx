@@ -2,7 +2,7 @@ import BudgetCard from "./BudgetCard";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 
 type Props = {
-  allBudgets: BudgetListInterface[] | null;
+  allBudgets: BudgetListInterface[];
 };
 
 // shows a list of budget cards for all budgets a user currently has
@@ -16,7 +16,7 @@ const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
       </header>
       {allBudgets?.length ? (
         <ul className="budget-list stripedBudgets flex flex-wrap justify-center">
-          {allBudgets?.map((budget) => (
+          {allBudgets.map((budget) => (
             <li className="w-5/6 md:w-2/5 xl:w-1/5 " key={budget._id}>
               <BudgetCard budget={budget} />
             </li>

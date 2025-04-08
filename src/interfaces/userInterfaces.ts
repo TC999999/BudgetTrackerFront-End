@@ -1,5 +1,3 @@
-import { BudgetInterface } from "./budgetInterfaces";
-
 export type UserContextInterface = {
   user: UserInfoInterface | null;
   userExists: boolean;
@@ -17,9 +15,7 @@ export type UserEditInterface = {
 export interface UserInfoInterface {
   _id: string;
   username: string;
-  email: string;
   totalAssets: number;
-  budgets: BudgetInterface[];
 }
 
 export type UserEditErrors = {

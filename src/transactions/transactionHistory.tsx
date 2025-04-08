@@ -7,6 +7,7 @@ import {
   TransactionExpenseList,
 } from "../interfaces/transactionInterfaces";
 import TransactionList from "./transactionList";
+import OnPageLoading from "../OnPageLoading";
 import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 
 // returns a list of all transactions and expenses the user has made
@@ -34,7 +35,7 @@ const TransactionHistory = (): JSX.Element => {
     getUserTransactions();
   }, [id]);
 
-  return (
+  return transactions.length ? (
     <div className="transaction-history-page">
       <section>
         <header>
@@ -45,6 +46,8 @@ const TransactionHistory = (): JSX.Element => {
         <TransactionList transactions={transactions} />
       </section>
     </div>
+  ) : (
+    <OnPageLoading loadingMsg="Transaction History" />
   );
 };
 

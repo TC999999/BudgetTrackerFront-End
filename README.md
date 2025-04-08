@@ -1,4 +1,4 @@
-# Budget Planner - Frontend
+# Personal Piggybank - Frontend
 
 ## Application Link
 

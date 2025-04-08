@@ -4,6 +4,7 @@ import {
   BudgetEditInterface,
   UpdateBudgetFormErrors,
   SubmitBudgetUpdateInterface,
+  BudgetUpdate,
 } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
@@ -18,8 +19,9 @@ import {
 } from "../helpers/handleBudgetErrors";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
-import { updateBudget } from "../features/actions/budgets";
+import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import BudgetAPI from "../apis/BudgetAPI";
 
 type Props = {
   hideEditForm: (
@@ -27,6 +29,7 @@ type Props = {
     form: "showEditForm"
   ) => void;
   budget: BudgetInterface;
+  updateBudget: (updatedBudget: BudgetUpdate) => void;
 };
 
 type flashErrors = {
@@ -36,6 +39,7 @@ type flashErrors = {
 const EditBudgetForm: React.FC<Props> = ({
   hideEditForm,
   budget,
+  updateBudget,
 }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notificationString: string) =>
@@ -188,6 +192,7 @@ const EditBudgetForm: React.FC<Props> = ({
     e.preventDefault();
     try {
       if (handleUpdateBudgetSubmitErrors(formData, setFormErrors)) {
+        dispatch(setSmallLoading(true));
         let submitData: SubmitBudgetUpdateInterface = {
           userID: userStatus.user!._id,
           budgetID: budget._id,
@@ -197,8 +202,13 @@ const EditBudgetForm: React.FC<Props> = ({
               ? formData.addedMoney / 100
               : -formData.addedMoney / 100,
         };
-        await dispatch(updateBudget(submitData)).unwrap();
+        let { newUserBudget, newAssets } = await BudgetAPI.updateBudget(
+          submitData
+        );
+        updateBudget(newUserBudget);
+        dispatch(setTotalAssets(newAssets));
         hideEditForm(e, "showEditForm");
+        setSmallLoading(false);
         notify(createUpdateBudgetString(budget.title, formData));
       } else {
         if (formErrors.title || formData.title === "")
@@ -209,6 +219,8 @@ const EditBudgetForm: React.FC<Props> = ({
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      dispatch(setSmallLoading(false));
     }
   };
 

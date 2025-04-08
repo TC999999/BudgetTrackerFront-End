@@ -37,6 +37,10 @@ const authSlice = createSlice({
     setTokenError: (state, action: ActionInterface) => {
       state.hasTokenInfo.tokenError = action.payload;
     },
+    // changes user total asset state
+    setTotalAssets: (state, action: ActionInterface) => {
+      state.userInfo.user!.totalAssets = action.payload;
+    },
     // changes income state when an SSE is heard
     incomeUpdate: (state, action: ActionInterface) => {
       let { newTotalAssets } = action.payload;
@@ -133,11 +137,7 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(addNewBudget.fulfilled, (state, action: any) => {
-        let { newUserBudget, newAssets } = action.payload;
-        state.userInfo.user!.budgets = [
-          ...state.userInfo.user!.budgets,
-          newUserBudget,
-        ];
+        let { newAssets } = action.payload;
         state.userInfo.user!.totalAssets = newAssets;
         state.userInfo.smallLoading = false;
       })
@@ -148,10 +148,7 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(updateBudget.fulfilled, (state, action: any) => {
-        let { newAssets, newUserBudget } = action.payload;
-        state.userInfo.user!.budgets = state.userInfo.user!.budgets.map((b) =>
-          newUserBudget._id === b._id ? newUserBudget : b
-        );
+        let { newAssets } = action.payload;
         state.userInfo.user!.totalAssets = newAssets;
         state.userInfo.smallLoading = false;
       })
@@ -162,12 +159,7 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(deleteBudget.fulfilled, (state, action: any) => {
-        let { delBudget, totalAssets } = action.payload;
-        state.userInfo.user!.budgets = state.userInfo.user!.budgets.filter(
-          (b) => {
-            return b._id !== delBudget._id;
-          }
-        );
+        let { totalAssets } = action.payload;
         state.userInfo.user!.totalAssets = totalAssets;
         state.userInfo.smallLoading = false;
       })
@@ -177,11 +169,7 @@ const authSlice = createSlice({
       .addCase(addNewExpense.pending, (state) => {
         state.userInfo.smallLoading = true;
       })
-      .addCase(addNewExpense.fulfilled, (state, action: any) => {
-        let { newUserBudget } = action.payload;
-        state.userInfo.user!.budgets = state.userInfo.user!.budgets.map((b) =>
-          newUserBudget._id === b._id ? newUserBudget : b
-        );
+      .addCase(addNewExpense.fulfilled, (state) => {
         state.userInfo.smallLoading = false;
       })
       .addCase(addNewExpense.rejected, (state) => {
@@ -190,11 +178,7 @@ const authSlice = createSlice({
       .addCase(removeExpense.pending, (state) => {
         state.userInfo.smallLoading = true;
       })
-      .addCase(removeExpense.fulfilled, (state, action: any) => {
-        let { newUserBudget } = action.payload;
-        state.userInfo.user!.budgets = state.userInfo.user!.budgets.map((b) =>
-          newUserBudget._id === b._id ? newUserBudget : b
-        );
+      .addCase(removeExpense.fulfilled, (state) => {
         state.userInfo.smallLoading = false;
       })
       .addCase(removeExpense.rejected, (state) => {
@@ -208,6 +192,7 @@ export const {
   setSmallLoading,
   removeUserError,
   setTokenError,
+  setTotalAssets,
   incomeUpdate,
 } = authSlice.actions;
 

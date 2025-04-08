@@ -5,6 +5,7 @@ import { Income } from "../interfaces/incomeInterfaces";
 import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
+import OnPageLoading from "../OnPageLoading";
 import NewIncomeForm from "./NewIncomeForm";
 import { toast } from "react-toastify";
 
@@ -19,6 +20,7 @@ const IncomePage = (): JSX.Element => {
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
   const [incomes, setIncomes] = useState<Income[]>([]);
 
+  // retrives all of a single user's incomes and saves them in state
   useEffect(() => {
     const getIncomes = async () => {
       try {
@@ -36,6 +38,7 @@ const IncomePage = (): JSX.Element => {
     getIncomes();
   }, [id]);
 
+  // adds a single income to state after a form submission
   const addToIncomeState = useCallback(
     (income: Income): void => {
       setIncomes((incomes) => [...incomes, income]);
@@ -43,6 +46,7 @@ const IncomePage = (): JSX.Element => {
     [incomes]
   );
 
+  // updates a single income in state after a form submission
   const updateIncomeState = useCallback(
     (income: Income): void => {
       setIncomes((incomes) =>
@@ -54,6 +58,7 @@ const IncomePage = (): JSX.Element => {
     [incomes]
   );
 
+  // removes a single income from state after a button press
   const removeFromIncomeState = useCallback(
     (id: string): void => {
       setIncomes((incomes) =>
@@ -88,7 +93,7 @@ const IncomePage = (): JSX.Element => {
     [showIncomeForm]
   );
 
-  return (
+  return incomes.length ? (
     <div id="income-page">
       <header className="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
@@ -123,6 +128,8 @@ const IncomePage = (): JSX.Element => {
         />
       </main>
     </div>
+  ) : (
+    <OnPageLoading loadingMsg="Incomes" />
   );
 };
 

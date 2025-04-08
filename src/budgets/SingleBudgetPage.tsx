@@ -1,19 +1,17 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../features/hooks";
-import { getCurrentBudget } from "../helpers/getCurrentBudget";
-import { UserContextInterface } from "../interfaces/userInterfaces";
+import { useState, useCallback, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../features/hooks";
 import BudgetPageCard from "./BudgetPageCard";
 import ExpenseForm from "../expenses/ExpenseForm";
-import BudgetErrorPage from "./BudgetErrorPage";
 import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
 import EditBudgetForm from "./EditBudgetForm";
-import { BudgetInterface } from "../interfaces/budgetInterfaces";
+import OnPageLoading from "../OnPageLoading";
+import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
-import ExpenseAPI from "../apis/ExpenseAPI";
 import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import BudgetAPI from "../apis/BudgetAPI";
 
 type FormStateInterface = {
   showExpenseForm: boolean;
@@ -23,22 +21,37 @@ type FormStateInterface = {
 
 // returns page for a single user's budget based on budget id ("/budgets/:id")
 const SingleBudgetPage = (): JSX.Element => {
-  const { budgetID } = useParams();
+  const { budgetID, id } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const notify = () =>
     toast.error("You have used all of the allocated funds for this budget");
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
-  );
+  const [currentBudget, setCurrentBudget] = useState<BudgetInterface>({
+    _id: "",
+    title: "",
+    moneySpent: 0,
+    moneyAllocated: "",
+  });
+
   const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
 
+  // retrieves budget from db based on id string in url parameters upon initial render
   useEffect(() => {
-    const getExpenses = async () => {
+    const getBudget = async () => {
       try {
         dispatch(setSmallLoading(true));
-        if (budgetID) {
-          let expenses = await ExpenseAPI.getAllBudgetExpenses(budgetID);
-          setExpenses(expenses);
+        if (budgetID && id) {
+          let { budget, expenses } = await BudgetAPI.getUserBudget(
+            budgetID,
+            id
+          );
+          if (budget) {
+            setCurrentBudget(budget);
+            setExpenses(expenses);
+          } else {
+            dispatch(setSmallLoading(false));
+            navigate("/budgets/error/unauthorized");
+          }
         }
       } catch (err: any) {
         dispatch(setTokenError(err.message));
@@ -46,14 +59,8 @@ const SingleBudgetPage = (): JSX.Element => {
         dispatch(setSmallLoading(false));
       }
     };
-    getExpenses();
-  }, [budgetID]);
-
-  // retrieves budget from user budget list based on id string in url parameters
-  const budget: BudgetInterface = useMemo<BudgetInterface>(
-    () => getCurrentBudget(userStatus.user!.budgets, budgetID || ""),
-    [userStatus.user!.budgets]
-  );
+    getBudget();
+  }, []);
 
   const initialFormState: FormStateInterface = {
     showExpenseForm: false,
@@ -73,7 +80,8 @@ const SingleBudgetPage = (): JSX.Element => {
     if (
       form === "showExpenseForm" &&
       formsState.showExpenseForm === false &&
-      +budget.moneyAllocated === +budget.moneySpent
+      currentBudget &&
+      +currentBudget.moneyAllocated === +currentBudget.moneySpent
     ) {
       notify();
     } else {
@@ -99,6 +107,14 @@ const SingleBudgetPage = (): JSX.Element => {
     [formsState]
   );
 
+  // updates a budget's state with partial update data
+  const updateBudget = useCallback(
+    (updatedBudget: BudgetUpdate): void => {
+      setCurrentBudget((prevBudget) => ({ ...prevBudget, ...updatedBudget }));
+    },
+    [currentBudget]
+  );
+
   // adds a new expense to the budget state after successfully adding it to the db
   const addExpense = useCallback(
     (newExpense: ExpenseInterface): void => {
@@ -110,16 +126,17 @@ const SingleBudgetPage = (): JSX.Element => {
   // removes an expense from the budget state after successfully removing it
   // from the db
   const filterExpense = useCallback(
-    (delExpense: ExpenseInterface): void => {
-      let newExpenses = expenses.filter((expense) => {
-        return expense._id !== delExpense._id;
-      });
-      setExpenses(newExpenses);
+    (id: string): void => {
+      setExpenses((prevExpenses) =>
+        prevExpenses.filter((expense) => {
+          return expense._id !== id;
+        })
+      );
     },
     [expenses]
   );
 
-  return budget ? (
+  return currentBudget._id ? (
     <div id="budget-page">
       <header className="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
@@ -141,7 +158,7 @@ const SingleBudgetPage = (): JSX.Element => {
             id="add-expense-form-button"
             className={`nav-button border-green-300 bg-green-500
               ${
-                +budget.moneyAllocated === +budget.moneySpent
+                +currentBudget.moneyAllocated === +currentBudget.moneySpent
                   ? "cursor-not-allowed"
                   : "hover:bg-green-400 hover:text-white active:bg-green-200"
               }`}
@@ -152,18 +169,26 @@ const SingleBudgetPage = (): JSX.Element => {
         </nav>
       </header>
       <main>
-        <BudgetPageCard budget={budget} />
+        <BudgetPageCard budget={currentBudget} />
         {formsState.showEditForm && (
-          <EditBudgetForm hideEditForm={changeFormState} budget={budget} />
+          <EditBudgetForm
+            hideEditForm={changeFormState}
+            budget={currentBudget}
+            updateBudget={updateBudget}
+          />
         )}
         {formsState.showDeleteForm && (
-          <DeleteBudgetForm hideDeleteForm={changeFormState} budget={budget} />
+          <DeleteBudgetForm
+            hideDeleteForm={changeFormState}
+            budget={currentBudget}
+          />
         )}
         {formsState.showExpenseForm && (
           <ExpenseForm
             hideExpenseForm={changeFormState}
-            budget={budget}
+            budget={currentBudget}
             addExpense={addExpense}
+            updateBudget={updateBudget}
           />
         )}
         <section className="expense-list">
@@ -175,12 +200,13 @@ const SingleBudgetPage = (): JSX.Element => {
             isFrontPage={false}
             budgetID={budgetID || null}
             filterExpense={filterExpense}
+            updateBudget={updateBudget}
           />
         </section>
       </main>
     </div>
   ) : (
-    <BudgetErrorPage />
+    <OnPageLoading loadingMsg="Budget" />
   );
 };
 

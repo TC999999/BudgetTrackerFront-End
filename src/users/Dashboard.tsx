@@ -80,7 +80,7 @@ const Dashboard = (): JSX.Element => {
               className="border rounded-full bg-green-700 p-1 sm:p-2 text-sm sm:text-base hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"
               onClick={(e) => ShowForm(e)}
             >
-              Document a Miscellaneous Transaction
+              Document a Transaction
             </button>
           </div>
         </header>
@@ -88,7 +88,7 @@ const Dashboard = (): JSX.Element => {
         <section className="recent-transactions-list">
           <header>
             <h2 className="recent-transactions-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
-              Your 5 Most Recent Miscellaneous Transactions
+              Recent Miscellaneous Transactions
             </h2>
           </header>
           <TransactionList transactions={transactions} />
@@ -97,7 +97,7 @@ const Dashboard = (): JSX.Element => {
         <section className="recent-expenses-list">
           <header>
             <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
-              Your 5 Most Recent Budget Expenses
+              Recent Budget Expenses
             </h2>
           </header>
           <ExpenseList

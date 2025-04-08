@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 // returns unauthorized error page if user attempts to use url to find a budget that
 // either does not belong them or does not exist
 const BudgetErrorPage = (): JSX.Element => {
@@ -13,13 +11,6 @@ const BudgetErrorPage = (): JSX.Element => {
           <li>Does not belong to you</li>
         </ul>
       </div>
-
-      <Link
-        className="text-3xl text-green-600 underline hover:text-green-400 active:text-green-500"
-        to="/"
-      >
-        Go Home
-      </Link>
     </div>
   );
 };

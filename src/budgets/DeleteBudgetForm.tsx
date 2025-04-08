@@ -6,10 +6,12 @@ import {
 } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { deleteBudget } from "../features/actions/budgets";
+// import { deleteBudget } from "../features/actions/budgets";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
+import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
 import { calculateNewTotalAssetsWithoutOperation } from "../helpers/calculateNewTotalAssets";
 import { toast } from "react-toastify";
+import BudgetAPI from "../apis/BudgetAPI";
 
 type Props = {
   hideDeleteForm: (
@@ -45,6 +47,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
   // initial form data for deleting a budget, the first two remain constant while the last one changes
   // based on which radio button the user selects
   let deleteBudgetData: DeleteBudgetInterface = {
+    user: userStatus.user!._id,
     budgetID: budget._id,
     addBackToAssets: 0,
   };
@@ -74,11 +77,15 @@ const DeleteBudgetForm: React.FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {
-      await dispatch(deleteBudget(formData)).unwrap();
+      dispatch(setSmallLoading(true));
+      let { totalAssets } = await BudgetAPI.deleteBudget(formData);
+      dispatch(setTotalAssets(totalAssets));
       navigate(`/budgets/user/${userStatus.user?._id}`);
       notify(budget.title, formData.addBackToAssets);
     } catch (err) {
       console.log(err);
+    } finally {
+      dispatch(setSmallLoading(false));
     }
   };
 

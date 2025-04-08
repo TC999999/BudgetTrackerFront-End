@@ -4,15 +4,18 @@ import {
   ExpenseInterface,
   deleteExpenseInterface,
 } from "../interfaces/expenseInterfaces";
-import { useAppDispatch } from "../features/hooks";
-import { removeExpense } from "../features/actions/expenses";
+import { BudgetUpdate } from "../interfaces/budgetInterfaces";
+import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { setSmallLoading } from "../features/auth/authSlice";
+import ExpenseAPI from "../apis/ExpenseAPI";
 
 // isFrontPage prop tells frontend if user is on dashboard or single budget page; passes down to expense card.
 type Props = {
   expensesList: ExpenseInterface[];
   isFrontPage: boolean;
   budgetID: string | null;
-  filterExpense?: (delExpense: ExpenseInterface) => void;
+  filterExpense?: (id: string) => void;
+  updateBudget?: (updatedBudget: BudgetUpdate) => void;
 };
 
 type infoInterface = {
@@ -27,12 +30,20 @@ const ExpenseList: React.FC<Props> = ({
   isFrontPage,
   budgetID,
   filterExpense,
+  updateBudget,
 }): JSX.Element => {
+  const userStatus = useAppSelector((store) => store.user.userInfo);
   const dispatch = useAppDispatch();
 
-  const callFilterExpense = (delExpense: ExpenseInterface) => {
+  const callFilterExpense = (id: string) => {
     if (filterExpense) {
-      filterExpense(delExpense);
+      filterExpense(id);
+    }
+  };
+
+  const callUpdateBudget = (updatedBudget: BudgetUpdate) => {
+    if (updateBudget) {
+      updateBudget(updatedBudget);
     }
   };
 
@@ -44,18 +55,24 @@ const ExpenseList: React.FC<Props> = ({
     ): Promise<void> => {
       try {
         e.preventDefault();
+        dispatch(setSmallLoading(true));
         let submitData: deleteExpenseInterface = {
           ...info,
           transaction: info.transaction,
           budgetID,
         };
-        let { delExpense } = await dispatch(removeExpense(submitData)).unwrap();
-        callFilterExpense(delExpense);
+        let { delExpense, newUserBudget } = await ExpenseAPI.deleteExpense(
+          submitData,
+          userStatus.user!._id
+        );
+        callFilterExpense(delExpense._id);
+        callUpdateBudget(newUserBudget);
+        dispatch(setSmallLoading(false));
       } catch (err) {
         console.log(err);
       }
     },
-    [dispatch]
+    []
   );
 
   return (

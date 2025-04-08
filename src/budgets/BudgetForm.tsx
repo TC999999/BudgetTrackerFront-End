@@ -6,19 +6,22 @@ import {
   newBudgetInterface,
   submitBudget,
   BudgetFormErrors,
+  BudgetInterface,
 } from "../interfaces/budgetInterfaces";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import {
   handleBudgetInputErrors,
   handleBudgetSubmitErrors,
 } from "../helpers/handleBudgetErrors";
-import { addNewBudget } from "../features/actions/budgets";
+import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import BudgetAPI from "../apis/BudgetAPI";
 
 type Props = {
   hideForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
+  addBudget: (newBudget: BudgetInterface) => void;
 };
 
 type flashErrors = {
@@ -27,7 +30,10 @@ type flashErrors = {
 };
 
 // returns form for creating a new budget
-const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
+const BudgetForm: React.FC<Props> = ({
+  hideForm,
+  addBudget,
+}): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (title: string, moneyAllocated: number) =>
     toast.success(
@@ -119,13 +125,19 @@ const BudgetForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     e.preventDefault();
     try {
       if (handleBudgetSubmitErrors(formData, setFormErrors)) {
+        dispatch(setSmallLoading(true));
         let submitData: submitBudget = {
           userID: userStatus.user!._id,
           ...formData,
           moneyAllocated: formData.moneyAllocated / 100,
         };
-        await dispatch(addNewBudget(submitData)).unwrap();
+        let { newUserBudget, newAssets } = await BudgetAPI.addNewBudget(
+          submitData
+        );
+        dispatch(setTotalAssets(newAssets));
+        addBudget(newUserBudget);
         hideForm(e);
+        dispatch(setSmallLoading(false));
         notify(submitData.title, submitData.moneyAllocated);
       } else {
         if (formErrors.title || formData.title === "")

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import KeyPad from "../KeyPad";
-import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { setSmallLoading } from "../features/auth/authSlice";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import {
@@ -13,10 +14,10 @@ import {
   submitNewExpense,
   ExpenseInterface,
 } from "../interfaces/expenseInterfaces";
-import { BudgetInterface } from "../interfaces/budgetInterfaces";
-import { addNewExpense } from "../features/actions/expenses";
+import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { DateTime } from "luxon";
 import { toast } from "react-toastify";
+import ExpenseAPI from "../apis/ExpenseAPI";
 
 type flashErrors = { title: boolean; transaction: boolean; date: boolean };
 
@@ -27,12 +28,14 @@ type Props = {
   ) => void;
   budget: BudgetInterface;
   addExpense: (newExpense: ExpenseInterface) => void;
+  updateBudget: (updatedBudget: BudgetUpdate) => void;
 };
 
 const ExpenseForm: React.FC<Props> = ({
   hideExpenseForm,
   budget,
   addExpense,
+  updateBudget,
 }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (title: string, transaction: number) =>
@@ -140,15 +143,18 @@ const ExpenseForm: React.FC<Props> = ({
     e.preventDefault();
     try {
       if (handleExpenseSubmitErrors(formData, setFormErrors)) {
+        dispatch(setSmallLoading(true));
         let submitData: submitNewExpense = {
           ...formData,
           budgetID: budget?._id,
           transaction: formData.transaction / 100,
         };
-        const { newBudgetExpense } = await dispatch(
-          addNewExpense(submitData)
-        ).unwrap();
-        addExpense(newBudgetExpense);
+        const { spentMoney, newExpense } = await ExpenseAPI.addNewExpense(
+          submitData,
+          userStatus.user!._id
+        );
+        addExpense(newExpense);
+        updateBudget(spentMoney);
         hideExpenseForm(e, "showExpenseForm");
         notify(submitData.title, submitData.transaction);
       } else {
@@ -164,6 +170,8 @@ const ExpenseForm: React.FC<Props> = ({
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      dispatch(setSmallLoading(false));
     }
   };
 

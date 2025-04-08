@@ -17,6 +17,12 @@ export type BudgetEditInterface = {
   operation: string;
 };
 
+export type BudgetUpdate = {
+  title?: string;
+  moneyAllocated?: string;
+  moneySpent?: number;
+};
+
 export type SubmitBudgetUpdateInterface = {
   userID: string;
   title: string;
@@ -36,6 +42,7 @@ export interface BudgetListInterface extends BudgetInterface {
 }
 
 export type DeleteBudgetInterface = {
+  user: string;
   addBackToAssets: number;
   budgetID: string;
 };
