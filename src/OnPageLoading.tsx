@@ -5,6 +5,8 @@ type Props = {
   loadingMsg: string;
 };
 
+// Returns a message on the body and not the modal for when certain data
+// (budget data or income data) is loading
 const OnPageLoading: React.FC<Props> = ({ loadingMsg }): JSX.Element | null => {
   const { smallLoading }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo

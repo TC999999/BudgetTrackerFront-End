@@ -33,19 +33,24 @@ export default class ResetPasswordAPI {
     }
   }
 
-  // sends user username and email to backend to confirm a user with both exist
+  // sends username and email to backend; returns the same username and email if they exist
+  // in the db, returns an error if not found
   static async confirmUserInfo(userInfo: ConfirmUserInfo): Promise<any> {
     let res = await this.request("confirmUserInfo", userInfo, "post");
     return res;
   }
 
-  // sends one time code to backend to confirm that code matches
+  // after user inputs verification code, sends code to backend to confirm that a document
+  // with the username, email, and code exists; returns success message if document exists
+  // and code matches, returns error if not
   static async confirmOTP(otcData: OneTimeCodeData): Promise<any> {
     let res = await this.request("confirmOTP", otcData, "post");
     return res;
   }
 
-  // sends new password data to backend to update user password
+  // when user submits a new password, sends data to back end to update password data on
+  // db; returns success message if verification code has already been confirmed, returns
+  // error it not
   static async resetPassword(resetData: PasswordResetSubmit): Promise<any> {
     let res = await this.request("resetPassword", resetData, "patch");
     return res;

@@ -44,6 +44,7 @@ const ExpenseForm: React.FC<Props> = ({
         2
       )} spent. $${availableMoney} remaining in ${budget.title}.`
     );
+  const notifyError = (message: string) => toast.error(message);
   const userStatus = useAppSelector((store) => store.user.userInfo);
 
   const initialState: newExpenseInterface = {
@@ -168,8 +169,8 @@ const ExpenseForm: React.FC<Props> = ({
           setFlashInput({ title: false, date: false, transaction: false });
         }, 500);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      notifyError(err);
     } finally {
       dispatch(setSmallLoading(false));
     }

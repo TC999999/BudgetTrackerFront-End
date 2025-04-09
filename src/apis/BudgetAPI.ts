@@ -31,7 +31,7 @@ export default class BudgetAPI {
     }
   }
 
-  // adds a new budget to db
+  // adds a new budget to db and returns its information
   static async addNewBudget(budgetData: submitBudget): Promise<any> {
     let res = await this.request(
       `add/user/${budgetData.userID}`,
@@ -41,19 +41,19 @@ export default class BudgetAPI {
     return res;
   }
 
-  // gets all user budgets
+  // returns all the budgets for a single user
   static async getAllBudgets(id: string): Promise<any> {
     let res = await this.request(`all/user/${id}`, "get");
     return res.budgets;
   }
 
-  // gets a single user budget
+  // returns information for a single user budget
   static async getUserBudget(budgetID: string, id: string): Promise<any> {
     let res = await this.request(`${budgetID}/user/${id}`, "get");
-    return res;
+    return res.budget;
   }
 
-  // updates a budget
+  // updates a budget and returns updated information
   static async updateBudget(
     budgetData: SubmitBudgetUpdateInterface
   ): Promise<any> {
@@ -65,7 +65,7 @@ export default class BudgetAPI {
     return res;
   }
 
-  // deletes a budget
+  // deletes a budget and returns information
   static async deleteBudget(budgetData: DeleteBudgetInterface): Promise<any> {
     let res = await this.request(
       `delete/${budgetData.budgetID}/user/${budgetData.user}`,

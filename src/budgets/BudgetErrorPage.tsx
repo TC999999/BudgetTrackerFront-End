@@ -1,4 +1,4 @@
-// returns unauthorized error page if user attempts to use url to find a budget that
+// returns unauthorized error page if user inputs a url to find a budget that
 // either does not belong them or does not exist
 const BudgetErrorPage = (): JSX.Element => {
   return (

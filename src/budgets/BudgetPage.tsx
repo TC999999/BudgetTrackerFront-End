@@ -40,7 +40,8 @@ const BudgetPage = (): JSX.Element => {
     getBudgets();
   }, []);
 
-  // creates list of budgets that changes based on state
+  // creates list of budgets that changes based on state (calculates money remaining
+  // from allocated budget funds as well)
   const budgetList: BudgetListInterface[] = useMemo<BudgetListInterface[]>(
     () => makeBudgetList(budgets),
     [budgets]
@@ -55,7 +56,8 @@ const BudgetPage = (): JSX.Element => {
     [budgets]
   );
 
-  // shows form for adding a new budget, unless the user's current budget list is equal to 10
+  // updates state to show form for adding a new budget,
+  // unless the user's current budget list is equal to 10
   const showForm = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
@@ -67,7 +69,7 @@ const BudgetPage = (): JSX.Element => {
     }
   };
 
-  // hides form for adding a new budget
+  // updates the state to hide form for adding a new budget
   const HideForm = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent

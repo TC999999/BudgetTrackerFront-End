@@ -33,7 +33,8 @@ type FormInfo = {
 
 type flashErrors = { title: boolean; value: boolean; date: boolean };
 
-// returns form for users to update their current savings value if necessary
+// returns form modal for users to add a new miscellaneous transaction using funds directly
+// from their savings
 const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notification: string) => toast.success(notification);
@@ -72,6 +73,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     );
   }, [formData.value, formData.operation]);
 
+  // updates the formdata state if the input that was changed was the title or date input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     if (name === "title" || name === "date") {

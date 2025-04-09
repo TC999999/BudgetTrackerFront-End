@@ -43,7 +43,8 @@ function App(): JSX.Element {
     getTokenInfo();
   }, [dispatch]);
 
-  // if a refresh JWT is found in cookies, retrieves the information tied to that user from the db and stores in redux
+  // if a refresh JWT is found in cookies, retrieves the information tied to that user
+  // from the db and stores in redux
   useEffect(() => {
     const getUserInfo = async () => {
       if (tokenStatus.hasRefreshToken && !tokenStatus.loading) {

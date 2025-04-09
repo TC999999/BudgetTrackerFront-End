@@ -6,7 +6,7 @@ type Props = {
   budget: BudgetInterface | null;
 };
 
-// returns large card for a single budget to use for the SingleBudgetPage
+// returns large card for a single budget not in a list; to use for the SingleBudgetPage
 const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
   // calculates the remaining amount of money based on the current budget's total funds allocated and
   // total money spend from this budget. Changes when the money spent increases or decreses

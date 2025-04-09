@@ -1,11 +1,12 @@
-import { TransactionExpenseList } from "../interfaces/transactionInterfaces";
+import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionCard from "./transactionCard";
 
 type Props = {
-  transactions: TransactionExpenseList;
+  transactions: Transaction[];
 };
 
-// returns a list of transactions to be used for both the dashboard and the transaction history page
+// returns a list of transactions to be used for both the dashboard and the full
+// transaction history page
 const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
   return (
     <div

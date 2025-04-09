@@ -6,7 +6,6 @@ import {
 } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
-// import { deleteBudget } from "../features/actions/budgets";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
 import { calculateNewTotalAssetsWithoutOperation } from "../helpers/calculateNewTotalAssets";
@@ -34,6 +33,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
         2
       )} added to available assets.`
     );
+  const notifyError = (message: string) => toast.error(message);
 
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
@@ -82,8 +82,8 @@ const DeleteBudgetForm: React.FC<Props> = ({
       dispatch(setTotalAssets(totalAssets));
       navigate(`/budgets/user/${userStatus.user?._id}`);
       notify(budget.title, formData.addBackToAssets);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      notifyError(err);
     } finally {
       dispatch(setSmallLoading(false));
     }

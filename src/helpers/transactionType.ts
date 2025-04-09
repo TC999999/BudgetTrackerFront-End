@@ -1,5 +1,4 @@
 import { Transaction } from "../interfaces/transactionInterfaces";
-import { TransactionExpense } from "../interfaces/expenseInterfaces";
 
 // returns the value of the transaction as a string and if the transaction increased
 // or decreased the user's total savings
@@ -9,7 +8,7 @@ export type transactionValAndType = {
 };
 
 export function transactionType(
-  transaction: Transaction | TransactionExpense
+  transaction: Transaction
 ): transactionValAndType {
   let returnVal: transactionValAndType = {
     value: `+$${transaction.transaction}`,

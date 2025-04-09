@@ -20,7 +20,7 @@ type Props = {
   ) => Promise<void>;
 };
 
-// returns expense card to be used for expense list
+// returns a card to be used for a single expense to be used for ExpenseList.tsx
 const ExpenseCard: React.FC<Props> = ({
   expense,
   isFrontPage,
@@ -33,7 +33,7 @@ const ExpenseCard: React.FC<Props> = ({
   const notify = () =>
     toast.success(`${expense.title} expense successfully deleted`);
 
-  // uses callback function from expense list to delete expense from both redux state and db
+  // uses callback function from ExpenseList.tsx to delete expense
   const deleteTransaction = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

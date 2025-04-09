@@ -1,5 +1,6 @@
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 
+// inserts a new expense into an array of previous expenses and sorts them by date
 export const addNewExpense = (
   expenses: ExpenseInterface[],
   newExpense: ExpenseInterface[]

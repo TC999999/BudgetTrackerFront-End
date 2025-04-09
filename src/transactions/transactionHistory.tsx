@@ -2,21 +2,19 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import TransactionAPI from "../apis/TransactionAPI";
 import { useAppDispatch } from "../features/hooks";
-import {
-  Transaction,
-  TransactionExpenseList,
-} from "../interfaces/transactionInterfaces";
+import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionList from "./transactionList";
 import OnPageLoading from "../OnPageLoading";
 import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 
-// returns a list of all transactions and expenses the user has made
+// returns a list of all miscellaneous transactions the user has made
 const TransactionHistory = (): JSX.Element => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const [transactions, setTransactions] = useState<TransactionExpenseList>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  // since this is potentially a large amount of data, we will be calling
+  // makes a request to retrieve all of a single user's transactions from db on initial
+  // render
   useEffect(() => {
     async function getUserTransactions() {
       try {
@@ -35,6 +33,8 @@ const TransactionHistory = (): JSX.Element => {
     getUserTransactions();
   }, [id]);
 
+  // if there are no transactions in the list state, returns an on page loading message
+  // instead
   return transactions.length ? (
     <div className="transaction-history-page">
       <section>

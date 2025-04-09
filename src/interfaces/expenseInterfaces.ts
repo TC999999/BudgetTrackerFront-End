@@ -21,18 +21,6 @@ export interface ExpenseInterface extends newExpenseInterface {
   _id: string;
 }
 
-type TransactionExpenseBudget = {
-  title: string;
-};
-
-export type TransactionExpense = {
-  _id: string;
-  title: string;
-  budget: TransactionExpenseBudget;
-  transaction: string;
-  date: string;
-};
-
 export type deleteExpenseInterface = {
   _id: string;
   budgetID: string | null;

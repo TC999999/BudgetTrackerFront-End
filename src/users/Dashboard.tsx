@@ -19,6 +19,8 @@ const Dashboard = (): JSX.Element => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
 
+  // makes a request to the backend to retrieve all of a single user's 5 most recent budget
+  // expenses and 5 most recent miscellaneous transactions
   useEffect(() => {
     const getRecentTransactions = async () => {
       dispatch(setSmallLoading(true));

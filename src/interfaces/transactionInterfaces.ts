@@ -1,5 +1,3 @@
-import { TransactionExpense } from "./expenseInterfaces";
-
 export type Transaction = {
   _id: string;
   date: string;
@@ -8,5 +6,3 @@ export type Transaction = {
   title: string;
   transaction: string;
 };
-
-export type TransactionExpenseList = (Transaction | TransactionExpense)[];

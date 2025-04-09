@@ -1,5 +1,3 @@
-// import { ExpenseInterface } from "./expenseInterfaces";
-
 export type newBudgetInterface = {
   title: string;
   moneyAllocated: number;

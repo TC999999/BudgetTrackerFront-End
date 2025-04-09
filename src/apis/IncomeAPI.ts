@@ -31,13 +31,13 @@ export default class IncomeAPI {
     }
   }
 
-  //returns all incomes that a user has
+  // retrieves and returns all of the incomes of a single user
   static async getAllUserIncomes(id: string): Promise<any> {
     let res = await this.request(`user/${id}`, "get");
     return res.userIncomes;
   }
 
-  //creates a new income for a single user
+  // sends new income data for a single user; returns that data to be saved in state
   static async addNewUserIncome(
     newIncomeData: SubmitIncomeSignUp,
     id: string
@@ -46,7 +46,8 @@ export default class IncomeAPI {
     return res.newUserIncome;
   }
 
-  // updates and returns a single income that a user has
+  // sends data to update a single income for a user and returns the updated income data to
+  // update the state
   static async updateUserIncome(
     data: SubmitUpdateIncome,
     user: string
@@ -59,7 +60,8 @@ export default class IncomeAPI {
     return res.updatedIncome;
   }
 
-  // deletes and returns a single income that a user has
+  // sends data to delete a single income for a user returns the deleted income data
+  //to filtered from the state
   static async deleteUserIncome(
     data: deleteIncomeType,
     user: string

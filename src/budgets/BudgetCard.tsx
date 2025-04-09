@@ -6,7 +6,7 @@ type Props = {
   budget: BudgetListInterface;
 };
 
-// returns budget card to be displayed in BudgetList component
+// returns card for a single budget to be displayed in BudgetList component
 const BudgetCard: React.FC<Props> = ({ budget }): JSX.Element => {
   const { user } = useAppSelector((store) => store.user.userInfo);
 

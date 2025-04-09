@@ -8,9 +8,11 @@ export const createUpdateUserString = (
 ): string => {
   const addOrRemove: string =
     submitData.value >= 0
-      ? `Added $${submitData.value.toFixed(2)} to available assets.`
-      : `Removed $${(submitData.value * -1).toFixed(2)} from available assets.`;
-  return "Succssfully updated assets! " + addOrRemove;
+      ? `Added $${submitData.value.toFixed(2)} to total savings balance.`
+      : `Removed $${(submitData.value * -1).toFixed(
+          2
+        )} from total savings balance.`;
+  return "Sucessfully noted transaction! " + addOrRemove;
 };
 
 // returns custom strings for notifications when updating users' incomes

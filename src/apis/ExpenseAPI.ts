@@ -8,8 +8,9 @@ import {
 
 type Method = "post" | "get" | "delete";
 
-// sends data to backend for operations invloving rretrieving user transactions; since we are not performing
-// any major updates to the redux state, we are doing this instead of a thunk action
+// sends data to backend for operations invloving retrieving user transactions; since we
+// are not performing any major updates to the redux state, we are doing this instead of
+// a thunk action
 export default class ExpenseAPI {
   static async request(
     endpoint: string,
@@ -30,7 +31,9 @@ export default class ExpenseAPI {
     }
   }
 
-  // adds a new expense to a budget
+  // sends data for a new expense for a single budget and single user, returns the
+  // new expense data as well as the new value of the the money spent from the budget's
+  // allocated funds
   static async addNewExpense(
     expenseData: submitNewExpense,
     user: string
@@ -43,19 +46,22 @@ export default class ExpenseAPI {
     return res;
   }
 
-  // gets all expenses in a budget
+  // retrieves and returns all of the expenses that belong to a single budget if that budget
+  // belongs to a single user
   static async getAllBudgetExpenses(id: string, user: string): Promise<any> {
     let res = await this.request(`budget/${id}/user/${user}`, "get");
     return res.expenses;
   }
 
-  // gets a user's most recent expenses in a budget
+  // retrieves and returns a user's five most recent expenses spent on budgets
   static async getRecentUserExpenses(id: string): Promise<any> {
     let res = await this.request(`user/${id}/recent`, "get");
     return res.expenses;
   }
 
-  // deletes an expense from a budget
+  // sends data for a single expense that belongs to a single budget and user to be deleted;
+  // returns the deleted expense data to be filtered from state as well as the new value of
+  // the money spent on that budget
   static async deleteExpense(
     expenseData: deleteExpenseInterface,
     user: string

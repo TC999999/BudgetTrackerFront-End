@@ -10,7 +10,7 @@ type Props = {
   index: number;
 };
 
-// returns card for list of intial incomes user makes when they sign up for an account
+// returns card for a single new income for list of intial incomes user makes when they sign up for an account
 const SignUpIncomeCard: React.FC<Props> = ({
   income,
   removeIncome,

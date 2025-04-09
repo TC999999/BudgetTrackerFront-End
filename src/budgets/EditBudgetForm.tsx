@@ -44,6 +44,7 @@ const EditBudgetForm: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const notify = (notificationString: string) =>
     toast.success(notificationString);
+  const notifyError = (message: string) => toast.error(message);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -112,7 +113,6 @@ const EditBudgetForm: React.FC<Props> = ({
       e.preventDefault();
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.addedMoney, num);
-
       let errors = handleUpdateBudgetComparisons(
         newNum,
         userStatus.user!.totalAssets * 100,
@@ -217,8 +217,8 @@ const EditBudgetForm: React.FC<Props> = ({
           setFlashInput({ title: false });
         }, 500);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      notifyError(err);
     } finally {
       dispatch(setSmallLoading(false));
     }

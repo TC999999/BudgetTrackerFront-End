@@ -35,19 +35,25 @@ const ExpenseList: React.FC<Props> = ({
   const userStatus = useAppSelector((store) => store.user.userInfo);
   const dispatch = useAppDispatch();
 
+  // since filterExpense is an optional prop function, this function calls on filterExpense
+  // if it exists
   const callFilterExpense = (id: string) => {
     if (filterExpense) {
       filterExpense(id);
     }
   };
 
+  // since updateBudget is an optional prop function, this function calls on updateBudget
+  // if it exists
   const callUpdateBudget = (updatedBudget: BudgetUpdate) => {
     if (updateBudget) {
       updateBudget(updatedBudget);
     }
   };
 
-  // deletes expense from db and filters from budget page
+  // makes a request to delete a single expense from the db, and if the user is on the single
+  // budget page, update the expense list state with that expense filtered out; additionally,
+  // update the budget value to account for the money spent on that expense
   const deleteExpense = useCallback(
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,

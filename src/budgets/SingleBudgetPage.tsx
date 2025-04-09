@@ -13,6 +13,7 @@ import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
+import ExpenseAPI from "../apis/ExpenseAPI";
 
 type FormStateInterface = {
   showExpenseForm: boolean;
@@ -25,8 +26,8 @@ const SingleBudgetPage = (): JSX.Element => {
   const { budgetID, id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const notify = () =>
-    toast.error("You have used all of the allocated funds for this budget");
+
+  const notify = (message: string) => toast.error(message);
   const [currentBudget, setCurrentBudget] = useState<BudgetInterface>({
     _id: "",
     title: "",
@@ -42,19 +43,17 @@ const SingleBudgetPage = (): JSX.Element => {
       try {
         dispatch(setSmallLoading(true));
         if (budgetID && id) {
-          let { budget, expenses } = await BudgetAPI.getUserBudget(
-            budgetID,
-            id
-          );
+          let budget = await BudgetAPI.getUserBudget(budgetID, id);
           if (budget) {
+            let expenses = await ExpenseAPI.getAllBudgetExpenses(budgetID, id);
             setCurrentBudget(budget);
             setExpenses(expenses);
           } else {
-            dispatch(setSmallLoading(false));
             navigate("/budgets/error/unauthorized");
           }
         }
       } catch (err: any) {
+        // navigate("/budgets/error/unauthorized");
         dispatch(setTokenError(err.message));
       } finally {
         dispatch(setSmallLoading(false));
@@ -84,7 +83,7 @@ const SingleBudgetPage = (): JSX.Element => {
       currentBudget &&
       +currentBudget.moneyAllocated === +currentBudget.moneySpent
     ) {
-      notify();
+      notify("You have used all of the allocated funds for this budget");
     } else {
       setFormsState((formState) => ({
         ...formState,

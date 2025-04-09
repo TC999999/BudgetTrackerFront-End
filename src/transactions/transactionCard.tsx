@@ -5,14 +5,13 @@ import {
   transactionValAndType,
 } from "../helpers/transactionType";
 import { Transaction } from "../interfaces/transactionInterfaces";
-import { TransactionExpense } from "../interfaces/expenseInterfaces";
 import { ImCheckmark } from "react-icons/im";
 
 type Props = {
-  transaction: Transaction | TransactionExpense;
+  transaction: Transaction;
 };
 
-// returns a card with all necessary information for transactions
+// returns a card that shows data for a single transaction on the transaction list
 const TransactionCard: React.FC<Props> = ({ transaction }): JSX.Element => {
   // makes readable date/time string to be displayed on card
   //    month day, year

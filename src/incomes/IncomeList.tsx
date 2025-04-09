@@ -5,6 +5,7 @@ import IncomeCard from "./IncomeCard";
 import UpdateIncomeForm from "./UpdateIncomeForm";
 import IncomeAPI from "../apis/IncomeAPI";
 import { setSmallLoading } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 type Props = {
   incomeList: Income[];
@@ -19,6 +20,8 @@ const IncomeList: React.FC<Props> = ({
   updateIncomeState,
 }): JSX.Element => {
   const dispatch = useAppDispatch();
+  const notify = () => toast.success(`Income deleted successfully`);
+  const notifyError = (message: string) => toast.error(message);
 
   const { user } = useAppSelector((store) => store.user.userInfo);
 
@@ -37,7 +40,8 @@ const IncomeList: React.FC<Props> = ({
     [selectedIncome]
   );
 
-  // delete a single income
+  // sends a request to backend to delete a single income from the db and filter it out of
+  // income page list state
   const deleteIncome = useCallback(
     async (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -50,9 +54,10 @@ const IncomeList: React.FC<Props> = ({
         if (user?._id) {
           await IncomeAPI.deleteUserIncome(submitData, user._id);
           removeFromIncomeState(id);
+          notify();
         }
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        notifyError(err);
       } finally {
         dispatch(setSmallLoading(false));
       }

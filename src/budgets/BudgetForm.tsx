@@ -24,6 +24,7 @@ type Props = {
   addBudget: (newBudget: BudgetInterface) => void;
 };
 
+// types for whether the form inputs should be flashing upon an erroneous form submission
 type flashErrors = {
   title: boolean;
   moneyAllocated: boolean;
@@ -41,6 +42,7 @@ const BudgetForm: React.FC<Props> = ({
         2
       )} allocated to this budget.`
     );
+  const notifyError = (message: string) => toast.error(message);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -137,7 +139,6 @@ const BudgetForm: React.FC<Props> = ({
         dispatch(setTotalAssets(newAssets));
         addBudget(newUserBudget);
         hideForm(e);
-        dispatch(setSmallLoading(false));
         notify(submitData.title, submitData.moneyAllocated);
       } else {
         if (formErrors.title || formData.title === "")
@@ -149,7 +150,9 @@ const BudgetForm: React.FC<Props> = ({
         }, 500);
       }
     } catch (err: any) {
-      console.log(err);
+      notifyError(err);
+    } finally {
+      dispatch(setSmallLoading(false));
     }
   };
 

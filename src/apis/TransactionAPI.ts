@@ -26,13 +26,15 @@ export default class TransactionAPI {
     }
   }
 
-  // gets all transactions that a user has
+  // retrieves and returns a list of all of a user's transactions made using their own direct
+  // savings
   static async getUserTransactions(id: string): Promise<any> {
     let res = await this.request(`user/${id}`, "get");
     return res.transactions;
   }
 
-  // gets the ten most recent transactions a user has
+  // retrieves and returns the five most recent miscellaneous transactions made by a single
+  // user
   static async getRecentUserTransactions(id: string): Promise<any> {
     let res = await this.request(`user/${id}/recent`, "get");
     return res.transactions;

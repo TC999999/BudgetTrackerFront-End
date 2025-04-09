@@ -20,7 +20,8 @@ const IncomePage = (): JSX.Element => {
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
   const [incomes, setIncomes] = useState<Income[]>([]);
 
-  // retrives all of a single user's incomes and saves them in state
+  // makes a request to retrive all of a single user's incomes and save them in component
+  // state on initial render
   useEffect(() => {
     const getIncomes = async () => {
       try {
@@ -70,7 +71,7 @@ const IncomePage = (): JSX.Element => {
     [incomes]
   );
 
-  // Shows income form unless the user already has 3 incomes
+  // updates state to show new income form unless the user already has 3 incomes
   const showIncomeFormState = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
@@ -82,7 +83,7 @@ const IncomePage = (): JSX.Element => {
     }
   };
 
-  // Hides income form
+  // updates state to hide new income form
   const hideIncomeFormState = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent

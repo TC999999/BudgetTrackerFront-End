@@ -42,6 +42,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
 }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notification: string) => toast.success(notification);
+  const notifyError = (message: string) => toast.error(message);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -197,8 +198,8 @@ const UpdateIncomeForm: React.FC<Props> = ({
         }
         notify(createUpdateIncomeString(income, submitData));
         selectIncome(e, null);
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        notifyError(err);
       } finally {
         dispatch(setSmallLoading(false));
       }

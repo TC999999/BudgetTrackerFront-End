@@ -40,6 +40,7 @@ const NewIncomeForm: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const notify = (incomeTitle: string) =>
     toast.success(`${incomeTitle} income successfully created`);
+  const notifyError = (message: string) => toast.error(message);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -179,39 +180,45 @@ const NewIncomeForm: React.FC<Props> = ({
   // data to db to be added. If any input errors are present (e.g. title is empty or contains invalid characters,
   // salary at $0.00), does not send data and insteads flashes erroneous inputs at user
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (handleIncomeSubmitErrors(formData, setFormErrors)) {
-      let { title, salary, updateTime } = formData;
-      let cronString: string = makeCronString(updateTime);
-      let submitData: SubmitIncomeSignUp = {
-        title,
-        salary: salary / 100,
-        cronString,
-        readableUpdateTimeString,
-      };
-      if (handleIncomes) {
-        dispatch(setSmallLoading(true));
-        handleIncomes(e, submitData);
-        dispatch(setSmallLoading(false));
-      } else if (addToIncomeState && userStatus.user?._id) {
-        dispatch(setSmallLoading(true));
-        let newIncome: Income = await IncomeAPI.addNewUserIncome(
-          submitData,
-          userStatus.user?._id
-        );
-        addToIncomeState(newIncome);
-        dispatch(setSmallLoading(false));
-        notify(submitData.title);
+    try {
+      e.preventDefault();
+      if (handleIncomeSubmitErrors(formData, setFormErrors)) {
+        let { title, salary, updateTime } = formData;
+        let cronString: string = makeCronString(updateTime);
+        let submitData: SubmitIncomeSignUp = {
+          title,
+          salary: salary / 100,
+          cronString,
+          readableUpdateTimeString,
+        };
+        if (handleIncomes) {
+          dispatch(setSmallLoading(true));
+          handleIncomes(e, submitData);
+          dispatch(setSmallLoading(false));
+        } else if (addToIncomeState && userStatus.user?._id) {
+          dispatch(setSmallLoading(true));
+          let newIncome: Income = await IncomeAPI.addNewUserIncome(
+            submitData,
+            userStatus.user?._id
+          );
+          addToIncomeState(newIncome);
+
+          notify(submitData.title);
+        }
+        hideIncomeFormState(e);
+      } else {
+        if (formData.title === "" || formErrors.title)
+          setFlashErrors((flash) => ({ ...flash, title: true }));
+        if (formData.salary === 0 || formErrors.salary)
+          setFlashErrors((flash) => ({ ...flash, salary: true }));
+        setTimeout(() => {
+          setFlashErrors(initialFlashErrors);
+        }, 500);
       }
-      hideIncomeFormState(e);
-    } else {
-      if (formData.title === "" || formErrors.title)
-        setFlashErrors((flash) => ({ ...flash, title: true }));
-      if (formData.salary === 0 || formErrors.salary)
-        setFlashErrors((flash) => ({ ...flash, salary: true }));
-      setTimeout(() => {
-        setFlashErrors(initialFlashErrors);
-      }, 500);
+    } catch (err: any) {
+      notifyError(err);
+    } finally {
+      dispatch(setSmallLoading(false));
     }
   };
 

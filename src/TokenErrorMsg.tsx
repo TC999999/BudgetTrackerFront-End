@@ -12,6 +12,7 @@ const TokenErrorMsg = (): JSX.Element | null => {
     (store) => store.user.hasTokenInfo
   );
 
+  // gets rid of token error and navigates back to home page
   const goHome = () => {
     navigate("/");
     dispatch(setTokenError(""));
