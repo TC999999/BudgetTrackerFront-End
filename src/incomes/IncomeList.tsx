@@ -74,17 +74,19 @@ const IncomeList: React.FC<Props> = ({
           updateIncomeState={updateIncomeState}
         />
       )}
-      <ul className="income-list flex flex-wrap justify-center">
-        {incomeList.map((i) => (
-          <li key={`income-${i._id}`}>
-            <IncomeCard
-              income={i}
-              deleteIncome={deleteIncome}
-              selectIncome={selectIncome}
-            />
-          </li>
-        ))}
-      </ul>
+      <div>
+        <ul id="income-list" className="">
+          {incomeList.map((i) => (
+            <li key={`income-${i._id}`}>
+              <IncomeCard
+                income={i}
+                deleteIncome={deleteIncome}
+                selectIncome={selectIncome}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

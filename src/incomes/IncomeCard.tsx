@@ -37,45 +37,59 @@ const IncomeCard: React.FC<Props> = ({
   );
 
   return (
-    <div className="p-2 m-4 w-96 text-center border-4 border-green-700 bg-white rounded-lg">
-      <header>
-        <h1 className="text-2xl sm:text-4xl text-green-600 underline">
-          {income.title}
-        </h1>
-      </header>
-      <div className="salary-information text-xl sm:text-3xl">
-        <p className="underline">Salary: </p>
-        <p className="salary-number font-bold">${income.salary}</p>
-        <p className="readable-salary-interval">
-          {income.readableUpdateTimeString}
-        </p>
-      </div>
-      <div className="next-and-last-received-dates text-lg sm:text-2xl">
-        <div className="last-received-date">
-          <p className="font-bold">Last Received On: </p>
-          <p>{lastDate}</p>
+    <div className="flex justify-center">
+      <div className="p-2 m-4 w-96 sm:w-2/3 text-center border-4 border-green-700 bg-white rounded-lg">
+        <header>
+          <h1 className="text-2xl sm:text-4xl text-green-600 underline">
+            {income.title}
+          </h1>
+        </header>
+        <div className="lg:flex lg:justify-evenly">
+          <div
+            id="salary-information"
+            className="text-xl sm:text-3xl lg:m-4 lg:p-2 lg:flex lg:items-center lg:w-96 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg"
+          >
+            <div>
+              <p className="underline">Salary: </p>
+              <p id="salary-number" className="font-bold">
+                ${income.salary}
+              </p>
+              <p id="readable-salary-interval">
+                {income.readableUpdateTimeString}
+              </p>
+            </div>
+          </div>
+          <div
+            id="next-and-last-received-dates"
+            className="text-lg sm:text-2xl lg:m-4 lg:p-2 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg"
+          >
+            <div className="last-received-date">
+              <p className="font-bold">Last Received On: </p>
+              <p>{lastDate}</p>
+            </div>
+            <div className="next-received-date">
+              <p className="font-bold">Next Received On: </p>
+              <p>
+                {nextDate.date} at {nextDate.time}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="next-received-date">
-          <p className="font-bold">Next Received On: </p>
-          <p>
-            {nextDate.date} at {nextDate.time}
-          </p>
-        </div>
-      </div>
-      <div className="flex justify-around">
-        <button
-          className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-red-700 bg-red-600 rounded-full duration-150 hover:bg-red-300 hover:text-black"
-          onClick={(e) => deleteIncome(e, income._id)}
-        >
-          Delete Income
-        </button>
+        <div className="flex justify-around">
+          <button
+            className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-red-700 bg-red-600 rounded-full duration-150 hover:bg-red-300 hover:text-black"
+            onClick={(e) => deleteIncome(e, income._id)}
+          >
+            Delete Income
+          </button>
 
-        <button
-          className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-orange-700 bg-orange-600 rounded-full duration-150 hover:bg-orange-300 hover:text-black"
-          onClick={(e) => selectIncome(e, income)}
-        >
-          Update Income
-        </button>
+          <button
+            className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-orange-700 bg-orange-600 rounded-full duration-150 hover:bg-orange-300 hover:text-black"
+            onClick={(e) => selectIncome(e, income)}
+          >
+            Update Income
+          </button>
+        </div>
       </div>
     </div>
   );
