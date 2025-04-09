@@ -51,6 +51,7 @@ const authSlice = createSlice({
     builder
       .addCase(registerUser.pending, (state) => {
         state.userInfo.loading = true;
+        state.hasTokenInfo.tokenError = "";
       })
       .addCase(registerUser.fulfilled, (state, action: any) => {
         state.userInfo.loading = false;
@@ -67,6 +68,7 @@ const authSlice = createSlice({
       })
       .addCase(logInUser.pending, (state) => {
         state.userInfo.loading = true;
+        state.hasTokenInfo.tokenError = "";
       })
       .addCase(logInUser.fulfilled, (state, action: any) => {
         state.userInfo.loading = false;
