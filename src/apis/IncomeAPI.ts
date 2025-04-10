@@ -71,6 +71,6 @@ export default class IncomeAPI {
       "delete",
       data
     );
-    return res.updatedIncome;
+    return res.delIncome;
   }
 }

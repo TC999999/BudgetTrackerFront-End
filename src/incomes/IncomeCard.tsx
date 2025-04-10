@@ -5,13 +5,14 @@ import {
   makeDateStringIncomeCard,
 } from "../helpers/makeDateString";
 import { useMemo } from "react";
+import { infoInterface } from "../interfaces/miscTypes";
 
 type Props = {
   income: Income;
-  deleteIncome: (
+  showSecondPrompt: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: string
-  ) => Promise<void>;
+    income: infoInterface
+  ) => void;
   selectIncome: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
     income: Income
@@ -21,7 +22,7 @@ type Props = {
 // Card for IncomePage.tsx, shows the title, salary, update interval, and when the next income update is
 const IncomeCard: React.FC<Props> = ({
   income,
-  deleteIncome,
+  showSecondPrompt,
   selectIncome,
 }): JSX.Element => {
   // makes readable date string for last time income was received
@@ -78,7 +79,7 @@ const IncomeCard: React.FC<Props> = ({
         <div className="flex justify-around">
           <button
             className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-red-700 bg-red-600 rounded-full duration-150 hover:bg-red-300 hover:text-black"
-            onClick={(e) => deleteIncome(e, income._id)}
+            onClick={(e) => showSecondPrompt(e, { _id: income._id })}
           >
             Delete Income
           </button>

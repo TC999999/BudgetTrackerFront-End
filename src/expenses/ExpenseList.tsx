@@ -1,13 +1,16 @@
-import { useCallback } from "react";
+import { useState, useCallback } from "react";
 import ExpenseCard from "./ExpenseCard";
+import SecondPrompt from "../SecondPrompt";
 import {
   ExpenseInterface,
   deleteExpenseInterface,
 } from "../interfaces/expenseInterfaces";
-import { BudgetUpdate } from "../interfaces/budgetInterfaces";
+import { budgetFunds, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { setSmallLoading } from "../features/auth/authSlice";
+import { infoInterface } from "../interfaces/miscTypes";
 import ExpenseAPI from "../apis/ExpenseAPI";
+import { toast } from "react-toastify";
 
 // isFrontPage prop tells frontend if user is on dashboard or single budget page; passes down to expense card.
 type Props = {
@@ -16,11 +19,7 @@ type Props = {
   budgetID: string | null;
   filterExpense?: (id: string) => void;
   updateBudget?: (updatedBudget: BudgetUpdate) => void;
-};
-
-type infoInterface = {
-  transaction: number;
-  _id: string;
+  budgetFunds?: budgetFunds;
 };
 
 // returns expense list to be used for budget expenses on a single budget page and a user's most recent
@@ -31,9 +30,15 @@ const ExpenseList: React.FC<Props> = ({
   budgetID,
   filterExpense,
   updateBudget,
+  budgetFunds,
 }): JSX.Element => {
   const userStatus = useAppSelector((store) => store.user.userInfo);
   const dispatch = useAppDispatch();
+  const [selectedExpense, setSelectedExpense] = useState<infoInterface | null>(
+    null
+  );
+  const notifyDelete = (expenseTitle: string) =>
+    toast.success(`${expenseTitle} expense successfully deleted`);
 
   // since filterExpense is an optional prop function, this function calls on filterExpense
   // if it exists
@@ -51,6 +56,25 @@ const ExpenseList: React.FC<Props> = ({
     }
   };
 
+  const showSecondPrompt = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+      expense: infoInterface
+    ): void => {
+      e.preventDefault();
+      setSelectedExpense(expense);
+    },
+    [selectedExpense]
+  );
+
+  const hidePrompt = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      setSelectedExpense(null);
+    },
+    [selectedExpense]
+  );
+
   // makes a request to delete a single expense from the db, and if the user is on the single
   // budget page, update the expense list state with that expense filtered out; additionally,
   // update the budget value to account for the money spent on that expense
@@ -62,9 +86,10 @@ const ExpenseList: React.FC<Props> = ({
       try {
         e.preventDefault();
         dispatch(setSmallLoading(true));
+
         let submitData: deleteExpenseInterface = {
-          ...info,
-          transaction: info.transaction,
+          _id: info._id,
+          transaction: info.transaction!,
           budgetID,
         };
         let { delExpense, newUserBudget } = await ExpenseAPI.deleteExpense(
@@ -73,57 +98,70 @@ const ExpenseList: React.FC<Props> = ({
         );
         callFilterExpense(delExpense._id);
         callUpdateBudget(newUserBudget);
-        dispatch(setSmallLoading(false));
+        notifyDelete(delExpense.title);
       } catch (err) {
         console.log(err);
+      } finally {
+        dispatch(setSmallLoading(false));
       }
     },
     []
   );
 
   return (
-    <div className="expense-list bg-white border-2 border-green-500 m-2 rounded-md">
-      <header className="expense-list-headers grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2">
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Name
-        </b>
-
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Cost
-        </b>
-
-        {isFrontPage && (
+    <div>
+      {selectedExpense && (
+        <SecondPrompt
+          deleteFunction={deleteExpense}
+          itemForDeletion={selectedExpense}
+          hidePrompt={hidePrompt}
+          type={"Expense"}
+          BudgetFunds={budgetFunds}
+        />
+      )}
+      <div className="expense-list bg-white border-2 border-green-500 m-2 rounded-md">
+        <header className="expense-list-headers grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2">
           <b className="text-sm sm:text-base duration-150 text-center content-center">
-            Budget
+            Name
           </b>
-        )}
 
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Date
-        </b>
-
-        {!isFrontPage && (
           <b className="text-sm sm:text-base duration-150 text-center content-center">
-            Delete
+            Cost
           </b>
-        )}
-      </header>
-      <div className="expense-card-list striped">
-        {expensesList.map((e) => {
-          return (
-            <ExpenseCard
-              key={e._id}
-              expense={e}
-              isFrontPage={isFrontPage}
-              deleteExpense={deleteExpense}
-            />
-          );
-        })}
-        {!expensesList.length && (
-          <div className="no-expenses text-center text-xl p-6">
-            <p className="italic">No Expenses Yet</p>
-          </div>
-        )}
+
+          {isFrontPage && (
+            <b className="text-sm sm:text-base duration-150 text-center content-center">
+              Budget
+            </b>
+          )}
+
+          <b className="text-sm sm:text-base duration-150 text-center content-center">
+            Date
+          </b>
+
+          {!isFrontPage && (
+            <b className="text-sm sm:text-base duration-150 text-center content-center">
+              Delete
+            </b>
+          )}
+        </header>
+        <div className="expense-card-list striped">
+          {expensesList.map((e) => {
+            return (
+              <ExpenseCard
+                key={e._id}
+                expense={e}
+                isFrontPage={isFrontPage}
+                showSecondPrompt={showSecondPrompt}
+              />
+            );
+          })}
+          {!expensesList.length && (
+            <div className="no-expenses text-center text-xl p-6">
+              <p className="italic">No Expenses Yet</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

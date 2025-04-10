@@ -14,6 +14,7 @@ import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
 import ExpenseAPI from "../apis/ExpenseAPI";
+import { getRemainingMoney } from "../helpers/getRemainingMoney";
 
 type FormStateInterface = {
   showExpenseForm: boolean;
@@ -201,6 +202,13 @@ const SingleBudgetPage = (): JSX.Element => {
             budgetID={budgetID || null}
             filterExpense={filterExpense}
             updateBudget={updateBudget}
+            budgetFunds={{
+              moneyRemaining: getRemainingMoney(
+                currentBudget.moneyAllocated,
+                currentBudget.moneySpent
+              ),
+              moneySpent: currentBudget.moneySpent,
+            }}
           />
         </section>
       </main>
