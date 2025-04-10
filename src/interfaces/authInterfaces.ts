@@ -1,9 +1,10 @@
-import { UserContextInterface } from "./userInterfaces";
+import { UserContextInterface, LoadError } from "./userInterfaces";
 import { SubmitIncomeSignUp } from "./incomeInterfaces";
 
 export type AuthInitialStateInterface = {
   userInfo: UserContextInterface;
   hasTokenInfo: hasTokenInterface;
+  loadError: LoadError;
 };
 
 export type hasTokenInterface = {

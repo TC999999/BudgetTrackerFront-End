@@ -28,8 +28,6 @@ const IncomeList: React.FC<Props> = ({
 
   const { user } = useAppSelector((store) => store.user.userInfo);
 
-  const [showPrompt, setShowPrompt] = useState<boolean>(false);
-
   // to use for editing a single income, retrieve info to be used for income edit
   const [selectedIncomeForEdit, setSelectedIncomeForEdit] =
     useState<Income | null>(null);
@@ -48,6 +46,8 @@ const IncomeList: React.FC<Props> = ({
     [selectedIncomeForEdit]
   );
 
+  // updates state to show the prompt window for when a user clicks delete
+  // income button on an income card
   const showSecondPrompt = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -55,16 +55,16 @@ const IncomeList: React.FC<Props> = ({
     ): void => {
       e.preventDefault();
       setSelectedIncomeForDelete(income);
-      setShowPrompt(true);
     },
-    [showPrompt]
+    [selectedIncomeForDelete]
   );
 
+  // updates state to hide the prompt window for when a user either clicks cancel on the prompt window or
+  // after the user successfully submits a delete request
   const hidePrompt = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
       setSelectedIncomeForDelete(null);
-      setShowPrompt(false);
     },
     []
   );
@@ -122,7 +122,6 @@ const IncomeList: React.FC<Props> = ({
               <IncomeCard
                 income={i}
                 showSecondPrompt={showSecondPrompt}
-                // deleteIncome={deleteIncome}
                 selectIncome={selectIncome}
               />
             </li>

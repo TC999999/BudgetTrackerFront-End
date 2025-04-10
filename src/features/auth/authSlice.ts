@@ -37,6 +37,10 @@ const authSlice = createSlice({
     setTokenError: (state, action: ActionInterface) => {
       state.hasTokenInfo.tokenError = action.payload;
     },
+    //sets state for errors involving failure to submit data
+    setLoadError: (state, action: ActionInterface) => {
+      state.loadError.error = action.payload;
+    },
     // changes user total asset state
     setTotalAssets: (state, action: ActionInterface) => {
       state.userInfo.user!.totalAssets = action.payload;

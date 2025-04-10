@@ -39,6 +39,7 @@ const ExpenseList: React.FC<Props> = ({
   );
   const notifyDelete = (expenseTitle: string) =>
     toast.success(`${expenseTitle} expense successfully deleted`);
+  const notifyError = (message: string) => toast.error(message);
 
   // since filterExpense is an optional prop function, this function calls on filterExpense
   // if it exists
@@ -56,6 +57,8 @@ const ExpenseList: React.FC<Props> = ({
     }
   };
 
+  // updates state to show the prompt window for when a user clicks delete
+  // expense button on an expense card
   const showSecondPrompt = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -67,6 +70,8 @@ const ExpenseList: React.FC<Props> = ({
     [selectedExpense]
   );
 
+  // updates state to hide the prompt window for when a user either clicks cancel on the prompt window or
+  // after the user successfully submits a delete request
   const hidePrompt = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
@@ -99,8 +104,8 @@ const ExpenseList: React.FC<Props> = ({
         callFilterExpense(delExpense._id);
         callUpdateBudget(newUserBudget);
         notifyDelete(delExpense.title);
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        notifyError(err.message);
       } finally {
         dispatch(setSmallLoading(false));
       }

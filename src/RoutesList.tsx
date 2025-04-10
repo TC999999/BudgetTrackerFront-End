@@ -5,7 +5,6 @@ import TransactionHistory from "./transactions/transactionHistory";
 import BudgetPage from "./budgets/BudgetPage";
 import SingleBudgetPage from "./budgets/SingleBudgetPage";
 import IncomePage from "./incomes/IncomePage";
-import BudgetErrorPage from "./budgets/BudgetErrorPage";
 import SignUp from "./auth/SignUp";
 import ResetPassword from "./auth/ResetPassword";
 
@@ -23,7 +22,6 @@ const RoutesList = (): JSX.Element => {
         path="/budgets/:budgetID/user/:id"
         element={<SingleBudgetPage />}
       />
-      <Route path="/budgets/error/unauthorized" element={<BudgetErrorPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

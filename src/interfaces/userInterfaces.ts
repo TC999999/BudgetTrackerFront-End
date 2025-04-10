@@ -6,6 +6,10 @@ export type UserContextInterface = {
   error: string[][] | string | null;
 };
 
+export type LoadError = {
+  error: string;
+};
+
 export type UserEditInterface = {
   title: string;
   value: number;

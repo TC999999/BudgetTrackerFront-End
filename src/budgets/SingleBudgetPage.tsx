@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../features/hooks";
 import BudgetPageCard from "./BudgetPageCard";
 import ExpenseForm from "../expenses/ExpenseForm";
@@ -26,7 +26,6 @@ type FormStateInterface = {
 const SingleBudgetPage = (): JSX.Element => {
   const { budgetID, id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const notify = (message: string) => toast.error(message);
   const [currentBudget, setCurrentBudget] = useState<BudgetInterface>({
@@ -45,16 +44,11 @@ const SingleBudgetPage = (): JSX.Element => {
         dispatch(setSmallLoading(true));
         if (budgetID && id) {
           let budget = await BudgetAPI.getUserBudget(budgetID, id);
-          if (budget) {
-            let expenses = await ExpenseAPI.getAllBudgetExpenses(budgetID, id);
-            setCurrentBudget(budget);
-            setExpenses(expenses);
-          } else {
-            navigate("/budgets/error/unauthorized");
-          }
+          let expenses = await ExpenseAPI.getAllBudgetExpenses(budgetID, id);
+          setCurrentBudget(budget);
+          setExpenses(expenses);
         }
       } catch (err: any) {
-        // navigate("/budgets/error/unauthorized");
         dispatch(setTokenError(err.message));
       } finally {
         dispatch(setSmallLoading(false));

@@ -17,4 +17,7 @@ export const INITIAL_STATE: AuthInitialStateInterface = {
     loading: true,
     tokenError: "",
   },
+  loadError: {
+    error: "",
+  },
 };
