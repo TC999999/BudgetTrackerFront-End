@@ -23,6 +23,14 @@
     @apply active:border-green-600;
   }
 
+  .checkbox {
+    @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150;
+  }
+
+  .checkbox-add {
+    @apply text-green-600 hover:ring-green-600 focus:ring-green-600;
+  }
+
   .radio {
     @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150;
   }

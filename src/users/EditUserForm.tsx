@@ -290,7 +290,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
                     num={formData.value}
                   />
                 </div>
-                <div className="edit-user-radio-buttons p-2">
+                <div id="edit-user-radio-buttons" className="p-2">
                   <fieldset className="edit-user-choices">
                     <legend className="font-bold">
                       Does this transaction add to or subtract from your total
@@ -351,16 +351,16 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
               </p>
               <div className="button-div flex justify-between">
                 <div>
-                  <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                    Add this Transaction
-                  </button>
-                </div>
-                <div>
                   <button
                     className="cancel-button"
                     onClick={(e) => hideForm(e)}
                   >
                     Cancel
+                  </button>
+                </div>
+                <div>
+                  <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+                    Add this Transaction
                   </button>
                 </div>
               </div>

@@ -16,7 +16,11 @@ import { Link } from "react-router-dom";
 
 // returns login form for users to login to their accounts
 const LogIn = (): JSX.Element => {
-  const initialState: LogInInterface = { username: "", password: "" };
+  const initialState: LogInInterface = {
+    username: "",
+    password: "",
+    trusted: true,
+  };
   const initialErrors: LogInErrors = {
     username: "",
     password: "",
@@ -60,6 +64,12 @@ const LogIn = (): JSX.Element => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
+  // updates form data state when the user checks or unchecks the checkbox that this is a trusted device
+  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name } = e.target;
+    setFormData((data) => ({ ...data, [name]: e.target.checked }));
+  };
+
   // submits login information and retrieves user data. If there are any errors in the inputs (username has
   // spaces between characters or password length too short), does not submit data and the errorful inputs
   // flash red.
@@ -68,11 +78,12 @@ const LogIn = (): JSX.Element => {
   // username.
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    const { username, password } = formData;
+    const { username, password, trusted } = formData;
     try {
       const logInInfo: LogInInterface = {
         username,
         password,
+        trusted,
       };
       if (handleLogInSubmitErrors(logInInfo, setLogInErrors)) {
         localStorage.setItem(
@@ -149,6 +160,21 @@ const LogIn = (): JSX.Element => {
                   <p>{logInErrors.password}</p>
                 </div>
               )}
+            </div>
+            <div id="trusted-div" className="flex justify-center">
+              <div className="flex items-center">
+                <input
+                  className="form-checkbox checkbox checkbox-add"
+                  id="login_trusted"
+                  type="checkbox"
+                  name="trusted"
+                  checked={formData.trusted}
+                  onChange={handleCheckBox}
+                />
+                <label className="text-lg" htmlFor="trusted">
+                  Do You Trust This Device?
+                </label>
+              </div>
             </div>
             <div className="button-div text-center m-2">
               <button className="get-profile-button border-2 border-green-500 rounded-full bg-green-400 p-2 hover:bg-green-900 hover:text-white">

@@ -10,13 +10,16 @@ export type AuthInitialStateInterface = {
 export type LogInInterface = {
   username: string;
   password: string;
+  trusted: boolean;
 };
 
-export interface SignUpInterface extends LogInInterface {
+export type SignUpInterface = {
+  username: string;
+  password: string;
   totalAssets: number;
   email: string;
   incomes: SubmitIncomeSignUp[];
-}
+};
 
 export type LogInErrors = {
   username: string;
