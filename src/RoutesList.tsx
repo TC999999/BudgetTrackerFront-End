@@ -1,5 +1,8 @@
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoutes from "./ProtectedRoutes";
+import ErrorRouter from "./ErrorRouter";
 import NotFound from "./NotFound";
+import Error from "./Error";
 import HomePage from "./users/HomePage";
 import TransactionHistory from "./transactions/transactionHistory";
 import BudgetPage from "./budgets/BudgetPage";
@@ -15,13 +18,17 @@ const RoutesList = (): JSX.Element => {
       <Route path="/" element={<HomePage />} />
       <Route path="/register" element={<SignUp />} />
       <Route path="/resetPassword" element={<ResetPassword />} />
-      <Route path="transactions/user/:id" element={<TransactionHistory />} />
-      <Route path="/incomes/user/:id" element={<IncomePage />} />
-      <Route path="/budgets/user/:id" element={<BudgetPage />} />
-      <Route
-        path="/budgets/:budgetID/user/:id"
-        element={<SingleBudgetPage />}
-      />
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/transactions/user/:id" element={<TransactionHistory />} />
+        <Route path="/incomes/user/:id" element={<IncomePage />} />
+        <Route path="/budgets">
+          <Route path="user/:id" element={<BudgetPage />} />
+          <Route path=":budgetID/user/:id" element={<SingleBudgetPage />} />
+        </Route>
+        <Route element={<ErrorRouter />}>
+          <Route path="/error" element={<Error />} />
+        </Route>
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

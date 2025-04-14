@@ -24,6 +24,7 @@ const LogIn = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<LogInInterface>(initialState);
   const [logInErrors, setLogInErrors] = useState<LogInErrors>(initialErrors);
+  const [submitError, setSubmitError] = useState<string>("");
   const [flashInput, setFlashInput] = useState<LogInFlashErrors>({
     username: false,
     password: false,
@@ -38,6 +39,10 @@ const LogIn = (): JSX.Element => {
   // and grab it after the rerender and sets the form data
   useEffect(() => {
     let inputs: string | null = localStorage.getItem("userInputs");
+    if (userStatus.error) {
+      setSubmitError(userStatus.error);
+      dispatch(removeUserError());
+    }
     if (inputs) {
       setFormData(JSON.parse(inputs));
       localStorage.removeItem("userInputs");
@@ -47,9 +52,8 @@ const LogIn = (): JSX.Element => {
   // handles changes to login form, if user makes any errors while inputting data, the frontend lets them know
   // Additionally, if the redux user status has an error, removes that error.
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (userStatus.error) {
-      dispatch(removeUserError());
-    }
+    if (submitError) setSubmitError("");
+
     const { name, value } = e.target;
     if (name === "username" || name === "password")
       handleLogInInputErrors(name, value, setLogInErrors);
@@ -86,8 +90,8 @@ const LogIn = (): JSX.Element => {
           setFlashInput({ username: false, password: false });
         }, 500);
       }
-    } catch (err) {
-      console.log("error in login");
+    } catch (err: any) {
+      console.log(err);
     }
   };
 
@@ -151,9 +155,9 @@ const LogIn = (): JSX.Element => {
                 Log In!
               </button>
             </div>
-            {typeof userStatus.error === "string" && (
+            {submitError && (
               <div className="error-message text-center text-red-500 text-xl font-bold">
-                <p>{userStatus.error}</p>
+                <p>{submitError}</p>
               </div>
             )}
           </form>

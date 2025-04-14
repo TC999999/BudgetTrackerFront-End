@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../features/hooks";
 import BudgetPageCard from "./BudgetPageCard";
 import ExpenseForm from "../expenses/ExpenseForm";
@@ -10,7 +10,7 @@ import OnPageLoading from "../OnPageLoading";
 import { addNewExpense } from "../helpers/addNewExpense";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
-import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
+import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
 import ExpenseAPI from "../apis/ExpenseAPI";
@@ -26,6 +26,7 @@ type FormStateInterface = {
 const SingleBudgetPage = (): JSX.Element => {
   const { budgetID, id } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const notify = (message: string) => toast.error(message);
   const [currentBudget, setCurrentBudget] = useState<BudgetInterface>({
@@ -49,7 +50,8 @@ const SingleBudgetPage = (): JSX.Element => {
           setExpenses(expenses);
         }
       } catch (err: any) {
-        dispatch(setTokenError(err.message));
+        dispatch(setLoadError(JSON.parse(err.message)));
+        navigate("/error");
       } finally {
         dispatch(setSmallLoading(false));
       }

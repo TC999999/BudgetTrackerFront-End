@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { infoInterface } from "./interfaces/miscTypes";
 import { budgetFunds } from "./interfaces/budgetInterfaces";
 import {
@@ -32,6 +33,22 @@ const SecondPrompt: React.FC<Props> = ({
     hidePrompt(e);
     if (itemForDeletion) deleteFunction(e, itemForDeletion);
   };
+
+  const remainingMoney = useMemo(() => {
+    if (BudgetFunds && itemForDeletion?.transaction)
+      return calcNewMoneyRemaining(
+        BudgetFunds.moneyRemaining,
+        itemForDeletion.transaction
+      );
+  }, []);
+
+  const moneySpent = useMemo(() => {
+    if (BudgetFunds && itemForDeletion?.transaction)
+      return calcNewMoneySpent(
+        BudgetFunds.moneySpent,
+        itemForDeletion.transaction
+      );
+  }, []);
 
   return (
     <div className="modal-layer-1">
@@ -80,11 +97,7 @@ const SecondPrompt: React.FC<Props> = ({
                         <FaArrowRight />
                       </td>
                       <td className="text-xl text-green-700">
-                        $
-                        {calcNewMoneyRemaining(
-                          BudgetFunds.moneyRemaining,
-                          itemForDeletion.transaction
-                        )}
+                        ${remainingMoney}
                       </td>
                     </tr>
                     <tr>
@@ -97,13 +110,7 @@ const SecondPrompt: React.FC<Props> = ({
                       <td>
                         <FaArrowRight />
                       </td>
-                      <td className="text-xl text-green-700">
-                        $
-                        {calcNewMoneySpent(
-                          BudgetFunds.moneySpent,
-                          itemForDeletion.transaction
-                        )}
-                      </td>
+                      <td className="text-xl text-green-700">${moneySpent}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -4,6 +4,7 @@ import {
   BudgetInterface,
   DeleteBudgetInterface,
 } from "../interfaces/budgetInterfaces";
+import { error } from "../interfaces/userInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
@@ -33,7 +34,8 @@ const DeleteBudgetForm: React.FC<Props> = ({
         2
       )} added to available assets.`
     );
-  const notifyError = (message: string) => toast.error(message);
+  const notifyError = (error: error) =>
+    toast.error(`${error.status} Error: ${error.message}`);
 
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
@@ -83,7 +85,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
       navigate(`/budgets/user/${userStatus.user?._id}`);
       notify(budget.title, formData.addBackToAssets);
     } catch (err: any) {
-      notifyError(err);
+      notifyError(JSON.parse(err.message));
     } finally {
       dispatch(setSmallLoading(false));
     }

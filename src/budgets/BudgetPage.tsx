@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../features/hooks";
-import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
+import { setLoadError, setSmallLoading } from "../features/auth/authSlice";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
 import OnPageLoading from "../OnPageLoading";
@@ -17,6 +17,7 @@ import BudgetAPI from "../apis/BudgetAPI";
 const BudgetPage = (): JSX.Element => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const notify = () =>
     toast.error("You have reached the maximum number of allowed budgets");
 
@@ -32,7 +33,8 @@ const BudgetPage = (): JSX.Element => {
           setBudgets(budgets);
         }
       } catch (err: any) {
-        dispatch(setTokenError(err.message));
+        dispatch(setLoadError(JSON.parse(err.message)));
+        navigate("/error");
       } finally {
         dispatch(setSmallLoading(false));
       }

@@ -1,0 +1,18 @@
+import { useAppSelector } from "./features/hooks";
+import { error } from "./interfaces/userInterfaces";
+
+// returns a general error window for non browser url errors
+const Error = () => {
+  const { message, status }: error = useAppSelector(
+    (store) => store.user.loadError
+  );
+
+  return (
+    <div id="error-page" className="text-center p-2">
+      <h1 className="text-9xl text-emerald-900 underline">{status} ERROR</h1>
+      <h1 className="text-6xl p-2">{message}</h1>
+    </div>
+  );
+};
+
+export default Error;

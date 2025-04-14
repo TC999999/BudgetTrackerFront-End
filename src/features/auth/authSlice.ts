@@ -1,10 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  registerUser,
-  findToken,
-  logInUser,
-  logOutUser,
-} from "../actions/auth";
+import { registerUser, logInUser, logOutUser } from "../actions/auth";
 import { getCurrentUser, addToAssets } from "../actions/users";
 // import { addNewIncome, updateIncome, removeIncome } from "../actions/incomes";
 import { addNewBudget, updateBudget, deleteBudget } from "../actions/budgets";
@@ -39,7 +34,7 @@ const authSlice = createSlice({
     },
     //sets state for errors involving failure to submit data
     setLoadError: (state, action: ActionInterface) => {
-      state.loadError.error = action.payload;
+      state.loadError = action.payload;
     },
     // changes user total asset state
     setTotalAssets: (state, action: ActionInterface) => {
@@ -60,9 +55,8 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action: any) => {
         state.userInfo.loading = false;
         state.userInfo.userExists = true;
-        state.userInfo.user = action.payload;
+        state.userInfo.user = action.payload.newUser;
         state.userInfo.error = null;
-        state.hasTokenInfo.hasRefreshToken = true;
       })
       .addCase(registerUser.rejected, (state, action: any) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
@@ -77,26 +71,14 @@ const authSlice = createSlice({
       .addCase(logInUser.fulfilled, (state, action: any) => {
         state.userInfo.loading = false;
         state.userInfo.userExists = true;
-        state.userInfo.user = action.payload.newUser;
+        state.userInfo.user = action.payload.user;
         state.userInfo.error = null;
-        state.hasTokenInfo.hasRefreshToken = true;
       })
       .addCase(logInUser.rejected, (state, action: any) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
         state.userInfo.error = action.payload;
-      })
-      .addCase(findToken.pending, (state) => {
-        state.hasTokenInfo.loading = true;
-      })
-      .addCase(findToken.fulfilled, (state, action: any) => {
-        state.hasTokenInfo.loading = false;
-        state.hasTokenInfo.hasRefreshToken = action.payload.token;
-      })
-      .addCase(findToken.rejected, (state) => {
-        state.hasTokenInfo.loading = false;
-        state.hasTokenInfo.hasRefreshToken = false;
       })
       .addCase(getCurrentUser.pending, (state) => {
         state.userInfo.loading = true;
@@ -106,25 +88,20 @@ const authSlice = createSlice({
         state.userInfo.userExists = true;
         state.userInfo.user = action.payload.user;
       })
-      .addCase(getCurrentUser.rejected, (state, action: any) => {
+      .addCase(getCurrentUser.rejected, (state) => {
         state.userInfo.user = INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
-        state.userInfo.error = action.payload;
       })
       .addCase(logOutUser.pending, (state) => {
-        state.hasTokenInfo.loading = true;
         state.userInfo.loading = true;
       })
       .addCase(logOutUser.fulfilled, (state) => {
-        state.hasTokenInfo.loading = false;
         state.userInfo.loading = false;
-        state.hasTokenInfo.hasRefreshToken = false;
         state.userInfo.userExists = false;
         state.userInfo.user = INITIAL_STATE.userInfo.user;
       })
       .addCase(logOutUser.rejected, (state, action: any) => {
-        state.hasTokenInfo.loading = false;
         state.userInfo.loading = false;
         state.userInfo.error = action.payload;
       })
@@ -198,6 +175,7 @@ export const {
   setSmallLoading,
   removeUserError,
   setTokenError,
+  setLoadError,
   setTotalAssets,
   incomeUpdate,
 } = authSlice.actions;

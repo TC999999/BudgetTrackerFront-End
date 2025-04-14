@@ -1,61 +1,39 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import RoutesList from "./RoutesList";
 import { useAppDispatch } from "./features/hooks";
-import {
-  setUserLoading,
-  removeUserError,
-  incomeUpdate,
-} from "./features/auth/authSlice";
-import { findToken } from "./features/actions/auth";
+import { incomeUpdate, setUserLoading } from "./features/auth/authSlice";
 import { getCurrentUser } from "./features/actions/users";
 import { useAppSelector } from "./features/hooks";
 import LoadingMsg from "./LoadingUserMsg";
 import SmallLoadingMsg from "./SmallLoadingMsg";
 import TokenErrorMsg from "./TokenErrorMsg";
 import Navbar from "./Navbar";
-import { hasTokenInterface } from "./interfaces/authInterfaces";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { ToastContainer, toast } from "react-toastify";
+import TokenAPI from "./apis/TokenAPI";
 
 //renders whole application
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const notify = (message: string) => toast.success(message);
-
-  const location = useLocation();
-  const [currPath, setCurrPath] = useState<string>("/");
 
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
 
-  const tokenStatus: hasTokenInterface = useAppSelector(
-    (store) => store.user.hasTokenInfo
-  );
-
-  // checks to see if there's a refresh JWT stored in cookies, sets access JWT in cookies
-  useEffect(() => {
-    const getTokenInfo = async () => {
-      await dispatch(findToken({})).unwrap();
-    };
-    getTokenInfo();
-  }, [dispatch]);
-
-  // if a refresh JWT is found in cookies, retrieves the information tied to that user
-  // from the db and stores in redux
+  // retrieves the current user using refresh token saved as an http only cookie. If there are no tokens, returns an error and
+  // returns user to login page
   useEffect(() => {
     const getUserInfo = async () => {
-      if (tokenStatus.hasRefreshToken && !tokenStatus.loading) {
+      if (await TokenAPI.getRefreshToken()) {
         await dispatch(getCurrentUser({}));
-      } else if (!tokenStatus.hasRefreshToken && !tokenStatus.loading) {
         dispatch(setUserLoading(false));
-        navigate("/");
+      } else {
+        dispatch(setUserLoading(false));
       }
     };
     getUserInfo();
-  }, [dispatch, tokenStatus.hasRefreshToken, tokenStatus.loading]);
+  }, [dispatch]);
 
   // if user information is found in redux, opens an event source connection to the server to listen
   // for live updates
@@ -87,14 +65,6 @@ function App(): JSX.Element {
       return () => es.close();
     }
   }, [dispatch, userStatus.user?._id, userStatus.loading]);
-
-  // removes user error if the path name in the url changes
-  useEffect(() => {
-    if (location.pathname !== currPath) {
-      dispatch(removeUserError());
-      setCurrPath(location.pathname);
-    }
-  }, [location]);
 
   // returns loading messages, toast notifications, and routes list
   return (

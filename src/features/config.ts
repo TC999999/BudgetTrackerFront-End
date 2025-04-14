@@ -13,11 +13,10 @@ export const INITIAL_STATE: AuthInitialStateInterface = {
     error: "",
   },
   hasTokenInfo: {
-    hasRefreshToken: false,
-    loading: true,
     tokenError: "",
   },
   loadError: {
-    error: "",
+    message: "",
+    status: null,
   },
 };

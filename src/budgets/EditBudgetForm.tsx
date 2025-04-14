@@ -22,6 +22,7 @@ import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
+import { error } from "../interfaces/userInterfaces";
 
 type Props = {
   hideEditForm: (
@@ -44,7 +45,8 @@ const EditBudgetForm: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const notify = (notificationString: string) =>
     toast.success(notificationString);
-  const notifyError = (message: string) => toast.error(message);
+  const notifyError = (error: error) =>
+    toast.error(`${error.status} Error: ${error.message}`);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -218,7 +220,7 @@ const EditBudgetForm: React.FC<Props> = ({
         }, 500);
       }
     } catch (err: any) {
-      notifyError(err);
+      notifyError(JSON.parse(err.message));
     } finally {
       dispatch(setSmallLoading(false));
     }

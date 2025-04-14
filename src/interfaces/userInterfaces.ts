@@ -3,11 +3,12 @@ export type UserContextInterface = {
   userExists: boolean;
   loading: boolean;
   smallLoading: boolean;
-  error: string[][] | string | null;
+  error: string | null;
 };
 
-export type LoadError = {
-  error: string;
+export type error = {
+  message: string;
+  status: number | null;
 };
 
 export type UserEditInterface = {

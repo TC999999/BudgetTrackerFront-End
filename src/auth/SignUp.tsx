@@ -50,6 +50,7 @@ const SignUp = (): JSX.Element => {
   const [formData, setFormData] = useState<SignUpInterface>(initialState);
   const [keyPadError, setKeyPadError] = useState<boolean>(false);
   const [signUpErrors, setSignUpErrors] = useState(initialErrors);
+  const [submitError, setSubmitError] = useState<string>("");
   const [FlashErrors, setFlashErrors] = useState<SignUpFlashErrors>({
     username: false,
     password: false,
@@ -63,6 +64,10 @@ const SignUp = (): JSX.Element => {
     if (userStatus.userExists) {
       navigate("/");
     }
+    if (userStatus.error) {
+      setSubmitError(userStatus.error);
+      dispatch(removeUserError());
+    }
     let inputs: string | null = localStorage.getItem("userInputs");
     if (inputs) {
       setFormData(JSON.parse(inputs));
@@ -74,8 +79,8 @@ const SignUp = (): JSX.Element => {
   // (e.g. username contains spaces betwwen characters, password length too long, email address is invalid)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
+    if (submitError) setSubmitError("");
     if (name === "username") {
-      if (userStatus.error) dispatch(removeUserError());
       handleSignUpInputErrors(name, value, setSignUpErrors);
     } else if (name === "password" || name === "email") {
       handleSignUpInputErrors(name, value, setSignUpErrors);
