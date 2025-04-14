@@ -17,6 +17,7 @@ import { createUpdateUserString } from "../helpers/createNotificationString";
 import { addToAssets } from "../features/actions/users";
 import { DateTime } from "luxon";
 import { toast } from "react-toastify";
+import { error } from "../interfaces/miscTypes";
 
 type Props = {
   hideForm: (
@@ -38,7 +39,8 @@ type flashErrors = { title: boolean; value: boolean; date: boolean };
 const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notification: string) => toast.success(notification);
-  const errorNotify = (err: any) => toast.error(err);
+  const notifyError = (error: error) =>
+    toast.error(`${error.status} Error: ${error.message}`);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -48,6 +50,8 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     operation: "add",
     date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
   };
+
+  // inital empty string errors for error state
   const initalErrors: UserEditErrors = { title: "", value: "", date: "" };
   // sets state for initial form data
   const [formData, setFormData] = useState<FormInfo>(initialState);
@@ -178,7 +182,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
         }, 500);
       }
     } catch (err: any) {
-      errorNotify(err);
+      notifyError(err);
     }
   };
 

@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../features/hooks";
 import { Income } from "../interfaces/incomeInterfaces";
-import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
+import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
 import OnPageLoading from "../OnPageLoading";
@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 const IncomePage = (): JSX.Element => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const notify = () =>
     toast.error("You have reached the maximum number of incomes");
 
@@ -31,7 +32,8 @@ const IncomePage = (): JSX.Element => {
           setIncomes(newIncomes);
         }
       } catch (err: any) {
-        dispatch(setTokenError(err.message));
+        dispatch(setLoadError(JSON.parse(err.message)));
+        navigate("/error");
       } finally {
         dispatch(setSmallLoading(false));
       }

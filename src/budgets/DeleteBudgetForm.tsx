@@ -4,7 +4,7 @@ import {
   BudgetInterface,
   DeleteBudgetInterface,
 } from "../interfaces/budgetInterfaces";
-import { error } from "../interfaces/userInterfaces";
+import { error } from "../interfaces/miscTypes";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";

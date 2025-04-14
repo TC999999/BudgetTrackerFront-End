@@ -8,6 +8,7 @@ import {
   Income,
 } from "../interfaces/incomeInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
+import { error } from "../interfaces/miscTypes";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
@@ -42,7 +43,8 @@ const UpdateIncomeForm: React.FC<Props> = ({
 }): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notification: string) => toast.success(notification);
-  const notifyError = (message: string) => toast.error(message);
+  const notifyError = (error: error) =>
+    toast.error(`${error.status} Error: ${error.message}`);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -199,7 +201,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
         notify(createUpdateIncomeString(income, submitData));
         selectIncome(e, null);
       } catch (err: any) {
-        notifyError(err);
+        notifyError(JSON.parse(err.message));
       } finally {
         dispatch(setSmallLoading(false));
       }

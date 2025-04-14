@@ -1,19 +1,21 @@
 import { useState, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import EditUserForm from "./EditUserForm";
 import TransactionList from "../transactions/transactionList";
-import TransactionAPI from "../apis/TransactionAPI";
-import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
-import { toast } from "react-toastify";
-import ExpenseAPI from "../apis/ExpenseAPI";
 import ExpenseList from "../expenses/ExpenseList";
+import ExpenseAPI from "../apis/ExpenseAPI";
+import TransactionAPI from "../apis/TransactionAPI";
+import { toast } from "react-toastify";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
   const { user } = useAppSelector((store) => store.user.userInfo);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const notify = () => toast.error("You have reached the maximum asset value");
   const [showAssetForm, setShowAssetForm] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -34,7 +36,8 @@ const Dashboard = (): JSX.Element => {
           setExpenses(recentExpenses);
         }
       } catch (err: any) {
-        dispatch(setTokenError(err.message));
+        dispatch(setLoadError(JSON.parse(err.message)));
+        navigate("/error");
       } finally {
         dispatch(setSmallLoading(false));
       }

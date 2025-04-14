@@ -6,11 +6,6 @@ export type UserContextInterface = {
   error: string | null;
 };
 
-export type error = {
-  message: string;
-  status: number | null;
-};
-
 export type UserEditInterface = {
   title: string;
   value: number;

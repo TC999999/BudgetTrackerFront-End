@@ -8,7 +8,7 @@ import {
 import { budgetFunds, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { setSmallLoading } from "../features/auth/authSlice";
-import { infoInterface } from "../interfaces/miscTypes";
+import { error, infoInterface } from "../interfaces/miscTypes";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import { toast } from "react-toastify";
 
@@ -39,7 +39,8 @@ const ExpenseList: React.FC<Props> = ({
   );
   const notifyDelete = (expenseTitle: string) =>
     toast.success(`${expenseTitle} expense successfully deleted`);
-  const notifyError = (message: string) => toast.error(message);
+  const notifyError = (error: error) =>
+    toast.error(`${error.status} Error: ${error.message}`);
 
   // since filterExpense is an optional prop function, this function calls on filterExpense
   // if it exists
@@ -103,9 +104,10 @@ const ExpenseList: React.FC<Props> = ({
         );
         callFilterExpense(delExpense._id);
         callUpdateBudget(newUserBudget);
+        setSelectedExpense(null);
         notifyDelete(delExpense.title);
       } catch (err: any) {
-        notifyError(err.message);
+        notifyError(JSON.parse(err.message));
       } finally {
         dispatch(setSmallLoading(false));
       }

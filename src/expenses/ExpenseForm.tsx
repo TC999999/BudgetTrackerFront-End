@@ -18,6 +18,7 @@ import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { DateTime } from "luxon";
 import { toast } from "react-toastify";
 import ExpenseAPI from "../apis/ExpenseAPI";
+import { error } from "../interfaces/miscTypes";
 
 type flashErrors = { title: boolean; transaction: boolean; date: boolean };
 
@@ -44,7 +45,8 @@ const ExpenseForm: React.FC<Props> = ({
         2
       )} spent. $${availableMoney} remaining in ${budget.title}.`
     );
-  const notifyError = (message: string) => toast.error(message);
+  const notifyError = (error: error) =>
+    toast.error(`${error.status} Error: ${error.message}`);
   const userStatus = useAppSelector((store) => store.user.userInfo);
 
   const initialState: newExpenseInterface = {
@@ -170,7 +172,7 @@ const ExpenseForm: React.FC<Props> = ({
         }, 500);
       }
     } catch (err: any) {
-      notifyError(err);
+      notifyError(JSON.parse(err.message));
     } finally {
       dispatch(setSmallLoading(false));
     }

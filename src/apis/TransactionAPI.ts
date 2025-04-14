@@ -22,7 +22,7 @@ export default class TransactionAPI {
       });
       return res.data;
     } catch (err: any) {
-      throw new Error(err.response.data.error.message);
+      throw new Error(JSON.stringify(err.response.data.error));
     }
   }
 

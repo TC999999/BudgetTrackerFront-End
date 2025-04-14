@@ -22,7 +22,7 @@ import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
-import { error } from "../interfaces/userInterfaces";
+import { error } from "../interfaces/miscTypes";
 
 type Props = {
   hideEditForm: (

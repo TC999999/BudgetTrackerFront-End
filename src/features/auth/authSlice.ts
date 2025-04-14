@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, logInUser, logOutUser } from "../actions/auth";
 import { getCurrentUser, addToAssets } from "../actions/users";
-// import { addNewIncome, updateIncome, removeIncome } from "../actions/incomes";
-import { addNewBudget, updateBudget, deleteBudget } from "../actions/budgets";
-import { addNewExpense, removeExpense } from "../actions/expenses";
 import { INITIAL_STATE } from "../config";
 
 type ActionInterface = {
@@ -28,10 +25,6 @@ const authSlice = createSlice({
     removeUserError: (state) => {
       state.userInfo.error = null;
     },
-    //sets state for errors involving tokens
-    setTokenError: (state, action: ActionInterface) => {
-      state.hasTokenInfo.tokenError = action.payload;
-    },
     //sets state for errors involving failure to submit data
     setLoadError: (state, action: ActionInterface) => {
       state.loadError = action.payload;
@@ -50,7 +43,6 @@ const authSlice = createSlice({
     builder
       .addCase(registerUser.pending, (state) => {
         state.userInfo.loading = true;
-        state.hasTokenInfo.tokenError = "";
       })
       .addCase(registerUser.fulfilled, (state, action: any) => {
         state.userInfo.loading = false;
@@ -66,7 +58,6 @@ const authSlice = createSlice({
       })
       .addCase(logInUser.pending, (state) => {
         state.userInfo.loading = true;
-        state.hasTokenInfo.tokenError = "";
       })
       .addCase(logInUser.fulfilled, (state, action: any) => {
         state.userInfo.loading = false;
@@ -115,57 +106,6 @@ const authSlice = createSlice({
       })
       .addCase(addToAssets.rejected, (state) => {
         state.userInfo.smallLoading = false;
-      })
-      .addCase(addNewBudget.pending, (state) => {
-        state.userInfo.smallLoading = true;
-      })
-      .addCase(addNewBudget.fulfilled, (state, action: any) => {
-        let { newAssets } = action.payload;
-        state.userInfo.user!.totalAssets = newAssets;
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(addNewBudget.rejected, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(updateBudget.pending, (state) => {
-        state.userInfo.smallLoading = true;
-      })
-      .addCase(updateBudget.fulfilled, (state, action: any) => {
-        let { newAssets } = action.payload;
-        state.userInfo.user!.totalAssets = newAssets;
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(updateBudget.rejected, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(deleteBudget.pending, (state) => {
-        state.userInfo.smallLoading = true;
-      })
-      .addCase(deleteBudget.fulfilled, (state, action: any) => {
-        let { totalAssets } = action.payload;
-        state.userInfo.user!.totalAssets = totalAssets;
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(deleteBudget.rejected, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(addNewExpense.pending, (state) => {
-        state.userInfo.smallLoading = true;
-      })
-      .addCase(addNewExpense.fulfilled, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(addNewExpense.rejected, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(removeExpense.pending, (state) => {
-        state.userInfo.smallLoading = true;
-      })
-      .addCase(removeExpense.fulfilled, (state) => {
-        state.userInfo.smallLoading = false;
-      })
-      .addCase(removeExpense.rejected, (state) => {
-        state.userInfo.smallLoading = false;
       });
   },
 });
@@ -174,7 +114,6 @@ export const {
   setUserLoading,
   setSmallLoading,
   removeUserError,
-  setTokenError,
   setLoadError,
   setTotalAssets,
   incomeUpdate,

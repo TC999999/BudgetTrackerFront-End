@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import TransactionAPI from "../apis/TransactionAPI";
 import { useAppDispatch } from "../features/hooks";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionList from "./transactionList";
 import OnPageLoading from "../OnPageLoading";
-import { setSmallLoading, setTokenError } from "../features/auth/authSlice";
+import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
 
 // returns a list of all miscellaneous transactions the user has made
 const TransactionHistory = (): JSX.Element => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   // makes a request to retrieve all of a single user's transactions from db on initial
@@ -25,7 +26,8 @@ const TransactionHistory = (): JSX.Element => {
           setTransactions(transactions);
         }
       } catch (err: any) {
-        dispatch(setTokenError(err.message));
+        dispatch(setLoadError(JSON.parse(err.message)));
+        navigate("/error");
       } finally {
         dispatch(setSmallLoading(false));
       }

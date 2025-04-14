@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useAppSelector } from "./features/hooks";
 import { infoInterface } from "./interfaces/miscTypes";
 import { budgetFunds } from "./interfaces/budgetInterfaces";
 import {
@@ -25,12 +26,15 @@ const SecondPrompt: React.FC<Props> = ({
   itemForDeletion,
   type,
   BudgetFunds,
-}): JSX.Element => {
+}): JSX.Element | null => {
+  const smallLoading: boolean = useAppSelector(
+    (store) => store.user.userInfo.smallLoading
+  );
+
   // uses callback function from props to delete either an income or expense from db and state
   const deleteFromState = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    hidePrompt(e);
     if (itemForDeletion) deleteFunction(e, itemForDeletion);
   };
 
@@ -50,7 +54,7 @@ const SecondPrompt: React.FC<Props> = ({
       );
   }, []);
 
-  return (
+  return !smallLoading ? (
     <div className="modal-layer-1">
       <div className="modal-layer-2">
         <div className="modal-layer-3 text-center">
@@ -137,7 +141,7 @@ const SecondPrompt: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default SecondPrompt;

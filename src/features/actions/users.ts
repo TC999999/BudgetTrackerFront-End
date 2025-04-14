@@ -44,7 +44,7 @@ export const addToAssets = createAsyncThunk<
       });
       return res.data.user;
     } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data.error.message);
+      return thunkAPI.rejectWithValue(err.response.data.error);
     }
   }
 );

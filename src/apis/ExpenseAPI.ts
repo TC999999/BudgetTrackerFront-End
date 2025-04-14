@@ -27,7 +27,7 @@ export default class ExpenseAPI {
       });
       return res.data;
     } catch (err: any) {
-      throw new Error(err.response.data.error.message);
+      throw new Error(JSON.stringify(err.response.data.error));
     }
   }
 

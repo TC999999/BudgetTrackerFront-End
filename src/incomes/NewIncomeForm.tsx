@@ -8,6 +8,7 @@ import {
   FlashIncomeErrors,
 } from "../interfaces/incomeInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
+import { error } from "../interfaces/miscTypes";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
@@ -40,7 +41,8 @@ const NewIncomeForm: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const notify = (incomeTitle: string) =>
     toast.success(`${incomeTitle} income successfully created`);
-  const notifyError = (message: string) => toast.error(message);
+  const notifyError = (error: error) =>
+    toast.error(`${error.status} Error: ${error.message}`);
   const userStatus: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo
   );
@@ -216,7 +218,7 @@ const NewIncomeForm: React.FC<Props> = ({
         }, 500);
       }
     } catch (err: any) {
-      notifyError(err);
+      notifyError(JSON.parse(err.message));
     } finally {
       dispatch(setSmallLoading(false));
     }

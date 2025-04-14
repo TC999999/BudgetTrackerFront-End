@@ -1,5 +1,5 @@
 import { useAppSelector } from "./features/hooks";
-import { error } from "./interfaces/userInterfaces";
+import { error } from "./interfaces/miscTypes";
 
 // returns a general error window for non browser url errors
 const Error = () => {

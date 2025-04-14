@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Income, deleteIncomeType } from "../interfaces/incomeInterfaces";
 import { infoInterface } from "../interfaces/miscTypes";
+import { error } from "../interfaces/miscTypes";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import IncomeCard from "./IncomeCard";
 import UpdateIncomeForm from "./UpdateIncomeForm";
@@ -24,7 +25,8 @@ const IncomeList: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const notify = (message: string) =>
     toast.success(`Income ${message} deleted successfully`);
-  const notifyError = (message: string) => toast.error(message);
+  const notifyError = (error: error) =>
+    toast.error(`${error.status} Error: ${error.message}`);
 
   const { user } = useAppSelector((store) => store.user.userInfo);
 
@@ -86,10 +88,11 @@ const IncomeList: React.FC<Props> = ({
             user._id
           );
           removeFromIncomeState(info._id);
+          setSelectedIncomeForDelete(null);
           notify(delIncome.title);
         }
       } catch (err: any) {
-        notifyError(err);
+        notifyError(JSON.parse(err.message));
       } finally {
         dispatch(setSmallLoading(false));
       }
