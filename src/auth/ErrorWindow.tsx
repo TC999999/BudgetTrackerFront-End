@@ -13,12 +13,18 @@ const ErrorWindow: React.FC<Props> = ({
   return (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2">
-        <div className="submit-form-error-msg p-4 text-center relative bg-gray-100 rounded-lg shadow-sm border-2 border-red-800">
+        <div
+          id="submit-form-error-msg"
+          className="p-4 text-center relative bg-gray-100 rounded-lg shadow-sm border-2 border-red-800"
+        >
           <div className="flex justify-center p-4">
-            <div className="error-icon text-8xl text-red-700 flex items-center">
+            <div
+              id="error-icon"
+              className="text-8xl text-red-700 flex items-center"
+            >
               <MdError />
             </div>
-            <div className="error-message text-xl">
+            <div id="error-message" className="text-xl">
               <b>{submitError}</b>
             </div>
           </div>

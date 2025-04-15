@@ -101,8 +101,8 @@ const OneTimeCode: React.FC<Props> = ({
     }
   };
   return (
-    <div className="one-time-code-div">
-      <div className="one-time-code">
+    <div id="one-time-code-div">
+      <div id="one-time-code">
         <h1 className="text-center text-xl p-2">
           One-Time-One-Use Verification Code
         </h1>
@@ -110,8 +110,8 @@ const OneTimeCode: React.FC<Props> = ({
           A 6-digit verification code was just sent to your linked email. This
           code will expire after 2 minutes. Please enter the code below.
         </h1>
-        <div className="one-time-code-form">
-          <div className="one-time-code-digits flex justify-center">
+        <div id="one-time-code-form">
+          <div id="one-time-code-digits" className="flex justify-center">
             <div
               className={`digitPlace ${
                 currPlace === 0 && "digitPlace-select"
@@ -162,10 +162,11 @@ const OneTimeCode: React.FC<Props> = ({
             </div>
           </div>
           <FullKeyPad handlePress={handlePress} handleDelete={handleDelete} />
-          <div className="submit-code-button text-center">
+          <div id="submit-code-button-div" className="text-center">
             <button
               onClick={handleSubmit}
-              className="submit-code border-2 text-gray-100 border-green-900 bg-green-500 p-2 rounded-full hover:bg-green-200 hover:text-black duration-150"
+              id="submit-code-button"
+              className="border-2 text-gray-100 border-green-900 bg-green-500 p-2 rounded-full hover:bg-green-200 hover:text-black duration-150"
             >
               Submit Code
             </button>

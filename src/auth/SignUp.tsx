@@ -148,7 +148,7 @@ const SignUp = (): JSX.Element => {
     setFormData((data) => ({ ...data, [name]: e.target.checked }));
   };
 
-  // sends new user info to db and creates a new account for user; automatially loggs them in as well. If there
+  // sends new user info to db and creates a new account for user; automatially logs them in as well. If there
   // are any errors in inputs, does not submit data and flashes errorful inputs. If backend error occurs,
   // returns to this page (e.g. username or email already exist).
   // Additionally, temporarily saves info into localstorage since submitting data causes the page to rerender,
@@ -216,8 +216,14 @@ const SignUp = (): JSX.Element => {
   );
 
   return (
-    <main className="register-page bg-[url('/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-full max-h-full">
-      <div className="register-form px-4 py-2 bg-white border-2 border-green-700 rounded-r-lg h-full max-h-full overflow-auto">
+    <main
+      id="register-page"
+      className="bg-[url('/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-full max-h-full"
+    >
+      <div
+        id="register-form"
+        className="px-4 py-2 bg-white border-2 border-green-700 rounded-r-lg h-full max-h-full overflow-auto"
+      >
         <button
           className="border border-gray-200 p-2 rounded-full bg-gray-400 shadow hover:bg-gray-200 transition-150 active:bg-gray-300"
           onClick={() => navigate("/")}
@@ -229,7 +235,7 @@ const SignUp = (): JSX.Element => {
             Sign Up Here!
           </h1>
         </header>
-        <div className="form-div">
+        <div id="register-form-div">
           {showIncomeForm && (
             <NewIncomeForm
               hideIncomeFormState={changeIncomeFormState}
@@ -237,7 +243,7 @@ const SignUp = (): JSX.Element => {
             />
           )}
           <form onSubmit={handleSubmit}>
-            <div className="username-div py-4">
+            <div id="username-div" className="py-4">
               <label className="text-lg block" htmlFor="username">
                 Username:{" "}
               </label>
@@ -256,12 +262,12 @@ const SignUp = (): JSX.Element => {
                 onChange={handleChange}
               />
               {signUpErrors.username && (
-                <div className="username-error text-red-600 font-bold">
+                <div id="username-error" className="text-red-600 font-bold">
                   <p>{signUpErrors.username}</p>
                 </div>
               )}
               {typeof userStatus.error === "string" && (
-                <div className="username-error text-red-600 font-bold">
+                <div id="register-error" className="text-red-600 font-bold">
                   <p>{userStatus.error}</p>
                 </div>
               )}
@@ -274,7 +280,7 @@ const SignUp = (): JSX.Element => {
                 <small>(e.g. !, ?, @, #, () [], /).</small>
               </div>
             </div>
-            <div className="password-div py-4">
+            <div id="password-div" className="py-4">
               <label className="text-lg block" htmlFor="password">
                 Password:{" "}
               </label>
@@ -290,7 +296,7 @@ const SignUp = (): JSX.Element => {
                 onChange={handleChange}
               />
               {signUpErrors.password && (
-                <div className="password-error text-red-600 font-bold">
+                <div id="password-error" className="text-red-600 font-bold">
                   <p>{signUpErrors.password}</p>
                 </div>
               )}
@@ -307,7 +313,7 @@ const SignUp = (): JSX.Element => {
                 <small>(e.g. [], (), /).</small>
               </div>
             </div>
-            <div className="email-div py-4">
+            <div id="email-div" className="py-4">
               <label className="text-lg block" htmlFor="email">
                 Email Address:{" "}
               </label>
@@ -332,7 +338,7 @@ const SignUp = (): JSX.Element => {
                 <p>Your email address must be valid</p>
               </div>
             </div>
-            <div className="total-assets-div py-4">
+            <div id="total-assets-div" className="py-4">
               <label className="text-lg block" htmlFor="moneyAllocated">
                 Total Assets: ($ U.S.):{" "}
               </label>
@@ -355,20 +361,20 @@ const SignUp = (): JSX.Element => {
                 </div>
               )}
             </div>
-            <div className="keyPad-div flex justify-center m-5">
+            <div id="keyPad-div" className="flex justify-center m-5">
               <KeyPad
                 handlePress={handlePress}
                 handleDelete={handleDelete}
                 num={formData.totalAssets}
               />
             </div>
-            <section className="incomes-section">
+            <section id="incomes-section">
               <header>
                 <h1 className="text-lg block">
                   Incomes ({formData.incomes.length}/5):
                 </h1>
               </header>
-              <div className="new-income-list">
+              <div id="new-income-list">
                 {formData.incomes.length ? (
                   formData.incomes.map((i, index) => (
                     <SignUpIncomeCard
@@ -382,7 +388,7 @@ const SignUp = (): JSX.Element => {
                   <i>No Incomes</i>
                 )}
               </div>
-              <div className="add-income-button">
+              <div id="add-income-button">
                 <button
                   className={`bg-green-600 p-2 m-2 border-2 border-green-600 rounded-full text-white ${
                     formData.incomes.length < 3
@@ -394,24 +400,32 @@ const SignUp = (): JSX.Element => {
                   Add an Income
                 </button>
               </div>
-              <div id="trusted-div" className="flex justify-center">
-                <div className="flex items-center">
-                  <input
-                    className="form-checkbox checkbox checkbox-add"
-                    id="login_trusted"
-                    type="checkbox"
-                    name="trusted"
-                    checked={formData.trusted}
-                    onChange={handleCheckBox}
-                  />
-                  <label className="text-lg" htmlFor="trusted">
-                    Do You Trust This Device?
-                  </label>
+              <div id="trusted-div" className="text-center m-2">
+                <div className="flex justify-center">
+                  <div className="flex items-center">
+                    <input
+                      className="form-checkbox checkbox checkbox-add"
+                      id="login_trusted"
+                      type="checkbox"
+                      name="trusted"
+                      checked={formData.trusted}
+                      onChange={handleCheckBox}
+                    />
+                    <label className="text-lg" htmlFor="trusted">
+                      Do You Trust This Device?
+                    </label>
+                  </div>
                 </div>
+                <small>
+                  (You will have a longer access session on trusted devices.)
+                </small>
               </div>
             </section>
-            <div className="button-div text-center">
-              <button className="make-profile-button border-2 rounded-full border-green-500 bg-green-500 text-white  py-2 px-4 hover:bg-green-200 hover:text-black duration-150 active:bg-green-400">
+            <div id="button-div" className="text-center">
+              <button
+                id="make-profile-button"
+                className="border-2 rounded-full border-green-500 bg-green-500 text-white  py-2 px-4 hover:bg-green-200 hover:text-black duration-150 active:bg-green-400"
+              >
                 Sign Up!
               </button>
             </div>

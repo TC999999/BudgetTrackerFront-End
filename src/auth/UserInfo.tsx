@@ -88,8 +88,8 @@ const UserInfo: React.FC<Props> = ({
   };
 
   return (
-    <div className="user-info-form-page">
-      <div className="user-info-form-div">
+    <div id="user-info-form-page">
+      <div id="user-info-form-div">
         <h1 className="text-center text-xl p-2">
           Confirm Your Information Here
         </h1>
@@ -98,9 +98,9 @@ const UserInfo: React.FC<Props> = ({
           Afterwards, you will be sent a 6-digit verification code to the email
           address you provided.
         </h1>
-        <div className="user-info-form">
+        <div id="user-info-form">
           <form onSubmit={handleSubmit}>
-            <div className="username-div">
+            <div id="username-div">
               <label className="text-lg block" htmlFor="username">
                 Username:
               </label>
@@ -116,12 +116,12 @@ const UserInfo: React.FC<Props> = ({
                 onChange={handleChange}
               />
               {formErrors.username && (
-                <div className="username-error text-red-600 font-bold">
+                <div id="username-error" className="text-red-600 font-bold">
                   <p>{formErrors.username}</p>
                 </div>
               )}
             </div>
-            <div className="email-div">
+            <div id="email-div">
               <label className="text-lg block" htmlFor="email">
                 Email:
               </label>
@@ -137,14 +137,17 @@ const UserInfo: React.FC<Props> = ({
                 onChange={handleChange}
               />
               {formErrors.email && (
-                <div className="email-error text-red-600 font-bold">
+                <div id="email-error" className="text-red-600 font-bold">
                   <p>{formErrors.email}</p>
                 </div>
               )}
             </div>
 
-            <div className="submit-code-button text-center">
-              <button className="submit-code border-2 text-gray-100 border-green-900 bg-green-500 p-2 rounded-full hover:bg-green-200 hover:text-black duration-150">
+            <div id="submit-code-button-div" className="text-center">
+              <button
+                id="submit-code-div"
+                className="border-2 text-gray-100 border-green-900 bg-green-500 p-2 rounded-full hover:bg-green-200 hover:text-black duration-150"
+              >
                 Get One Time Verification Code
               </button>
             </div>

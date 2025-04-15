@@ -93,7 +93,7 @@ const ResetPassword = (): JSX.Element => {
   );
 
   return (
-    <div className="reset-password-page-div">
+    <div id="reset-password-page-div">
       <button
         className="border border-gray-200 p-2 rounded-full bg-gray-400 shadow hover:bg-gray-200 transition-150 active:bg-gray-300"
         onClick={() => navigate("/")}
@@ -101,14 +101,21 @@ const ResetPassword = (): JSX.Element => {
         Go Back
       </button>
 
-      <div className="reset-password-page-forms bg-white p-2 m-2 border-4 border-green-600 rounded-lg">
+      <div
+        id="reset-password-page-forms"
+        className="bg-white p-2 m-2 border-4 border-green-600 rounded-lg"
+      >
         <h1 className="text-5xl text-center text-green-800 underline">
           Reset Your Password
         </h1>
-        <div className="reset-password-set-progress-div border-4 my-2 border-green-700 rounded-lg relative">
-          <div className="progress-headers grid grid-cols-4">
+        <div
+          id="reset-password-set-progress-div"
+          className="border-4 my-2 border-green-700 rounded-lg relative"
+        >
+          <div id="progress-headers" className="grid grid-cols-4">
             <div
-              className={`confirm-info-header pt-4 pb-8 flex justify-center items-center rounded-l-sm border-r-2 ${
+              id="confirm-info-header"
+              className={`pt-4 pb-8 flex justify-center items-center rounded-l-sm border-r-2 ${
                 currentStep === "userInfo"
                   ? "underline text-green-500 bg-green-100"
                   : ""
@@ -118,7 +125,8 @@ const ResetPassword = (): JSX.Element => {
               <CiCircleCheck className="text-xl" />
             </div>
             <div
-              className={`verification-code-header pt-4 pb-8 flex justify-center items-center border-r-2 ${
+              id="verification-code-header"
+              className={`pt-4 pb-8 flex justify-center items-center border-r-2 ${
                 currentStep === "oneTimeCode"
                   ? "underline text-green-500 bg-green-100"
                   : ""
@@ -128,7 +136,8 @@ const ResetPassword = (): JSX.Element => {
               <CiCircleCheck className="text-xl" />
             </div>
             <div
-              className={`reset-header-header pt-4 pb-8 flex justify-center items-center border-r-2${
+              id="password-reset-header"
+              className={`pt-4 pb-8 flex justify-center items-center border-r-2${
                 currentStep === "newPassword"
                   ? "underline text-green-500 bg-green-100"
                   : ""
@@ -138,7 +147,8 @@ const ResetPassword = (): JSX.Element => {
               <CiCircleCheck className="text-xl" />
             </div>
             <div
-              className={`success-header pt-4 pb-8 flex justify-center items-center rounded-r-sm ${
+              id="success-header"
+              className={`pt-4 pb-8 flex justify-center items-center rounded-r-sm ${
                 currentStep === "success"
                   ? "underline text-green-500 bg-green-100"
                   : ""
@@ -149,7 +159,10 @@ const ResetPassword = (): JSX.Element => {
             </div>
           </div>
 
-          <div className="reset-password-set-progress-bar absolute bottom-0 w-full">
+          <div
+            id="reset-password-set-progress-bar "
+            className="absolute bottom-0 w-full"
+          >
             <progress
               className="w-full  [&::-webkit-progress-value]:bg-green-700"
               max={100}

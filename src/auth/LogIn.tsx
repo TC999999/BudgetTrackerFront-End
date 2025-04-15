@@ -158,20 +158,25 @@ const LogIn = (): JSX.Element => {
                 </div>
               )}
             </div>
-            <div id="trusted-div" className="flex justify-center">
-              <div className="flex items-center">
-                <input
-                  className="form-checkbox checkbox checkbox-add"
-                  id="login_trusted"
-                  type="checkbox"
-                  name="trusted"
-                  checked={formData.trusted}
-                  onChange={handleCheckBox}
-                />
-                <label className="text-lg" htmlFor="trusted">
-                  Do You Trust This Device?
-                </label>
+            <div id="trusted-div" className="text-center">
+              <div className="flex justify-center">
+                <div className="flex items-center">
+                  <input
+                    className="form-checkbox checkbox checkbox-add"
+                    id="login_trusted"
+                    type="checkbox"
+                    name="trusted"
+                    checked={formData.trusted}
+                    onChange={handleCheckBox}
+                  />
+                  <label className="text-lg" htmlFor="trusted">
+                    Do You Trust This Device?
+                  </label>
+                </div>
               </div>
+              <small>
+                (You will have a longer access session on trusted devices.)
+              </small>
             </div>
             <div className="button-div text-center m-2">
               <button className="get-profile-button border-2 border-green-500 rounded-full bg-green-400 p-2 hover:bg-green-900 hover:text-white">
@@ -185,25 +190,27 @@ const LogIn = (): JSX.Element => {
             )}
           </form>
         </div>
-        <p>
-          Not a user yet?{" "}
-          <Link
-            className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
-            to="/register"
-          >
-            Make an account here!
-          </Link>
-        </p>
+        <div id="alternate-links" className="text-center">
+          <p>
+            Not a user yet?{" "}
+            <Link
+              className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
+              to="/register"
+            >
+              Sign Up Here!
+            </Link>
+          </p>
 
-        <p>
-          Forget your password?{" "}
-          <Link
-            className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
-            to="/resetPassword"
-          >
-            Reset it here!
-          </Link>
-        </p>
+          <p>
+            Forget your password?{" "}
+            <Link
+              className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
+              to="/resetPassword"
+            >
+              Reset It Here!
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

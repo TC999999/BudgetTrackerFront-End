@@ -106,10 +106,10 @@ const NewPassword: React.FC<Props> = ({
     }
   };
   return (
-    <div className="create-new-password-div">
-      <div className="create-new-password-form">
+    <div id="create-new-password-div">
+      <div id="create-new-password-form">
         <form onSubmit={handleSubmit}>
-          <div className="new-password-div">
+          <div id="new-password-div">
             <label className="text-lg block" htmlFor="newPassword">
               Input your new password here:{" "}
             </label>
@@ -125,7 +125,7 @@ const NewPassword: React.FC<Props> = ({
               onChange={handleChange}
             />
             {formErrors.newPassword && (
-              <div className="username-error text-red-600 font-bold">
+              <div id="newPassword-error" className="text-red-600 font-bold">
                 <p>{formErrors.newPassword}</p>
               </div>
             )}
@@ -162,7 +162,10 @@ const NewPassword: React.FC<Props> = ({
               </span>
             </div>
             {formErrors.confirmNewPassword && (
-              <div className="username-error text-red-600 font-bold">
+              <div
+                id="confirmNewPassword-error"
+                className="text-red-600 font-bold"
+              >
                 <p>{formErrors.confirmNewPassword}</p>
               </div>
             )}
@@ -170,7 +173,7 @@ const NewPassword: React.FC<Props> = ({
               <p>Type the same new password you typed above.</p>
             </div>
           </div>
-          <div className="submit-button text-center">
+          <div id="submit-button" className="text-center">
             <button className="border-2 text-gray-100 border-green-900 bg-green-500 p-2 rounded-full hover:bg-green-200 hover:text-black duration-150">
               Reset Password
             </button>
