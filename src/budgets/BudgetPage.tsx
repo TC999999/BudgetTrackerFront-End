@@ -83,8 +83,8 @@ const BudgetPage = (): JSX.Element => {
   );
 
   return budgetList.length ? (
-    <div className="budget-page">
-      <header className="additional-nav-header">
+    <div id="all-budget-page">
+      <header id="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
           <button
             id="show-budget-form-button"

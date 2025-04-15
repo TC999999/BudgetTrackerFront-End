@@ -98,7 +98,7 @@ const IncomePage = (): JSX.Element => {
 
   return incomes.length ? (
     <div id="income-page">
-      <header className="additional-nav-header">
+      <header id="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
           <button
             className={`nav-button border-green-500 bg-green-400 ${

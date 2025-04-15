@@ -384,20 +384,16 @@ const EditBudgetForm: React.FC<Props> = ({
               </form>
             </div>
           </div>
-          <div className="buttons flex justify-between m-2">
-            <div className="cancel-button">
-              <button onClick={(e) => hideEditForm(e, "showEditForm")}>
-                Cancel
-              </button>
-            </div>
-            <div className="submit-button">
-              <button
-                onClick={(e) => handleSubmit(e)}
-                className="edit-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900"
-              >
-                Edit Budget
-              </button>
-            </div>
+          <div id="buttons" className="flex justify-between m-2">
+            <button
+              className="cancel-button"
+              onClick={(e) => hideEditForm(e, "showEditForm")}
+            >
+              Cancel
+            </button>
+            <button onClick={(e) => handleSubmit(e)} className="submit-button">
+              Edit Budget
+            </button>
           </div>
         </div>
       </div>

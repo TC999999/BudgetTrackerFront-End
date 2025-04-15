@@ -233,10 +233,13 @@ const NewIncomeForm: React.FC<Props> = ({
               Add a New Income
             </h1>
           </header>
-          <form className="new-income-form" onSubmit={handleSubmit}>
-            <div className="form-inputs sm:flex sm:justify-center sm:items-center">
-              <div className="title-and-salary sm:w-80">
-                <div className="new-income-title-div">
+          <form id="new-income-form" onSubmit={handleSubmit}>
+            <div
+              id="form-inputs"
+              className="sm:flex sm:justify-center sm:items-center"
+            >
+              <div id="title-and-salary" className="sm:w-80">
+                <div id="new-income-title-div">
                   <label className="text-2xl block" htmlFor="title">
                     Income Title:
                   </label>
@@ -251,17 +254,22 @@ const NewIncomeForm: React.FC<Props> = ({
                     onChange={handleChange}
                     placeholder={"Where does this income come from?"}
                   />
-                  <div className="title-error text-red-600 font-bold sm:text-sm">
-                    <p>{formErrors.title}</p>
-                  </div>
-                  <div className="income-title-info flex flex-col">
+                  {formErrors.title && (
+                    <div
+                      id="title-error-message"
+                      className="text-red-600 font-bold sm:text-sm"
+                    >
+                      <p>{formErrors.title}</p>
+                    </div>
+                  )}
+                  <div id="income-title-requirements" className="flex flex-col">
                     <small>Title must be between 4-20 characters</small>
                     <small>Title may include letters and numbers.</small>
                     <small>Title cannot contain special characters</small>
                     <small>(e.g. !, ?, @, #, () [], /).</small>
                   </div>
                 </div>
-                <div className="new-income-salary">
+                <div id="new-income-salary-div">
                   <label className="text-2xl block" htmlFor="Salary">
                     Income Value ($ U.S.):{" "}
                   </label>
@@ -276,10 +284,15 @@ const NewIncomeForm: React.FC<Props> = ({
                     placeholder={"$0.00"}
                     readOnly
                   />
-                  <div className="salary-error text-red-600 font-bold sm:text-sm">
-                    <p>{formErrors.salary}</p>
-                  </div>
-                  <div className="income-salary-info pb-2">
+                  {formErrors.salary && (
+                    <div
+                      id="salary-error-message"
+                      className="text-red-600 font-bold sm:text-sm"
+                    >
+                      <p>{formErrors.salary}</p>
+                    </div>
+                  )}
+                  <div id="income-salary-requirements" className=" pb-2">
                     <small>Salary must be greater than $0.00</small>
                   </div>
                   <KeyPad
@@ -289,20 +302,23 @@ const NewIncomeForm: React.FC<Props> = ({
                   />
                 </div>
               </div>
-              <section className="update-schedule">
-                <div className="schedule-headers flex justify-center">
-                  <header className="time-show">
-                    <h1 className="readable-update-time-string font-bold text-center text-3xl text-green-700 w-96">
+              <section id="update-schedule">
+                <div id="schedule-headers" className="flex justify-center">
+                  <header id="time-show">
+                    <h1
+                      id="readable-update-time-string"
+                      className="font-bold text-center text-3xl text-green-700 w-96"
+                    >
                       {readableUpdateTimeString}
                     </h1>
                   </header>
                 </div>
-                <section className="income-time-input">
+                <section id="income-time-input">
                   <header>
                     <h2 className="text-2xl">Time:</h2>
                   </header>
                   <div className="flex justify-center items-center">
-                    <div className="hour-select-div">
+                    <div id="hour-select-div">
                       <label className="block" htmlFor="hour">
                         Hour:
                       </label>
@@ -331,10 +347,10 @@ const NewIncomeForm: React.FC<Props> = ({
                         ))}
                       </select>
                     </div>
-                    <div className="colon-div">
+                    <div id="colon-div">
                       <p className="text-5xl">:</p>
                     </div>
-                    <div className="minute-select-div">
+                    <div id="minute-select-div">
                       <label className="block" htmlFor="minute">
                         Minute:
                       </label>
@@ -363,7 +379,7 @@ const NewIncomeForm: React.FC<Props> = ({
                     </div>
                   </div>
                   <div className="flex justify-center">
-                    <div className="time-info sm:w-72">
+                    <div id="time-requirements" className="sm:w-72">
                       <small>
                         Adjust the time that your income comes through with the
                         sliders above.
@@ -376,7 +392,7 @@ const NewIncomeForm: React.FC<Props> = ({
                     <h1 className="text-2xl">Date:</h1>
                   </header>
                   <div className="sm:flex sm:justify-center w-full">
-                    <div className="dayOfMonth-div mx-2">
+                    <div id="dayOfMonth-div" className="mx-2">
                       <label
                         htmlFor="dayOfMonth"
                         className="text-lg block text-center"
@@ -410,7 +426,7 @@ const NewIncomeForm: React.FC<Props> = ({
                       </select>
                     </div>
                     {formData.updateTime.dayOfMonth !== "*" && (
-                      <div className="month-div mx-2">
+                      <div id="month-div" className="mx-2">
                         <label
                           htmlFor="month"
                           className="text-lg block text-center"
@@ -442,7 +458,7 @@ const NewIncomeForm: React.FC<Props> = ({
                         </select>
                       </div>
                     )}
-                    <div className="dayOfWeek-div mx-2">
+                    <div id="dayOfWeek-div" className="mx-2">
                       <label
                         htmlFor="dayOfWeek"
                         className="text-lg block text-center"
@@ -475,7 +491,10 @@ const NewIncomeForm: React.FC<Props> = ({
                     </div>
                   </div>
                   <div className="flex justify-center">
-                    <div className="info-div flex flex-col sm:w-72">
+                    <div
+                      id="date-requirements"
+                      className="flex flex-col sm:w-72"
+                    >
                       <small>Adjust the date with the sliders above.</small>
                       <small>
                         To avoid any possible errors, you are only allowed to
@@ -486,7 +505,7 @@ const NewIncomeForm: React.FC<Props> = ({
                 </section>
               </section>
             </div>
-            <div className="buttons flex justify-between m-2">
+            <div id="buttons" className="flex justify-between m-2">
               <button
                 className="cancel-button"
                 onClick={(e) => hideIncomeFormState(e)}
@@ -494,9 +513,7 @@ const NewIncomeForm: React.FC<Props> = ({
                 Cancel
               </button>
 
-              <button className="submit-button bg-green-300 border-2 border-green-700 rounded-full p-2 hover:bg-green-600 hover:text-white active:bg-green-700">
-                Add Income
-              </button>
+              <button className="submit-button">Add Income</button>
             </div>
           </form>
         </div>

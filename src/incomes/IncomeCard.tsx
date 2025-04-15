@@ -46,24 +46,16 @@ const IncomeCard: React.FC<Props> = ({
           </h1>
         </header>
         <div className="lg:flex lg:justify-evenly">
-          <div
-            id="salary-information"
-            className="text-xl sm:text-3xl lg:m-4 lg:p-2 lg:flex lg:items-center lg:w-96 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg"
-          >
+          <div className="salary-information text-xl sm:text-3xl lg:m-4 lg:p-2 lg:flex lg:items-center lg:w-96 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg">
             <div>
               <p className="underline">Salary: </p>
-              <p id="salary-number" className="font-bold">
-                ${income.salary}
-              </p>
-              <p id="readable-salary-interval">
+              <p className="salary-number-value font-bold">${income.salary}</p>
+              <p className="readable-salary-interval">
                 {income.readableUpdateTimeString}
               </p>
             </div>
           </div>
-          <div
-            id="next-and-last-received-dates"
-            className="text-lg sm:text-2xl lg:m-4 lg:p-2 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg"
-          >
+          <div className="next-and-last-received-dates text-lg sm:text-2xl lg:m-4 lg:p-2 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg">
             <div className="last-received-date">
               <p className="font-bold">Last Received On: </p>
               <p>{lastDate}</p>

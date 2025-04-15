@@ -101,7 +101,7 @@ const IncomeList: React.FC<Props> = ({
   );
 
   return (
-    <div className="income-list-and-edit-form">
+    <div id="income-list-and-edit-form">
       {selectedIncomeForDelete && (
         <SecondPrompt
           deleteFunction={deleteIncome}
@@ -119,7 +119,7 @@ const IncomeList: React.FC<Props> = ({
         />
       )}
       <div>
-        <ul id="income-list" className="">
+        <ul id="income-list">
           {incomeList.map((i) => (
             <li key={`income-${i._id}`}>
               <IncomeCard

@@ -179,9 +179,9 @@ const ExpenseForm: React.FC<Props> = ({
   };
 
   return !userStatus.smallLoading ? (
-    <div tabIndex={-1} className="new-expense-form-div modal-layer-1">
+    <div tabIndex={-1} id="new-expense-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
-        <div className="new-expense-form modal-layer-3 text-center">
+        <div id="new-expense-form" className="modal-layer-3 text-center">
           <header>
             <h2 className="text-3xl text-green-800 font-bold underline">
               Add a New Expense!
@@ -192,7 +192,7 @@ const ExpenseForm: React.FC<Props> = ({
             </h2>
           </header>
           <form onSubmit={handleSubmit}>
-            <div className="title-div mb-2">
+            <div id="title-div" className="mb-2">
               <label className="text-gray-700 text-lg block" htmlFor="title">
                 Expense Title:
               </label>
@@ -209,7 +209,7 @@ const ExpenseForm: React.FC<Props> = ({
                 maxLength={30}
               />
               {formErrors.title && (
-                <div className="error-message">
+                <div id="title-error-message">
                   <p className="text-red-700 font-bold">{formErrors.title}</p>
                 </div>
               )}
@@ -224,7 +224,7 @@ const ExpenseForm: React.FC<Props> = ({
                 <small>Spaces may only be between characters.</small>
               </div>
             </div>
-            <div className="date-div mb-2">
+            <div id="date-div" className="mb-2">
               <label htmlFor="date" className="text-gray-700 text-lg block">
                 Expense Date
               </label>
@@ -239,12 +239,12 @@ const ExpenseForm: React.FC<Props> = ({
                 onChange={handleChange}
               />
               {formErrors.date && (
-                <div className="error-message">
+                <div id="date-error-message">
                   <p className="text-red-700 font-bold">{formErrors.date}</p>
                 </div>
               )}
             </div>
-            <div className="transaction-div mb-2">
+            <div id="transaction-div" className="mb-2">
               <label
                 htmlFor="transaction"
                 className="text-gray-700 text-lg block"
@@ -263,7 +263,7 @@ const ExpenseForm: React.FC<Props> = ({
                 readOnly
               />
               {formErrors.transaction && (
-                <div className="error-message">
+                <div id="transaction-error-message">
                   <p className="text-red-700 font-bold">
                     {formErrors.transaction}
                   </p>
@@ -273,7 +273,7 @@ const ExpenseForm: React.FC<Props> = ({
                 Expense may not exceed remaining funds for {budget.title}
               </small>
             </div>
-            <div className="keyPad-div">
+            <div id="keyPad-div">
               <KeyPad
                 handlePress={handlePress}
                 handleDelete={handleDelete}
@@ -281,14 +281,14 @@ const ExpenseForm: React.FC<Props> = ({
               />
             </div>
 
-            <div className="button-div flex justify-between m-2">
+            <div id="button-div" className="flex justify-between m-2">
               <button
                 className="cancel-button"
                 onClick={(e) => hideExpenseForm(e, "showExpenseForm")}
               >
                 Cancel
               </button>
-              <button className="add-expense-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
+              <button id="add-expense-button" className="submit-button">
                 Add this Expense
               </button>
             </div>

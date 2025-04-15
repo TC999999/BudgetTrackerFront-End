@@ -159,10 +159,10 @@ const BudgetForm: React.FC<Props> = ({
   };
 
   return !userStatus.smallLoading ? (
-    <div tabIndex={-1} className="budget-form-div modal-layer-1">
+    <div tabIndex={-1} id="budget-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
-        <div className="new-budget-form modal-layer-3">
-          <header className="headers text-center">
+        <div id="new-budget-form" className="modal-layer-3">
+          <header className="text-center">
             <h1 className="text-3xl text-green-800 font-bold underline">
               Add a New Budget
             </h1>
@@ -172,7 +172,7 @@ const BudgetForm: React.FC<Props> = ({
             </h2>
           </header>
           <form onSubmit={handleSubmit}>
-            <div className="title-div text-center mb-2">
+            <div id="title-div" className="text-center mb-2">
               <label className="text-gray-700 block" htmlFor="title">
                 Budget Title:
               </label>
@@ -188,7 +188,7 @@ const BudgetForm: React.FC<Props> = ({
                 onChange={handleChange}
               />
               {formErrors.title && (
-                <div className="error-message">
+                <div id="title-error-message">
                   <p className="text-red-700 font-bold">{formErrors.title}</p>
                 </div>
               )}
@@ -203,7 +203,7 @@ const BudgetForm: React.FC<Props> = ({
                 <small> Spaces may only be between characters.</small>
               </div>
             </div>
-            <div className="allocated-funds-div text-center mb-2">
+            <div id="allocated-funds-div" className="text-center mb-2">
               <label className="text-gray-700 block" htmlFor="moneyAllocated">
                 Money Allocated ($ U.S.):
               </label>
@@ -234,21 +234,18 @@ const BudgetForm: React.FC<Props> = ({
                 </small>
               </div>
             </div>
-            <div className="keyPad-div">
+            <div id="keyPad-div">
               <KeyPad
                 handlePress={handlePress}
                 handleDelete={handleDelete}
                 num={formData.moneyAllocated}
               />
             </div>
-            <div className="button flex justify-between m-2">
-              <button
-                className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600 duration-150"
-                onClick={(e) => hideForm(e)}
-              >
+            <div id="button" className="flex justify-between m-2">
+              <button className="cancel-button" onClick={(e) => hideForm(e)}>
                 Cancel
               </button>
-              <button className="add-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900 duration-150">
+              <button id="add-budget-button" className="submit-button">
                 Add this Budget
               </button>
             </div>

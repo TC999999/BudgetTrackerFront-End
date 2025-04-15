@@ -126,8 +126,14 @@ const ExpenseList: React.FC<Props> = ({
           BudgetFunds={budgetFunds}
         />
       )}
-      <div className="expense-list bg-white border-2 border-green-500 m-2 rounded-md">
-        <header className="expense-list-headers grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2">
+      <div
+        id="expense-list"
+        className="bg-white border-2 border-green-500 m-2 rounded-md"
+      >
+        <header
+          id="expense-list-headers"
+          className="grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2"
+        >
           <b className="text-sm sm:text-base duration-150 text-center content-center">
             Name
           </b>
@@ -152,7 +158,7 @@ const ExpenseList: React.FC<Props> = ({
             </b>
           )}
         </header>
-        <div className="expense-card-list striped">
+        <div id="expense-card-list" className="striped">
           {expensesList.map((e) => {
             return (
               <ExpenseCard

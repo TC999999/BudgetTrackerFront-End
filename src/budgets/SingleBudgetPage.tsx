@@ -134,9 +134,9 @@ const SingleBudgetPage = (): JSX.Element => {
   );
 
   return currentBudget._id ? (
-    <div id="budget-page">
-      <header className="additional-nav-header">
-        <nav className="buttons flex justify-around w-full">
+    <div id="single-budget-page">
+      <header id="additional-nav-header">
+        <nav id="buttons" className="flex justify-around w-full">
           <button
             id="edit-budget-form-button"
             className="nav-button border-orange-300 text-white bg-orange-400 hover:bg-orange-200 hover:text-black active:bg-orange-300"
@@ -188,9 +188,12 @@ const SingleBudgetPage = (): JSX.Element => {
             updateBudget={updateBudget}
           />
         )}
-        <section className="expense-list">
+        <section id="budget-expense-list">
           <header className="text-center m-2">
-            <h1 className="expense-list-title text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150">
+            <h1
+              id="budget-expense-list-title"
+              className="text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150"
+            >
               Expenses Made
             </h1>
             <small>

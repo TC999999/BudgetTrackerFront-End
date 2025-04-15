@@ -9,7 +9,7 @@ type Props = {
 // that the user has no budgets
 const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
   return (
-    <main>
+    <main id="budget-list-page">
       <header className="text-center">
         <h1 className="text-2xl sm:text-3xl text-emerald-500 underline font-bold">
           All Current Budgets ({allBudgets!.length}/10)
@@ -21,7 +21,10 @@ const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
         </small>
       </header>
       {allBudgets?.length ? (
-        <ul className="budget-list stripedBudgets flex flex-wrap justify-center">
+        <ul
+          id="budget-list"
+          className="stripedBudgets flex flex-wrap justify-center"
+        >
           {allBudgets.map((budget) => (
             <li className="w-5/6 md:w-2/5 xl:w-1/5 " key={budget._id}>
               <BudgetCard budget={budget} />

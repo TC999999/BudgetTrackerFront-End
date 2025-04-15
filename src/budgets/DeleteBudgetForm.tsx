@@ -92,10 +92,10 @@ const DeleteBudgetForm: React.FC<Props> = ({
   };
 
   return !userStatus.smallLoading ? (
-    <div className="delete-budget-form-div modal-layer-1">
+    <div id="delete-budget-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
-        <div className="delete-budget-form text-center modal-layer-3">
-          <header className="duration-150">
+        <div id="delete-budget-form" className=" text-center modal-layer-3">
+          <header className="transition duration-150">
             <h3 className="text-3xl sm:text-4xl font-bold text-red-700 underline">
               Before You Delete
             </h3>
@@ -106,13 +106,17 @@ const DeleteBudgetForm: React.FC<Props> = ({
             </h2>
           </header>
           <form onSubmit={handleSubmit}>
-            <fieldset className="delete-choices">
+            <fieldset id="delete-choices">
               <legend className="text-lg sm:text-xl font-bold duration-150">
                 Are you returning any funds to your total savings?
               </legend>
-              <div className="delete-budget-radio-buttons text-lg border border-green-600 shadow-md">
+              <div
+                id="delete-budget-radio-buttons"
+                className="text-lg border border-green-600 shadow-md"
+              >
                 <div
-                  className={`add-no-funds p-3 border-b border-green-600 ${
+                  id="add-no-funds"
+                  className={`p-3 border-b border-green-600 ${
                     formData.addBackToAssets === 0 ? "bg-gray-200" : ""
                   }`}
                 >
@@ -132,7 +136,8 @@ const DeleteBudgetForm: React.FC<Props> = ({
                 </div>
                 {remainingMoney !== budget.moneyAllocated && (
                   <div
-                    className={`add-remaining-funds p-3 border-b border-green-600 ${
+                    id="add-remaining-funds"
+                    className={`p-3 border-b border-green-600 ${
                       formData.addBackToAssets === +remainingMoney
                         ? "bg-blue-100"
                         : ""
@@ -157,7 +162,8 @@ const DeleteBudgetForm: React.FC<Props> = ({
                   </div>
                 )}
                 <div
-                  className={`add-all-funds p-3 ${
+                  id="add-all-funds "
+                  className={`p-3 ${
                     formData.addBackToAssets === +budget.moneyAllocated
                       ? "bg-green-100"
                       : ""
@@ -184,7 +190,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
                 </div>
               </div>
             </fieldset>
-            <div className="new-assets">
+            <div id="new-assets">
               <p className="text-lg p-1">Your New Total Savings Will Be:</p>
               <p className="text-3xl sm:text-4xl font-bold text-green-700 p-1 duration-150">
                 ${newAssets}
@@ -192,7 +198,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
             </div>
 
             <div>
-              <ul className="list-disc list-inside">
+              <ul id="warning-list" className="list-disc list-inside">
                 <small>
                   <span className="text-red-600 font-bold">WARNING:</span> Once
                   you click "Delete Budget", you not be able to:
@@ -213,16 +219,14 @@ const DeleteBudgetForm: React.FC<Props> = ({
                 </li>
               </ul>
 
-              <div className="buttons flex justify-between m-2">
+              <div id="buttons" className="flex justify-between m-2">
                 <button
-                  className="cancel-button duration-150"
+                  className="cancel-button"
                   onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
                 >
                   Cancel
                 </button>
-                <button className="delete-button duration-150 bg-red-300 border-2 border-red-900 rounded-full px-2 py-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900">
-                  Delete Budget
-                </button>
+                <button className="delete-button">Delete Budget</button>
               </div>
             </div>
           </form>
