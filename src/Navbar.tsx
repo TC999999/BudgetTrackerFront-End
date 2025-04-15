@@ -33,13 +33,13 @@ const Navbar = (): JSX.Element | null => {
   }, []);
 
   return userExists ? (
-    <div>
+    <div className="sticky top-0 p-2 bg-emerald-900 z-20">
       <Logout
         showPrompt={showPrompt}
         hidePrompt={hidePrompt}
         logOutAndNavigate={logOutAndNavigate}
       />
-      <header id="navbar" className="sticky top-0 p-2 bg-emerald-900 z-20">
+      <header id="navbar">
         <Logo />
         <nav className="buttons flex justify-around">
           <button
