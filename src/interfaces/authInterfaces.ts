@@ -19,6 +19,7 @@ export type SignUpInterface = {
   totalAssets: number;
   email: string;
   incomes: SubmitIncomeSignUp[];
+  trusted: true;
 };
 
 export type LogInErrors = {

@@ -78,12 +78,9 @@ const LogIn = (): JSX.Element => {
   // username.
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    const { username, password, trusted } = formData;
     try {
       const logInInfo: LogInInterface = {
-        username,
-        password,
-        trusted,
+        ...formData,
       };
       if (handleLogInSubmitErrors(logInInfo, setLogInErrors)) {
         localStorage.setItem(

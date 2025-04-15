@@ -28,6 +28,7 @@ const SignUp = (): JSX.Element => {
     email: "",
     totalAssets: 0,
     incomes: [],
+    trusted: true,
   };
 
   const initialErrors: SignUpErrors = {
@@ -141,6 +142,12 @@ const SignUp = (): JSX.Element => {
     [formData.incomes]
   );
 
+  // updates form data state when the user checks or unchecks the checkbox that this is a trusted device
+  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name } = e.target;
+    setFormData((data) => ({ ...data, [name]: e.target.checked }));
+  };
+
   // sends new user info to db and creates a new account for user; automatially loggs them in as well. If there
   // are any errors in inputs, does not submit data and flashes errorful inputs. If backend error occurs,
   // returns to this page (e.g. username or email already exist).
@@ -148,14 +155,11 @@ const SignUp = (): JSX.Element => {
   // so this is used to prevent the information (except password) from being cleared.
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    const { username, password, email, totalAssets, incomes } = formData;
+    const { totalAssets } = formData;
     try {
       const signUpInfo: SignUpInterface = {
-        username,
-        password,
-        email,
+        ...formData,
         totalAssets: totalAssets / 100,
-        incomes,
       };
       if (handleSignUpSubmitErrors(signUpInfo, setSignUpErrors)) {
         localStorage.setItem(
@@ -389,6 +393,21 @@ const SignUp = (): JSX.Element => {
                 >
                   Add an Income
                 </button>
+              </div>
+              <div id="trusted-div" className="flex justify-center">
+                <div className="flex items-center">
+                  <input
+                    className="form-checkbox checkbox checkbox-add"
+                    id="login_trusted"
+                    type="checkbox"
+                    name="trusted"
+                    checked={formData.trusted}
+                    onChange={handleCheckBox}
+                  />
+                  <label className="text-lg" htmlFor="trusted">
+                    Do You Trust This Device?
+                  </label>
+                </div>
               </div>
             </section>
             <div className="button-div text-center">

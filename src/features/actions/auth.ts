@@ -48,7 +48,7 @@ export const findToken = createAsyncThunk(
 export const logInUser = createAsyncThunk<UserInfoInterface, LogInInterface>(
   "auth/login",
   async (
-    userInfo: LogInInterface = { username: "", password: "" },
+    userInfo: LogInInterface = { username: "", password: "", trusted: true },
     thunkAPI
   ) => {
     try {
