@@ -119,10 +119,16 @@ const IncomePage = (): JSX.Element => {
             addToIncomeState={addToIncomeState}
           />
         )}
-        <header>
-          <h1 className="text-center text-xl sm:text-3xl text-green-700 underline font-bold">
+        <header className="text-center">
+          <h1 className="text-xl sm:text-3xl text-green-700 underline font-bold">
             Your Current Incomes ({incomes.length}/3)
           </h1>
+          <small>
+            This page allows you to add, update, or delete any sources of income
+            you may have. Each of below income values will be added to your
+            total savings automatically on the time noted on "Next Received On".
+            You are allowed a maximum of three incomes.
+          </small>
         </header>
         <IncomeList
           incomeList={incomes}

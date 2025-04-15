@@ -100,7 +100,8 @@ const DeleteBudgetForm: React.FC<Props> = ({
               Before You Delete
             </h3>
             <h2 className="text-base sm:text-lg">
-              Please be aware that deleting the {budget.title} budget will also
+              Please be aware that deleting the{" "}
+              <span className="font-bold">{budget.title}</span> budget will also
               delete all records of the expenses made using its funds.
             </h2>
           </header>
@@ -193,8 +194,8 @@ const DeleteBudgetForm: React.FC<Props> = ({
             <div>
               <ul className="list-disc list-inside">
                 <small>
-                  <span className="text-red-600">WARNING:</span> Once you click
-                  "Delete Budget", you not be able to:
+                  <span className="text-red-600 font-bold">WARNING:</span> Once
+                  you click "Delete Budget", you not be able to:
                 </small>
                 <li>
                   <small>
@@ -208,9 +209,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
                   </small>
                 </li>
                 <li>
-                  <small>
-                    Retrieve any funds you chose not to recover on deletion.
-                  </small>
+                  <small>Recover any funds you forfeited deletion.</small>
                 </li>
               </ul>
 

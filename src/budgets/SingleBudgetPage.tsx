@@ -189,9 +189,16 @@ const SingleBudgetPage = (): JSX.Element => {
           />
         )}
         <section className="expense-list">
-          <h1 className="expense-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
-            Expenses Made
-          </h1>
+          <header className="text-center m-2">
+            <h1 className="expense-list-title text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150">
+              Expenses Made
+            </h1>
+            <small>
+              This shows all expenses made using funds from this budget. The
+              total added value of all below expenses should not exceed the
+              total funds allocated for this budget.
+            </small>
+          </header>
           <ExpenseList
             expensesList={expenses}
             isFrontPage={false}

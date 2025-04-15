@@ -17,13 +17,17 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
   );
 
   return (
-    <header className="budget-page-card border-2 px-6 py-4 mx-4 my-4 shadow-md rounded-lg bg-white">
+    <header
+      id="budget-page-card"
+      className="border-2 border-green-500 px-6 py-4 m-4 shadow-md rounded-lg bg-white"
+    >
       <h3 className="budget-title text-3xl sm:text-4xl text-center text-emerald-800 font-bold">
         {budget?.title}
       </h3>
-
       <div className="text-center">
-        <p className="budget-allocated-money">Total Money Allocated:</p>
+        <p className="budget-allocated-money">
+          Total Funds Allocated from Savings:
+        </p>
         <p className="text-green-700 text-3xl sm:text-5xl font-bold">
           ${budget?.moneyAllocated}
         </p>
@@ -48,6 +52,14 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
             ${moneyRemaining}
           </p>
         </div>
+      </div>
+      <div className="text-center">
+        <small>
+          The money spent using funds from this budget will not be able to
+          exceed the total funds allocated from this budget. Additionally, the
+          money remaining in the total funds allocated will not be able to go
+          below zero.
+        </small>
       </div>
     </header>
   );

@@ -12,6 +12,7 @@ const Navbar = (): JSX.Element | null => {
   const navigate = useNavigate();
   const { userExists, user } = useAppSelector((store) => store.user.userInfo);
 
+  // hides prompt window asking user if they are sure if they want to logout
   const hidePrompt = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
@@ -21,7 +22,6 @@ const Navbar = (): JSX.Element | null => {
   );
 
   // removes the user token from cookies and navigates back to log in page
-
   const logOutAndNavigate = useCallback(async (): Promise<void> => {
     try {
       navigate("/");

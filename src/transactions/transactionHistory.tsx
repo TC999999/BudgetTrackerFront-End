@@ -40,10 +40,17 @@ const TransactionHistory = (): JSX.Element => {
   return transactions.length ? (
     <div className="transaction-history-page">
       <section>
-        <header>
-          <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
+        <header className="text-center m-2">
+          <h2
+            id="transaction-list-title"
+            className="text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150"
+          >
             Full Transaction History
           </h2>
+          <small>
+            These transactions cannot be edited or deleted. These transactions
+            include incomes that you may not recieve anymore.
+          </small>
         </header>
         <TransactionList transactions={transactions} />
       </section>

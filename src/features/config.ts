@@ -12,9 +12,6 @@ export const INITIAL_STATE: AuthInitialStateInterface = {
     userExists: false,
     error: "",
   },
-  hasTokenInfo: {
-    tokenError: "",
-  },
   loadError: {
     message: "",
     status: null,

@@ -10,10 +10,15 @@ type Props = {
 const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
   return (
     <main>
-      <header>
-        <h1 className="text-center text-2xl sm:text-3xl text-emerald-500 underline font-bold">
+      <header className="text-center">
+        <h1 className="text-2xl sm:text-3xl text-emerald-500 underline font-bold">
           All Current Budgets ({allBudgets!.length}/10)
         </h1>
+        <small>
+          This page allows you set aside funds in order to make plans for future
+          budgets or record current budgets you may have. You are allowed a
+          maximum of ten budgets.
+        </small>
       </header>
       {allBudgets?.length ? (
         <ul className="budget-list stripedBudgets flex flex-wrap justify-center">

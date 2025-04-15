@@ -70,17 +70,23 @@ const Dashboard = (): JSX.Element => {
   );
 
   return (
-    <div className="dashboard-homepage">
+    <div id="dashboard-homepage">
       <main>
-        <header className="dashboard-usercard border-2 bg-white border-emerald-900 p-4 m-4 shadow-xl text-center">
-          <div className="dashboard-information text-green-700">
+        <header
+          id="dashboard-usercard"
+          className="border-2 bg-white border-emerald-900 p-4 m-4 shadow-xl text-center rounded-lg"
+        >
+          <div id="dashboard-information" className="text-green-700">
             <h1 className="text-2xl sm:text-4xl font-bold">{user?.username}</h1>
             <p className="text-xl">Total Savings Available:</p>
             <p className="text-3xl sm:text-5xl font-bold">
               ${user?.totalAssets}
             </p>
           </div>
-          <div className="add-asset-button flex justify-center m-4">
+          <div
+            id="show-make-transaction-button"
+            className="flex justify-center m-4"
+          >
             <button
               className="border rounded-full bg-green-700 p-1 sm:p-2 text-sm sm:text-base hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400"
               onClick={(e) => ShowForm(e)}
@@ -90,20 +96,35 @@ const Dashboard = (): JSX.Element => {
           </div>
         </header>
         {showAssetForm && <EditUserForm hideForm={HideForm} />}
-        <section className="recent-transactions-list">
-          <header>
-            <h2 className="recent-transactions-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
+        <section id="recent-transactions-list">
+          <header className="text-center m-2">
+            <h2
+              id="recent-transactions-list-title"
+              className="text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150"
+            >
               Recent Miscellaneous Transactions
             </h2>
+            <small>
+              Below are your 5 most recent transactions, which includes both
+              that you have documented yourself and from your incomes: past and
+              present.
+            </small>
           </header>
           <TransactionList transactions={transactions} />
         </section>
 
         <section className="recent-expenses-list">
-          <header>
-            <h2 className="recent-expenses-list-title text-center text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 mb-2 font-bold duration-150">
+          <header className="text-center m-2">
+            <h2
+              id="recent-expenses-list-title"
+              className="text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150"
+            >
               Recent Budget Expenses
             </h2>
+            <small>
+              Below are your 5 most recent budget expenses. These only include
+              expenses made using funds from all budgets you have presently.
+            </small>
           </header>
           <ExpenseList
             expensesList={expenses}
