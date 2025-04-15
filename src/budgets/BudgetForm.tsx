@@ -242,14 +242,14 @@ const BudgetForm: React.FC<Props> = ({
               />
             </div>
             <div className="button flex justify-between m-2">
-              <button className="add-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900 duration-150">
-                Add this Budget
-              </button>
               <button
                 className="bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full px-2 py-2 hover:bg-gray-200 hover:text-gray-600 duration-150"
                 onClick={(e) => hideForm(e)}
               >
                 Cancel
+              </button>
+              <button className="add-budget-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900 duration-150">
+                Add this Budget
               </button>
             </div>
           </form>

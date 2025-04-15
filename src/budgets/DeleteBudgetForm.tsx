@@ -215,14 +215,14 @@ const DeleteBudgetForm: React.FC<Props> = ({
               </ul>
 
               <div className="buttons flex justify-between m-2">
-                <button className="delete-button duration-150 bg-red-300 border-2 border-red-900 rounded-full px-2 py-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900">
-                  Delete Budget
-                </button>
                 <button
                   className="cancel-button duration-150"
                   onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
                 >
                   Cancel
+                </button>
+                <button className="delete-button duration-150 bg-red-300 border-2 border-red-900 rounded-full px-2 py-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900">
+                  Delete Budget
                 </button>
               </div>
             </div>
