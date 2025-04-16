@@ -36,18 +36,16 @@ const ExpenseCard: React.FC<Props> = ({
         -${expense.transaction}
       </div>
 
-      {isFrontPage && (
-        <div className="expense-budget-title p-1 text-sm sm:text-base duration-150 text-center content-center">
-          {expense.budget?.title}
-        </div>
-      )}
-
       <div className="expense-date p-1 text-sm sm:text-base duration-150 text-center content-center">
         <p>{dateTime.current.date}</p>
         <p>{dateTime.current.time}</p>
       </div>
 
-      {!isFrontPage && (
+      {isFrontPage ? (
+        <div className="expense-budget-title p-1 text-sm sm:text-base duration-150 text-center content-center">
+          {expense.budget}
+        </div>
+      ) : (
         <div className="delete-expense-div text-center content-center">
           <button
             onClick={(e) =>

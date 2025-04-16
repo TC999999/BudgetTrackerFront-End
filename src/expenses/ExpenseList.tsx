@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 type Props = {
   expensesList: ExpenseInterface[];
   isFrontPage: boolean;
-  budgetID: string | null;
+  budgetID?: string;
   filterExpense?: (id: string) => void;
   updateBudget?: (updatedBudget: BudgetUpdate) => void;
   budgetFunds?: budgetFunds;
@@ -97,20 +97,21 @@ const ExpenseList: React.FC<Props> = ({
       try {
         e.preventDefault();
         dispatch(setSmallLoading(true));
-
-        let submitData: deleteExpenseInterface = {
-          _id: info._id,
-          transaction: info.transaction!,
-          budgetID,
-        };
-        let { delExpense, newUserBudget } = await ExpenseAPI.deleteExpense(
-          submitData,
-          user!._id
-        );
-        callFilterExpense(delExpense._id);
-        callUpdateBudget(newUserBudget);
-        setSelectedExpense(null);
-        notifyDelete(delExpense.title);
+        if (budgetID) {
+          let submitData: deleteExpenseInterface = {
+            _id: info._id,
+            transaction: info.transaction!,
+            budgetID,
+          };
+          let { delExpense, newUserBudget } = await ExpenseAPI.deleteExpense(
+            submitData,
+            user!._id
+          );
+          callFilterExpense(delExpense._id);
+          callUpdateBudget(newUserBudget);
+          setSelectedExpense(null);
+          notifyDelete(delExpense.title);
+        }
       } catch (err: any) {
         notifyError(JSON.parse(err.message));
       } finally {
@@ -145,37 +146,38 @@ const ExpenseList: React.FC<Props> = ({
           <b className="text-sm sm:text-base duration-150 text-center content-center">
             Cost
           </b>
-          {isFrontPage && (
-            <b className="text-sm sm:text-base duration-150 text-center content-center">
-              Budget
-            </b>
-          )}
+
           <b className="text-sm sm:text-base duration-150 text-center content-center">
             Date
           </b>
-          {!isFrontPage && (
+          {isFrontPage ? (
+            <b className="text-sm sm:text-base duration-150 text-center content-center">
+              Budget
+            </b>
+          ) : (
             <b className="text-sm sm:text-base duration-150 text-center content-center">
               Delete
             </b>
           )}
         </header>
-        <div id="expense-card-list" className="striped">
-          {expensesList.map((e) => {
-            return (
-              <ExpenseCard
-                key={e._id}
-                expense={e}
-                isFrontPage={isFrontPage}
-                showSecondPrompt={showSecondPrompt}
-              />
-            );
-          })}
-          {!expensesList.length && (
-            <div className="no-expenses text-center text-xl p-6">
-              <p className="italic">No Expenses Yet</p>
-            </div>
-          )}
-        </div>
+        {expensesList.length ? (
+          <div id="expense-card-list" className="striped">
+            {expensesList.map((e) => {
+              return (
+                <ExpenseCard
+                  key={e._id}
+                  expense={e}
+                  isFrontPage={isFrontPage}
+                  showSecondPrompt={showSecondPrompt}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div className="no-expenses text-center text-xl p-6">
+            <p className="italic">None</p>
+          </div>
+        )}
       </div>
     </div>
   );

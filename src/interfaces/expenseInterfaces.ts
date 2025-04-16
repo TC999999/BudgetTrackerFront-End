@@ -11,13 +11,8 @@ export type submitNewExpense = {
   date: string;
 };
 
-type ExpenseBudgetInterface = {
-  _id: string;
-  title: string;
-};
-
 export interface ExpenseInterface extends newExpenseInterface {
-  budget?: ExpenseBudgetInterface;
+  budget?: string;
   _id: string;
 }
 

@@ -143,11 +143,7 @@ const Dashboard = (): JSX.Element => {
               expenses made using funds from all budgets you have presently.
             </small>
           </header>
-          <ExpenseList
-            expensesList={expenses}
-            isFrontPage={true}
-            budgetID={null}
-          />
+          <ExpenseList expensesList={expenses} isFrontPage={true} />
         </section>
       </main>
     </div>

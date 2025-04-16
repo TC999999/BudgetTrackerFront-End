@@ -205,7 +205,7 @@ const SingleBudgetPage = (): JSX.Element => {
           <ExpenseList
             expensesList={expenses}
             isFrontPage={false}
-            budgetID={budgetID || null}
+            budgetID={budgetID}
             filterExpense={filterExpense}
             updateBudget={updateBudget}
             budgetFunds={{
