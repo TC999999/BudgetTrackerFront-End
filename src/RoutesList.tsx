@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoutes from "./ProtectedRoutes";
 import ErrorRouter from "./ErrorRouter";
+import NotLoggedInRoutes from "./NotLoggedInRoutes";
 import NotFound from "./NotFound";
 import Error from "./Error";
 import HomePage from "./users/HomePage";
@@ -16,8 +17,10 @@ const RoutesList = (): JSX.Element => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/register" element={<SignUp />} />
-      <Route path="/resetPassword" element={<ResetPassword />} />
+      <Route element={<NotLoggedInRoutes />}>
+        <Route path="/register" element={<SignUp />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
+      </Route>
       <Route element={<ProtectedRoutes />}>
         <Route path="/transactions/user/:id" element={<TransactionHistory />} />
         <Route path="/incomes/user/:id" element={<IncomePage />} />
