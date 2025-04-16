@@ -6,9 +6,10 @@ import {
 } from "../interfaces/budgetInterfaces";
 import { error } from "../interfaces/miscTypes";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
+import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { calculateNewTotalAssetsWithoutOperation } from "../helpers/calculateNewTotalAssets";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
@@ -37,8 +38,9 @@ const DeleteBudgetForm: React.FC<Props> = ({
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
 
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { user, smallLoading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
 
   // constant used if user chooses to return the remaining funds of the budget only
@@ -49,7 +51,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
   // initial form data for deleting a budget, the first two remain constant while the last one changes
   // based on which radio button the user selects
   let deleteBudgetData: DeleteBudgetInterface = {
-    user: userStatus.user!._id,
+    user: user!._id,
     budgetID: budget._id,
     addBackToAssets: 0,
   };
@@ -62,7 +64,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
   let newAssets: string = useMemo<string>(
     () =>
       calculateNewTotalAssetsWithoutOperation(
-        userStatus.user!.totalAssets,
+        user!.totalAssets,
         formData.addBackToAssets
       ),
     [formData.addBackToAssets]
@@ -82,7 +84,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
       dispatch(setSmallLoading(true));
       let { totalAssets } = await BudgetAPI.deleteBudget(formData);
       dispatch(setTotalAssets(totalAssets));
-      navigate(`/budgets/user/${userStatus.user?._id}`);
+      navigate(`/budgets/user/${user?._id}`);
       notify(budget.title, formData.addBackToAssets);
     } catch (err: any) {
       notifyError(JSON.parse(err.message));
@@ -91,7 +93,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
     }
   };
 
-  return !userStatus.smallLoading ? (
+  return !smallLoading ? (
     <div id="delete-budget-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
         <div id="delete-budget-form" className=" text-center modal-layer-3">

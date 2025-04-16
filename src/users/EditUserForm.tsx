@@ -4,8 +4,11 @@ import {
   UserEditInterface,
   UserEditErrors,
 } from "../interfaces/userInterfaces";
+import { error } from "../interfaces/miscTypes";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { shallowEqual } from "react-redux";
+import { addToAssets } from "../features/actions/users";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { calculateNewTotalAssetsUserDashboard } from "../helpers/calculateNewTotalAssets";
 import {
@@ -14,10 +17,8 @@ import {
   handleEditUserSubmitErrors,
 } from "../helpers/handleUserEditErrors";
 import { createUpdateUserString } from "../helpers/createNotificationString";
-import { addToAssets } from "../features/actions/users";
 import { DateTime } from "luxon";
 import { toast } from "react-toastify";
-import { error } from "../interfaces/miscTypes";
 
 type Props = {
   hideForm: (
@@ -41,8 +42,9 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   const notify = (notification: string) => toast.success(notification);
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { user, smallLoading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
   const initialState: FormInfo = {
     title: "",
@@ -71,7 +73,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
   // display on the form window for users.
   const newTotalAssets: string = useMemo<string>(() => {
     return calculateNewTotalAssetsUserDashboard(
-      userStatus.user!.totalAssets,
+      user!.totalAssets,
       formData.value,
       formData.operation
     );
@@ -99,7 +101,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
           setFormErrors,
           formData.operation,
           maxNum.current,
-          userStatus.user!.totalAssets * 100
+          user!.totalAssets * 100
         )
       ) {
         setFormData((data) => ({
@@ -141,7 +143,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
         setFormErrors,
         value,
         maxNum.current,
-        userStatus.user!.totalAssets * 100
+        user!.totalAssets * 100
       )
     ) {
       setFormData((data) => ({
@@ -186,7 +188,7 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
     }
   };
 
-  return !userStatus.smallLoading ? (
+  return !smallLoading ? (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="add-to-assets-form text-center modal-layer-3">

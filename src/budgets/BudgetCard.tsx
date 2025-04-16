@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
+import { UserContextInterface } from "../interfaces/userInterfaces";
 
 type Props = {
   budget: BudgetListInterface;
@@ -8,7 +10,10 @@ type Props = {
 
 // returns card for a single budget to be displayed in BudgetList component
 const BudgetCard: React.FC<Props> = ({ budget }): JSX.Element => {
-  const { user } = useAppSelector((store) => store.user.userInfo);
+  const { user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
 
   return (
     <div className="budget-card border-2 border-green-400 p-8 m-4 shadow-md bg-white rounded-md">

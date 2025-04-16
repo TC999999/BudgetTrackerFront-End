@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import { useAppSelector } from "./features/hooks";
+import { shallowEqual } from "react-redux";
 
 // Error page for 404 errors (invalid URL routes)
 const NotFound = (): JSX.Element => {
-  const userExists = useAppSelector((store) => store.user.userInfo.userExists);
+  const userExists = useAppSelector(
+    (store) => store.user.userInfo.userExists,
+    shallowEqual
+  );
 
   return (
     <div id="not-found-page" className="text-center p-2">

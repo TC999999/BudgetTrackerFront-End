@@ -2,12 +2,14 @@ import { useState, useCallback } from "react";
 import { Income, deleteIncomeType } from "../interfaces/incomeInterfaces";
 import { infoInterface } from "../interfaces/miscTypes";
 import { error } from "../interfaces/miscTypes";
+import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { setSmallLoading } from "../features/auth/authSlice";
+import { shallowEqual } from "react-redux";
 import IncomeCard from "./IncomeCard";
 import UpdateIncomeForm from "./UpdateIncomeForm";
 import SecondPrompt from "../SecondPrompt";
 import IncomeAPI from "../apis/IncomeAPI";
-import { setSmallLoading } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 
 type Props = {
@@ -28,7 +30,10 @@ const IncomeList: React.FC<Props> = ({
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
 
-  const { user } = useAppSelector((store) => store.user.userInfo);
+  const { user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
 
   // to use for editing a single income, retrieve info to be used for income edit
   const [selectedIncomeForEdit, setSelectedIncomeForEdit] =

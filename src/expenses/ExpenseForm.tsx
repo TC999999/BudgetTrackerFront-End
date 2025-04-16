@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { setSmallLoading } from "../features/auth/authSlice";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
@@ -15,6 +16,7 @@ import {
   ExpenseInterface,
 } from "../interfaces/expenseInterfaces";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
+import { UserContextInterface } from "../interfaces/userInterfaces";
 import { DateTime } from "luxon";
 import { toast } from "react-toastify";
 import ExpenseAPI from "../apis/ExpenseAPI";
@@ -47,7 +49,10 @@ const ExpenseForm: React.FC<Props> = ({
     );
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const userStatus = useAppSelector((store) => store.user.userInfo);
+  const { user, smallLoading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
 
   const initialState: newExpenseInterface = {
     title: "",
@@ -154,7 +159,7 @@ const ExpenseForm: React.FC<Props> = ({
         };
         const { spentMoney, newExpense } = await ExpenseAPI.addNewExpense(
           submitData,
-          userStatus.user!._id
+          user!._id
         );
         addExpense(newExpense);
         updateBudget(spentMoney);
@@ -178,7 +183,7 @@ const ExpenseForm: React.FC<Props> = ({
     }
   };
 
-  return !userStatus.smallLoading ? (
+  return !smallLoading ? (
     <div tabIndex={-1} id="new-expense-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
         <div id="new-expense-form" className="modal-layer-3 text-center">

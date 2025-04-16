@@ -1,3 +1,4 @@
+import { shallowEqual } from "react-redux";
 import { useAppSelector } from "./features/hooks";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 
@@ -9,7 +10,8 @@ type Props = {
 // (budget data or income data) is loading
 const OnPageLoading: React.FC<Props> = ({ loadingMsg }): JSX.Element | null => {
   const { smallLoading }: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+    (store) => store.user.userInfo,
+    shallowEqual
   );
   return smallLoading ? (
     <div className="text-center text-5xl text-green-700 font-bold p-10">

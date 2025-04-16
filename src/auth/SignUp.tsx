@@ -9,6 +9,7 @@ import {
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { SubmitIncomeSignUp } from "../interfaces/incomeInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import KeyPad from "../KeyPad";
 import NewIncomeForm from "../incomes/NewIncomeForm";
@@ -40,8 +41,9 @@ const SignUp = (): JSX.Element => {
   const navigate = useNavigate();
   const notify = () =>
     toast.error("You have reached the maximum number of allowed incomes!");
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { userExists, error }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
 
   // max value for total assets
@@ -62,11 +64,11 @@ const SignUp = (): JSX.Element => {
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
 
   useEffect(() => {
-    if (userStatus.userExists) {
+    if (userExists) {
       navigate("/");
     }
-    if (userStatus.error) {
-      setSubmitError(userStatus.error);
+    if (error) {
+      setSubmitError(error);
       dispatch(removeUserError());
     }
     let inputs: string | null = localStorage.getItem("userInputs");
@@ -74,7 +76,7 @@ const SignUp = (): JSX.Element => {
       setFormData(JSON.parse(inputs));
       localStorage.removeItem("userInputs");
     }
-  }, [userStatus]);
+  }, [userExists, error]);
 
   // updates form data when user inputs data, if there are any errors in inputs, lets the user know
   // (e.g. username contains spaces betwwen characters, password length too long, email address is invalid)
@@ -250,9 +252,7 @@ const SignUp = (): JSX.Element => {
               <input
                 className={`input 
                 ${
-                  signUpErrors.username || userStatus.error
-                    ? "input-error"
-                    : "input-valid"
+                  signUpErrors.username || error ? "input-error" : "input-valid"
                 } ${FlashErrors.username && "animate-blinkError"}`}
                 id="signup_username"
                 type="text"
@@ -266,9 +266,9 @@ const SignUp = (): JSX.Element => {
                   <p>{signUpErrors.username}</p>
                 </div>
               )}
-              {typeof userStatus.error === "string" && (
+              {typeof error === "string" && (
                 <div id="register-error" className="text-red-600 font-bold">
-                  <p>{userStatus.error}</p>
+                  <p>{error}</p>
                 </div>
               )}
               <div className="flex flex-col">

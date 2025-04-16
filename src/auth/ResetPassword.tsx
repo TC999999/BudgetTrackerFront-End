@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { setSmallLoading } from "../features/auth/authSlice";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import UserInfo from "./UserInfo";
@@ -20,8 +21,9 @@ import { CiCircleCheck } from "react-icons/ci";
 const ResetPassword = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { smallLoading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
   const initialUser: ConfirmUserInfo = {
     username: "",
@@ -56,7 +58,7 @@ const ResetPassword = (): JSX.Element => {
     (loadingStatus: boolean): void => {
       dispatch(setSmallLoading(loadingStatus));
     },
-    [userStatus.smallLoading]
+    [smallLoading]
   );
 
   // changes current step in step list and marks previous step completion as true, shows a new form and

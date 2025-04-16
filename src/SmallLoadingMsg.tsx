@@ -1,3 +1,4 @@
+import { shallowEqual } from "react-redux";
 import { useAppSelector } from "./features/hooks";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { FaRegHourglass } from "react-icons/fa";
@@ -5,7 +6,8 @@ import { FaRegHourglass } from "react-icons/fa";
 // Loading Message for regular form submissions other than logging in and registering users
 const SmallLoadingMsg = (): JSX.Element | null => {
   const { smallLoading }: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+    (store) => store.user.userInfo,
+    shallowEqual
   );
 
   // message only shows when making smaller CRUD requests, otherwise is null

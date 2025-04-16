@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import {
   newBudgetInterface,
@@ -45,8 +46,9 @@ const BudgetForm: React.FC<Props> = ({
     );
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { user, smallLoading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
   const initialState: newBudgetInterface = {
     title: "",
@@ -58,7 +60,7 @@ const BudgetForm: React.FC<Props> = ({
   const [formData, setFormData] = useState<newBudgetInterface>(initialState);
   // sets state for available funds that changes if the new budget fund value changes
   const [availableFunds, setAvailableFunds] = useState<number>(
-    userStatus.user!.totalAssets * 100
+    user!.totalAssets * 100
   );
   // sets state for errors in the form inputs, updates if errors are detcted
   const [formErrors, setFormErrors] = useState<BudgetFormErrors>(initialErrors);
@@ -77,9 +79,9 @@ const BudgetForm: React.FC<Props> = ({
       let num: number = +e.currentTarget.value;
       let newNum: number = currencyConverter(formData.moneyAllocated, num);
       handleBudgetInputErrors("moneyAllocated", newNum, setFormErrors);
-      if (newNum <= userStatus.user!.totalAssets * 100) {
+      if (newNum <= user!.totalAssets * 100) {
         setFormData((data) => ({ ...data, moneyAllocated: newNum }));
-        setAvailableFunds(userStatus.user!.totalAssets * 100 - newNum);
+        setAvailableFunds(user!.totalAssets * 100 - newNum);
       } else {
         setFormErrors((data) => ({
           ...data,
@@ -108,7 +110,7 @@ const BudgetForm: React.FC<Props> = ({
         ...data,
         moneyAllocated: newNum,
       }));
-      setAvailableFunds(userStatus.user!.totalAssets * 100 - newNum);
+      setAvailableFunds(user!.totalAssets * 100 - newNum);
     },
     [formData]
   );
@@ -131,7 +133,7 @@ const BudgetForm: React.FC<Props> = ({
       if (handleBudgetSubmitErrors(formData, setFormErrors)) {
         dispatch(setSmallLoading(true));
         let submitData: submitBudget = {
-          userID: userStatus.user!._id,
+          userID: user!._id,
           ...formData,
           moneyAllocated: formData.moneyAllocated / 100,
         };
@@ -158,7 +160,7 @@ const BudgetForm: React.FC<Props> = ({
     }
   };
 
-  return !userStatus.smallLoading ? (
+  return !smallLoading ? (
     <div tabIndex={-1} id="budget-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
         <div id="new-budget-form" className="modal-layer-3">

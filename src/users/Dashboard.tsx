@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
@@ -13,7 +14,7 @@ import { toast } from "react-toastify";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
-  const { user } = useAppSelector((store) => store.user.userInfo);
+  const { user } = useAppSelector((store) => store.user.userInfo, shallowEqual);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const notify = () => toast.error("You have reached the maximum asset value");
@@ -43,7 +44,7 @@ const Dashboard = (): JSX.Element => {
       }
     };
     getRecentTransactions();
-  }, [user?._id, user?.totalAssets]);
+  }, [user?._id]);
 
   // updates state for showing the update asset form to true, unless the user's current total asset value equals the
   // maximum allowed value

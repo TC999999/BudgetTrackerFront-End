@@ -13,6 +13,7 @@ import {
   handleLogInSubmitErrors,
 } from "../helpers/handleLogInErrors";
 import { Link } from "react-router-dom";
+import { shallowEqual } from "react-redux";
 
 // returns login form for users to login to their accounts
 const LogIn = (): JSX.Element => {
@@ -35,16 +36,17 @@ const LogIn = (): JSX.Element => {
   });
 
   // this is used to grab an error for invalid username/password
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { error }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
 
   // since submitting the login form causes a rerender, we store the inputted information into localstorage
   // and grab it after the rerender and sets the form data
   useEffect(() => {
     let inputs: string | null = localStorage.getItem("userInputs");
-    if (userStatus.error) {
-      setSubmitError(userStatus.error);
+    if (error) {
+      setSubmitError(error);
       dispatch(removeUserError());
     }
     if (inputs) {

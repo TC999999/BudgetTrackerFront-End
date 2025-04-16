@@ -19,6 +19,7 @@ import {
 } from "../helpers/handleBudgetErrors";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
@@ -47,8 +48,9 @@ const EditBudgetForm: React.FC<Props> = ({
     toast.success(notificationString);
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { user, smallLoading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
 
   const initialState: BudgetEditInterface = {
@@ -100,7 +102,7 @@ const EditBudgetForm: React.FC<Props> = ({
   // value
   const newTotalAssets: string = useMemo<string>(() => {
     return calculateNewTotalAssets(
-      userStatus.user!.totalAssets,
+      user!.totalAssets,
       formData.addedMoney,
       formData.operation
     );
@@ -117,7 +119,7 @@ const EditBudgetForm: React.FC<Props> = ({
       let newNum = currencyConverter(formData.addedMoney, num);
       let errors = handleUpdateBudgetComparisons(
         newNum,
-        userStatus.user!.totalAssets * 100,
+        user!.totalAssets * 100,
         formData.operation,
         remainingMoney.current,
         setFormErrors
@@ -156,7 +158,7 @@ const EditBudgetForm: React.FC<Props> = ({
     if (
       !handleUpdateBudgetComparisons(
         formData.addedMoney,
-        userStatus.user!.totalAssets * 100,
+        user!.totalAssets * 100,
         value,
         remainingMoney.current,
         setFormErrors
@@ -196,7 +198,7 @@ const EditBudgetForm: React.FC<Props> = ({
       if (handleUpdateBudgetSubmitErrors(formData, setFormErrors)) {
         dispatch(setSmallLoading(true));
         let submitData: SubmitBudgetUpdateInterface = {
-          userID: userStatus.user!._id,
+          userID: user!._id,
           budgetID: budget._id,
           title: formData.title,
           addedMoney:
@@ -226,7 +228,7 @@ const EditBudgetForm: React.FC<Props> = ({
     }
   };
 
-  return !userStatus.smallLoading ? (
+  return !smallLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="edit-budget-form-div text-center modal-layer-3">

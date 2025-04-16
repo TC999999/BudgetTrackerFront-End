@@ -22,9 +22,10 @@ import {
 import { createUpdateIncomeString } from "../helpers/createNotificationString";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { setSmallLoading } from "../features/auth/authSlice";
+import { shallowEqual } from "react-redux";
 import { toast } from "react-toastify";
 import IncomeAPI from "../apis/IncomeAPI";
-import { setSmallLoading } from "../features/auth/authSlice";
 
 type Props = {
   income: Income;
@@ -45,8 +46,9 @@ const UpdateIncomeForm: React.FC<Props> = ({
   const notify = (notification: string) => toast.success(notification);
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { user, smallLoading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
 
   // update time is used to construct a new cron string to be sent to backend for update
@@ -191,10 +193,10 @@ const UpdateIncomeForm: React.FC<Props> = ({
           cronString,
           readableUpdateTimeString,
         };
-        if (userStatus.user?._id) {
+        if (user?._id) {
           let updatedIncome: Income = await IncomeAPI.updateUserIncome(
             submitData,
-            userStatus.user?._id
+            user?._id
           );
           updateIncomeState(updatedIncome);
         }
@@ -216,7 +218,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     }
   };
 
-  return !userStatus.smallLoading ? (
+  return !smallLoading ? (
     <div className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="modal-layer-3 text-center">

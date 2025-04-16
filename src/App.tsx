@@ -4,6 +4,7 @@ import { useAppDispatch } from "./features/hooks";
 import { incomeUpdate, setUserLoading } from "./features/auth/authSlice";
 import { getCurrentUser } from "./features/actions/users";
 import { useAppSelector } from "./features/hooks";
+import { shallowEqual } from "react-redux";
 import LoadingMsg from "./LoadingUserMsg";
 import SmallLoadingMsg from "./SmallLoadingMsg";
 import Navbar from "./Navbar";
@@ -16,8 +17,9 @@ function App(): JSX.Element {
   const dispatch = useAppDispatch();
   const notify = (message: string) => toast.success(message);
 
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { user, loading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
 
   // retrieves the current user using refresh token saved as an http only cookie. If there are no tokens, returns an error and
@@ -37,10 +39,8 @@ function App(): JSX.Element {
   // if user information is found in redux, opens an event source connection to the server to listen
   // for live updates
   useEffect(() => {
-    if (userStatus.user?._id && !userStatus.loading) {
-      const es = new EventSource(
-        `http://localhost:3001/events/${userStatus.user._id}`
-      );
+    if (user?._id && !loading) {
+      const es = new EventSource(`http://localhost:3001/events/${user._id}`);
 
       es.onopen = () => {
         console.log("SSE Connection Established");
@@ -63,7 +63,7 @@ function App(): JSX.Element {
 
       return () => es.close();
     }
-  }, [dispatch, userStatus.user?._id, userStatus.loading]);
+  }, [dispatch, user?._id, loading]);
 
   // returns loading messages, toast notifications, and routes list
   return (
@@ -72,7 +72,7 @@ function App(): JSX.Element {
       <SmallLoadingMsg />
       <ToastContainer position="bottom-right" />
       <Navbar />
-      {!userStatus.loading && <RoutesList />}
+      {!loading && <RoutesList />}
     </div>
   );
 }

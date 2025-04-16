@@ -7,6 +7,7 @@ import {
   calcNewMoneySpent,
 } from "./helpers/calculateExpenseDelete";
 import { FaArrowRight } from "react-icons/fa6";
+import { shallowEqual } from "react-redux";
 
 type Props = {
   deleteFunction: (
@@ -28,7 +29,8 @@ const SecondPrompt: React.FC<Props> = ({
   BudgetFunds,
 }): JSX.Element | null => {
   const smallLoading: boolean = useAppSelector(
-    (store) => store.user.userInfo.smallLoading
+    (store) => store.user.userInfo.smallLoading,
+    shallowEqual
   );
 
   // uses callback function from props to delete either an income or expense from db and state

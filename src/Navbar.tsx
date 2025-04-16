@@ -4,13 +4,18 @@ import Logout from "./auth/Logout";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./features/hooks";
 import { logOutUser } from "./features/actions/auth";
+import { shallowEqual } from "react-redux";
+import { UserContextInterface } from "./interfaces/userInterfaces";
 
 // returns main navbar at the top of the app when user logs in
 const Navbar = (): JSX.Element | null => {
   const [showPrompt, setShowPrompt] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { userExists, user } = useAppSelector((store) => store.user.userInfo);
+  const { userExists, user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
 
   // hides prompt window asking user if they are sure if they want to logout
   const hidePrompt = useCallback(

@@ -1,15 +1,17 @@
+import { shallowEqual } from "react-redux";
 import { useAppSelector } from "./features/hooks";
 import { UserContextInterface } from "./interfaces/userInterfaces";
 import { FaRegHourglass } from "react-icons/fa";
 
 // Loading message for refreshes, logging in, and registering users
 const LoadingMsg = (): JSX.Element | null => {
-  const userStatus: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo
+  const { loading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
   );
 
   // message only shows when app refreshes or retrieving user data, otherwise is null
-  return userStatus.loading ? (
+  return loading ? (
     <div
       tabIndex={-1}
       className="loading-message-div bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full"

@@ -5,10 +5,12 @@ import {
   ExpenseInterface,
   deleteExpenseInterface,
 } from "../interfaces/expenseInterfaces";
+import { UserContextInterface } from "../interfaces/userInterfaces";
 import { budgetFunds, BudgetUpdate } from "../interfaces/budgetInterfaces";
-import { useAppSelector, useAppDispatch } from "../features/hooks";
-import { setSmallLoading } from "../features/auth/authSlice";
 import { error, infoInterface } from "../interfaces/miscTypes";
+import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { shallowEqual } from "react-redux";
+import { setSmallLoading } from "../features/auth/authSlice";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import { toast } from "react-toastify";
 
@@ -32,7 +34,10 @@ const ExpenseList: React.FC<Props> = ({
   updateBudget,
   budgetFunds,
 }): JSX.Element => {
-  const userStatus = useAppSelector((store) => store.user.userInfo);
+  const { user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
   const dispatch = useAppDispatch();
   const [selectedExpense, setSelectedExpense] = useState<infoInterface | null>(
     null
@@ -100,7 +105,7 @@ const ExpenseList: React.FC<Props> = ({
         };
         let { delExpense, newUserBudget } = await ExpenseAPI.deleteExpense(
           submitData,
-          userStatus.user!._id
+          user!._id
         );
         callFilterExpense(delExpense._id);
         callUpdateBudget(newUserBudget);
@@ -137,21 +142,17 @@ const ExpenseList: React.FC<Props> = ({
           <b className="text-sm sm:text-base duration-150 text-center content-center">
             Name
           </b>
-
           <b className="text-sm sm:text-base duration-150 text-center content-center">
             Cost
           </b>
-
           {isFrontPage && (
             <b className="text-sm sm:text-base duration-150 text-center content-center">
               Budget
             </b>
           )}
-
           <b className="text-sm sm:text-base duration-150 text-center content-center">
             Date
           </b>
-
           {!isFrontPage && (
             <b className="text-sm sm:text-base duration-150 text-center content-center">
               Delete
