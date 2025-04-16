@@ -2,7 +2,7 @@ import { useAppSelector } from "./features/hooks";
 import { shallowEqual } from "react-redux";
 import { error } from "./interfaces/miscTypes";
 
-// returns a general error window for non browser url errors
+// returns a general error window for non browser url 404 errors
 const Error = () => {
   const { message, status }: error = useAppSelector(
     (store) => store.user.loadError,

@@ -10,6 +10,7 @@ import TransactionList from "../transactions/transactionList";
 import ExpenseList from "../expenses/ExpenseList";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import TransactionAPI from "../apis/TransactionAPI";
+import { addNewTransaction } from "../helpers/addNewTransaction";
 import { toast } from "react-toastify";
 
 // returns the main page for users who are logged in: shows their current total assets and
@@ -70,6 +71,16 @@ const Dashboard = (): JSX.Element => {
     [showAssetForm]
   );
 
+  // adds new transaction to recent transaction list when user documents a new transaction
+  const updateTransactions = useCallback(
+    (newTransaction: Transaction): void => {
+      setTransactions((prevTransactions) =>
+        addNewTransaction(prevTransactions, [newTransaction])
+      );
+    },
+    [transactions]
+  );
+
   return (
     <div id="dashboard-homepage">
       <main>
@@ -96,7 +107,12 @@ const Dashboard = (): JSX.Element => {
             </button>
           </div>
         </header>
-        {showAssetForm && <EditUserForm hideForm={HideForm} />}
+        {showAssetForm && (
+          <EditUserForm
+            hideForm={HideForm}
+            updateTransactions={updateTransactions}
+          />
+        )}
         <section id="recent-transactions-list">
           <header className="text-center m-2">
             <h2

@@ -5,6 +5,7 @@ import {
   UserEditErrors,
 } from "../interfaces/userInterfaces";
 import { error } from "../interfaces/miscTypes";
+import { Transaction } from "../interfaces/transactionInterfaces";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { shallowEqual } from "react-redux";
@@ -24,6 +25,7 @@ type Props = {
   hideForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
+  updateTransactions: (newTransaction: Transaction) => void;
 };
 
 type FormInfo = {
@@ -37,7 +39,10 @@ type flashErrors = { title: boolean; value: boolean; date: boolean };
 
 // returns form modal for users to add a new miscellaneous transaction using funds directly
 // from their savings
-const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
+const EditUserForm: React.FC<Props> = ({
+  hideForm,
+  updateTransactions,
+}): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const notify = (notification: string) => toast.success(notification);
   const notifyError = (error: error) =>
@@ -169,7 +174,8 @@ const EditUserForm: React.FC<Props> = ({ hideForm }): JSX.Element | null => {
           ...formData,
           value: operation === "add" ? +value / 100 : -value / 100,
         };
-        await dispatch(addToAssets(submitData)).unwrap();
+        let { transaction } = await dispatch(addToAssets(submitData)).unwrap();
+        updateTransactions(transaction);
         hideForm(e);
         notify(createUpdateUserString(submitData));
       } else {

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAppSelector } from "./features/hooks";
 import { shallowEqual } from "react-redux";
 
-// Error page for 404 errors (invalid URL routes)
+// Error page for 404 errors (invalid browser URL routes)
 const NotFound = (): JSX.Element => {
   const userExists = useAppSelector(
     (store) => store.user.userInfo.userExists,

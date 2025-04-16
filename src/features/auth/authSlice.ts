@@ -100,8 +100,8 @@ const authSlice = createSlice({
         state.userInfo.smallLoading = true;
       })
       .addCase(addToAssets.fulfilled, (state, action: any) => {
-        let { totalAssets } = action.payload;
-        state.userInfo.user!.totalAssets = totalAssets;
+        let { user } = action.payload;
+        state.userInfo.user!.totalAssets = user.totalAssets;
         state.userInfo.smallLoading = false;
       })
       .addCase(addToAssets.rejected, (state) => {

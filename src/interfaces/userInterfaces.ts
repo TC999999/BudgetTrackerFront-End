@@ -1,3 +1,5 @@
+import { Transaction } from "./transactionInterfaces";
+
 export type UserContextInterface = {
   user: UserInfoInterface | null;
   userExists: boolean;
@@ -17,6 +19,14 @@ export interface UserInfoInterface {
   username: string;
   totalAssets: number;
 }
+
+export type NewTransactionInterface = {
+  user: {
+    _id: string;
+    totalAssets: number;
+  };
+  transaction: Transaction;
+};
 
 export type UserEditErrors = {
   title: string;

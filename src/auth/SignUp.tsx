@@ -68,6 +68,7 @@ const SignUp = (): JSX.Element => {
       navigate("/");
     }
     if (error) {
+      console.log(error);
       setSubmitError(error);
       dispatch(removeUserError());
     }
@@ -182,7 +183,9 @@ const SignUp = (): JSX.Element => {
           setFlashErrors({ username: false, password: false, email: false });
         }, 500);
       }
-    } catch (err) {}
+    } catch (err: any) {
+      // console.log(err);
+    }
   };
 
   // when user clicks key on in-app keypad, pushes number clicked onto the formData's totalAssets field and
@@ -236,6 +239,9 @@ const SignUp = (): JSX.Element => {
           <h1 className="text-3xl font-bold underline text-emerald-600">
             Sign Up Here!
           </h1>
+          <small>
+            (<span className="text-red-700">*</span>: <i>required</i>)
+          </small>
         </header>
         <div id="register-form-div">
           {showIncomeForm && (
@@ -245,9 +251,18 @@ const SignUp = (): JSX.Element => {
             />
           )}
           <form onSubmit={handleSubmit}>
+            {submitError && (
+              <div
+                id="register-error"
+                className="text-red-600 text-xl font-bold"
+              >
+                <p>{submitError}</p>
+              </div>
+            )}
+
             <div id="username-div" className="py-4">
               <label className="text-lg block" htmlFor="username">
-                Username:{" "}
+                Username: <small className="text-red-700">*</small>
               </label>
               <input
                 className={`input 
@@ -266,11 +281,7 @@ const SignUp = (): JSX.Element => {
                   <p>{signUpErrors.username}</p>
                 </div>
               )}
-              {typeof error === "string" && (
-                <div id="register-error" className="text-red-600 font-bold">
-                  <p>{error}</p>
-                </div>
-              )}
+
               <div className="flex flex-col">
                 <small>Your username must be between 6-30 characters.</small>
                 <small>Your username may include letters and numbers.</small>
@@ -282,7 +293,7 @@ const SignUp = (): JSX.Element => {
             </div>
             <div id="password-div" className="py-4">
               <label className="text-lg block" htmlFor="password">
-                Password:{" "}
+                Password: <small className="text-red-700">*</small>
               </label>
               <input
                 className={`input ${
@@ -315,7 +326,7 @@ const SignUp = (): JSX.Element => {
             </div>
             <div id="email-div" className="py-4">
               <label className="text-lg block" htmlFor="email">
-                Email Address:{" "}
+                Email Address: <small className="text-red-700">*</small>
               </label>
               <input
                 className={`input-email 

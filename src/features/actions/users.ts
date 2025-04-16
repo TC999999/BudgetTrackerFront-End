@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   UserInfoInterface,
   UserEditInterface,
+  NewTransactionInterface,
 } from "../../interfaces/userInterfaces";
 import { API_URL } from "../config";
 import axios from "axios";
@@ -27,7 +28,7 @@ export const getCurrentUser = createAsyncThunk<UserInfoInterface, any>(
 
 // updates a user's total assets based on the value in sent data
 export const addToAssets = createAsyncThunk<
-  UserInfoInterface,
+  NewTransactionInterface,
   UserEditInterface
 >(
   "user/update/assets",
@@ -42,7 +43,7 @@ export const addToAssets = createAsyncThunk<
         data: updateInfo,
         withCredentials: true,
       });
-      return res.data.user;
+      return res.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response.data.error);
     }
