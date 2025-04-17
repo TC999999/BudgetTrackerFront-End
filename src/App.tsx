@@ -51,7 +51,7 @@ function App(): JSX.Element {
         if (data.newTotalAssets) {
           dispatch(incomeUpdate(data));
           notify(
-            `Recieved Income! Your Total Assets are now $${data.newTotalAssets.totalAssets} `
+            `Recieved Income! Your total savings are now $${data.newTotalAssets.totalAssets} `
           );
         }
       };
