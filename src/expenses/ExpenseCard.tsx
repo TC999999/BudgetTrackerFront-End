@@ -28,7 +28,7 @@ const ExpenseCard: React.FC<Props> = ({
   const dateTime = useRef<dateInfo>(makeDateString(expense.date));
 
   return (
-    <div className="expense-card grid grid-cols-4 px-4 py-4">
+    <div className="expense-card grid grid-cols-4 p-4">
       <div className="expense-title p-1 text-sm sm:text-base duration-150 text-center content-center">
         {expense.title}
       </div>

@@ -8,6 +8,7 @@ import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import EditUserForm from "./EditUserForm";
 import TransactionList from "../transactions/transactionList";
 import ExpenseList from "../expenses/ExpenseList";
+import OnPageLoading from "../OnPageLoading";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import TransactionAPI from "../apis/TransactionAPI";
 import { addNewTransaction } from "../helpers/addNewTransaction";
@@ -15,7 +16,10 @@ import { toast } from "react-toastify";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
-  const { user } = useAppSelector((store) => store.user.userInfo, shallowEqual);
+  const { user, smallLoading } = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const notify = () => toast.error("You have reached the maximum asset value");
@@ -86,7 +90,7 @@ const Dashboard = (): JSX.Element => {
       <main>
         <header
           id="dashboard-usercard"
-          className="border-2 bg-white border-emerald-900 p-4 m-4 shadow-xl text-center rounded-lg"
+          className="border-2 bg-white border-emerald-900 p-2 m-4 shadow-xl text-center rounded-lg"
         >
           <div id="dashboard-information" className="text-green-700">
             <h1 className="text-2xl sm:text-4xl font-bold">{user?.username}</h1>
@@ -113,38 +117,46 @@ const Dashboard = (): JSX.Element => {
             updateTransactions={updateTransactions}
           />
         )}
-        <section id="recent-transactions-list">
-          <header className="text-center m-2">
-            <h2
-              id="recent-transactions-list-title"
-              className="text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150"
-            >
-              Recent Miscellaneous Transactions
-            </h2>
-            <small>
-              Below are your 5 most recent transactions, which includes both
-              that you have documented yourself and from your incomes: past and
-              present.
-            </small>
-          </header>
-          <TransactionList transactions={transactions} />
-        </section>
 
-        <section className="recent-expenses-list">
-          <header className="text-center m-2">
-            <h2
-              id="recent-expenses-list-title"
-              className="text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150"
+        {!smallLoading ? (
+          <div id="recent-data">
+            <section
+              id="recent-transactions-list"
+              className="transition duration-150"
             >
-              Recent Budget Expenses
-            </h2>
-            <small>
-              Below are your 5 most recent budget expenses. These only include
-              expenses made using funds from all budgets you have presently.
-            </small>
-          </header>
-          <ExpenseList expensesList={expenses} isFrontPage={true} />
-        </section>
+              <header className="text-center m-2">
+                <h2 id="recent-transactions-list-title" className="list-header">
+                  Recent Miscellaneous Transactions
+                </h2>
+                <small>
+                  Below are your 5 most recent transactions, which includes both
+                  that you have documented yourself and from your incomes: past
+                  and present.
+                </small>
+              </header>
+              <TransactionList transactions={transactions} />
+            </section>
+
+            <section
+              id="recent-expenses-list"
+              className="transition duration-150"
+            >
+              <header className="text-center m-2">
+                <h2 id="recent-expenses-list-title" className="list-header">
+                  Recent Budget Expenses
+                </h2>
+                <small>
+                  Below are your 5 most recent budget expenses. These only
+                  include expenses made using funds from all budgets you have
+                  presently.
+                </small>
+              </header>
+              <ExpenseList expensesList={expenses} isFrontPage={true} />
+            </section>
+          </div>
+        ) : (
+          <OnPageLoading loadingMsg="Loading Recent Data..." />
+        )}
       </main>
     </div>
   );

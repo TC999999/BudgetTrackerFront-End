@@ -11,27 +11,20 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
   return (
     <div
       id="transactions-list"
-      className="bg-white border-2 border-green-500 m-2 rounded-md"
+      className="bg-white border-2 border-green-500 m-2 rounded-md h-100"
     >
-      <header className="expense-list-headers grid grid-cols-5 bg-green-200 border-b-2 border-green-500 px-4 py-2">
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Name
-        </b>
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Value
-        </b>
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Date
-        </b>
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Income
-        </b>
-        <b className="text-sm sm:text-base duration-150 text-center content-center">
-          Misc.
-        </b>
+      <header
+        id="transaction-list-headers"
+        className="grid grid-cols-5 bg-green-200 border-b-2 border-green-500 p-2"
+      >
+        <b className="table-header">Name</b>
+        <b className="table-header">Value</b>
+        <b className="table-header">Date</b>
+        <b className="table-header">Income</b>
+        <b className="table-header">Misc.</b>
       </header>
       {transactions.length ? (
-        <div className="transaction-cards stripedTransactions">
+        <div id="transaction-card-list" className="stripedTransactions">
           {transactions.map((transaction) => {
             return (
               <TransactionCard
@@ -42,7 +35,7 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
           })}
         </div>
       ) : (
-        <div className="no-transactions text-center text-xl p-6">
+        <div id="no-transactions" className="text-center text-xl p-2">
           <p className="italic">No Transactions Yet</p>
         </div>
       )}

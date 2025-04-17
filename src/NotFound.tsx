@@ -13,7 +13,7 @@ const NotFound = (): JSX.Element => {
     <div id="not-found-page" className="text-center p-2">
       <h1 className="text-9xl text-emerald-900 underline">404 ERROR</h1>
       <h1 className="text-6xl p-2">
-        The Page you were trying to look for does not exist!
+        The page you were trying to look for does not exist!
       </h1>
       {!userExists && (
         <h1 className="text-xl text-green-500 underline hover:text-green-200 active:text-green-600">

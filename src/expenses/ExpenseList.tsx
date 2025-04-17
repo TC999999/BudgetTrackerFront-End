@@ -122,7 +122,10 @@ const ExpenseList: React.FC<Props> = ({
   );
 
   return (
-    <div>
+    <div
+      id="expense-list"
+      className="bg-white border-2 border-green-500 m-2 rounded-md h-full"
+    >
       {selectedExpense && (
         <SecondPrompt
           deleteFunction={deleteExpense}
@@ -132,53 +135,37 @@ const ExpenseList: React.FC<Props> = ({
           BudgetFunds={budgetFunds}
         />
       )}
-      <div
-        id="expense-list"
-        className="bg-white border-2 border-green-500 m-2 rounded-md"
+      <header
+        id="expense-list-headers"
+        className="grid grid-cols-4 bg-green-200 border-b-2 border-green-500 p-2"
       >
-        <header
-          id="expense-list-headers"
-          className="grid grid-cols-4 bg-green-200 border-b-2 border-green-500 px-4 py-2"
-        >
-          <b className="text-sm sm:text-base duration-150 text-center content-center">
-            Name
-          </b>
-          <b className="text-sm sm:text-base duration-150 text-center content-center">
-            Cost
-          </b>
-
-          <b className="text-sm sm:text-base duration-150 text-center content-center">
-            Date
-          </b>
-          {isFrontPage ? (
-            <b className="text-sm sm:text-base duration-150 text-center content-center">
-              Budget
-            </b>
-          ) : (
-            <b className="text-sm sm:text-base duration-150 text-center content-center">
-              Delete
-            </b>
-          )}
-        </header>
-        {expensesList.length ? (
-          <div id="expense-card-list" className="striped">
-            {expensesList.map((e) => {
-              return (
-                <ExpenseCard
-                  key={e._id}
-                  expense={e}
-                  isFrontPage={isFrontPage}
-                  showSecondPrompt={showSecondPrompt}
-                />
-              );
-            })}
-          </div>
+        <b className="table-header">Name</b>
+        <b className="table-header">Cost</b>
+        <b className="table-header">Date</b>
+        {isFrontPage ? (
+          <b className="table-header">Budget</b>
         ) : (
-          <div className="no-expenses text-center text-xl p-6">
-            <p className="italic">None</p>
-          </div>
+          <b className="table-header">Delete</b>
         )}
-      </div>
+      </header>
+      {expensesList.length ? (
+        <div id="expense-card-list" className="striped">
+          {expensesList.map((e) => {
+            return (
+              <ExpenseCard
+                key={e._id}
+                expense={e}
+                isFrontPage={isFrontPage}
+                showSecondPrompt={showSecondPrompt}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="no-expenses text-center text-xl p-4">
+          <p className="italic"> No Expenses Yet</p>
+        </div>
+      )}
     </div>
   );
 };

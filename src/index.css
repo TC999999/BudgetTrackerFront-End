@@ -63,6 +63,14 @@
     @apply text-gray-600 hover:ring-gray-600 focus:ring-gray-600;
   }
 
+  .list-header {
+    @apply text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold transition duration-150;
+  }
+
+  .table-header {
+    @apply text-sm sm:text-base transition duration-150 text-center content-center;
+  }
+
   .striped .expense-card:nth-child(even) {
     @apply bg-green-200;
   }
