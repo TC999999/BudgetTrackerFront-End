@@ -197,7 +197,7 @@ const SingleBudgetPage = (): JSX.Element => {
               Expenses Made
             </h1>
             <small>
-              This shows all expenses made using funds from this budget. The
+              Below are all expenses made using funds from this budget. The
               total added value of all below expenses should not exceed the
               total funds allocated for this budget.
             </small>

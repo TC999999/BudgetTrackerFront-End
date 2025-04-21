@@ -130,10 +130,10 @@ const IncomePage = (): JSX.Element => {
             Your Current Incomes ({pageLoading ? "..." : incomes.length}/3)
           </h1>
           <small>
-            This page allows you to add, update, or delete any sources of income
-            you may have. Each of below income values will be added to your
-            total savings automatically on the time noted on "Next Received On".
-            You are allowed a maximum of three incomes.
+            Here you may add, update, or delete any sources of income you may
+            have. Each of below income values will be added to your total
+            savings automatically on the time noted on "Next Received On". You
+            are allowed a maximum of three incomes.
           </small>
         </header>
         <IncomeList

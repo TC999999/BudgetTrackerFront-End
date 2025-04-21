@@ -111,9 +111,9 @@ const BudgetPage = (): JSX.Element => {
             All Current Budgets ({pageLoading ? "..." : budgetList.length}/10)
           </h1>
           <small>
-            This page allows you set aside funds in order to make plans for
-            future budgets or record current budgets you may have. You are
-            allowed a maximum of ten budgets.
+            Here you may set aside funds in order to make plans for future
+            budgets or record current budgets you may have. You are allowed a
+            maximum of ten budgets.
           </small>
         </header>
 

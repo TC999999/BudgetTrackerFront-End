@@ -131,9 +131,9 @@ const Dashboard = (): JSX.Element => {
                   Recent Miscellaneous Transactions
                 </h2>
                 <small>
-                  Below are your 5 most recent transactions, which includes both
-                  that you have documented yourself and from your incomes: past
-                  and present.
+                  Below are your most recent transactions (≤5), which includes
+                  both that you have documented yourself and from your incomes:
+                  past and present.
                 </small>
               </header>
               <TransactionList transactions={transactions} />
@@ -148,7 +148,7 @@ const Dashboard = (): JSX.Element => {
                   Recent Budget Expenses
                 </h2>
                 <small>
-                  Below are your 5 most recent budget expenses. These only
+                  Below are your most recent budget expenses (≤5). These only
                   include expenses made using funds from all budgets you have
                   presently.
                 </small>

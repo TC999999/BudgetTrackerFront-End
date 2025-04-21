@@ -47,8 +47,9 @@ const TransactionHistory = (): JSX.Element => {
             Full Transaction History
           </h2>
           <small>
-            These transactions cannot be edited or deleted. These transactions
-            include incomes that you may not recieve anymore.
+            Here are all transactions made from funds directly from your
+            savings. They cannot be edited or deleted. They may include incomes
+            that you do not recieve anymore.
           </small>
         </header>
         <TransactionList transactions={transactions} />
