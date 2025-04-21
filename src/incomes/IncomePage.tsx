@@ -1,13 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../features/hooks";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { Income } from "../interfaces/incomeInterfaces";
-import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
+import { setLoadError, setPageLoading } from "../features/auth/authSlice";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
-import OnPageLoading from "../OnPageLoading";
 import NewIncomeForm from "./NewIncomeForm";
 import { toast } from "react-toastify";
+import { loading } from "../interfaces/miscTypes";
 
 // Shows the list of incomes the current user has
 const IncomePage = (): JSX.Element => {
@@ -16,6 +16,10 @@ const IncomePage = (): JSX.Element => {
   const navigate = useNavigate();
   const notify = () =>
     toast.error("You have reached the maximum number of incomes");
+
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo
+  );
 
   // state that shows the form to add a new income
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
@@ -26,7 +30,7 @@ const IncomePage = (): JSX.Element => {
   useEffect(() => {
     const getIncomes = async () => {
       try {
-        dispatch(setSmallLoading(true));
+        dispatch(setPageLoading(true));
         if (id) {
           let newIncomes: Income[] = await IncomeAPI.getAllUserIncomes(id);
           setIncomes(newIncomes);
@@ -35,7 +39,7 @@ const IncomePage = (): JSX.Element => {
         dispatch(setLoadError(JSON.parse(err.message)));
         navigate("/error");
       } finally {
-        dispatch(setSmallLoading(false));
+        dispatch(setPageLoading(false));
       }
     };
     getIncomes();
@@ -96,7 +100,7 @@ const IncomePage = (): JSX.Element => {
     [showIncomeForm]
   );
 
-  return incomes.length ? (
+  return (
     <div id="income-page">
       <header id="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
@@ -121,7 +125,7 @@ const IncomePage = (): JSX.Element => {
         )}
         <header className="text-center">
           <h1 className="text-xl sm:text-3xl text-green-700 underline font-bold">
-            Your Current Incomes ({incomes.length}/3)
+            Your Current Incomes ({pageLoading ? "..." : incomes.length}/3)
           </h1>
           <small>
             This page allows you to add, update, or delete any sources of income
@@ -137,8 +141,6 @@ const IncomePage = (): JSX.Element => {
         />
       </main>
     </div>
-  ) : (
-    <OnPageLoading loadingMsg="Incomes" />
   );
 };
 

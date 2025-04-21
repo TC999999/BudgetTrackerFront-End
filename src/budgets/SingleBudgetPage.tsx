@@ -10,7 +10,7 @@ import OnPageLoading from "../OnPageLoading";
 import { addNewExpense } from "../helpers/addNewExpense";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
-import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
+import { setLoadError, setPageLoading } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
 import ExpenseAPI from "../apis/ExpenseAPI";
@@ -42,7 +42,7 @@ const SingleBudgetPage = (): JSX.Element => {
   useEffect(() => {
     const getBudget = async () => {
       try {
-        dispatch(setSmallLoading(true));
+        dispatch(setPageLoading(true));
         if (budgetID && id) {
           let budget = await BudgetAPI.getUserBudget(budgetID, id);
           let expenses = await ExpenseAPI.getAllBudgetExpenses(budgetID, id);
@@ -53,7 +53,7 @@ const SingleBudgetPage = (): JSX.Element => {
         dispatch(setLoadError(JSON.parse(err.message)));
         navigate("/error");
       } finally {
-        dispatch(setSmallLoading(false));
+        dispatch(setPageLoading(false));
       }
     };
     getBudget();

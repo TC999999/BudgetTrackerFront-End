@@ -8,7 +8,7 @@ import {
   FlashIncomeErrors,
 } from "../interfaces/incomeInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import { error } from "../interfaces/miscTypes";
+import { error, loading } from "../interfaces/miscTypes";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
@@ -20,7 +20,7 @@ import {
 } from "../helpers/handleIncomeErrors";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { setSmallLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/auth/authSlice";
 import { shallowEqual } from "react-redux";
 import { toast } from "react-toastify";
 import IncomeAPI from "../apis/IncomeAPI";
@@ -44,8 +44,12 @@ const NewIncomeForm: React.FC<Props> = ({
     toast.success(`${incomeTitle} income successfully created`);
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const { user, smallLoading }: UserContextInterface = useAppSelector(
+  const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
 
@@ -196,17 +200,15 @@ const NewIncomeForm: React.FC<Props> = ({
           readableUpdateTimeString,
         };
         if (handleIncomes) {
-          dispatch(setSmallLoading(true));
+          dispatch(setFormLoading(true));
           handleIncomes(e, submitData);
-          dispatch(setSmallLoading(false));
         } else if (addToIncomeState && user?._id) {
-          dispatch(setSmallLoading(true));
+          dispatch(setFormLoading(true));
           let newIncome: Income = await IncomeAPI.addNewUserIncome(
             submitData,
             user?._id
           );
           addToIncomeState(newIncome);
-
           notify(submitData.title);
         }
         hideIncomeFormState(e);
@@ -222,11 +224,11 @@ const NewIncomeForm: React.FC<Props> = ({
     } catch (err: any) {
       notifyError(JSON.parse(err.message));
     } finally {
-      dispatch(setSmallLoading(false));
+      dispatch(setFormLoading(false));
     }
   };
 
-  return !smallLoading ? (
+  return !formLoading ? (
     <div className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="modal-layer-3 text-center">

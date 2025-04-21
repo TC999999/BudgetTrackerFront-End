@@ -4,7 +4,6 @@ export type UserContextInterface = {
   user: UserInfoInterface | null;
   userExists: boolean;
   loading: boolean;
-  smallLoading: boolean;
   error: string | null;
 };
 

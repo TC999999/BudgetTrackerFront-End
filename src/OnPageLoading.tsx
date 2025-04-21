@@ -1,6 +1,6 @@
 import { shallowEqual } from "react-redux";
 import { useAppSelector } from "./features/hooks";
-import { UserContextInterface } from "./interfaces/userInterfaces";
+import { loading } from "./interfaces/miscTypes";
 
 type Props = {
   loadingMsg: string;
@@ -9,11 +9,11 @@ type Props = {
 // Returns a message on the body and not the modal for when certain data
 // (budget data or income data) is loading
 const OnPageLoading: React.FC<Props> = ({ loadingMsg }): JSX.Element | null => {
-  const { smallLoading }: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo,
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
-  return smallLoading ? (
+  return pageLoading ? (
     <div className="text-center text-5xl text-green-700 font-bold p-10">
       Loading {loadingMsg}...
     </div>

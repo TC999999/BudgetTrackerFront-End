@@ -2,8 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
-import { setSmallLoading } from "../features/auth/authSlice";
-import { UserContextInterface } from "../interfaces/userInterfaces";
+import { setFormLoading } from "../features/auth/authSlice";
 import UserInfo from "./UserInfo";
 import OneTimeCode from "./OneTimeCode";
 import NewPassword from "./NewPassword";
@@ -16,13 +15,15 @@ import {
 } from "../interfaces/authInterfaces";
 import { setResetProgress } from "../helpers/setResetProgress";
 import { CiCircleCheck } from "react-icons/ci";
+import { loading } from "../interfaces/miscTypes";
 
 // main page for users attempting to reset password
 const ResetPassword = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { smallLoading }: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo,
+
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
   const initialUser: ConfirmUserInfo = {
@@ -56,9 +57,9 @@ const ResetPassword = (): JSX.Element => {
   // of thunk actions, this is needed)
   const changeLoading = useCallback(
     (loadingStatus: boolean): void => {
-      dispatch(setSmallLoading(loadingStatus));
+      dispatch(setFormLoading(loadingStatus));
     },
-    [smallLoading]
+    [formLoading]
   );
 
   // changes current step in step list and marks previous step completion as true, shows a new form and

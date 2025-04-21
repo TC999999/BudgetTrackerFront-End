@@ -4,7 +4,7 @@ import {
   UserEditInterface,
   UserEditErrors,
 } from "../interfaces/userInterfaces";
-import { error } from "../interfaces/miscTypes";
+import { error, loading } from "../interfaces/miscTypes";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
@@ -47,8 +47,12 @@ const EditUserForm: React.FC<Props> = ({
   const notify = (notification: string) => toast.success(notification);
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const { user, smallLoading }: UserContextInterface = useAppSelector(
+  const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
   const initialState: FormInfo = {
@@ -194,7 +198,7 @@ const EditUserForm: React.FC<Props> = ({
     }
   };
 
-  return !smallLoading ? (
+  return !formLoading ? (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="add-to-assets-form text-center modal-layer-3">

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { shallowEqual } from "react-redux";
-import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
+import { setPageLoading, setLoadError } from "../features/auth/authSlice";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import EditUserForm from "./EditUserForm";
@@ -13,11 +13,13 @@ import ExpenseAPI from "../apis/ExpenseAPI";
 import TransactionAPI from "../apis/TransactionAPI";
 import { addNewTransaction } from "../helpers/addNewTransaction";
 import { toast } from "react-toastify";
+import { loading } from "../interfaces/miscTypes";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
-  const { user, smallLoading } = useAppSelector(
-    (store) => store.user.userInfo,
+  const { user } = useAppSelector((store) => store.user.userInfo, shallowEqual);
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
   const dispatch = useAppDispatch();
@@ -31,7 +33,7 @@ const Dashboard = (): JSX.Element => {
   // expenses and 5 most recent miscellaneous transactions
   useEffect(() => {
     const getRecentTransactions = async () => {
-      dispatch(setSmallLoading(true));
+      dispatch(setPageLoading(true));
       try {
         if (user?._id) {
           const recentTransactions: Transaction[] =
@@ -45,7 +47,7 @@ const Dashboard = (): JSX.Element => {
         dispatch(setLoadError(JSON.parse(err.message)));
         navigate("/error");
       } finally {
-        dispatch(setSmallLoading(false));
+        dispatch(setPageLoading(false));
       }
     };
     getRecentTransactions();
@@ -118,7 +120,7 @@ const Dashboard = (): JSX.Element => {
           />
         )}
 
-        {!smallLoading ? (
+        {!pageLoading ? (
           <div id="recent-data">
             <section
               id="recent-transactions-list"

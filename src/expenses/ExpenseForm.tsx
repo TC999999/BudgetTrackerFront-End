@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { shallowEqual } from "react-redux";
-import { setSmallLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/auth/authSlice";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import {
@@ -20,7 +20,7 @@ import { UserContextInterface } from "../interfaces/userInterfaces";
 import { DateTime } from "luxon";
 import { toast } from "react-toastify";
 import ExpenseAPI from "../apis/ExpenseAPI";
-import { error } from "../interfaces/miscTypes";
+import { error, loading } from "../interfaces/miscTypes";
 
 type flashErrors = { title: boolean; transaction: boolean; date: boolean };
 
@@ -49,8 +49,12 @@ const ExpenseForm: React.FC<Props> = ({
     );
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const { user, smallLoading }: UserContextInterface = useAppSelector(
+  const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
 
@@ -151,7 +155,7 @@ const ExpenseForm: React.FC<Props> = ({
     e.preventDefault();
     try {
       if (handleExpenseSubmitErrors(formData, setFormErrors)) {
-        dispatch(setSmallLoading(true));
+        dispatch(setFormLoading(true));
         let submitData: submitNewExpense = {
           ...formData,
           budgetID: budget?._id,
@@ -179,11 +183,11 @@ const ExpenseForm: React.FC<Props> = ({
     } catch (err: any) {
       notifyError(JSON.parse(err.message));
     } finally {
-      dispatch(setSmallLoading(false));
+      dispatch(setFormLoading(false));
     }
   };
 
-  return !smallLoading ? (
+  return !formLoading ? (
     <div tabIndex={-1} id="new-expense-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
         <div id="new-expense-form" className="modal-layer-3 text-center">

@@ -14,10 +14,10 @@ import {
   handleBudgetInputErrors,
   handleBudgetSubmitErrors,
 } from "../helpers/handleBudgetErrors";
-import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
+import { setTotalAssets, setFormLoading } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
-import { error } from "../interfaces/miscTypes";
+import { error, loading } from "../interfaces/miscTypes";
 
 type Props = {
   hideForm: (
@@ -46,8 +46,13 @@ const BudgetForm: React.FC<Props> = ({
     );
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const { user, smallLoading }: UserContextInterface = useAppSelector(
+  const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
   const initialState: newBudgetInterface = {
@@ -131,7 +136,7 @@ const BudgetForm: React.FC<Props> = ({
     e.preventDefault();
     try {
       if (handleBudgetSubmitErrors(formData, setFormErrors)) {
-        dispatch(setSmallLoading(true));
+        dispatch(setFormLoading(true));
         let submitData: submitBudget = {
           userID: user!._id,
           ...formData,
@@ -156,11 +161,11 @@ const BudgetForm: React.FC<Props> = ({
     } catch (err: any) {
       notifyError(JSON.parse(err.message));
     } finally {
-      dispatch(setSmallLoading(false));
+      dispatch(setFormLoading(false));
     }
   };
 
-  return !smallLoading ? (
+  return !formLoading ? (
     <div tabIndex={-1} id="budget-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
         <div id="new-budget-form" className="modal-layer-3">

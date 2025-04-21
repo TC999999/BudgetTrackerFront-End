@@ -4,9 +4,9 @@ import {
   BudgetInterface,
   DeleteBudgetInterface,
 } from "../interfaces/budgetInterfaces";
-import { error } from "../interfaces/miscTypes";
+import { error, loading } from "../interfaces/miscTypes";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
+import { setTotalAssets, setFormLoading } from "../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
@@ -38,8 +38,13 @@ const DeleteBudgetForm: React.FC<Props> = ({
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
 
-  const { user, smallLoading }: UserContextInterface = useAppSelector(
+  const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
 
@@ -81,7 +86,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {
-      dispatch(setSmallLoading(true));
+      dispatch(setFormLoading(true));
       let { totalAssets } = await BudgetAPI.deleteBudget(formData);
       dispatch(setTotalAssets(totalAssets));
       navigate(`/budgets/user/${user?._id}`);
@@ -89,11 +94,11 @@ const DeleteBudgetForm: React.FC<Props> = ({
     } catch (err: any) {
       notifyError(JSON.parse(err.message));
     } finally {
-      dispatch(setSmallLoading(false));
+      dispatch(setFormLoading(false));
     }
   };
 
-  return !smallLoading ? (
+  return !formLoading ? (
     <div id="delete-budget-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
         <div id="delete-budget-form" className=" text-center modal-layer-3">

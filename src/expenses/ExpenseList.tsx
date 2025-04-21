@@ -10,7 +10,7 @@ import { budgetFunds, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { error, infoInterface } from "../interfaces/miscTypes";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { shallowEqual } from "react-redux";
-import { setSmallLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/auth/authSlice";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import { toast } from "react-toastify";
 
@@ -96,7 +96,7 @@ const ExpenseList: React.FC<Props> = ({
     ): Promise<void> => {
       try {
         e.preventDefault();
-        dispatch(setSmallLoading(true));
+        dispatch(setFormLoading(true));
         if (budgetID) {
           let submitData: deleteExpenseInterface = {
             _id: info._id,
@@ -115,7 +115,7 @@ const ExpenseList: React.FC<Props> = ({
       } catch (err: any) {
         notifyError(JSON.parse(err.message));
       } finally {
-        dispatch(setSmallLoading(false));
+        dispatch(setFormLoading(false));
       }
     },
     []

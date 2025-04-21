@@ -1,5 +1,8 @@
 import BudgetCard from "./BudgetCard";
+import OnPageLoading from "../OnPageLoading";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
+import { loading } from "../interfaces/miscTypes";
+import { useAppSelector } from "../features/hooks";
 
 type Props = {
   allBudgets: BudgetListInterface[];
@@ -8,18 +11,11 @@ type Props = {
 // returns a list of budget cards for all of the budgets a user currenly has; or shows a message
 // that the user has no budgets
 const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
-  return (
-    <main id="budget-list-page">
-      <header className="text-center">
-        <h1 className="text-2xl sm:text-3xl text-emerald-500 underline font-bold">
-          All Current Budgets ({allBudgets!.length}/10)
-        </h1>
-        <small>
-          This page allows you set aside funds in order to make plans for future
-          budgets or record current budgets you may have. You are allowed a
-          maximum of ten budgets.
-        </small>
-      </header>
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo
+  );
+  return !pageLoading ? (
+    <section id="budget-list-page">
       {allBudgets?.length ? (
         <ul
           id="budget-list"
@@ -36,7 +32,9 @@ const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
           You currently have no budgets
         </p>
       )}
-    </main>
+    </section>
+  ) : (
+    <OnPageLoading loadingMsg="Budgets" />
   );
 };
 

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppSelector } from "./features/hooks";
-import { infoInterface } from "./interfaces/miscTypes";
+import { infoInterface, loading } from "./interfaces/miscTypes";
 import { budgetFunds } from "./interfaces/budgetInterfaces";
 import {
   calcNewMoneyRemaining,
@@ -28,8 +28,8 @@ const SecondPrompt: React.FC<Props> = ({
   type,
   BudgetFunds,
 }): JSX.Element | null => {
-  const smallLoading: boolean = useAppSelector(
-    (store) => store.user.userInfo.smallLoading,
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
 
@@ -56,7 +56,7 @@ const SecondPrompt: React.FC<Props> = ({
       );
   }, []);
 
-  return !smallLoading ? (
+  return !formLoading ? (
     <div className="modal-layer-1">
       <div className="modal-layer-2">
         <div className="modal-layer-3 text-center">

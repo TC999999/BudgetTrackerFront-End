@@ -8,9 +8,12 @@ export const INITIAL_STATE: AuthInitialStateInterface = {
   userInfo: {
     user: null,
     loading: true,
-    smallLoading: false,
     userExists: false,
     error: "",
+  },
+  loadingInfo: {
+    pageLoading: true,
+    formLoading: false,
   },
   loadError: {
     message: "",

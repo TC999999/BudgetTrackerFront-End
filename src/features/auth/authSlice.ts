@@ -17,10 +17,6 @@ const authSlice = createSlice({
     setUserLoading: (state, action: ActionInterface) => {
       state.userInfo.loading = action.payload;
     },
-    // changes loading state for smaller CRUD actions
-    setSmallLoading: (state, action: ActionInterface) => {
-      state.userInfo.smallLoading = action.payload;
-    },
     // removes state for errors involving loading user information
     removeUserError: (state) => {
       state.userInfo.error = null;
@@ -28,6 +24,14 @@ const authSlice = createSlice({
     //sets state for errors involving failure to submit data
     setLoadError: (state, action: ActionInterface) => {
       state.loadError = action.payload;
+    },
+    // changes on page loading state when submitting a form
+    setFormLoading: (state, action: ActionInterface) => {
+      state.loadingInfo.formLoading = action.payload;
+    },
+    // changes on page loading state for when getting data
+    setPageLoading: (state, action: ActionInterface) => {
+      state.loadingInfo.pageLoading = action.payload;
     },
     // changes user total asset state
     setTotalAssets: (state, action: ActionInterface) => {
@@ -97,22 +101,24 @@ const authSlice = createSlice({
         state.userInfo.error = action.payload;
       })
       .addCase(addToAssets.pending, (state) => {
-        state.userInfo.smallLoading = true;
+        state.loadingInfo.formLoading = true;
       })
       .addCase(addToAssets.fulfilled, (state, action: any) => {
         let { user } = action.payload;
         state.userInfo.user!.totalAssets = user.totalAssets;
-        state.userInfo.smallLoading = false;
+
+        state.loadingInfo.formLoading = false;
       })
       .addCase(addToAssets.rejected, (state) => {
-        state.userInfo.smallLoading = false;
+        state.loadingInfo.formLoading = false;
       });
   },
 });
 
 export const {
   setUserLoading,
-  setSmallLoading,
+  setFormLoading,
+  setPageLoading,
   removeUserError,
   setLoadError,
   setTotalAssets,

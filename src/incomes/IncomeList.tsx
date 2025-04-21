@@ -3,13 +3,16 @@ import { Income, deleteIncomeType } from "../interfaces/incomeInterfaces";
 import { infoInterface } from "../interfaces/miscTypes";
 import { error } from "../interfaces/miscTypes";
 import { UserContextInterface } from "../interfaces/userInterfaces";
+import { loading } from "../interfaces/miscTypes";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
-import { setSmallLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/auth/authSlice";
 import { shallowEqual } from "react-redux";
 import IncomeCard from "./IncomeCard";
 import UpdateIncomeForm from "./UpdateIncomeForm";
+import OnPageLoading from "../OnPageLoading";
 import SecondPrompt from "../SecondPrompt";
 import IncomeAPI from "../apis/IncomeAPI";
+
 import { toast } from "react-toastify";
 
 type Props = {
@@ -32,6 +35,11 @@ const IncomeList: React.FC<Props> = ({
 
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
 
@@ -84,7 +92,7 @@ const IncomeList: React.FC<Props> = ({
       info: infoInterface
     ): Promise<void> => {
       try {
-        dispatch(setSmallLoading(true));
+        dispatch(setFormLoading(true));
         e.preventDefault();
         let submitData: deleteIncomeType = { id: info._id };
         if (user?._id) {
@@ -99,13 +107,13 @@ const IncomeList: React.FC<Props> = ({
       } catch (err: any) {
         notifyError(JSON.parse(err.message));
       } finally {
-        dispatch(setSmallLoading(false));
+        dispatch(setFormLoading(false));
       }
     },
     []
   );
 
-  return (
+  return !pageLoading ? (
     <div id="income-list-and-edit-form">
       {selectedIncomeForDelete && (
         <SecondPrompt
@@ -124,19 +132,27 @@ const IncomeList: React.FC<Props> = ({
         />
       )}
       <div>
-        <ul id="income-list">
-          {incomeList.map((i) => (
-            <li key={`income-${i._id}`}>
-              <IncomeCard
-                income={i}
-                showSecondPrompt={showSecondPrompt}
-                selectIncome={selectIncome}
-              />
-            </li>
-          ))}
-        </ul>
+        {incomeList.length ? (
+          <ul id="income-list">
+            {incomeList.map((i) => (
+              <li key={`income-${i._id}`}>
+                <IncomeCard
+                  income={i}
+                  showSecondPrompt={showSecondPrompt}
+                  selectIncome={selectIncome}
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-3xl m-4 text-center italic">
+            You currently have no incomes
+          </p>
+        )}
       </div>
     </div>
+  ) : (
+    <OnPageLoading loadingMsg="Incomes" />
   );
 };
 

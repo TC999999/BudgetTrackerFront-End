@@ -5,7 +5,7 @@ import { useAppDispatch } from "../features/hooks";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionList from "./transactionList";
 import OnPageLoading from "../OnPageLoading";
-import { setSmallLoading, setLoadError } from "../features/auth/authSlice";
+import { setLoadError, setPageLoading } from "../features/auth/authSlice";
 
 // returns a list of all miscellaneous transactions the user has made
 const TransactionHistory = (): JSX.Element => {
@@ -19,7 +19,7 @@ const TransactionHistory = (): JSX.Element => {
   useEffect(() => {
     async function getUserTransactions() {
       try {
-        dispatch(setSmallLoading(true));
+        dispatch(setPageLoading(true));
         if (id) {
           let transactions: Transaction[] =
             await TransactionAPI.getUserTransactions(id);
@@ -29,7 +29,7 @@ const TransactionHistory = (): JSX.Element => {
         dispatch(setLoadError(JSON.parse(err.message)));
         navigate("/error");
       } finally {
-        dispatch(setSmallLoading(false));
+        dispatch(setPageLoading(false));
       }
     }
     getUserTransactions();

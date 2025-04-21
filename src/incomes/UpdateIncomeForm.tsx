@@ -8,7 +8,7 @@ import {
   Income,
 } from "../interfaces/incomeInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import { error } from "../interfaces/miscTypes";
+import { error, loading } from "../interfaces/miscTypes";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
@@ -22,7 +22,7 @@ import {
 import { createUpdateIncomeString } from "../helpers/createNotificationString";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { setSmallLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/auth/authSlice";
 import { shallowEqual } from "react-redux";
 import { toast } from "react-toastify";
 import IncomeAPI from "../apis/IncomeAPI";
@@ -46,8 +46,12 @@ const UpdateIncomeForm: React.FC<Props> = ({
   const notify = (notification: string) => toast.success(notification);
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const { user, smallLoading }: UserContextInterface = useAppSelector(
+  const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
 
@@ -183,7 +187,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     e.preventDefault();
     if (handleIncomeSubmitErrors(formData, setFormErrors)) {
       try {
-        dispatch(setSmallLoading(true));
+        dispatch(setFormLoading(true));
         let { title, salary, updateTime } = formData;
         let cronString: string = makeCronString(updateTime);
         let submitData: SubmitUpdateIncome = {
@@ -205,7 +209,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
       } catch (err: any) {
         notifyError(JSON.parse(err.message));
       } finally {
-        dispatch(setSmallLoading(false));
+        dispatch(setFormLoading(false));
       }
     } else {
       if (formData.title === "" || formErrors.title)
@@ -218,7 +222,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     }
   };
 
-  return !smallLoading ? (
+  return !formLoading ? (
     <div className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="modal-layer-3 text-center">

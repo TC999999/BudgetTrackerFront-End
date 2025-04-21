@@ -26,6 +26,6 @@ export const addNewTransaction = (
     arr.push(transactions[i]);
     i++;
   }
-  arr.pop();
+  if (arr.length > 5) arr.pop();
   return arr;
 };

@@ -1,10 +1,11 @@
 import { UserContextInterface } from "./userInterfaces";
 import { SubmitIncomeSignUp } from "./incomeInterfaces";
-import { error } from "./miscTypes";
+import { error, loading } from "./miscTypes";
 
 export type AuthInitialStateInterface = {
   userInfo: UserContextInterface;
   loadError: error;
+  loadingInfo: loading;
 };
 
 export type LogInInterface = {

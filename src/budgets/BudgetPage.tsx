@@ -1,15 +1,15 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../features/hooks";
-import { setLoadError, setSmallLoading } from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { setLoadError, setPageLoading } from "../features/auth/authSlice";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
-import OnPageLoading from "../OnPageLoading";
 import { makeBudgetList } from "../helpers/makeBudgetList";
 import {
   BudgetInterface,
   BudgetListInterface,
 } from "../interfaces/budgetInterfaces";
+import { loading } from "../interfaces/miscTypes";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
 
@@ -21,13 +21,17 @@ const BudgetPage = (): JSX.Element => {
   const notify = () =>
     toast.error("You have reached the maximum number of allowed budgets");
 
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo
+  );
+
   const [budgets, setBudgets] = useState<BudgetInterface[]>([]);
 
   // retrieves a list of budgets for a specific user on initial render
   useEffect(() => {
     const getBudgets = async () => {
       try {
-        dispatch(setSmallLoading(true));
+        dispatch(setPageLoading(true));
         if (id) {
           const budgets = await BudgetAPI.getAllBudgets(id);
           setBudgets(budgets);
@@ -36,7 +40,7 @@ const BudgetPage = (): JSX.Element => {
         dispatch(setLoadError(JSON.parse(err.message)));
         navigate("/error");
       } finally {
-        dispatch(setSmallLoading(false));
+        dispatch(setPageLoading(false));
       }
     };
     getBudgets();
@@ -82,7 +86,7 @@ const BudgetPage = (): JSX.Element => {
     [showBudgetForm]
   );
 
-  return budgetList.length ? (
+  return (
     <div id="all-budget-page">
       <header id="additional-nav-header">
         <nav className="buttons flex justify-around w-full">
@@ -99,14 +103,25 @@ const BudgetPage = (): JSX.Element => {
           </button>
         </nav>
       </header>
+      <main>
+        <header className="text-center">
+          <h1 className="text-2xl sm:text-3xl text-emerald-500 underline font-bold">
+            All Current Budgets ({pageLoading ? "..." : budgetList.length}/10)
+          </h1>
+          <small>
+            This page allows you set aside funds in order to make plans for
+            future budgets or record current budgets you may have. You are
+            allowed a maximum of ten budgets.
+          </small>
+        </header>
 
-      {showBudgetForm && (
-        <BudgetForm hideForm={HideForm} addBudget={addBudget} />
-      )}
-      <BudgetList allBudgets={budgetList} />
+        {showBudgetForm && (
+          <BudgetForm hideForm={HideForm} addBudget={addBudget} />
+        )}
+
+        <BudgetList allBudgets={budgetList} />
+      </main>
     </div>
-  ) : (
-    <OnPageLoading loadingMsg="Budgets" />
   );
 };
 

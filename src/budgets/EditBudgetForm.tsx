@@ -20,10 +20,10 @@ import {
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
 import { shallowEqual } from "react-redux";
-import { setSmallLoading, setTotalAssets } from "../features/auth/authSlice";
+import { setTotalAssets, setFormLoading } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
-import { error } from "../interfaces/miscTypes";
+import { error, loading } from "../interfaces/miscTypes";
 
 type Props = {
   hideEditForm: (
@@ -48,8 +48,12 @@ const EditBudgetForm: React.FC<Props> = ({
     toast.success(notificationString);
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
-  const { user, smallLoading }: UserContextInterface = useAppSelector(
+  const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
     shallowEqual
   );
 
@@ -196,7 +200,7 @@ const EditBudgetForm: React.FC<Props> = ({
     e.preventDefault();
     try {
       if (handleUpdateBudgetSubmitErrors(formData, setFormErrors)) {
-        dispatch(setSmallLoading(true));
+        dispatch(setFormLoading(true));
         let submitData: SubmitBudgetUpdateInterface = {
           userID: user!._id,
           budgetID: budget._id,
@@ -212,7 +216,6 @@ const EditBudgetForm: React.FC<Props> = ({
         updateBudget(newUserBudget);
         dispatch(setTotalAssets(newAssets));
         hideEditForm(e, "showEditForm");
-        setSmallLoading(false);
         notify(createUpdateBudgetString(budget.title, formData));
       } else {
         if (formErrors.title || formData.title === "")
@@ -224,11 +227,11 @@ const EditBudgetForm: React.FC<Props> = ({
     } catch (err: any) {
       notifyError(JSON.parse(err.message));
     } finally {
-      dispatch(setSmallLoading(false));
+      dispatch(setFormLoading(false));
     }
   };
 
-  return !smallLoading ? (
+  return !formLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="edit-budget-form-div text-center modal-layer-3">
