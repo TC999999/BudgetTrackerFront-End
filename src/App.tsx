@@ -65,7 +65,7 @@ function App(): JSX.Element {
     }
   }, [dispatch, user?._id, loading]);
 
-  // returns loading messages, toast notifications, and routes list
+  // returns loading messages, toast notifications, navbar, and routes list
   return (
     <div className="App">
       <LoadingMsg />

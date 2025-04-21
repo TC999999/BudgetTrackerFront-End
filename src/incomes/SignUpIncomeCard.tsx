@@ -22,10 +22,10 @@ const SignUpIncomeCard: React.FC<Props> = ({
         <div>
           <h1 className="text-xl font-bold">{income.title}</h1>
           <p>
-            <b>Salary:</b> ${income.salary.toFixed(2)}
+            <b>Value:</b> ${income.salary.toFixed(2)}
           </p>
           <p>
-            <b>Gets paid at:</b> {income.readableUpdateTimeString}
+            <b>Received at:</b> {income.readableUpdateTimeString}
           </p>
         </div>
         <div className="flex items-center">

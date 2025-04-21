@@ -329,7 +329,7 @@ const SignUp = (): JSX.Element => {
                 Email Address: <small className="text-red-700">*</small>
               </label>
               <input
-                className={`input-email 
+                className={`input 
                 ${signUpErrors.email ? "input-error" : "input-valid"} ${
                   FlashErrors.email && "animate-blinkError"
                 }`}
@@ -382,7 +382,7 @@ const SignUp = (): JSX.Element => {
             <section id="incomes-section">
               <header>
                 <h1 className="text-lg block">
-                  Incomes ({formData.incomes.length}/5):
+                  Incomes ({formData.incomes.length}/3):
                 </h1>
               </header>
               <div id="new-income-list">
