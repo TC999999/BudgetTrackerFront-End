@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useAppSelector } from "./features/hooks";
+import { shallowEqual } from "react-redux";
 import { infoInterface, loading } from "./interfaces/miscTypes";
 import { budgetFunds } from "./interfaces/budgetInterfaces";
 import {
@@ -7,7 +8,6 @@ import {
   calcNewMoneySpent,
 } from "./helpers/calculateExpenseDelete";
 import { FaArrowRight } from "react-icons/fa6";
-import { shallowEqual } from "react-redux";
 
 type Props = {
   deleteFunction: (

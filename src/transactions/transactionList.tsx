@@ -1,5 +1,9 @@
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionCard from "./transactionCard";
+import OnPageLoading from "../OnPageLoading";
+import { loading } from "../interfaces/miscTypes";
+import { useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 
 type Props = {
   transactions: Transaction[];
@@ -8,7 +12,11 @@ type Props = {
 // returns a list of transactions to be used for both the dashboard and the full
 // transaction history page
 const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
-  return (
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.user.loadingInfo,
+    shallowEqual
+  );
+  return !pageLoading ? (
     <div
       id="transactions-list"
       className="bg-white border-2 border-green-500 m-2 rounded-md h-100"
@@ -40,6 +48,8 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
         </div>
       )}
     </div>
+  ) : (
+    <OnPageLoading loadingMsg="Transactions" />
   );
 };
 

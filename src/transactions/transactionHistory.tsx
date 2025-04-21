@@ -4,7 +4,6 @@ import TransactionAPI from "../apis/TransactionAPI";
 import { useAppDispatch } from "../features/hooks";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionList from "./transactionList";
-import OnPageLoading from "../OnPageLoading";
 import { setLoadError, setPageLoading } from "../features/auth/authSlice";
 
 // returns a list of all miscellaneous transactions the user has made
@@ -37,7 +36,7 @@ const TransactionHistory = (): JSX.Element => {
 
   // if there are no transactions in the list state, returns an on page loading message
   // instead
-  return transactions.length ? (
+  return (
     <div className="transaction-history-page">
       <section>
         <header className="text-center m-2">
@@ -55,8 +54,6 @@ const TransactionHistory = (): JSX.Element => {
         <TransactionList transactions={transactions} />
       </section>
     </div>
-  ) : (
-    <OnPageLoading loadingMsg="Transaction History" />
   );
 };
 

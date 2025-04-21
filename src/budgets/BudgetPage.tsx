@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { setLoadError, setPageLoading } from "../features/auth/authSlice";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
@@ -22,7 +23,8 @@ const BudgetPage = (): JSX.Element => {
     toast.error("You have reached the maximum number of allowed budgets");
 
   const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo
+    (store) => store.user.loadingInfo,
+    shallowEqual
   );
 
   const [budgets, setBudgets] = useState<BudgetInterface[]>([]);

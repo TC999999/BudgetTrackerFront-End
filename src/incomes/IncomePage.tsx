@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { shallowEqual } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { Income } from "../interfaces/incomeInterfaces";
 import { setLoadError, setPageLoading } from "../features/auth/authSlice";
@@ -18,7 +19,8 @@ const IncomePage = (): JSX.Element => {
     toast.error("You have reached the maximum number of incomes");
 
   const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo
+    (store) => store.user.loadingInfo,
+    shallowEqual
   );
 
   // state that shows the form to add a new income
