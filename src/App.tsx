@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import RoutesList from "./RoutesList";
 import { useAppDispatch } from "./features/hooks";
-import { incomeUpdate, setUserLoading } from "./features/auth/authSlice";
+import { AppDispatch } from "./features/store";
+import { incomeUpdate, setUserLoading } from "./features/slices/authSlice";
 import { getCurrentUser } from "./features/actions/users";
 import { useAppSelector } from "./features/hooks";
 import { shallowEqual } from "react-redux";
@@ -9,13 +10,14 @@ import LoadingMsg from "./LoadingUserMsg";
 import SmallLoadingMsg from "./SmallLoadingMsg";
 import Navbar from "./Navbar";
 import { UserContextInterface } from "./interfaces/userInterfaces";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast, Id } from "react-toastify";
 import TokenAPI from "./apis/TokenAPI";
+import { API_URL } from "./features/config";
 
 //renders whole application
 function App(): JSX.Element {
-  const dispatch = useAppDispatch();
-  const notify = (message: string) => toast.success(message);
+  const dispatch: AppDispatch = useAppDispatch();
+  const notify = (message: string): Id => toast.success(message);
 
   const { user, loading }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
@@ -24,7 +26,7 @@ function App(): JSX.Element {
 
   // retrieves the current user using refresh token saved as an http only cookie. If there are no tokens, returns an error and
   // returns user to login page
-  useEffect(() => {
+  useEffect((): void => {
     const getUserInfo = async () => {
       if (await TokenAPI.getRefreshToken()) {
         await dispatch(getCurrentUser({}));
@@ -40,7 +42,7 @@ function App(): JSX.Element {
   // for live updates
   useEffect(() => {
     if (user?._id && !loading) {
-      const es = new EventSource(`http://localhost:3001/events/${user._id}`);
+      const es = new EventSource(`${API_URL}/events/${user._id}`);
 
       es.onopen = () => {
         console.log("SSE Connection Established");

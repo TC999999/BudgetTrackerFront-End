@@ -1,25 +1,26 @@
 import { useState, useCallback, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, NavigateFunction } from "react-router-dom";
 import { shallowEqual } from "react-redux";
+import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { Income } from "../interfaces/incomeInterfaces";
-import { setLoadError, setPageLoading } from "../features/auth/authSlice";
+import { loading } from "../interfaces/loadingInterfaces";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
 import NewIncomeForm from "./NewIncomeForm";
-import { toast } from "react-toastify";
-import { loading } from "../interfaces/miscTypes";
+import { toast, Id } from "react-toastify";
 
 // Shows the list of incomes the current user has
 const IncomePage = (): JSX.Element => {
   const { id } = useParams();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const notify = () =>
+  const dispatch: AppDispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
+  const notify = (): Id =>
     toast.error("You have reached the maximum number of incomes");
 
   const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 
@@ -29,7 +30,7 @@ const IncomePage = (): JSX.Element => {
 
   // makes a request to retrive all of a single user's incomes and save them in component
   // state on initial render
-  useEffect(() => {
+  useEffect((): void => {
     const getIncomes = async () => {
       try {
         dispatch(setPageLoading(true));

@@ -2,11 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, logInUser, logOutUser } from "../actions/auth";
 import { getCurrentUser, addToAssets } from "../actions/users";
 import { INITIAL_STATE } from "../config";
-
-type ActionInterface = {
-  type: string;
-  payload: any;
-};
+import { ActionInterface } from "../../interfaces/miscTypes";
 
 // redux slice for global user state
 const authSlice = createSlice({
@@ -20,18 +16,6 @@ const authSlice = createSlice({
     // removes state for errors involving loading user information
     removeUserError: (state) => {
       state.userInfo.error = null;
-    },
-    //sets state for errors involving failure to submit data
-    setLoadError: (state, action: ActionInterface) => {
-      state.loadError = action.payload;
-    },
-    // changes on page loading state when submitting a form
-    setFormLoading: (state, action: ActionInterface) => {
-      state.loadingInfo.formLoading = action.payload;
-    },
-    // changes on page loading state for when getting data
-    setPageLoading: (state, action: ActionInterface) => {
-      state.loadingInfo.pageLoading = action.payload;
     },
     // changes user total asset state
     setTotalAssets: (state, action: ActionInterface) => {
@@ -100,27 +84,19 @@ const authSlice = createSlice({
         state.userInfo.loading = false;
         state.userInfo.error = action.payload;
       })
-      .addCase(addToAssets.pending, (state) => {
-        state.loadingInfo.formLoading = true;
-      })
+
       .addCase(addToAssets.fulfilled, (state, action: any) => {
         let { user } = action.payload;
         state.userInfo.user!.totalAssets = user.totalAssets;
-
-        state.loadingInfo.formLoading = false;
-      })
-      .addCase(addToAssets.rejected, (state) => {
-        state.loadingInfo.formLoading = false;
       });
   },
 });
 
 export const {
   setUserLoading,
-  setFormLoading,
-  setPageLoading,
+
   removeUserError,
-  setLoadError,
+
   setTotalAssets,
   incomeUpdate,
 } = authSlice.actions;

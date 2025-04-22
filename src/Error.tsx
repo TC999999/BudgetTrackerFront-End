@@ -5,7 +5,7 @@ import { error } from "./interfaces/miscTypes";
 // returns a general error window for non browser url 404 errors
 const Error = () => {
   const { message, status }: error = useAppSelector(
-    (store) => store.user.loadError,
+    (store) => store.loading.loadError,
     shallowEqual
   );
 

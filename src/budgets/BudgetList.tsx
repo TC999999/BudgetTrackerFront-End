@@ -1,7 +1,7 @@
 import BudgetCard from "./BudgetCard";
 import OnPageLoading from "../OnPageLoading";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
-import { loading } from "../interfaces/miscTypes";
+import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 
@@ -13,7 +13,7 @@ type Props = {
 // that the user has no budgets
 const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
   const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
   return !pageLoading ? (

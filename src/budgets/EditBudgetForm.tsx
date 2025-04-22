@@ -1,4 +1,9 @@
 import { useState, useCallback, useMemo, useRef } from "react";
+import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
+import { setTotalAssets } from "../features/slices/authSlice";
+import { setFormLoading } from "../features/slices/loadSlice";
+import { shallowEqual } from "react-redux";
 import {
   BudgetInterface,
   BudgetEditInterface,
@@ -7,6 +12,8 @@ import {
   BudgetUpdate,
 } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
+import { error } from "../interfaces/miscTypes";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getNewBudgetValue } from "../helpers/showBudgetValue";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
@@ -18,12 +25,9 @@ import {
   handleUpdateBudgetComparisons,
 } from "../helpers/handleBudgetErrors";
 import KeyPad from "../KeyPad";
-import { useAppSelector, useAppDispatch } from "../features/hooks";
-import { shallowEqual } from "react-redux";
-import { setTotalAssets, setFormLoading } from "../features/auth/authSlice";
-import { toast } from "react-toastify";
+
+import { toast, Id } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
-import { error, loading } from "../interfaces/miscTypes";
 
 type Props = {
   hideEditForm: (
@@ -43,17 +47,21 @@ const EditBudgetForm: React.FC<Props> = ({
   budget,
   updateBudget,
 }): JSX.Element | null => {
-  const dispatch = useAppDispatch();
-  const notify = (notificationString: string) =>
+  const dispatch: AppDispatch = useAppDispatch();
+
+  const notify = (notificationString: string): Id =>
     toast.success(notificationString);
-  const notifyError = (error: error) =>
+
+  const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
+
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
     shallowEqual
   );
+
   const { formLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 
@@ -62,6 +70,7 @@ const EditBudgetForm: React.FC<Props> = ({
     addedMoney: 0,
     operation: "add",
   };
+
   const initialErrors: UpdateBudgetFormErrors = {
     title: "",
     addedMoney: "",

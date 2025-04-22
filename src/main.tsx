@@ -3,10 +3,10 @@ import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { setUpStore } from "./features/store.ts";
+import { setUpStore, AppStore } from "./features/store.ts";
 import { Provider } from "react-redux";
 
-const store = setUpStore();
+const store: AppStore = setUpStore();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

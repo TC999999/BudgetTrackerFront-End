@@ -7,8 +7,7 @@ import {
   UpdateTime,
   FlashIncomeErrors,
 } from "../interfaces/incomeInterfaces";
-import { UserContextInterface } from "../interfaces/userInterfaces";
-import { error, loading } from "../interfaces/miscTypes";
+import { error } from "../interfaces/miscTypes";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
@@ -20,10 +19,13 @@ import {
 } from "../helpers/handleIncomeErrors";
 import KeyPad from "../KeyPad";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
-import { setFormLoading } from "../features/auth/authSlice";
+import { AppDispatch } from "../features/store";
+import { setFormLoading } from "../features/slices/loadSlice";
 import { shallowEqual } from "react-redux";
-import { toast } from "react-toastify";
+import { toast, Id } from "react-toastify";
 import IncomeAPI from "../apis/IncomeAPI";
+import { UserContextInterface } from "../interfaces/userInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
 
 type Props = {
   hideIncomeFormState: (
@@ -39,17 +41,21 @@ const NewIncomeForm: React.FC<Props> = ({
   addToIncomeState,
   handleIncomes,
 }): JSX.Element | null => {
-  const dispatch = useAppDispatch();
-  const notify = (incomeTitle: string) =>
+  const dispatch: AppDispatch = useAppDispatch();
+
+  const notify = (incomeTitle: string): Id =>
     toast.success(`${incomeTitle} income successfully created`);
-  const notifyError = (error: error) =>
+
+  const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
+
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
     shallowEqual
   );
+
   const { formLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 

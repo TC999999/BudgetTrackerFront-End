@@ -8,7 +8,7 @@ export type error = {
   status: number | null;
 };
 
-export type loading = {
-  pageLoading: boolean;
-  formLoading: boolean;
+export type ActionInterface = {
+  type: string;
+  payload: any;
 };

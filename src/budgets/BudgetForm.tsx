@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
-import { UserContextInterface } from "../interfaces/userInterfaces";
+import { setFormLoading } from "../features/slices/loadSlice";
 import {
   newBudgetInterface,
   submitBudget,
@@ -14,10 +15,12 @@ import {
   handleBudgetInputErrors,
   handleBudgetSubmitErrors,
 } from "../helpers/handleBudgetErrors";
-import { setTotalAssets, setFormLoading } from "../features/auth/authSlice";
-import { toast } from "react-toastify";
+import { setTotalAssets } from "../features/slices/authSlice";
+import { toast, Id } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
-import { error, loading } from "../interfaces/miscTypes";
+import { error } from "../interfaces/miscTypes";
+import { UserContextInterface } from "../interfaces/userInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
 
 type Props = {
   hideForm: (
@@ -37,22 +40,22 @@ const BudgetForm: React.FC<Props> = ({
   hideForm,
   addBudget,
 }): JSX.Element | null => {
-  const dispatch = useAppDispatch();
-  const notify = (title: string, moneyAllocated: number) =>
+  const dispatch: AppDispatch = useAppDispatch();
+  const notify = (title: string, moneyAllocated: number): Id =>
     toast.success(
       `${title} budget created successfully! $${moneyAllocated.toFixed(
         2
       )} allocated to this budget.`
     );
-  const notifyError = (error: error) =>
+  const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
+
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
     shallowEqual
   );
-
   const { formLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
   const initialState: newBudgetInterface = {

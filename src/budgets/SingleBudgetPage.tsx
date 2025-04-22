@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, NavigateFunction } from "react-router-dom";
 import { useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import BudgetPageCard from "./BudgetPageCard";
 import ExpenseForm from "../expenses/ExpenseForm";
 import ExpenseList from "../expenses/ExpenseList";
@@ -10,8 +11,8 @@ import OnPageLoading from "../OnPageLoading";
 import { addNewExpense } from "../helpers/addNewExpense";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
-import { setLoadError, setPageLoading } from "../features/auth/authSlice";
-import { toast } from "react-toastify";
+import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
+import { toast, Id } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
@@ -25,10 +26,10 @@ type FormStateInterface = {
 // returns page for a single user's budget based on budget id ("/budgets/:id")
 const SingleBudgetPage = (): JSX.Element => {
   const { budgetID, id } = useParams();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const dispatch: AppDispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
 
-  const notify = (message: string) => toast.error(message);
+  const notify = (message: string): Id => toast.error(message);
   const [currentBudget, setCurrentBudget] = useState<BudgetInterface>({
     _id: "",
     title: "",
@@ -39,7 +40,7 @@ const SingleBudgetPage = (): JSX.Element => {
   const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
 
   // retrieves budget from db based on id string in url parameters upon initial render
-  useEffect(() => {
+  useEffect((): void => {
     const getBudget = async () => {
       try {
         dispatch(setPageLoading(true));

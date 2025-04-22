@@ -1,10 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
+import { setPageLoading, setLoadError } from "../features/slices/loadSlice";
 import { shallowEqual } from "react-redux";
-import { setPageLoading, setLoadError } from "../features/auth/authSlice";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
+import { UserContextInterface } from "../interfaces/userInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
 import EditUserForm from "./EditUserForm";
 import TransactionList from "../transactions/transactionList";
 import ExpenseList from "../expenses/ExpenseList";
@@ -12,26 +15,29 @@ import OnPageLoading from "../OnPageLoading";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import TransactionAPI from "../apis/TransactionAPI";
 import { addNewTransaction } from "../helpers/addNewTransaction";
-import { toast } from "react-toastify";
-import { loading } from "../interfaces/miscTypes";
+import { toast, Id } from "react-toastify";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
-  const { user } = useAppSelector((store) => store.user.userInfo, shallowEqual);
-  const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+  const { user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
     shallowEqual
   );
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const notify = () => toast.error("You have reached the maximum asset value");
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.loading.loadingInfo,
+    shallowEqual
+  );
+  const dispatch: AppDispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
+  const notify = (): Id =>
+    toast.error("You have reached the maximum asset value");
   const [showAssetForm, setShowAssetForm] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
 
   // makes a request to the backend to retrieve all of a single user's 5 most recent budget
   // expenses and 5 most recent miscellaneous transactions
-  useEffect(() => {
+  useEffect((): void => {
     const getRecentTransactions = async () => {
       dispatch(setPageLoading(true));
       try {

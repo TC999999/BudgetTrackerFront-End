@@ -1,9 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authReducer from "./auth/authSlice.ts";
+import authReducer from "./slices/authSlice.ts";
+import loadReducer from "./slices/loadSlice.ts";
 
 // creates root reducer independently using authreducer from slice
 const rootReducer = combineReducers({
   user: authReducer,
+  loading: loadReducer,
 });
 
 // creates user and load stores using authSlice context

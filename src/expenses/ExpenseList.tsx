@@ -9,10 +9,11 @@ import { UserContextInterface } from "../interfaces/userInterfaces";
 import { budgetFunds, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { error, infoInterface } from "../interfaces/miscTypes";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
-import { setFormLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/slices/loadSlice";
 import ExpenseAPI from "../apis/ExpenseAPI";
-import { toast } from "react-toastify";
+import { toast, Id } from "react-toastify";
 
 // isFrontPage prop tells frontend if user is on dashboard or single budget page; passes down to expense card.
 type Props = {
@@ -38,13 +39,16 @@ const ExpenseList: React.FC<Props> = ({
     (store) => store.user.userInfo,
     shallowEqual
   );
-  const dispatch = useAppDispatch();
+
+  const dispatch: AppDispatch = useAppDispatch();
+
   const [selectedExpense, setSelectedExpense] = useState<infoInterface | null>(
     null
   );
-  const notifyDelete = (expenseTitle: string) =>
+  const notifyDelete = (expenseTitle: string): Id =>
     toast.success(`${expenseTitle} expense successfully deleted`);
-  const notifyError = (error: error) =>
+
+  const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
 
   // since filterExpense is an optional prop function, this function calls on filterExpense

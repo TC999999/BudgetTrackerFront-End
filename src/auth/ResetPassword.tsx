@@ -1,8 +1,9 @@
 import { useState, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
-import { setFormLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/slices/loadSlice";
 import UserInfo from "./UserInfo";
 import OneTimeCode from "./OneTimeCode";
 import NewPassword from "./NewPassword";
@@ -15,17 +16,18 @@ import {
 } from "../interfaces/authInterfaces";
 import { setResetProgress } from "../helpers/setResetProgress";
 import { CiCircleCheck } from "react-icons/ci";
-import { loading } from "../interfaces/miscTypes";
+import { loading } from "../interfaces/loadingInterfaces";
 
 // main page for users attempting to reset password
 const ResetPassword = (): JSX.Element => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
+  const dispatch: AppDispatch = useAppDispatch();
 
   const { formLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
+
   const initialUser: ConfirmUserInfo = {
     username: "",
     email: "",

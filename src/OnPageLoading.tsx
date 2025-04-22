@@ -1,6 +1,6 @@
 import { shallowEqual } from "react-redux";
 import { useAppSelector } from "./features/hooks";
-import { loading } from "./interfaces/miscTypes";
+import { loading } from "./interfaces/loadingInterfaces";
 
 type Props = {
   loadingMsg: string;
@@ -10,7 +10,7 @@ type Props = {
 // (budget data or income data) is loading
 const OnPageLoading: React.FC<Props> = ({ loadingMsg }): JSX.Element | null => {
   const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
   return pageLoading ? (

@@ -6,7 +6,7 @@ import { error } from "./interfaces/miscTypes";
 // prevents users with that do not have errors from accessing error page
 const ErrorRouter = (): JSX.Element => {
   const { message, status }: error = useAppSelector(
-    (store) => store.user.loadError,
+    (store) => store.loading.loadError,
     shallowEqual
   );
 

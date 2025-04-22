@@ -1,8 +1,9 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, NavigateFunction } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
-import { setLoadError, setPageLoading } from "../features/auth/authSlice";
+import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
 import BudgetForm from "./BudgetForm";
 import BudgetList from "./BudgetList";
 import { makeBudgetList } from "../helpers/makeBudgetList";
@@ -10,27 +11,27 @@ import {
   BudgetInterface,
   BudgetListInterface,
 } from "../interfaces/budgetInterfaces";
-import { loading } from "../interfaces/miscTypes";
-import { toast } from "react-toastify";
+import { loading } from "../interfaces/loadingInterfaces";
+import { toast, Id } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
 
 // returns page for list of all budgets the user currently has
 const BudgetPage = (): JSX.Element => {
   const { id } = useParams();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const notify = () =>
+  const dispatch: AppDispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
+  const notify = (): Id =>
     toast.error("You have reached the maximum number of allowed budgets");
 
   const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 
   const [budgets, setBudgets] = useState<BudgetInterface[]>([]);
 
   // retrieves a list of budgets for a specific user on initial render
-  useEffect(() => {
+  useEffect((): void => {
     const getBudgets = async () => {
       try {
         dispatch(setPageLoading(true));

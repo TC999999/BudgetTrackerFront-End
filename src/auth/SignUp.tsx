@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import { removeUserError } from "../features/auth/authSlice";
+import { removeUserError } from "../features/slices/authSlice";
 import { registerUser } from "../features/actions/auth";
 import {
   SignUpInterface,
@@ -9,17 +9,18 @@ import {
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { SubmitIncomeSignUp } from "../interfaces/incomeInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import KeyPad from "../KeyPad";
 import NewIncomeForm from "../incomes/NewIncomeForm";
 import SignUpIncomeCard from "../incomes/SignUpIncomeCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import {
   handleSignUpInputErrors,
   handleSignUpSubmitErrors,
 } from "../helpers/handleSignUpErrors";
-import { toast } from "react-toastify";
+import { toast, Id } from "react-toastify";
 
 // returns window allowing users to create a new account
 const SignUp = (): JSX.Element => {
@@ -37,9 +38,9 @@ const SignUp = (): JSX.Element => {
     password: "",
     email: "",
   };
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const notify = () =>
+  const dispatch: AppDispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
+  const notify = (): Id =>
     toast.error("You have reached the maximum number of allowed incomes!");
   const { userExists, error }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
@@ -47,7 +48,7 @@ const SignUp = (): JSX.Element => {
   );
 
   // max value for total assets
-  const maxNum = useRef(99999999999999);
+  const maxNum = useRef<number>(99999999999999);
 
   // states for form data values, strings for form errors, and whether to flash errorful inputs to user
   const [formData, setFormData] = useState<SignUpInterface>(initialState);
@@ -63,7 +64,7 @@ const SignUp = (): JSX.Element => {
   // state to show form to add initial incomes
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
 
-  useEffect(() => {
+  useEffect((): void => {
     if (userExists) {
       navigate("/");
     }

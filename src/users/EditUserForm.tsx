@@ -1,13 +1,15 @@
 import { useState, useCallback, useRef, useMemo } from "react";
 import {
-  UserContextInterface,
   UserEditInterface,
   UserEditErrors,
+  UserContextInterface,
 } from "../interfaces/userInterfaces";
-import { error, loading } from "../interfaces/miscTypes";
+import { error } from "../interfaces/miscTypes";
+import { loading } from "../interfaces/loadingInterfaces";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
 import { addToAssets } from "../features/actions/users";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
@@ -19,7 +21,7 @@ import {
 } from "../helpers/handleUserEditErrors";
 import { createUpdateUserString } from "../helpers/createNotificationString";
 import { DateTime } from "luxon";
-import { toast } from "react-toastify";
+import { toast, Id } from "react-toastify";
 
 type Props = {
   hideForm: (
@@ -43,18 +45,21 @@ const EditUserForm: React.FC<Props> = ({
   hideForm,
   updateTransactions,
 }): JSX.Element | null => {
-  const dispatch = useAppDispatch();
-  const notify = (notification: string) => toast.success(notification);
-  const notifyError = (error: error) =>
+  const dispatch: AppDispatch = useAppDispatch();
+  const notify = (notification: string): Id => toast.success(notification);
+  const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
+
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
     shallowEqual
   );
+
   const { formLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
+
   const initialState: FormInfo = {
     title: "",
     value: 0,

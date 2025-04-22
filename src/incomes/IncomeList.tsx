@@ -2,18 +2,18 @@ import { useState, useCallback } from "react";
 import { Income, deleteIncomeType } from "../interfaces/incomeInterfaces";
 import { infoInterface } from "../interfaces/miscTypes";
 import { error } from "../interfaces/miscTypes";
-import { UserContextInterface } from "../interfaces/userInterfaces";
-import { loading } from "../interfaces/miscTypes";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
-import { setFormLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/slices/loadSlice";
 import IncomeCard from "./IncomeCard";
 import UpdateIncomeForm from "./UpdateIncomeForm";
 import OnPageLoading from "../OnPageLoading";
 import SecondPrompt from "../SecondPrompt";
 import IncomeAPI from "../apis/IncomeAPI";
-
-import { toast } from "react-toastify";
+import { toast, Id } from "react-toastify";
+import { UserContextInterface } from "../interfaces/userInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
 
 type Props = {
   incomeList: Income[];
@@ -27,10 +27,12 @@ const IncomeList: React.FC<Props> = ({
   removeFromIncomeState,
   updateIncomeState,
 }): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const notify = (message: string) =>
+  const dispatch: AppDispatch = useAppDispatch();
+
+  const notify = (message: string): Id =>
     toast.success(`Income ${message} deleted successfully`);
-  const notifyError = (error: error) =>
+
+  const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
 
   const { user }: UserContextInterface = useAppSelector(
@@ -39,13 +41,15 @@ const IncomeList: React.FC<Props> = ({
   );
 
   const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 
   // to use for editing a single income, retrieve info to be used for income edit
   const [selectedIncomeForEdit, setSelectedIncomeForEdit] =
     useState<Income | null>(null);
+
+  // to use for deleting a single income, retrieve info to be used for income deletion
   const [selectedIncomeForDelete, setSelectedIncomeForDelete] =
     useState<infoInterface | null>(null);
 

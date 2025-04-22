@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { removeUserError } from "../features/auth/authSlice";
+import { removeUserError } from "../features/slices/authSlice";
 import { logInUser } from "../features/actions/auth";
 import {
   LogInInterface,
@@ -8,6 +8,7 @@ import {
 } from "../interfaces/authInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import {
   handleLogInInputErrors,
   handleLogInSubmitErrors,
@@ -26,7 +27,7 @@ const LogIn = (): JSX.Element => {
     username: "",
     password: "",
   };
-  const dispatch = useAppDispatch();
+  const dispatch: AppDispatch = useAppDispatch();
   const [formData, setFormData] = useState<LogInInterface>(initialState);
   const [logInErrors, setLogInErrors] = useState<LogInErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string>("");
@@ -43,7 +44,7 @@ const LogIn = (): JSX.Element => {
 
   // since submitting the login form causes a rerender, we store the inputted information into localstorage
   // and grab it after the rerender and sets the form data
-  useEffect(() => {
+  useEffect((): void => {
     let inputs: string | null = localStorage.getItem("userInputs");
     if (error) {
       setSubmitError(error);

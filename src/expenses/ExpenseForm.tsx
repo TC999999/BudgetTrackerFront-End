@@ -1,8 +1,9 @@
 import { useState, useRef, useCallback } from "react";
 import KeyPad from "../KeyPad";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
-import { setFormLoading } from "../features/auth/authSlice";
+import { setFormLoading } from "../features/slices/loadSlice";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import {
@@ -16,11 +17,12 @@ import {
   ExpenseInterface,
 } from "../interfaces/expenseInterfaces";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
+import { error } from "../interfaces/miscTypes";
 import { UserContextInterface } from "../interfaces/userInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
 import { DateTime } from "luxon";
-import { toast } from "react-toastify";
+import { toast, Id } from "react-toastify";
 import ExpenseAPI from "../apis/ExpenseAPI";
-import { error, loading } from "../interfaces/miscTypes";
 
 type flashErrors = { title: boolean; transaction: boolean; date: boolean };
 
@@ -40,21 +42,25 @@ const ExpenseForm: React.FC<Props> = ({
   addExpense,
   updateBudget,
 }): JSX.Element | null => {
-  const dispatch = useAppDispatch();
-  const notify = (title: string, transaction: number) =>
+  const dispatch: AppDispatch = useAppDispatch();
+
+  const notify = (title: string, transaction: number): Id =>
     toast.success(
       `${title} expense created successfully! $${transaction.toFixed(
         2
       )} spent. $${availableMoney} remaining in ${budget.title}.`
     );
+
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);
+
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
     shallowEqual
   );
+
   const { formLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 

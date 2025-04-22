@@ -1,13 +1,12 @@
 import { shallowEqual } from "react-redux";
 import { useAppSelector } from "./features/hooks";
-
-import { loading } from "./interfaces/miscTypes";
+import { loading } from "./interfaces/loadingInterfaces";
 import { FaRegHourglass } from "react-icons/fa";
 
 // Loading Message for regular form submissions other than logging in and registering users
 const SmallLoadingMsg = (): JSX.Element | null => {
   const { formLoading, pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 

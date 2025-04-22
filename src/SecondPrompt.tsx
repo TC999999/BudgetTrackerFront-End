@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { useAppSelector } from "./features/hooks";
 import { shallowEqual } from "react-redux";
-import { infoInterface, loading } from "./interfaces/miscTypes";
+import { infoInterface } from "./interfaces/miscTypes";
+import { loading } from "./interfaces/loadingInterfaces";
 import { budgetFunds } from "./interfaces/budgetInterfaces";
 import {
   calcNewMoneyRemaining,
@@ -29,7 +30,7 @@ const SecondPrompt: React.FC<Props> = ({
   BudgetFunds,
 }): JSX.Element | null => {
   const { formLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 

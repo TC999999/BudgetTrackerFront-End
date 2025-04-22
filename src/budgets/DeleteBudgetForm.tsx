@@ -1,17 +1,20 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import {
   BudgetInterface,
   DeleteBudgetInterface,
 } from "../interfaces/budgetInterfaces";
-import { error, loading } from "../interfaces/miscTypes";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import { setTotalAssets, setFormLoading } from "../features/auth/authSlice";
+import { loading } from "../interfaces/loadingInterfaces";
+import { error } from "../interfaces/miscTypes";
+import { setTotalAssets } from "../features/slices/authSlice";
+import { setFormLoading } from "../features/slices/loadSlice";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import { calculateNewTotalAssetsWithoutOperation } from "../helpers/calculateNewTotalAssets";
-import { toast } from "react-toastify";
+import { toast, Id } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
 
 type Props = {
@@ -27,24 +30,24 @@ const DeleteBudgetForm: React.FC<Props> = ({
   hideDeleteForm,
   budget,
 }): JSX.Element | null => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const notify = (title: string, addBackToAssets: number) =>
+  const dispatch: AppDispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
+  const notify = (title: string, addBackToAssets: number): Id =>
     toast.success(
       `${title} budget deleted successfully! $${addBackToAssets.toFixed(
         2
       )} added to available assets.`
     );
-  const notifyError = (error: error) =>
+  const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
 
-  const { user }: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo,
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 
-  const { formLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+  const { user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
     shallowEqual
   );
 

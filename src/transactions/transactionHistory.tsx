@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, NavigateFunction } from "react-router-dom";
 import TransactionAPI from "../apis/TransactionAPI";
 import { useAppDispatch } from "../features/hooks";
+import { AppDispatch } from "../features/store";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionList from "./transactionList";
-import { setLoadError, setPageLoading } from "../features/auth/authSlice";
+import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
 
 // returns a list of all miscellaneous transactions the user has made
 const TransactionHistory = (): JSX.Element => {
   const { id } = useParams();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const dispatch: AppDispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   // makes a request to retrieve all of a single user's transactions from db on initial
   // render
-  useEffect(() => {
+  useEffect((): void => {
     async function getUserTransactions() {
       try {
         dispatch(setPageLoading(true));

@@ -1,7 +1,7 @@
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionCard from "./transactionCard";
 import OnPageLoading from "../OnPageLoading";
-import { loading } from "../interfaces/miscTypes";
+import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 
@@ -13,7 +13,7 @@ type Props = {
 // transaction history page
 const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
   const { pageLoading }: loading = useAppSelector(
-    (store) => store.user.loadingInfo,
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
   return !pageLoading ? (

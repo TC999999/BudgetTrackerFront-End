@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
 import Logo from "./Logo";
 import Logout from "./auth/Logout";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./features/hooks";
+import { AppDispatch } from "./features/store";
 import { logOutUser } from "./features/actions/auth";
 import { shallowEqual } from "react-redux";
 import { UserContextInterface } from "./interfaces/userInterfaces";
@@ -10,8 +11,8 @@ import { UserContextInterface } from "./interfaces/userInterfaces";
 // returns main navbar at the top of the app when user logs in
 const Navbar = (): JSX.Element | null => {
   const [showPrompt, setShowPrompt] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const dispatch: AppDispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
   const { userExists, user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
     shallowEqual
