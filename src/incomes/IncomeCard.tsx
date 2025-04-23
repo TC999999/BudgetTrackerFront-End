@@ -46,7 +46,7 @@ const IncomeCard: React.FC<Props> = ({
           </h1>
         </header>
         <div className="lg:flex lg:justify-evenly">
-          <div className="salary-information text-xl sm:text-3xl lg:m-4 lg:p-2 lg:flex lg:items-center lg:w-96 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg">
+          <div className="salary-information flex justify-center items-center text-xl sm:text-3xl lg:m-4 lg:p-2  lg:w-96 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg">
             <div>
               <p className="underline">Salary: </p>
               <p className="salary-number-value font-bold">${income.salary}</p>
@@ -55,13 +55,13 @@ const IncomeCard: React.FC<Props> = ({
               </p>
             </div>
           </div>
-          <div className="next-and-last-received-dates text-lg sm:text-2xl lg:m-4 lg:p-2 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg">
-            <div className="last-received-date">
-              <p className="font-bold">Last Received On: </p>
+          <div className="next-and-last-received-dates flex justify-between items-center text-lg sm:text-2xl lg:m-4 lg:p-2 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg">
+            <div className="last-received-date m-1">
+              <p className="font-bold">Last Received: </p>
               <p>{lastDate}</p>
             </div>
-            <div className="next-received-date">
-              <p className="font-bold">Next Received On: </p>
+            <div className="next-received-date m-1">
+              <p className="font-bold">Next Received: </p>
               <p>
                 {nextDate.date} at {nextDate.time}
               </p>

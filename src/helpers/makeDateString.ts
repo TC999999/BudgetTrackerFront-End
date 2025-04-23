@@ -26,7 +26,7 @@ export const makeDateString = (dateString: string): dateInfo => {
 };
 
 export const makeDateStringIncomeCard = (dateString: string): string => {
-  if (!dateString) return "no data for this time";
+  if (!dateString) return "no data";
   let d: Date = new Date(dateString);
   let date: string = d.toLocaleDateString("en-US", {
     month: "short",

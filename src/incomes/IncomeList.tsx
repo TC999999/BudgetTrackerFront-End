@@ -7,6 +7,7 @@ import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
 import { setFormLoading } from "../features/slices/loadSlice";
 import IncomeCard from "./IncomeCard";
+import IncomeSkeleton from "../skeleton/IncomeSkeleton";
 import UpdateIncomeForm from "./UpdateIncomeForm";
 import OnPageLoading from "../OnPageLoading";
 import SecondPrompt from "../SecondPrompt";
@@ -135,8 +136,9 @@ const IncomeList: React.FC<Props> = ({
           updateIncomeState={updateIncomeState}
         />
       )}
+
       <div>
-        {incomeList.length ? (
+        {!pageLoading && incomeList.length && (
           <ul id="income-list">
             {incomeList.map((i) => (
               <li key={`income-${i._id}`}>
@@ -148,7 +150,11 @@ const IncomeList: React.FC<Props> = ({
               </li>
             ))}
           </ul>
-        ) : (
+        )}
+
+        {pageLoading && <IncomeSkeleton cards={3} />}
+
+        {!pageLoading && incomeList.length === 0 && (
           <p className="text-3xl m-4 text-center italic">
             You currently have no incomes
           </p>

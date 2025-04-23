@@ -114,9 +114,9 @@ const BudgetPage = (): JSX.Element => {
             <h1 className=" underline">All Current Budgets</h1>
             <h2>
               {pageLoading ? (
-                <Skeleton width={60} baseColor="#00ff00" />
+                <Skeleton width={60} />
               ) : (
-                <span>{budgetList.length}/10</span>
+                `${budgetList.length}/10`
               )}
             </h2>
           </div>

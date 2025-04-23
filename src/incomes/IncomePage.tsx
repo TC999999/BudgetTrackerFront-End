@@ -9,6 +9,7 @@ import { loading } from "../interfaces/loadingInterfaces";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
 import NewIncomeForm from "./NewIncomeForm";
+import Skeleton from "react-loading-skeleton";
 import { toast, Id } from "react-toastify";
 
 // Shows the list of incomes the current user has
@@ -127,9 +128,12 @@ const IncomePage = (): JSX.Element => {
           />
         )}
         <header className="text-center">
-          <h1 className="text-xl sm:text-3xl text-green-700 underline font-bold">
-            Your Current Incomes ({pageLoading ? "..." : incomes.length}/3)
-          </h1>
+          <div className="text-xl sm:text-3xl text-green-700 font-bold">
+            <h1 className="underline">Your Current Incomes</h1>
+            <h2>
+              {pageLoading ? <Skeleton width={60} /> : `${incomes.length}/3`}
+            </h2>
+          </div>
           <small>
             Here you may add, update, or delete any sources of income you may
             have. Each of below income values will be added to your total
