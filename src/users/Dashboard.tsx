@@ -1,6 +1,8 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, SyntheticEvent } from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../features/hooks";
+import { Tab, Box } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { AppDispatch } from "../features/store";
 import { setPageLoading, setLoadError } from "../features/slices/loadSlice";
 import { shallowEqual } from "react-redux";
@@ -15,6 +17,7 @@ import TransactionAPI from "../apis/TransactionAPI";
 import { addNewTransaction } from "../helpers/addNewTransaction";
 import { toast, Id } from "react-toastify";
 
+type tabState = "1" | "2";
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
   const { user }: UserContextInterface = useAppSelector(
@@ -29,6 +32,7 @@ const Dashboard = (): JSX.Element => {
   const [showAssetForm, setShowAssetForm] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
+  const [val, setVal] = useState<tabState>("1");
 
   // makes a request to the backend to retrieve all of a single user's 5 most recent budget
   // expenses and 5 most recent miscellaneous transactions
@@ -78,6 +82,14 @@ const Dashboard = (): JSX.Element => {
     [showAssetForm]
   );
 
+  const changeTab = (
+    e: SyntheticEvent<Element, Event>,
+    val: tabState
+  ): void => {
+    e.preventDefault();
+    setVal(val);
+  };
+
   // adds new transaction to recent transaction list when user documents a new transaction
   const updateTransactions = useCallback(
     (newTransaction: Transaction): void => {
@@ -121,40 +133,66 @@ const Dashboard = (): JSX.Element => {
           />
         )}
 
-        <div id="recent-data">
-          <section
-            id="recent-transactions-list"
-            className="transition duration-150"
-          >
-            <header className="text-center m-2">
-              <h2 id="recent-transactions-list-title" className="list-header">
-                Recent Miscellaneous Transactions
-              </h2>
-              <small>
-                Below are your most recent transactions (≤5), which includes
-                both that you have documented yourself and from your incomes:
-                past and present.
-              </small>
-            </header>
-            <TransactionList transactions={transactions} />
-          </section>
+        <div
+          id="recent-data"
+          className="border-2 border-green-500 m-4 rounded-lg bg-green-200"
+        >
+          <TabContext value={val}>
+            <Box className="border-b-2 border-green-500 bg-green-300 rounded-t-lg">
+              <TabList onChange={changeTab} allowScrollButtonsMobile centered>
+                <Tab
+                  className="recent-transactions"
+                  label="Recent Transactions"
+                  value="1"
+                />
+                <Tab
+                  className="recent-transactions"
+                  label="Recent Expenses"
+                  value="2"
+                />
+              </TabList>
+            </Box>
 
-          <section
-            id="recent-expenses-list"
-            className="transition duration-150"
-          >
-            <header className="text-center m-2">
-              <h2 id="recent-expenses-list-title" className="list-header">
-                Recent Budget Expenses
-              </h2>
-              <small>
-                Below are your most recent budget expenses (≤5). These only
-                include expenses made using funds from all budgets you have
-                presently.
-              </small>
-            </header>
-            <ExpenseList expensesList={expenses} isFrontPage={true} />
-          </section>
+            <TabPanel value="1">
+              <section
+                id="recent-transactions-list"
+                className="transition duration-150"
+              >
+                <header className="text-center mb-2">
+                  <h2
+                    id="recent-transactions-list-title"
+                    className="list-header"
+                  >
+                    Recent Miscellaneous Transactions
+                  </h2>
+                  <small>
+                    Below are your most recent transactions (≤5), which includes
+                    both that you have documented yourself and from your
+                    incomes: past and present.
+                  </small>
+                </header>
+                <TransactionList transactions={transactions} />
+              </section>
+            </TabPanel>
+            <TabPanel value="2">
+              <section
+                id="recent-expenses-list"
+                className="transition duration-150"
+              >
+                <header className="text-center mb-2">
+                  <h2 id="recent-expenses-list-title" className="list-header">
+                    Recent Budget Expenses
+                  </h2>
+                  <small>
+                    Below are your most recent budget expenses (≤5). These only
+                    include expenses made using funds from all budgets you have
+                    presently.
+                  </small>
+                </header>
+                <ExpenseList expensesList={expenses} isFrontPage={true} />
+              </section>
+            </TabPanel>
+          </TabContext>
         </div>
       </main>
     </div>
