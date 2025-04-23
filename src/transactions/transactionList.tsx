@@ -1,6 +1,6 @@
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionCard from "./TransactionCard";
-import OnPageLoading from "../OnPageLoading";
+import TableSkeletonCard from "../skeleton/TableSkeletonCard";
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
@@ -16,7 +16,7 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
     (store) => store.loading.loadingInfo,
     shallowEqual
   );
-  return !pageLoading ? (
+  return (
     <div
       id="transactions-list"
       className="bg-white border-2 border-green-500 m-2 rounded-md h-100"
@@ -31,25 +31,34 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
         <b className="table-header">Income</b>
         <b className="table-header">Misc.</b>
       </header>
-      {transactions.length ? (
-        <div id="transaction-card-list" className="stripedTransactions">
-          {transactions.map((transaction) => {
-            return (
-              <TransactionCard
-                key={transaction._id}
-                transaction={transaction}
-              />
-            );
-          })}
-        </div>
-      ) : (
-        <div id="no-transactions" className="text-center text-xl p-2">
-          <p className="italic">No Transactions Yet</p>
-        </div>
-      )}
+
+      <div id="transaction-card-list" className="stripedTransactions">
+        {!pageLoading && transactions.length && (
+          <div>
+            {transactions.map((transaction) => {
+              return (
+                <TransactionCard
+                  key={transaction._id}
+                  transaction={transaction}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {pageLoading && (
+          <div>
+            <TableSkeletonCard cards={5} cols="5" />
+          </div>
+        )}
+
+        {!pageLoading && transactions.length === 0 && (
+          <div id="no-transactions" className="text-center text-xl p-2">
+            <p className="italic">No Transactions Yet</p>
+          </div>
+        )}
+      </div>
     </div>
-  ) : (
-    <OnPageLoading loadingMsg="Transactions" />
   );
 };
 

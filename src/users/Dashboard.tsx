@@ -7,11 +7,9 @@ import { shallowEqual } from "react-redux";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import { loading } from "../interfaces/loadingInterfaces";
 import EditUserForm from "./EditUserForm";
 import TransactionList from "../transactions/TransactionList";
 import ExpenseList from "../expenses/ExpenseList";
-import OnPageLoading from "../OnPageLoading";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import TransactionAPI from "../apis/TransactionAPI";
 import { addNewTransaction } from "../helpers/addNewTransaction";
@@ -23,10 +21,7 @@ const Dashboard = (): JSX.Element => {
     (store) => store.user.userInfo,
     shallowEqual
   );
-  const { pageLoading }: loading = useAppSelector(
-    (store) => store.loading.loadingInfo,
-    shallowEqual
-  );
+
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const notify = (): Id =>
@@ -126,45 +121,41 @@ const Dashboard = (): JSX.Element => {
           />
         )}
 
-        {!pageLoading ? (
-          <div id="recent-data">
-            <section
-              id="recent-transactions-list"
-              className="transition duration-150"
-            >
-              <header className="text-center m-2">
-                <h2 id="recent-transactions-list-title" className="list-header">
-                  Recent Miscellaneous Transactions
-                </h2>
-                <small>
-                  Below are your most recent transactions (≤5), which includes
-                  both that you have documented yourself and from your incomes:
-                  past and present.
-                </small>
-              </header>
-              <TransactionList transactions={transactions} />
-            </section>
+        <div id="recent-data">
+          <section
+            id="recent-transactions-list"
+            className="transition duration-150"
+          >
+            <header className="text-center m-2">
+              <h2 id="recent-transactions-list-title" className="list-header">
+                Recent Miscellaneous Transactions
+              </h2>
+              <small>
+                Below are your most recent transactions (≤5), which includes
+                both that you have documented yourself and from your incomes:
+                past and present.
+              </small>
+            </header>
+            <TransactionList transactions={transactions} />
+          </section>
 
-            <section
-              id="recent-expenses-list"
-              className="transition duration-150"
-            >
-              <header className="text-center m-2">
-                <h2 id="recent-expenses-list-title" className="list-header">
-                  Recent Budget Expenses
-                </h2>
-                <small>
-                  Below are your most recent budget expenses (≤5). These only
-                  include expenses made using funds from all budgets you have
-                  presently.
-                </small>
-              </header>
-              <ExpenseList expensesList={expenses} isFrontPage={true} />
-            </section>
-          </div>
-        ) : (
-          <OnPageLoading loadingMsg="Loading Recent Data..." />
-        )}
+          <section
+            id="recent-expenses-list"
+            className="transition duration-150"
+          >
+            <header className="text-center m-2">
+              <h2 id="recent-expenses-list-title" className="list-header">
+                Recent Budget Expenses
+              </h2>
+              <small>
+                Below are your most recent budget expenses (≤5). These only
+                include expenses made using funds from all budgets you have
+                presently.
+              </small>
+            </header>
+            <ExpenseList expensesList={expenses} isFrontPage={true} />
+          </section>
+        </div>
       </main>
     </div>
   );

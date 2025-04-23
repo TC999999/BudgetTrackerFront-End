@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import ExpenseCard from "./ExpenseCard";
-import SkeletonCard from "./SkeletonCard";
+import TableSkeletonCard from "../skeleton/TableSkeletonCard";
 import SecondPrompt from "../SecondPrompt";
 import {
   ExpenseInterface,
@@ -176,9 +176,9 @@ const ExpenseList: React.FC<Props> = ({
           </div>
         )}
 
-        {pageLoading && expensesList.length === 0 && (
+        {pageLoading && (
           <div>
-            <SkeletonCard cards={5} />
+            <TableSkeletonCard cards={5} cols="4" />
           </div>
         )}
 
