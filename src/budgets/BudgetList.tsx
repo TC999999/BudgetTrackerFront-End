@@ -1,5 +1,5 @@
 import BudgetCard from "./BudgetCard";
-import OnPageLoading from "../OnPageLoading";
+import BudgetSkeleton from "../skeleton/BudgetSkeleton";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
@@ -16,27 +16,39 @@ const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
     (store) => store.loading.loadingInfo,
     shallowEqual
   );
-  return !pageLoading ? (
-    <section id="budget-list-page">
-      {allBudgets?.length ? (
+  return (
+    <div>
+      {/* <ul
+        id="budget-list"
+        className="stripedBudgets flex flex-wrap justify-center"
+      >
+        <BudgetSkeleton cards={10} />
+      </ul> */}
+      {!pageLoading && allBudgets.length && (
         <ul
           id="budget-list"
           className="stripedBudgets flex flex-wrap justify-center"
         >
           {allBudgets.map((budget) => (
-            <li className="w-5/6 md:w-2/5 xl:w-1/5 " key={budget._id}>
-              <BudgetCard budget={budget} />
-            </li>
+            <BudgetCard budget={budget} key={budget._id} />
           ))}
         </ul>
-      ) : (
+      )}
+
+      {pageLoading && (
+        <ul
+          id="budget-list"
+          className="stripedBudgets flex flex-wrap justify-center"
+        >
+          <BudgetSkeleton cards={10} />
+        </ul>
+      )}
+      {!pageLoading && allBudgets.length === 0 && (
         <p className="text-3xl m-4 text-center italic">
           You currently have no budgets
         </p>
       )}
-    </section>
-  ) : (
-    <OnPageLoading loadingMsg="Budgets" />
+    </div>
   );
 };
 

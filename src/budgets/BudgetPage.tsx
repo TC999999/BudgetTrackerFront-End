@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useParams, useNavigate, NavigateFunction } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
@@ -12,6 +13,7 @@ import {
   BudgetListInterface,
 } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
+
 import { toast, Id } from "react-toastify";
 import BudgetAPI from "../apis/BudgetAPI";
 
@@ -108,9 +110,16 @@ const BudgetPage = (): JSX.Element => {
       </header>
       <main>
         <header className="text-center">
-          <h1 className="text-2xl sm:text-3xl text-emerald-500 underline font-bold">
-            All Current Budgets ({pageLoading ? "..." : budgetList.length}/10)
-          </h1>
+          <div className="text-2xl sm:text-3xl text-emerald-500 font-bold">
+            <h1 className=" underline">All Current Budgets</h1>
+            <h2>
+              {pageLoading ? (
+                <Skeleton width={60} baseColor="#00ff00" />
+              ) : (
+                <span>{budgetList.length}/10</span>
+              )}
+            </h2>
+          </div>
           <small>
             Here you may set aside funds in order to make plans for future
             budgets or record current budgets you may have. You are allowed a
