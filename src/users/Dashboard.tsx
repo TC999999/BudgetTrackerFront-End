@@ -9,7 +9,7 @@ import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import EditUserForm from "./EditUserForm";
-import TransactionList from "../transactions/transactionList";
+import TransactionList from "../transactions/TransactionList";
 import ExpenseList from "../expenses/ExpenseList";
 import OnPageLoading from "../OnPageLoading";
 import ExpenseAPI from "../apis/ExpenseAPI";

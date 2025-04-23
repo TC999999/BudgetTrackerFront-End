@@ -7,7 +7,6 @@ import ExpenseForm from "../expenses/ExpenseForm";
 import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
 import EditBudgetForm from "./EditBudgetForm";
-import OnPageLoading from "../OnPageLoading";
 import { addNewExpense } from "../helpers/addNewExpense";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
@@ -134,7 +133,7 @@ const SingleBudgetPage = (): JSX.Element => {
     [expenses]
   );
 
-  return currentBudget._id ? (
+  return (
     <div id="single-budget-page">
       <header id="additional-nav-header">
         <nav id="buttons" className="flex justify-around w-full">
@@ -220,8 +219,6 @@ const SingleBudgetPage = (): JSX.Element => {
         </section>
       </main>
     </div>
-  ) : (
-    <OnPageLoading loadingMsg="Budget" />
   );
 };
 

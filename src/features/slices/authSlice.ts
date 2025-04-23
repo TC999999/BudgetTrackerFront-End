@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, logInUser, logOutUser } from "../actions/auth";
 import { getCurrentUser, addToAssets } from "../actions/users";
-import { INITIAL_STATE } from "../config";
+import { AUTH_INITIAL_STATE } from "../config";
 import { ActionInterface } from "../../interfaces/miscTypes";
 
 // redux slice for global user state
 const authSlice = createSlice({
   name: "auth",
-  initialState: INITIAL_STATE,
+  initialState: AUTH_INITIAL_STATE,
   reducers: {
     // changes loading state for retrieving or creating all user information
     setUserLoading: (state, action: ActionInterface) => {
@@ -39,7 +39,7 @@ const authSlice = createSlice({
         state.userInfo.error = null;
       })
       .addCase(registerUser.rejected, (state, action: any) => {
-        state.userInfo.user = INITIAL_STATE.userInfo.user;
+        state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
         state.userInfo.error = action.payload;
@@ -54,7 +54,7 @@ const authSlice = createSlice({
         state.userInfo.error = null;
       })
       .addCase(logInUser.rejected, (state, action: any) => {
-        state.userInfo.user = INITIAL_STATE.userInfo.user;
+        state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
         state.userInfo.error = action.payload;
@@ -68,7 +68,7 @@ const authSlice = createSlice({
         state.userInfo.user = action.payload.user;
       })
       .addCase(getCurrentUser.rejected, (state) => {
-        state.userInfo.user = INITIAL_STATE.userInfo.user;
+        state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
       })
@@ -78,13 +78,12 @@ const authSlice = createSlice({
       .addCase(logOutUser.fulfilled, (state) => {
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
-        state.userInfo.user = INITIAL_STATE.userInfo.user;
+        state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
       })
       .addCase(logOutUser.rejected, (state, action: any) => {
         state.userInfo.loading = false;
         state.userInfo.error = action.payload;
       })
-
       .addCase(addToAssets.fulfilled, (state, action: any) => {
         let { user } = action.payload;
         state.userInfo.user!.totalAssets = user.totalAssets;
@@ -92,13 +91,7 @@ const authSlice = createSlice({
   },
 });
 
-export const {
-  setUserLoading,
-
-  removeUserError,
-
-  setTotalAssets,
-  incomeUpdate,
-} = authSlice.actions;
+export const { setUserLoading, removeUserError, setTotalAssets, incomeUpdate } =
+  authSlice.actions;
 
 export default authSlice.reducer;

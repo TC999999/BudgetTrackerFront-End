@@ -13,6 +13,8 @@ import { UserContextInterface } from "./interfaces/userInterfaces";
 import { ToastContainer, toast, Id } from "react-toastify";
 import TokenAPI from "./apis/TokenAPI";
 import { API_URL } from "./features/config";
+import { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 //renders whole application
 function App(): JSX.Element {
@@ -70,11 +72,18 @@ function App(): JSX.Element {
   // returns loading messages, toast notifications, navbar, and routes list
   return (
     <div className="App">
-      <LoadingMsg />
-      <SmallLoadingMsg />
-      <ToastContainer position="bottom-right" />
-      <Navbar />
-      {!loading && <RoutesList />}
+      <SkeletonTheme
+        enableAnimation
+        baseColor="#646665"
+        highlightColor="#f0f0f0"
+        borderRadius={50}
+      >
+        <LoadingMsg />
+        <SmallLoadingMsg />
+        <ToastContainer position="bottom-right" />
+        <Navbar />
+        {!loading && <RoutesList />}
+      </SkeletonTheme>
     </div>
   );
 }

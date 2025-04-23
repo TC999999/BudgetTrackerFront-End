@@ -4,7 +4,7 @@ import TransactionAPI from "../apis/TransactionAPI";
 import { useAppDispatch } from "../features/hooks";
 import { AppDispatch } from "../features/store";
 import { Transaction } from "../interfaces/transactionInterfaces";
-import TransactionList from "./transactionList";
+import TransactionList from "./TransactionList";
 import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
 
 // returns a list of all miscellaneous transactions the user has made

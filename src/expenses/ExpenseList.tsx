@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import ExpenseCard from "./ExpenseCard";
+import SkeletonCard from "./SkeletonCard";
 import SecondPrompt from "../SecondPrompt";
 import {
   ExpenseInterface,
@@ -14,6 +15,7 @@ import { shallowEqual } from "react-redux";
 import { setFormLoading } from "../features/slices/loadSlice";
 import ExpenseAPI from "../apis/ExpenseAPI";
 import { toast, Id } from "react-toastify";
+import { loading } from "../interfaces/loadingInterfaces";
 
 // isFrontPage prop tells frontend if user is on dashboard or single budget page; passes down to expense card.
 type Props = {
@@ -37,6 +39,11 @@ const ExpenseList: React.FC<Props> = ({
 }): JSX.Element => {
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
+    shallowEqual
+  );
+
+  const { pageLoading }: loading = useAppSelector(
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 
@@ -152,24 +159,35 @@ const ExpenseList: React.FC<Props> = ({
           <b className="table-header">Delete</b>
         )}
       </header>
-      {expensesList.length ? (
-        <div id="expense-card-list" className="striped">
-          {expensesList.map((e) => {
-            return (
-              <ExpenseCard
-                key={e._id}
-                expense={e}
-                isFrontPage={isFrontPage}
-                showSecondPrompt={showSecondPrompt}
-              />
-            );
-          })}
-        </div>
-      ) : (
-        <div className="no-expenses text-center text-xl p-4">
-          <p className="italic"> No Expenses Yet</p>
-        </div>
-      )}
+
+      <div id="expense-card-list" className="striped">
+        {!pageLoading && expensesList.length > 0 && (
+          <div>
+            {expensesList.map((e) => {
+              return (
+                <ExpenseCard
+                  key={e._id}
+                  expense={e}
+                  isFrontPage={isFrontPage}
+                  showSecondPrompt={showSecondPrompt}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {pageLoading && expensesList.length === 0 && (
+          <div>
+            <SkeletonCard cards={5} />
+          </div>
+        )}
+
+        {!pageLoading && expensesList.length === 0 && (
+          <div className="no-expenses text-center text-xl p-4">
+            <p className="italic"> No Expenses Yet</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Transaction } from "../interfaces/transactionInterfaces";
-import TransactionCard from "./transactionCard";
+import TransactionCard from "./TransactionCard";
 import OnPageLoading from "../OnPageLoading";
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";

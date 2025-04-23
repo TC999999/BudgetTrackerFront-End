@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
-import { setUpStore, AppStore } from "./features/store.ts";
 import { Provider } from "react-redux";
+import { setUpStore, AppStore } from "./features/store.ts";
+import App from "./App.tsx";
+import "./index.css";
 
 const store: AppStore = setUpStore();
 

@@ -5,7 +5,7 @@ import { LoadingContext } from "../interfaces/loadingInterfaces";
 export const API_URL: string = "http://localhost:3001";
 
 // typing for redux store
-export const INITIAL_STATE: AuthInitialStateInterface = {
+export const AUTH_INITIAL_STATE: AuthInitialStateInterface = {
   userInfo: {
     user: null,
     loading: true,
@@ -16,7 +16,7 @@ export const INITIAL_STATE: AuthInitialStateInterface = {
 
 export const LOADING_INITIAL_STATE: LoadingContext = {
   loadingInfo: {
-    pageLoading: true,
+    pageLoading: false,
     formLoading: false,
   },
   loadError: {

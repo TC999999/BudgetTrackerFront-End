@@ -5,7 +5,7 @@ import NotLoggedInRoutes from "./NotLoggedInRoutes";
 import NotFound from "./NotFound";
 import Error from "./Error";
 import HomePage from "./users/HomePage";
-import TransactionHistory from "./transactions/transactionHistory";
+import TransactionHistory from "./transactions/TransactionHistory";
 import BudgetPage from "./budgets/BudgetPage";
 import SingleBudgetPage from "./budgets/SingleBudgetPage";
 import IncomePage from "./incomes/IncomePage";
