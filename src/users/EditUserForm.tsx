@@ -25,12 +25,17 @@ const EditUserForm: React.FC<Props> = ({
   return (
     <div
       id="edit-user-info-form"
-      className="p-4 m-4 bg-gray-100 border-2 border-green-500 rounded-lg"
+      className="p-4 m-4 bg-gray-100 border-2 border-green-700 rounded-lg"
     >
-      <header>
-        <h1 className="text-center text-2xl text-green-600 font-bold">
+      <header className="text-center">
+        <h1 className="text-2xl sm:text-4xl text-green-700 font-bold underline">
           Edit Your Information Here
         </h1>
+        <small>
+          Here you may edit either your username, your email address, or both.
+          If you wish to change your password, you will need to log out and
+          click the "Reset Your Password Here" link.
+        </small>
       </header>
       <form onSubmit={handleSubmit}>
         <div id="username-input">

@@ -401,7 +401,7 @@ const NewIncomeForm: React.FC<Props> = ({
                   <header>
                     <h1 className="text-2xl">Date:</h1>
                   </header>
-                  <div className="sm:flex sm:justify-center w-full">
+                  <div className="flex justify-center w-full">
                     <div id="dayOfMonth-div" className="mx-2">
                       <label
                         htmlFor="dayOfMonth"

@@ -35,6 +35,7 @@ const LogIn = (): JSX.Element => {
     username: false,
     password: false,
   });
+  const [submitErrorFlash, setSubmitErrorFlash] = useState<boolean>(false);
 
   // this is used to grab an error for invalid username/password
   const { error }: UserContextInterface = useAppSelector(
@@ -85,7 +86,7 @@ const LogIn = (): JSX.Element => {
       const logInInfo: LogInInterface = {
         ...formData,
       };
-      if (handleLogInSubmitErrors(logInInfo, setLogInErrors)) {
+      if (handleLogInSubmitErrors(logInInfo, setLogInErrors) && !submitError) {
         localStorage.setItem(
           "userInputs",
           JSON.stringify({ ...formData, password: "" })
@@ -93,12 +94,14 @@ const LogIn = (): JSX.Element => {
         await dispatch(logInUser(logInInfo));
         localStorage.removeItem("userInputs");
       } else {
+        if (submitError) setSubmitErrorFlash(true);
         if (logInErrors.username || formData.username === "")
           setFlashInput((flash) => ({ ...flash, username: true }));
         if (logInErrors.password || formData.password === "")
           setFlashInput((flash) => ({ ...flash, password: true }));
         setTimeout(() => {
           setFlashInput({ username: false, password: false });
+          setSubmitErrorFlash(false);
         }, 500);
       }
     } catch (err: any) {
@@ -187,7 +190,11 @@ const LogIn = (): JSX.Element => {
               </button>
             </div>
             {submitError && (
-              <div className="error-message text-center text-red-500 text-xl font-bold">
+              <div
+                className={`error-message text-center text-red-500 text-xl font-bold ${
+                  submitErrorFlash ? "animate-blinkErrorText" : ""
+                }`}
+              >
                 <p>{submitError}</p>
               </div>
             )}
@@ -210,7 +217,7 @@ const LogIn = (): JSX.Element => {
               className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
               to="/resetPassword"
             >
-              Reset It Here!
+              Reset Your Password Here!
             </Link>
           </p>
         </div>
