@@ -3,7 +3,14 @@ import { isEmail } from "validator";
 
 // returns custom string error if the username input value is empty on the reset password user info form
 const returnUsernameErrors = (value: string): string => {
-  return value.length === 0 ? "Username is Empty" : "";
+  if (value.length === 0) {
+    return "Username is Empty";
+  } else if (value.length > 0 && value.length < 6) {
+    return "Username must be more than 6 characters";
+  } else if (value.length > 30) {
+    return "Username must be less than 30 characters";
+  }
+  return "";
 };
 
 // returns custom string for the username input value errors n the reset password user info form

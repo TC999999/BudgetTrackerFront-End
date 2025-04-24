@@ -4,6 +4,7 @@ import {
   UserEditInterface,
   NewTransactionInterface,
 } from "../../interfaces/userInterfaces";
+import { SubmitUserInfoEdit } from "../../interfaces/authInterfaces";
 import { API_URL } from "../config";
 import axios from "axios";
 
@@ -40,6 +41,24 @@ export const addToAssets = createAsyncThunk<
       let res = await axios({
         method: "patch",
         url: `${API_URL}/users/update/assets`,
+        data: updateInfo,
+        withCredentials: true,
+      });
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data.error);
+    }
+  }
+);
+
+// updates a user's total assets based on the value in sent data
+export const editUser = createAsyncThunk<any, SubmitUserInfoEdit>(
+  "user/edit",
+  async (updateInfo = { _id: "", username: "", email: "" }, thunkAPI) => {
+    try {
+      let res = await axios({
+        method: "patch",
+        url: `${API_URL}/users/${updateInfo._id}/edit`,
         data: updateInfo,
         withCredentials: true,
       });

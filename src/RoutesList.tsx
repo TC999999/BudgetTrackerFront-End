@@ -5,6 +5,7 @@ import NotLoggedInRoutes from "./NotLoggedInRoutes";
 import NotFound from "./NotFound";
 import Error from "./Error";
 import HomePage from "./users/HomePage";
+import EditUser from "./users/EditUser";
 import TransactionHistory from "./transactions/TransactionHistory";
 import BudgetPage from "./budgets/BudgetPage";
 import SingleBudgetPage from "./budgets/SingleBudgetPage";
@@ -22,6 +23,7 @@ const RoutesList = (): JSX.Element => {
         <Route path="/resetPassword" element={<ResetPassword />} />
       </Route>
       <Route element={<ProtectedRoutes />}>
+        <Route path="/user/:id/edit" element={<EditUser />} />
         <Route path="/transactions/user/:id" element={<TransactionHistory />} />
         <Route path="/incomes/user/:id" element={<IncomePage />} />
         <Route path="/budgets">

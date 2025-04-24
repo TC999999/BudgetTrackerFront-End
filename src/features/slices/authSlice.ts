@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, logInUser, logOutUser } from "../actions/auth";
-import { getCurrentUser, addToAssets } from "../actions/users";
+import { getCurrentUser, addToAssets, editUser } from "../actions/users";
 import { AUTH_INITIAL_STATE } from "../config";
 import { ActionInterface } from "../../interfaces/miscTypes";
 
@@ -71,6 +71,9 @@ const authSlice = createSlice({
         state.userInfo.user = AUTH_INITIAL_STATE.userInfo.user;
         state.userInfo.loading = false;
         state.userInfo.userExists = false;
+      })
+      .addCase(editUser.fulfilled, (state, action: any) => {
+        state.userInfo.user!.username = action.payload.user.username;
       })
       .addCase(logOutUser.pending, (state) => {
         state.userInfo.loading = true;

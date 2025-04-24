@@ -7,7 +7,7 @@ import { shallowEqual } from "react-redux";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import EditUserForm from "./EditUserForm";
+import AddTransactionForm from "../transactions/AddTransactionForm";
 import Recents from "./Recents";
 import UserCard from "./UserCard";
 import ExpenseAPI from "../apis/ExpenseAPI";
@@ -33,7 +33,7 @@ const Dashboard = (): JSX.Element => {
   // makes a request to the backend to retrieve all of a single user's 5 most recent budget
   // expenses and 5 most recent miscellaneous transactions
   useEffect((): void => {
-    const getRecentTransactions = async () => {
+    const getRecentTransactions = async (): Promise<void> => {
       dispatch(setPageLoading(true));
       try {
         if (user?._id) {
@@ -96,7 +96,7 @@ const Dashboard = (): JSX.Element => {
       <main>
         <UserCard user={user!} showForm={ShowForm} />
         {showAssetForm && (
-          <EditUserForm
+          <AddTransactionForm
             hideForm={HideForm}
             updateTransactions={updateTransactions}
           />

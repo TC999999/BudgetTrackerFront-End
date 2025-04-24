@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { LOADING_INITIAL_STATE } from "../config";
-import { addToAssets } from "../actions/users";
+import { addToAssets, editUser } from "../actions/users";
 import { ActionInterface } from "../../interfaces/miscTypes";
 
 const loadSlice = createSlice({
@@ -29,6 +29,15 @@ const loadSlice = createSlice({
         state.loadingInfo.formLoading = false;
       })
       .addCase(addToAssets.rejected, (state) => {
+        state.loadingInfo.formLoading = false;
+      })
+      .addCase(editUser.pending, (state) => {
+        state.loadingInfo.formLoading = true;
+      })
+      .addCase(editUser.fulfilled, (state) => {
+        state.loadingInfo.formLoading = false;
+      })
+      .addCase(editUser.rejected, (state) => {
         state.loadingInfo.formLoading = false;
       });
   },
