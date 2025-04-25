@@ -28,6 +28,7 @@ type Props = {
   handleCheckBox: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
+// form for a new user to register their account
 const SignUpForm: React.FC<Props> = ({
   formData,
   signUpErrors,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { removeUserError } from "../features/slices/authSlice";
 import { logInUser } from "../features/actions/auth";
 import {
@@ -13,7 +13,7 @@ import {
   handleLogInInputErrors,
   handleLogInSubmitErrors,
 } from "../helpers/handleLogInErrors";
-import { Link } from "react-router-dom";
+import LogInForm from "./LogInForm";
 import { shallowEqual } from "react-redux";
 
 // returns login form for users to login to their accounts
@@ -59,20 +59,26 @@ const LogIn = (): JSX.Element => {
 
   // handles changes to login form, if user makes any errors while inputting data, the frontend lets them know
   // Additionally, if the redux user status has an error, removes that error.
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (submitError) setSubmitError("");
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      if (submitError) setSubmitError("");
 
-    const { name, value } = e.target;
-    if (name === "username" || name === "password")
-      handleLogInInputErrors(name, value, setLogInErrors);
-    setFormData((data) => ({ ...data, [name]: value }));
-  };
+      const { name, value } = e.target;
+      if (name === "username" || name === "password")
+        handleLogInInputErrors(name, value, setLogInErrors);
+      setFormData((data) => ({ ...data, [name]: value }));
+    },
+    [submitError, formData, logInErrors]
+  );
 
   // updates form data state when the user checks or unchecks the checkbox that this is a trusted device
-  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name } = e.target;
-    setFormData((data) => ({ ...data, [name]: e.target.checked }));
-  };
+  const handleCheckBox = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const { name } = e.target;
+      setFormData((data) => ({ ...data, [name]: e.target.checked }));
+    },
+    [formData]
+  );
 
   // submits login information and retrieves user data. If there are any errors in the inputs (username has
   // spaces between characters or password length too short), does not submit data and the errorful inputs
@@ -80,149 +86,52 @@ const LogIn = (): JSX.Element => {
   // Additionally, temporarily sets username info into local storage in case username and password is invalid since
   // submitting login form causes page to rerender and formdata to clear so user does not need to reenter
   // username.
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    try {
-      const logInInfo: LogInInterface = {
-        ...formData,
-      };
-      if (handleLogInSubmitErrors(logInInfo, setLogInErrors) && !submitError) {
-        localStorage.setItem(
-          "userInputs",
-          JSON.stringify({ ...formData, password: "" })
-        );
-        await dispatch(logInUser(logInInfo));
-        localStorage.removeItem("userInputs");
-      } else {
-        if (submitError) setSubmitErrorFlash(true);
-        if (logInErrors.username || formData.username === "")
-          setFlashInput((flash) => ({ ...flash, username: true }));
-        if (logInErrors.password || formData.password === "")
-          setFlashInput((flash) => ({ ...flash, password: true }));
-        setTimeout(() => {
-          setFlashInput({ username: false, password: false });
-          setSubmitErrorFlash(false);
-        }, 500);
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent): Promise<void> => {
+      e.preventDefault();
+      try {
+        const logInInfo: LogInInterface = {
+          ...formData,
+        };
+        if (
+          handleLogInSubmitErrors(logInInfo, setLogInErrors) &&
+          !submitError
+        ) {
+          localStorage.setItem(
+            "userInputs",
+            JSON.stringify({ ...formData, password: "" })
+          );
+          await dispatch(logInUser(logInInfo));
+          localStorage.removeItem("userInputs");
+        } else {
+          if (submitError) setSubmitErrorFlash(true);
+          if (logInErrors.username || formData.username === "")
+            setFlashInput((flash) => ({ ...flash, username: true }));
+          if (logInErrors.password || formData.password === "")
+            setFlashInput((flash) => ({ ...flash, password: true }));
+          setTimeout(() => {
+            setFlashInput({ username: false, password: false });
+            setSubmitErrorFlash(false);
+          }, 500);
+        }
+      } catch (err: any) {
+        console.log(err);
       }
-    } catch (err: any) {
-      console.log(err);
-    }
-  };
+    },
+    [formData, submitError, logInErrors, flashInput, submitErrorFlash]
+  );
 
   return (
-    <div
-      tabIndex={-1}
-      className="login-page-div bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full"
-    >
-      <div className="login-page relative w-full p-4 max-w-md max-h-full">
-        <div className="login-form relative p-10 bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full">
-          <h1 className="text-3xl font-bold underline">Log in Here!</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="username-div">
-              <label className="text-lg block" htmlFor="username">
-                Username:{" "}
-              </label>
-              <input
-                className={`input 
-                ${logInErrors.username ? "input-error" : "input-valid"} ${
-                  flashInput.username && "animate-blinkError"
-                }`}
-                id="login_username"
-                type="text"
-                name="username"
-                placeholder="type your username here"
-                value={formData.username}
-                onChange={handleChange}
-                maxLength={30}
-              />
-              {logInErrors.username && (
-                <div className="username-error text-red-600 font-bold">
-                  <p>{logInErrors.username}</p>
-                </div>
-              )}
-            </div>
-            <div className="password-div">
-              <label className="text-lg block" htmlFor="password">
-                Password:{" "}
-              </label>
-              <input
-                className={`input 
-                  ${logInErrors.password ? "input-error" : "input-valid"} ${
-                  flashInput.password && "animate-blinkError"
-                }`}
-                id="login_password"
-                type="password"
-                name="password"
-                placeholder="type your password here"
-                value={formData.password}
-                onChange={handleChange}
-                maxLength={20}
-              />
-              {logInErrors.password && (
-                <div className="password-error text-red-600 font-bold">
-                  <p>{logInErrors.password}</p>
-                </div>
-              )}
-            </div>
-            <div id="trusted-div" className="text-center">
-              <div className="flex justify-center">
-                <div className="flex items-center">
-                  <input
-                    className="form-checkbox checkbox checkbox-add"
-                    id="login_trusted"
-                    type="checkbox"
-                    name="trusted"
-                    checked={formData.trusted}
-                    onChange={handleCheckBox}
-                  />
-                  <label className="text-lg" htmlFor="trusted">
-                    Do You Trust This Device?
-                  </label>
-                </div>
-              </div>
-              <small>
-                (You will have a longer access session on trusted devices.)
-              </small>
-            </div>
-            <div className="button-div text-center m-2">
-              <button className="get-profile-button border-2 border-green-500 rounded-full bg-green-400 p-2 hover:bg-green-900 hover:text-white">
-                Log In!
-              </button>
-            </div>
-            {submitError && (
-              <div
-                className={`error-message text-center text-red-500 text-xl font-bold ${
-                  submitErrorFlash ? "animate-blinkErrorText" : ""
-                }`}
-              >
-                <p>{submitError}</p>
-              </div>
-            )}
-          </form>
-        </div>
-        <div id="alternate-links" className="text-center">
-          <p>
-            Not a user yet?{" "}
-            <Link
-              className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
-              to="/register"
-            >
-              Sign Up Here!
-            </Link>
-          </p>
-
-          <p>
-            Forget your password?{" "}
-            <Link
-              className="text-blue-900 hover:text-blue-500 hover:underline active:text-blue-300"
-              to="/resetPassword"
-            >
-              Reset Your Password Here!
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
+    <LogInForm
+      formData={formData}
+      logInErrors={logInErrors}
+      flashErrors={flashInput}
+      submitError={submitError}
+      submitErrorFlash={submitErrorFlash}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      handleCheckBox={handleCheckBox}
+    />
   );
 };
 
