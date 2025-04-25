@@ -252,7 +252,7 @@ const SignUpForm: React.FC<Props> = ({
           <div id="button-div" className="text-center">
             <button
               id="make-profile-button"
-              className="border-2 rounded-full border-green-500 bg-green-500 text-white  py-2 px-4 hover:bg-green-200 hover:text-black duration-150 active:bg-green-400"
+              className="border-2 rounded-full border-green-500 bg-green-500 text-white py-2 px-4 hover:bg-green-200 hover:text-black duration-150 active:bg-green-400"
             >
               Sign Up!
             </button>
