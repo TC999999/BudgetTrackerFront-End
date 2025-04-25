@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
 import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
-import BudgetForm from "./BudgetForm";
+import NewBudgetWindow from "./NewBudget";
 import BudgetList from "./BudgetList";
 import { makeBudgetList } from "../helpers/makeBudgetList";
 import {
@@ -128,7 +128,7 @@ const BudgetPage = (): JSX.Element => {
         </header>
 
         {showBudgetForm && (
-          <BudgetForm hideForm={HideForm} addBudget={addBudget} />
+          <NewBudgetWindow hideForm={HideForm} addBudget={addBudget} />
         )}
 
         <BudgetList allBudgets={budgetList} />

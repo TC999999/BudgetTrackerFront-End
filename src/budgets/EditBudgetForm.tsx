@@ -246,7 +246,7 @@ const EditBudgetForm: React.FC<Props> = ({
         <div className="edit-budget-form-div text-center modal-layer-3">
           <header>
             <h2 className="text-3xl text-green-800 font-bold underline">
-              Edit {budget.title} Budget
+              Update {budget.title} Budget
             </h2>
           </header>
           <div className="info-and-form sm:flex sm:justify-center p-4">

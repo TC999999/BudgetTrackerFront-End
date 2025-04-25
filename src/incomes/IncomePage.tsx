@@ -8,7 +8,7 @@ import { Income } from "../interfaces/incomeInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
-import NewIncomeForm from "./NewIncomeForm";
+import NewIncomeWindow from "./NewIncome";
 import Skeleton from "react-loading-skeleton";
 import { toast, Id } from "react-toastify";
 
@@ -122,7 +122,7 @@ const IncomePage = (): JSX.Element => {
       </header>
       <main>
         {showIncomeForm && (
-          <NewIncomeForm
+          <NewIncomeWindow
             hideIncomeFormState={hideIncomeFormState}
             addToIncomeState={addToIncomeState}
           />
