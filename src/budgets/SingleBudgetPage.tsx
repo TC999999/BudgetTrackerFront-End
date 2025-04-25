@@ -6,7 +6,7 @@ import BudgetPageCard from "./BudgetPageCard";
 import ExpenseForm from "../expenses/ExpenseForm";
 import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
-import EditBudgetForm from "./EditBudgetForm";
+import EditBudgetWindow from "./EditBudget";
 import { addNewExpense } from "../helpers/addNewExpense";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
@@ -168,7 +168,7 @@ const SingleBudgetPage = (): JSX.Element => {
       <main>
         <BudgetPageCard budget={currentBudget} />
         {formsState.showEditForm && (
-          <EditBudgetForm
+          <EditBudgetWindow
             hideEditForm={changeFormState}
             budget={currentBudget}
             updateBudget={updateBudget}

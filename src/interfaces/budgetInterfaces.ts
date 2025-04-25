@@ -55,6 +55,10 @@ export type BudgetFlashErrors = {
   moneyAllocated: boolean;
 };
 
+export type UpdateBudgetFlashErrors = {
+  title: boolean;
+};
+
 export type UpdateBudgetFormErrors = {
   title: string;
   addedMoney: string;
