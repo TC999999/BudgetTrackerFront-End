@@ -18,7 +18,7 @@ const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
   );
   return (
     <div>
-      {!pageLoading && allBudgets.length && (
+      {!pageLoading && allBudgets.length > 0 && (
         <ul
           id="budget-list"
           className="stripedBudgets flex flex-wrap justify-center"
@@ -38,7 +38,7 @@ const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
         </ul>
       )}
 
-      {!pageLoading && allBudgets.length === 0 && (
+      {!pageLoading && !allBudgets.length && (
         <p className="text-3xl m-4 text-center italic">
           You currently have no budgets
         </p>

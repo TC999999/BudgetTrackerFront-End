@@ -182,7 +182,7 @@ const ExpenseList: React.FC<Props> = ({
           </div>
         )}
 
-        {!pageLoading && expensesList.length === 0 && (
+        {!pageLoading && !expensesList.length && (
           <div className="no-expenses text-center text-xl p-4">
             <p className="italic"> No Expenses Yet</p>
           </div>

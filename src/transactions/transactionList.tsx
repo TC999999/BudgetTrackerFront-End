@@ -33,7 +33,7 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
       </header>
 
       <div id="transaction-card-list" className="stripedTransactions">
-        {!pageLoading && transactions.length && (
+        {!pageLoading && transactions.length > 0 && (
           <div>
             {transactions.map((transaction) => {
               return (
@@ -52,7 +52,7 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
           </div>
         )}
 
-        {!pageLoading && transactions.length === 0 && (
+        {!pageLoading && !transactions.length && (
           <div id="no-transactions" className="text-center text-xl p-2">
             <p className="italic">No Transactions Yet</p>
           </div>

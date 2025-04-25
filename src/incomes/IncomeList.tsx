@@ -138,7 +138,7 @@ const IncomeList: React.FC<Props> = ({
       )}
 
       <div>
-        {!pageLoading && incomeList.length && (
+        {!pageLoading && incomeList.length > 0 && (
           <ul id="income-list">
             {incomeList.map((i) => (
               <li key={`income-${i._id}`}>
@@ -154,7 +154,7 @@ const IncomeList: React.FC<Props> = ({
 
         {pageLoading && <IncomeSkeleton cards={3} />}
 
-        {!pageLoading && incomeList.length === 0 && (
+        {!pageLoading && !incomeList.length && (
           <p className="text-3xl m-4 text-center italic">
             You currently have no incomes
           </p>
