@@ -1,14 +1,14 @@
 import { useState, SyntheticEvent } from "react";
 import { Tab, Box } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { ExpenseInterface } from "../interfaces/expenseInterfaces";
+import { RecentExpense } from "../interfaces/expenseInterfaces";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionList from "../transactions/TransactionList";
 import ExpenseList from "../expenses/ExpenseList";
 import ListHeader from "../ListHeader";
 
 type Props = {
-  expenses: ExpenseInterface[];
+  expenses: RecentExpense[];
   transactions: Transaction[];
 };
 

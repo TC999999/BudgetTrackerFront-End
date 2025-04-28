@@ -1,13 +1,19 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
+import { useAppSelector } from "../features/hooks";
 import { makeDateString, dateInfo } from "../helpers/makeDateString";
-import { ExpenseInterface } from "../interfaces/expenseInterfaces";
+import {
+  ExpenseInterface,
+  RecentExpense,
+} from "../interfaces/expenseInterfaces";
 import { infoInterface } from "../interfaces/miscTypes";
 import { FaTrashAlt } from "react-icons/fa";
+import { shallowEqual } from "react-redux";
 
 // If isFrontPage is true, shows name of budget; if not, shows
 // delete button instead
 type Props = {
-  expense: ExpenseInterface;
+  expense: ExpenseInterface | RecentExpense;
   isFrontPage: boolean;
 
   showSecondPrompt: (
@@ -27,6 +33,11 @@ const ExpenseCard: React.FC<Props> = ({
   //    time
   const dateTime = useRef<dateInfo>(makeDateString(expense.date));
 
+  const userID: string = useAppSelector(
+    (store) => store.user.userInfo.user?._id!,
+    shallowEqual
+  );
+
   return (
     <div className="expense-card grid grid-cols-4 p-4">
       <div className="expense-title p-1 text-sm sm:text-base duration-150 text-center content-center">
@@ -41,9 +52,14 @@ const ExpenseCard: React.FC<Props> = ({
         <p>{dateTime.current.time}</p>
       </div>
 
-      {isFrontPage ? (
+      {isFrontPage && "budget" in expense && "budgetID" in expense ? (
         <div className="expense-budget-title p-1 text-sm sm:text-base duration-150 text-center content-center">
-          {expense.budget}
+          <Link
+            to={`/budgets/${expense.budgetID}/user/${userID}`}
+            className="text-green-600 underline hover:text-green-400"
+          >
+            {expense.budget}
+          </Link>
         </div>
       ) : (
         <div className="delete-expense-div text-center content-center">

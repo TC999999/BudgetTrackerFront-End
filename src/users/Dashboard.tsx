@@ -5,7 +5,7 @@ import { AppDispatch } from "../features/store";
 import { setPageLoading, setLoadError } from "../features/slices/loadSlice";
 import { shallowEqual } from "react-redux";
 import { Transaction } from "../interfaces/transactionInterfaces";
-import { ExpenseInterface } from "../interfaces/expenseInterfaces";
+import { RecentExpense } from "../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import AddTransactionForm from "../transactions/AddTransactionForm";
 import Recents from "./Recents";
@@ -28,7 +28,7 @@ const Dashboard = (): JSX.Element => {
     toast.error("You have reached the maximum asset value");
   const [showAssetForm, setShowAssetForm] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
+  const [expenses, setExpenses] = useState<RecentExpense[]>([]);
 
   // makes a request to the backend to retrieve all of a single user's 5 most recent budget
   // expenses and 5 most recent miscellaneous transactions
@@ -40,7 +40,7 @@ const Dashboard = (): JSX.Element => {
           const recentTransactions: Transaction[] =
             await TransactionAPI.getRecentUserTransactions(user._id);
           setTransactions(recentTransactions);
-          const recentExpenses: ExpenseInterface[] =
+          const recentExpenses: RecentExpense[] =
             await ExpenseAPI.getRecentUserExpenses(user._id);
           setExpenses(recentExpenses);
         }

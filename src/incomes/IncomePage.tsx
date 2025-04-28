@@ -8,6 +8,7 @@ import ListHeader from "../ListHeader";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
 import NewIncomeWindow from "./NewIncome";
+import IncomePageButtons from "./IncomePageButtons";
 import { toast, Id } from "react-toastify";
 
 // Shows the list of incomes the current user has
@@ -75,16 +76,17 @@ const IncomePage = (): JSX.Element => {
   );
 
   // updates state to show new income form unless the user already has 3 incomes
-  const showIncomeFormState = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    if (incomes.length < 3) {
-      setShowIncomeForm(true);
-    } else {
-      notify();
-    }
-  };
+  const showIncomeFormState = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      if (incomes.length < 3) {
+        setShowIncomeForm(true);
+      } else {
+        notify();
+      }
+    },
+    [incomes, showIncomeForm]
+  );
 
   // updates state to hide new income form
   const hideIncomeFormState = useCallback(
@@ -99,20 +101,10 @@ const IncomePage = (): JSX.Element => {
 
   return (
     <div id="income-page">
-      <header id="additional-nav-header">
-        <nav className="buttons flex justify-around w-full">
-          <button
-            className={`nav-button border-green-500 bg-green-400 ${
-              incomes.length < 3
-                ? "hover:bg-green-700 hover:text-white active:bg-green-500 duration-150"
-                : "cursor-not-allowed"
-            }`}
-            onClick={(e) => showIncomeFormState(e)}
-          >
-            Add New Income
-          </button>
-        </nav>
-      </header>
+      <IncomePageButtons
+        incomeListLength={incomes.length}
+        showIncomeFormState={showIncomeFormState}
+      />
       <main>
         {showIncomeForm && (
           <NewIncomeWindow

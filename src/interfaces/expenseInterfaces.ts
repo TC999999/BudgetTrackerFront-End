@@ -1,8 +1,8 @@
-export interface newExpenseInterface {
+export type newExpenseInterface = {
   title: string;
   transaction: number;
   date: string;
-}
+};
 
 export type submitNewExpense = {
   budgetID: string;
@@ -11,10 +11,12 @@ export type submitNewExpense = {
   date: string;
 };
 
-export interface ExpenseInterface extends newExpenseInterface {
-  budget?: string;
+export type ExpenseInterface = {
   _id: string;
-}
+  title: string;
+  transaction: number;
+  date: string;
+};
 
 export type deleteExpenseInterface = {
   _id: string;
@@ -26,4 +28,13 @@ export type ExpenseFormErrors = {
   title: string;
   transaction: string;
   date: string;
+};
+
+export type RecentExpense = {
+  _id: string;
+  title: string;
+  transaction: number;
+  date: string;
+  budget: string;
+  budgetID: string;
 };

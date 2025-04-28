@@ -4,6 +4,7 @@ import TableSkeletonCard from "../skeleton/TableSkeletonCard";
 import SecondPrompt from "../SecondPrompt";
 import {
   ExpenseInterface,
+  RecentExpense,
   deleteExpenseInterface,
 } from "../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
@@ -19,7 +20,7 @@ import { loading } from "../interfaces/loadingInterfaces";
 
 // isFrontPage prop tells frontend if user is on dashboard or single budget page; passes down to expense card.
 type Props = {
-  expensesList: ExpenseInterface[];
+  expensesList: ExpenseInterface[] | RecentExpense[];
   isFrontPage: boolean;
   budgetID?: string;
   filterExpense?: (id: string) => void;
