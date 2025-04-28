@@ -17,7 +17,7 @@ const BudgetList: React.FC<Props> = ({ allBudgets }): JSX.Element => {
     shallowEqual
   );
   return (
-    <div>
+    <div className="m-2">
       {!pageLoading && allBudgets.length > 0 && (
         <ul
           id="budget-list"

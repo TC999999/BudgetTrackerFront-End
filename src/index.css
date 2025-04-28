@@ -80,11 +80,11 @@
   }
 
   .stripedBudgets li:nth-child(even) .budget-card {
-    @apply bg-green-500 border-white text-white;
+    @apply bg-green-500 border-white text-white hover:bg-green-600 hover:ring-emerald-500/50;
   }
 
-  .stripedBudgets li:nth-child(even) h3.budget-title {
-    @apply hover:text-gray-500 active:text-gray-400;
+  .stripedBudgets li.budget-card-border {
+    @apply w-5/6 md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5;
   }
 
   .stripedBudgets li:nth-child(even) progress.budget-progress-bar {
