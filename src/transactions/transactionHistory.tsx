@@ -5,6 +5,7 @@ import { useAppDispatch } from "../features/hooks";
 import { AppDispatch } from "../features/store";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionList from "./TransactionList";
+import ListHeader from "../ListHeader";
 import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
 
 // returns a list of all miscellaneous transactions the user has made
@@ -40,19 +41,7 @@ const TransactionHistory = (): JSX.Element => {
   return (
     <div className="transaction-history-page">
       <section>
-        <header className="text-center m-2">
-          <h2
-            id="transaction-list-title"
-            className="text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150"
-          >
-            Full Transaction History
-          </h2>
-          <small>
-            Here are all transactions made from funds directly from your
-            savings. They cannot be edited or deleted. They may include incomes
-            that you do not recieve anymore.
-          </small>
-        </header>
+        <ListHeader type="Transactions" itemListLength={transactions.length} />
         <TransactionList transactions={transactions} />
       </section>
     </div>

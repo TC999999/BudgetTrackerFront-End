@@ -1,15 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate, NavigateFunction } from "react-router-dom";
-import { shallowEqual } from "react-redux";
 import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
-import { useAppDispatch, useAppSelector } from "../features/hooks";
+import { useAppDispatch } from "../features/hooks";
 import { AppDispatch } from "../features/store";
 import { Income } from "../interfaces/incomeInterfaces";
-import { loading } from "../interfaces/loadingInterfaces";
+import ListHeader from "../ListHeader";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
 import NewIncomeWindow from "./NewIncome";
-import Skeleton from "react-loading-skeleton";
 import { toast, Id } from "react-toastify";
 
 // Shows the list of incomes the current user has
@@ -19,11 +17,6 @@ const IncomePage = (): JSX.Element => {
   const navigate: NavigateFunction = useNavigate();
   const notify = (): Id =>
     toast.error("You have reached the maximum number of incomes");
-
-  const { pageLoading }: loading = useAppSelector(
-    (store) => store.loading.loadingInfo,
-    shallowEqual
-  );
 
   // state that shows the form to add a new income
   const [showIncomeForm, setShowIncomeForm] = useState<boolean>(false);
@@ -127,20 +120,7 @@ const IncomePage = (): JSX.Element => {
             addToIncomeState={addToIncomeState}
           />
         )}
-        <header className="text-center">
-          <div className="text-xl sm:text-3xl text-green-700 font-bold">
-            <h1 className="underline">Your Current Incomes</h1>
-            <h2>
-              {pageLoading ? <Skeleton width={60} /> : `${incomes.length}/3`}
-            </h2>
-          </div>
-          <small>
-            Here you may add, update, or delete any sources of income you may
-            have. Each of below income values will be added to your total
-            savings automatically on the time noted on "Next Received On". You
-            are allowed a maximum of three incomes.
-          </small>
-        </header>
+        <ListHeader type="Incomes" itemListLength={incomes.length} />
         <IncomeList
           incomeList={incomes}
           removeFromIncomeState={removeFromIncomeState}

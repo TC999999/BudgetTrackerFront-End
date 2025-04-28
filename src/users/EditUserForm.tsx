@@ -31,7 +31,7 @@ const EditUserForm: React.FC<Props> = ({
         <h1 className="text-2xl sm:text-4xl text-green-700 font-bold underline">
           Edit Your Information Here
         </h1>
-        <small>
+        <small className="text-sm sm:text-base">
           Here you may edit either your username, your email address, or both.
           If you wish to change your password, you will need to log out and
           click the "Reset Your Password Here" link.
@@ -39,7 +39,7 @@ const EditUserForm: React.FC<Props> = ({
       </header>
       <form onSubmit={handleSubmit}>
         <div id="username-input">
-          <label className="text-lg block" htmlFor="username">
+          <label className="text-base smt:text-lg block" htmlFor="username">
             Username:
           </label>
           <input
@@ -58,7 +58,10 @@ const EditUserForm: React.FC<Props> = ({
           >
             {errors.username}
           </div>
-          <div id="username-instructions" className="flex flex-col">
+          <div
+            id="username-instructions"
+            className="flex flex-col text-sm sm:text-base"
+          >
             <small>Your new username must be between 6-30 characters.</small>
             <small>Your new username may include letters and numbers.</small>
             <small>
@@ -68,7 +71,7 @@ const EditUserForm: React.FC<Props> = ({
           </div>
         </div>
         <div id="email-input">
-          <label className="text-lg block" htmlFor="email">
+          <label className="text-base smt:text-lg  block" htmlFor="email">
             Email:
           </label>
           <input
@@ -85,8 +88,8 @@ const EditUserForm: React.FC<Props> = ({
           <div id="email-errors" className="text-center text-red-600 font-bold">
             {errors.email}
           </div>
-          <div id="email-instructions" className="text-sm">
-            <p>Your new email address must be valid</p>
+          <div id="email-instructions" className="text-sm sm:text-base">
+            <small>Your new email address must be valid</small>
           </div>
         </div>
 
