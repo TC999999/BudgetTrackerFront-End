@@ -5,8 +5,14 @@ import { loading } from "./interfaces/loadingInterfaces";
 import Skeleton from "react-loading-skeleton";
 
 type Props = {
-  type: "Incomes" | "Transactions" | "Budgets";
-  itemListLength: number;
+  type:
+    | "Incomes"
+    | "Transactions"
+    | "Recent Transactions"
+    | "Budgets"
+    | "Expenses"
+    | "Recent Expenses";
+  itemListLength?: number;
 };
 
 // header for full page list components (incomes, transactions, budgets)
@@ -26,6 +32,13 @@ const ListHeader: React.FC<Props> = ({ type, itemListLength }) => {
           return "All Current Budgets";
         case "Transactions":
           return "Full Transaction History";
+        case "Recent Transactions":
+          return "Recent Miscellaneous Transactions";
+        case "Expenses":
+          return "Expenses Made";
+
+        case "Recent Expenses":
+          return "Recent Budget Expenses";
       }
     };
     return makeTitle();
@@ -39,7 +52,7 @@ const ListHeader: React.FC<Props> = ({ type, itemListLength }) => {
           return `(${itemListLength}/3)`;
         case "Budgets":
           return `(${itemListLength}/10)`;
-        case "Transactions":
+        default:
           return "";
       }
     };
@@ -56,6 +69,12 @@ const ListHeader: React.FC<Props> = ({ type, itemListLength }) => {
           return "Here you may set aside funds in order to make plans for future budgets or record current budgets you may have. You are allowed a maximum of ten budgets.";
         case "Transactions":
           return "Here are all transactions made from funds directly from your savings. They cannot be edited or deleted. They may include incomes that you do not recieve anymore";
+        case "Recent Transactions":
+          return "Below are your most recent transactions (≤5), which includes both that you have documented yourself and from your incomes: past and present.";
+        case "Expenses":
+          return "Below are all expenses made using funds from this budget. The total added value of all below expenses should not exceed the total funds allocated for this budget.";
+        case "Recent Expenses":
+          return " Below are your most recent budget expenses (≤5). These only include expenses made using funds from all budgets you have presently.";
       }
     };
     return returnMessage();
@@ -65,7 +84,7 @@ const ListHeader: React.FC<Props> = ({ type, itemListLength }) => {
     <header className="text-center">
       <div className="text-2xl sm:text-3xl text-emerald-500 font-bold">
         <h1 className="underline">{constructTitle}</h1>
-        {type !== "Transactions" && (
+        {(type === "Incomes" || type === "Budgets") && (
           <h2>
             {pageLoading ? <Skeleton width={60} /> : <p>{maxListLength}</p>}
           </h2>

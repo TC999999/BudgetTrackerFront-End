@@ -5,6 +5,7 @@ import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import TransactionList from "../transactions/TransactionList";
 import ExpenseList from "../expenses/ExpenseList";
+import ListHeader from "../ListHeader";
 
 type Props = {
   expenses: ExpenseInterface[];
@@ -51,16 +52,7 @@ const Recents: React.FC<Props> = ({ expenses, transactions }) => {
             id="recent-transactions-list"
             className="transition duration-150"
           >
-            <header className="text-center mb-2">
-              <h2 id="recent-transactions-list-title" className="list-header">
-                Recent Miscellaneous Transactions
-              </h2>
-              <small>
-                Below are your most recent transactions (≤5), which includes
-                both that you have documented yourself and from your incomes:
-                past and present.
-              </small>
-            </header>
+            <ListHeader type="Recent Transactions" />
             <TransactionList transactions={transactions} />
           </section>
         </TabPanel>
@@ -69,16 +61,7 @@ const Recents: React.FC<Props> = ({ expenses, transactions }) => {
             id="recent-expenses-list"
             className="transition duration-150"
           >
-            <header className="text-center mb-2">
-              <h2 id="recent-expenses-list-title" className="list-header">
-                Recent Budget Expenses
-              </h2>
-              <small>
-                Below are your most recent budget expenses (≤5). These only
-                include expenses made using funds from all budgets you have
-                presently.
-              </small>
-            </header>
+            <ListHeader type="Recent Expenses" />
             <ExpenseList expensesList={expenses} isFrontPage={true} />
           </section>
         </TabPanel>

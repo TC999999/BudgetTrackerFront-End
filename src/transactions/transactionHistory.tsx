@@ -41,7 +41,7 @@ const TransactionHistory = (): JSX.Element => {
   return (
     <div className="transaction-history-page">
       <section>
-        <ListHeader type="Transactions" itemListLength={transactions.length} />
+        <ListHeader type="Transactions" />
         <TransactionList transactions={transactions} />
       </section>
     </div>

@@ -7,6 +7,8 @@ import ExpenseForm from "../expenses/ExpenseForm";
 import ExpenseList from "../expenses/ExpenseList";
 import DeleteBudgetForm from "./DeleteBudgetForm";
 import EditBudgetWindow from "./EditBudget";
+import SingleBudgetButtons from "./SingleBudgetButtons";
+import ListHeader from "../ListHeader";
 import { addNewExpense } from "../helpers/addNewExpense";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
@@ -69,25 +71,28 @@ const SingleBudgetPage = (): JSX.Element => {
 
   // sets state for which form should be shown. Will not show expense form if total budget funds and money
   // spent with budget funds are equal
-  const showFormState = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-    form: "showExpenseForm" | "showDeleteForm" | "showEditForm"
-  ): void => {
-    e.preventDefault();
-    if (
-      form === "showExpenseForm" &&
-      formsState.showExpenseForm === false &&
-      currentBudget &&
-      +currentBudget.moneyAllocated === +currentBudget.moneySpent
-    ) {
-      notify("You have used all of the allocated funds for this budget");
-    } else {
-      setFormsState((formState) => ({
-        ...formState,
-        [form]: !formsState[form],
-      }));
-    }
-  };
+  const showFormState = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+      form: "showExpenseForm" | "showDeleteForm" | "showEditForm"
+    ): void => {
+      e.preventDefault();
+      if (
+        form === "showExpenseForm" &&
+        formsState.showExpenseForm === false &&
+        currentBudget &&
+        +currentBudget.moneyAllocated === +currentBudget.moneySpent
+      ) {
+        notify("You have used all of the allocated funds for this budget");
+      } else {
+        setFormsState((formState) => ({
+          ...formState,
+          [form]: !formsState[form],
+        }));
+      }
+    },
+    [formsState, currentBudget]
+  );
 
   // callback function to hide forms when cancelling or after submission
   const changeFormState = useCallback(
@@ -135,36 +140,10 @@ const SingleBudgetPage = (): JSX.Element => {
 
   return (
     <div id="single-budget-page">
-      <header id="additional-nav-header">
-        <nav id="buttons" className="flex justify-around w-full">
-          <button
-            id="edit-budget-form-button"
-            className="nav-button border-orange-300 text-white bg-orange-400 hover:bg-orange-200 hover:text-black active:bg-orange-300"
-            onClick={(e) => showFormState(e, "showEditForm")}
-          >
-            Update Budget
-          </button>
-          <button
-            id="delete-budget-form-button"
-            className="nav-button border-red-500 bg-red-600 hover:bg-red-400 hover:text-white active:bg-red-100"
-            onClick={(e) => showFormState(e, "showDeleteForm")}
-          >
-            Delete Budget
-          </button>
-          <button
-            id="add-expense-form-button"
-            className={`nav-button border-green-300 bg-green-500
-              ${
-                +currentBudget.moneyAllocated === +currentBudget.moneySpent
-                  ? "cursor-not-allowed"
-                  : "hover:bg-green-400 hover:text-white active:bg-green-200"
-              }`}
-            onClick={(e) => showFormState(e, "showExpenseForm")}
-          >
-            Add Expense
-          </button>
-        </nav>
-      </header>
+      <SingleBudgetButtons
+        currentBudget={currentBudget}
+        showFormState={showFormState}
+      />
       <main>
         <BudgetPageCard budget={currentBudget} />
         {formsState.showEditForm && (
@@ -189,19 +168,7 @@ const SingleBudgetPage = (): JSX.Element => {
           />
         )}
         <section id="budget-expense-list">
-          <header className="text-center m-2">
-            <h1
-              id="budget-expense-list-title"
-              className="text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold duration-150"
-            >
-              Expenses Made
-            </h1>
-            <small>
-              Below are all expenses made using funds from this budget. The
-              total added value of all below expenses should not exceed the
-              total funds allocated for this budget.
-            </small>
-          </header>
+          <ListHeader type="Expenses" />
           <ExpenseList
             expensesList={expenses}
             isFrontPage={false}

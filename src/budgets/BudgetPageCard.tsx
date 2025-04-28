@@ -44,20 +44,17 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
         </p>
       </div>
       <div className="budget-progress-bar-div my-4 flex justify-center">
-        {/* {pageLoading ? (
-          <Skeleton width={"100%"} />
+        {pageLoading ? (
+          <div className="block w-full h-full">
+            <Skeleton />
+          </div>
         ) : (
           <progress
             className="budget-progress-bar w-full [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-green-400 [&::-moz-progress-bar]:bg-green-400"
             max={budget?.moneyAllocated}
             value={budget?.moneySpent}
           ></progress>
-        )} */}
-        <progress
-          className="budget-progress-bar w-full [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-green-400 [&::-moz-progress-bar]:bg-green-400"
-          max={budget?.moneyAllocated}
-          value={budget?.moneySpent}
-        ></progress>
+        )}
       </div>
       <div className="fraction-information grid grid-cols-5">
         <div className="budget-money-spend-div text-center col-start-1 col-end-3">
@@ -74,7 +71,7 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
         </div>
       </div>
       <div className="text-center">
-        <small>
+        <small className="text-xs sm:text-sm transition duration-150">
           The money spent using funds from this budget will not be able to
           exceed the total funds allocated from this budget. Additionally, the
           money remaining in the total funds allocated will not be able to go
