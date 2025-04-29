@@ -1,10 +1,10 @@
-import { UserEditInterface } from "../interfaces/userInterfaces";
+import { NewTransactionUI } from "../interfaces/transactionInterfaces";
 import { Income, SubmitUpdateIncome } from "../interfaces/incomeInterfaces";
 import { BudgetEditInterface } from "../interfaces/budgetInterfaces";
 
 // returns custom strings for notifications when updating users' total assets
 export const createUpdateUserString = (
-  submitData: UserEditInterface
+  submitData: NewTransactionUI
 ): string => {
   const addOrRemove: string =
     submitData.value >= 0

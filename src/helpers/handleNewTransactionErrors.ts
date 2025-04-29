@@ -1,7 +1,7 @@
 import {
-  UserEditErrors,
-  UserEditInterface,
-} from "../interfaces/userInterfaces";
+  NewTransactionErrors,
+  NewTransactionUI,
+} from "../interfaces/transactionInterfaces";
 
 // returns custom strings for input errors in transaction form title
 const handleTransactionTitleErrors = (title: string): string => {
@@ -48,7 +48,7 @@ const handleAddErrors = (newAssets: number, maxVal: number): string => {
 // updates user update form errors state when a radio button is selected
 export const handleUserComparisons = (
   newAssets: number,
-  setter: React.Dispatch<React.SetStateAction<UserEditErrors>>,
+  setter: React.Dispatch<React.SetStateAction<NewTransactionErrors>>,
   operation: string,
   maxVal: number,
   totalAssets: number
@@ -79,7 +79,7 @@ export const handleUserComparisons = (
 export const handleUserEditInputErrors = (
   name: "title" | "value" | "date",
   value: string | number,
-  setter: React.Dispatch<React.SetStateAction<UserEditErrors>>
+  setter: React.Dispatch<React.SetStateAction<NewTransactionErrors>>
 ) => {
   switch (name) {
     case "title":
@@ -108,8 +108,8 @@ export const handleUserEditInputErrors = (
 // updates user update form errors state when the form is submitted; returns true if all inputs are error
 // free
 export const handleEditUserSubmitErrors = (
-  newAssetInfo: UserEditInterface,
-  setter: React.Dispatch<React.SetStateAction<UserEditErrors>>
+  newAssetInfo: NewTransactionUI,
+  setter: React.Dispatch<React.SetStateAction<NewTransactionErrors>>
 ): boolean => {
   handleUserEditInputErrors("value", newAssetInfo.value, setter);
   handleUserEditInputErrors("title", newAssetInfo.title, setter);

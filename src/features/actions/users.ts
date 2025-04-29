@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   UserInfoInterface,
-  UserEditInterface,
   NewTransactionInterface,
 } from "../../interfaces/userInterfaces";
+import { NewTransactionUI } from "../../interfaces/transactionInterfaces";
 import { SubmitUserInfoEdit } from "../../interfaces/authInterfaces";
 import { API_URL } from "../config";
 import axios from "axios";
@@ -30,11 +30,11 @@ export const getCurrentUser = createAsyncThunk<UserInfoInterface, any>(
 // updates a user's total assets based on the value in sent data
 export const addToAssets = createAsyncThunk<
   NewTransactionInterface,
-  UserEditInterface
+  NewTransactionUI
 >(
   "user/update/assets",
   async (
-    updateInfo: UserEditInterface = { title: "", value: 0, date: "" },
+    updateInfo: NewTransactionUI = { title: "", value: 0, date: "" },
     thunkAPI
   ) => {
     try {

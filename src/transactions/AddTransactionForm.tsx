@@ -1,27 +1,15 @@
-import { useState, useCallback, useRef, useMemo } from "react";
-import {
-  UserEditInterface,
-  UserEditErrors,
-  UserContextInterface,
-} from "../interfaces/userInterfaces";
-import { error } from "../interfaces/miscTypes";
 import { loading } from "../interfaces/loadingInterfaces";
-import { Transaction } from "../interfaces/transactionInterfaces";
-import KeyPad from "../KeyPad";
-import { useAppSelector, useAppDispatch } from "../features/hooks";
-import { AppDispatch } from "../features/store";
-import { shallowEqual } from "react-redux";
-import { addToAssets } from "../features/actions/users";
-import { currencyConverter, numPop } from "../helpers/currencyConverter";
-import { calculateNewTotalAssetsUserDashboard } from "../helpers/calculateNewTotalAssets";
 import {
-  handleUserComparisons,
-  handleUserEditInputErrors,
-  handleEditUserSubmitErrors,
-} from "../helpers/handleUserEditErrors";
-import { createUpdateUserString } from "../helpers/createNotificationString";
+  Transaction,
+  NewTransaction,
+  NewTransactionErrors,
+  NewTransactionFlashErrors,
+} from "../interfaces/transactionInterfaces";
+import KeyPad from "../KeyPad";
+import useAddTransaction from "./formHooks/useAddTransaction";
+import { useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { DateTime } from "luxon";
-import { toast, Id } from "react-toastify";
 
 type Props = {
   hideForm: (
@@ -30,37 +18,18 @@ type Props = {
   updateTransactions: (newTransaction: Transaction) => void;
 };
 
-type FormInfo = {
-  title: string;
-  value: number;
-  operation: string;
-  date: string;
-};
-
-type flashErrors = { title: boolean; value: boolean; date: boolean };
-
 // returns form modal for users to add a new miscellaneous transaction using funds directly
 // from their savings
 const AddTransactionForm: React.FC<Props> = ({
   hideForm,
   updateTransactions,
 }): JSX.Element | null => {
-  const dispatch: AppDispatch = useAppDispatch();
-  const notify = (notification: string): Id => toast.success(notification);
-  const notifyError = (error: error): Id =>
-    toast.error(`${error.status} Error: ${error.message}`);
-
-  const { user }: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo,
-    shallowEqual
-  );
-
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
     shallowEqual
   );
 
-  const initialState: FormInfo = {
+  const initialState: NewTransaction = {
     title: "",
     value: 0,
     operation: "add",
@@ -68,140 +37,35 @@ const AddTransactionForm: React.FC<Props> = ({
   };
 
   // inital empty string errors for error state
-  const initalErrors: UserEditErrors = { title: "", value: "", date: "" };
-  // sets state for initial form data
-  const [formData, setFormData] = useState<FormInfo>(initialState);
-  // reference hook for maximum value for new asset value
-  const maxNum = useRef<number>(99999999999999);
-  // sets state for input errors in form
-  const [formErrors, setFormErrors] = useState<UserEditErrors>(initalErrors);
-  // sets state for flashing inputs after attempting to submit errorful data in form
-  const [flashInput, setFlashInput] = useState<flashErrors>({
+  const initialErrors: NewTransactionErrors = {
+    title: "",
+    value: "",
+    date: "",
+  };
+
+  const initialFlashErrors: NewTransactionFlashErrors = {
     title: false,
     value: false,
     date: false,
+  };
+
+  const {
+    formData,
+    formErrors,
+    flashErrors,
+    newTotalAssets,
+    handleChange,
+    handlePress,
+    handleDelete,
+    handleRadio,
+    handleSubmit,
+  } = useAddTransaction({
+    initialState,
+    initialErrors,
+    initialFlashErrors,
+    hideForm,
+    updateTransactions,
   });
-
-  // calcuates new asset value based on original asset value, the inputted monetary value to be added or
-  // subtracted from the original, and the operation that changes with the press of a radio button. Used to
-  // display on the form window for users.
-  const newTotalAssets: string = useMemo<string>(() => {
-    return calculateNewTotalAssetsUserDashboard(
-      user!.totalAssets,
-      formData.value,
-      formData.operation
-    );
-  }, [formData.value, formData.operation]);
-
-  // updates the formdata state if the input that was changed was the title or date input
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    if (name === "title" || name === "date") {
-      handleUserEditInputErrors(name, value, setFormErrors);
-      setFormData((data) => ({ ...data, [name]: value }));
-    }
-  };
-
-  // updates form data state when a user presses a key on keypad: pushes the number on the key to the right
-  // most side of the current inputted value and handles input errors (input value too high or at $0.00)
-  const handlePress = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-      e.preventDefault();
-      let num = +e.currentTarget.value;
-      let newNum = currencyConverter(formData.value, num);
-      if (
-        !handleUserComparisons(
-          newNum,
-          setFormErrors,
-          formData.operation,
-          maxNum.current,
-          user!.totalAssets * 100
-        )
-      ) {
-        setFormData((data) => ({
-          ...data,
-          value: newNum,
-        }));
-      } else {
-        setTimeout(() => {
-          setFormErrors((data) => ({ ...data, value: "" }));
-        }, 1500);
-      }
-    },
-    [formData]
-  );
-
-  // updates form data state when user clicks on delete key: pops the right-most number of the current added
-  // asset value
-  const handleDelete = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-      e.preventDefault();
-      let newNum = numPop(formData.value);
-      handleUserEditInputErrors("value", newNum, setFormErrors);
-      setFormData((data) => ({
-        ...data,
-        value: newNum,
-      }));
-    },
-    [formData]
-  );
-
-  // updates form data state when user clicks on radio button: changes operation to either add or subtract.
-  // If click error occurs (e.g. add value exceeds maximum value or subtract value exceeds original asset
-  // value), neither button nor state changes
-  const handleRadio = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    if (
-      !handleUserComparisons(
-        formData.value,
-        setFormErrors,
-        value,
-        maxNum.current,
-        user!.totalAssets * 100
-      )
-    ) {
-      setFormData((data) => ({
-        ...data,
-        [name]: value,
-      }));
-    } else {
-      setTimeout(() => {
-        setFormErrors((data) => ({ ...data, value: "" }));
-      }, 1500);
-    }
-  };
-
-  // sends data to update to backend, sets new total asset value in redux state. If input errors occur,
-  // (e.g. value to be added exceeds maximum value or value to be subtracted exceeds original asset
-  // value), does not send data and erroneous inputs flash at user
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    try {
-      if (handleEditUserSubmitErrors(formData, setFormErrors)) {
-        const { value, operation } = formData;
-        const submitData: UserEditInterface = {
-          ...formData,
-          value: operation === "add" ? +value / 100 : -value / 100,
-        };
-        let { transaction } = await dispatch(addToAssets(submitData)).unwrap();
-        updateTransactions(transaction);
-        hideForm(e);
-        notify(createUpdateUserString(submitData));
-      } else {
-        if (formErrors.title || formData.title === "")
-          setFlashInput((flash) => ({ ...flash, title: true }));
-        if (formErrors.date || formData.date === "")
-          setFlashInput((flash) => ({ ...flash, date: true }));
-        if (formErrors.value || formData.value === 0)
-          setFlashInput((flash) => ({ ...flash, value: true }));
-        setTimeout(() => {
-          setFlashInput({ title: false, date: false, value: false });
-        }, 500);
-      }
-    } catch (err: any) {
-      notifyError(err);
-    }
-  };
 
   return !formLoading ? (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
@@ -226,7 +90,7 @@ const AddTransactionForm: React.FC<Props> = ({
                   <input
                     className={`input sm:text-sm md:text-base ${
                       formErrors.title ? "input-error" : ""
-                    } ${flashInput.title ? "animate-blinkError" : ""}`}
+                    } ${flashErrors.title ? "animate-blinkError" : ""}`}
                     id="title"
                     type="text"
                     name="title"
@@ -260,7 +124,7 @@ const AddTransactionForm: React.FC<Props> = ({
                     type="datetime-local"
                     className={`input  ${
                       formErrors.date ? "input-error" : "input-valid-date"
-                    } ${flashInput.date && "animate-blinkError"}`}
+                    } ${flashErrors.date && "animate-blinkError"}`}
                     id="expense_date"
                     name="date"
                     value={formData.date}
@@ -283,7 +147,7 @@ const AddTransactionForm: React.FC<Props> = ({
                   <input
                     className={`input sm:text-sm sm:w-64 md:text-base md:w-96  ${
                       formErrors.value ? "input-error" : ""
-                    } ${flashInput.value ? "animate-blinkError" : ""}`}
+                    } ${flashErrors.value ? "animate-blinkError" : ""}`}
                     id="added_assets"
                     type="text"
                     name="addedAssets"

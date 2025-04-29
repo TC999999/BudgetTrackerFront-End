@@ -7,12 +7,6 @@ export type UserContextInterface = {
   error: string | null;
 };
 
-export type UserEditInterface = {
-  title: string;
-  value: number;
-  date: string;
-};
-
 export interface UserInfoInterface {
   _id: string;
   username: string;
@@ -25,10 +19,4 @@ export type NewTransactionInterface = {
     totalAssets: number;
   };
   transaction: Transaction;
-};
-
-export type UserEditErrors = {
-  title: string;
-  value: string;
-  date: string;
 };
