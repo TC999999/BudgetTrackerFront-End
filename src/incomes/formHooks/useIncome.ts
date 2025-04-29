@@ -43,7 +43,7 @@ type input = {
 };
 
 // custom hook for the form for adding a new income or updating a single income for a single user
-const useIncomeForm = ({
+const useIncome = ({
   initialState,
   initialErrors,
   initialFlashErrors,
@@ -56,14 +56,14 @@ const useIncomeForm = ({
   selectIncome,
 }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
-
   const notify = (message: string): Id => toast.success(message);
-
   const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
 
   // state for form data used to create income
-  const [formData, setFormData] = useState<NewIncome>(initialState);
+  const [formData, setFormData] = useState<NewIncome | UpdateIncome>(
+    initialState
+  );
   // state for form input error strings
   const [formErrors, setFormErrors] = useState<IncomeErrors>(initialErrors);
   // state for flashing inputs when input errors are present upon submission
@@ -243,4 +243,4 @@ const useIncomeForm = ({
   };
 };
 
-export default useIncomeForm;
+export default useIncome;

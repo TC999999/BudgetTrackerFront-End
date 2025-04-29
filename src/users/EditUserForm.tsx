@@ -10,7 +10,7 @@ import useEditUser from "./formHooks/useEditUser";
 const EditUserForm = (): JSX.Element => {
   const { id } = useParams();
 
-  const initialUserInfo: ConfirmUserInfo = {
+  const initialState: ConfirmUserInfo = {
     username: "retrieving data",
     email: "retrieving data",
   };
@@ -33,7 +33,7 @@ const EditUserForm = (): JSX.Element => {
     submitErrorFlash,
     handleChange,
     handleSubmit,
-  } = useEditUser({ id, initialUserInfo, initialErrors, initialFlashErrors });
+  } = useEditUser({ id, initialState, initialErrors, initialFlashErrors });
 
   return (
     <div

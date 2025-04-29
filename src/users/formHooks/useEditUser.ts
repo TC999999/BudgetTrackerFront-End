@@ -18,8 +18,7 @@ import UserAPI from "../../apis/UserAPI";
 
 type input = {
   id?: string;
-
-  initialUserInfo: ConfirmUserInfo;
+  initialState: ConfirmUserInfo;
   initialErrors: UserInfoErrors;
   initialFlashErrors: UserInfoFlashErrors;
 };
@@ -27,22 +26,18 @@ type input = {
 // custom hooks for a form to update a single user
 const useEditUser = ({
   id,
-  initialUserInfo,
+  initialState,
   initialErrors,
   initialFlashErrors,
 }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
 
-  const [formData, setFormData] = useState<ConfirmUserInfo>(initialUserInfo);
-
+  const [formData, setFormData] = useState<ConfirmUserInfo>(initialState);
   const [formErrors, setFormErrors] = useState<UserInfoErrors>(initialErrors);
-
   const [flashErrors, setFlashErrors] =
     useState<UserInfoFlashErrors>(initialFlashErrors);
-
   const [submitError, setSubmitError] = useState<string>("");
-
   const [submitErrorFlash, setSubmitErrorFlash] = useState<boolean>(false);
 
   useEffect((): void => {
@@ -93,7 +88,6 @@ const useEditUser = ({
           setFlashErrors((flash) => ({ ...flash, username: true }));
         if (formErrors.email || formData.email === "")
           setFlashErrors((flash) => ({ ...flash, email: true }));
-
         if (submitError) setSubmitErrorFlash(true);
         setTimeout(() => {
           setFlashErrors({ username: false, email: false });
