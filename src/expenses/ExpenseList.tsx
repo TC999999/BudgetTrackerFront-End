@@ -169,7 +169,6 @@ const ExpenseList: React.FC<Props> = ({
                 <ExpenseCard
                   key={e._id}
                   expense={e}
-                  isFrontPage={isFrontPage}
                   showSecondPrompt={showSecondPrompt}
                 />
               );

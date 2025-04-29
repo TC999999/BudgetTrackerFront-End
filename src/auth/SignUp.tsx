@@ -12,7 +12,8 @@ import { useAppDispatch, useAppSelector } from "../features/hooks";
 import { AppDispatch } from "../features/store";
 import { shallowEqual } from "react-redux";
 import { currencyConverter, numPop } from "../helpers/currencyConverter";
-import NewIncomeWindow from "../incomes/NewIncome";
+// import NewIncomeWindow from "../incomes/NewIncome";
+import NewIncomeForm from "../incomes/NewIncomeForm";
 import SignUpForm from "./SignUpForm";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import {
@@ -239,7 +240,7 @@ const SignUp = (): JSX.Element => {
       className="bg-[url('/signUp.jpg')] bg-cover bg-center bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex flex-start w-full md:inset-0 h-full max-h-full"
     >
       {showIncomeForm && (
-        <NewIncomeWindow
+        <NewIncomeForm
           hideIncomeFormState={changeIncomeFormState}
           handleIncomes={handleIncomes}
         />

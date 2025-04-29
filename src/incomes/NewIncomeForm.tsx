@@ -1,48 +1,87 @@
 import {
   NewIncome,
+  Income,
   IncomeErrors,
   FlashIncomeErrors,
+  SubmitIncomeSignUp,
 } from "../interfaces/incomeInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
+import { UserContextInterface } from "../interfaces/userInterfaces";
+import useNewIncomeForm from "./formHooks/useNewIncomeForm";
+import { useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
 import KeyPad from "../KeyPad";
 
 type Props = {
-  formData: NewIncome;
-  formErrors: IncomeErrors;
-  flashErrors: FlashIncomeErrors;
-  readableUpdateTimeString: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent) => Promise<void>;
-  handlePress: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleTime: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleDate: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleMonth: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleWeek: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   hideIncomeFormState: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
+  addToIncomeState?: (income: Income) => void;
+  handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
 };
 
 // returns form to add new income, used for both registration and the income page
 const NewIncomeForm: React.FC<Props> = ({
-  formData,
-  formErrors,
-  flashErrors,
-  readableUpdateTimeString,
-  handleChange,
-  handleSubmit,
-  handlePress,
-  handleDelete,
-  handleTime,
-  handleDate,
-  handleMonth,
-  handleWeek,
-
   hideIncomeFormState,
-}): JSX.Element => {
-  return (
+  addToIncomeState,
+  handleIncomes,
+}): JSX.Element | null => {
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.loading.loadingInfo,
+    shallowEqual
+  );
+
+  const { user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
+
+  // update time is used to construct a cron string to be sent to backend
+  const initialState: NewIncome = {
+    title: "",
+    salary: 0,
+    updateTime: {
+      minute: "0",
+      hour: "0",
+      dayOfMonth: "*",
+      month: "*",
+      dayOfWeek: "*",
+    },
+  };
+
+  const initialErrors: IncomeErrors = {
+    title: "",
+    salary: "",
+  };
+
+  const initialFlashErrors: FlashIncomeErrors = { title: false, salary: false };
+
+  const {
+    formData,
+    formErrors,
+    flashErrors,
+    readableUpdateTimeString,
+    handleChange,
+    handlePress,
+    handleDelete,
+    handleTime,
+    handleDate,
+    handleMonth,
+    handleWeek,
+    handleSubmit,
+  } = useNewIncomeForm({
+    initialState,
+    initialErrors,
+    initialFlashErrors,
+    hideIncomeFormState,
+    userID: user?._id,
+    addToIncomeState,
+    handleIncomes,
+  });
+
+  return !formLoading ? (
     <div className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="modal-layer-3 text-center">
@@ -337,7 +376,7 @@ const NewIncomeForm: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default NewIncomeForm;

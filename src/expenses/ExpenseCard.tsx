@@ -14,8 +14,6 @@ import { shallowEqual } from "react-redux";
 // delete button instead
 type Props = {
   expense: ExpenseInterface | RecentExpense;
-  isFrontPage: boolean;
-
   showSecondPrompt: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     expense: infoInterface
@@ -25,7 +23,6 @@ type Props = {
 // returns a card to be used for a single expense to be used for ExpenseList.tsx
 const ExpenseCard: React.FC<Props> = ({
   expense,
-  isFrontPage,
   showSecondPrompt,
 }): JSX.Element => {
   // makes readable date/time string to be displayed on card
@@ -52,7 +49,7 @@ const ExpenseCard: React.FC<Props> = ({
         <p>{dateTime.current.time}</p>
       </div>
 
-      {isFrontPage && "budget" in expense && "budgetID" in expense ? (
+      {"budget" in expense && "budgetID" in expense ? (
         <div className="expense-budget-title p-1 text-sm sm:text-base duration-150 text-center content-center">
           <Link
             to={`/budgets/${expense.budgetID}/user/${userID}`}
