@@ -30,6 +30,12 @@ export type ExpenseFormErrors = {
   date: string;
 };
 
+export type ExpenseFlashErrors = {
+  title: boolean;
+  transaction: boolean;
+  date: boolean;
+};
+
 export type RecentExpense = {
   _id: string;
   title: string;
