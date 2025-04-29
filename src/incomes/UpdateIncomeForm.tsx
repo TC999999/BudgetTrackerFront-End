@@ -4,48 +4,79 @@ import {
   FlashIncomeErrors,
   Income,
 } from "../interfaces/incomeInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
+import { UserContextInterface } from "../interfaces/userInterfaces";
+import { useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
+import { constructUpdateTimeObj } from "../helpers/constructUpdateTimeObj";
 import KeyPad from "../KeyPad";
+import useIncomeForm from "./formHooks/useIncomeForm";
 
 type Props = {
   income: Income;
-  formData: UpdateIncome;
-  formErrors: IncomeErrors;
-  flashErrors: FlashIncomeErrors;
-  readableUpdateTimeString: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent) => Promise<void>;
-  handlePress: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleTime: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleDate: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleMonth: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleWeek: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   selectIncome: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
     income: null
   ) => void;
+  updateIncomeState: (income: Income) => void;
 };
 
 // returns a form for users to update their own incomes
 const UpdateIncomeForm: React.FC<Props> = ({
   income,
-  formData,
-  formErrors,
-  flashErrors,
-  readableUpdateTimeString,
-  handleChange,
-  handleSubmit,
-  handlePress,
-  handleDelete,
-  handleTime,
-  handleDate,
-  handleMonth,
-  handleWeek,
   selectIncome,
-}): JSX.Element => {
-  return (
+  updateIncomeState,
+}): JSX.Element | null => {
+  const { user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.loading.loadingInfo,
+    shallowEqual
+  );
+
+  // update time is used to construct a new cron string to be sent to backend for update
+  const initialState: UpdateIncome = {
+    _id: income._id,
+    title: income.title,
+    salary: +income.salary * 100,
+    updateTime: constructUpdateTimeObj(income.cronString),
+  };
+
+  const initialErrors: IncomeErrors = {
+    title: "",
+    salary: "",
+  };
+
+  const initialFlashErrors: FlashIncomeErrors = { title: false, salary: false };
+
+  const {
+    formData,
+    formErrors,
+    flashErrors,
+    readableUpdateTimeString,
+    handleChange,
+    handlePress,
+    handleDelete,
+    handleTime,
+    handleDate,
+    handleMonth,
+    handleWeek,
+    handleSubmit,
+  } = useIncomeForm({
+    initialState,
+    initialErrors,
+    initialFlashErrors,
+    userID: user?._id,
+    income,
+    updateIncomeState,
+    selectIncome,
+  });
+
+  return !formLoading ? (
     <div className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="modal-layer-3 text-center">
@@ -339,7 +370,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default UpdateIncomeForm;

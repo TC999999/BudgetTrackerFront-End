@@ -8,7 +8,7 @@ import { shallowEqual } from "react-redux";
 import { setFormLoading } from "../features/slices/loadSlice";
 import IncomeCard from "./IncomeCard";
 import IncomeSkeleton from "../skeleton/IncomeSkeleton";
-import UpdateIncomeWindow from "./UpdateIncome";
+import UpdateIncomeForm from "./UpdateIncomeForm";
 import OnPageLoading from "../OnPageLoading";
 import SecondPrompt from "../SecondPrompt";
 import IncomeAPI from "../apis/IncomeAPI";
@@ -130,7 +130,7 @@ const IncomeList: React.FC<Props> = ({
       )}
 
       {selectedIncomeForEdit && (
-        <UpdateIncomeWindow
+        <UpdateIncomeForm
           income={selectedIncomeForEdit}
           selectIncome={selectIncome}
           updateIncomeState={updateIncomeState}

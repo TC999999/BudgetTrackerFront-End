@@ -6,6 +6,7 @@ import {
 } from "../../helpers/handleIncomeErrors";
 import { currencyConverter, numPop } from "../../helpers/currencyConverter";
 import { makeCronString } from "../../helpers/makeCronString";
+import { createUpdateIncomeString } from "../../helpers/createNotificationString";
 import { useAppDispatch } from "../../features/hooks";
 import { setFormLoading } from "../../features/slices/loadSlice";
 import { AppDispatch } from "../../features/store";
@@ -16,37 +17,47 @@ import {
   IncomeErrors,
   SubmitIncomeSignUp,
   UpdateTime,
+  UpdateIncome,
   FlashIncomeErrors,
+  SubmitUpdateIncome,
 } from "../../interfaces/incomeInterfaces";
 import { error } from "../../interfaces/miscTypes";
 import { toast, Id } from "react-toastify";
 
 type input = {
-  initialState: NewIncome;
+  initialState: NewIncome | UpdateIncome;
   initialErrors: IncomeErrors;
   initialFlashErrors: FlashIncomeErrors;
-  hideIncomeFormState: (
+  userID?: string;
+  income?: Income;
+  hideIncomeFormState?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
-  userID?: string;
   addToIncomeState?: (income: Income) => void;
   handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
+  updateIncomeState?: (income: Income) => void;
+  selectIncome?: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+    income: null
+  ) => void;
 };
 
 // custom hook for the form for adding a new income for a single user
-const useNewIncomeForm = ({
+const useIncomeForm = ({
   initialState,
   initialErrors,
   initialFlashErrors,
-  hideIncomeFormState,
   userID,
+  income,
+  hideIncomeFormState,
   addToIncomeState,
   handleIncomes,
+  updateIncomeState,
+  selectIncome,
 }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
 
-  const notify = (incomeTitle: string): Id =>
-    toast.success(`${incomeTitle} income successfully created`);
+  const notify = (message: string): Id => toast.success(message);
 
   const notifyError = (error: error): Id =>
     toast.error(`${error.status} Error: ${error.message}`);
@@ -168,6 +179,7 @@ const useNewIncomeForm = ({
     try {
       e.preventDefault();
       if (handleIncomeSubmitErrors(formData, setFormErrors)) {
+        dispatch(setFormLoading(true));
         let { title, salary, updateTime } = formData;
         let cronString: string = makeCronString(updateTime);
         let submitData: SubmitIncomeSignUp = {
@@ -177,18 +189,28 @@ const useNewIncomeForm = ({
           readableUpdateTimeString,
         };
         if (handleIncomes) {
-          dispatch(setFormLoading(true));
           handleIncomes(e, submitData);
         } else if (addToIncomeState && userID) {
-          dispatch(setFormLoading(true));
           let newIncome: Income = await IncomeAPI.addNewUserIncome(
             submitData,
             userID
           );
           addToIncomeState(newIncome);
-          notify(submitData.title);
+          notify(`${submitData.title} income created successfully!`);
+        } else if (updateIncomeState && userID && income && selectIncome) {
+          let updateData: SubmitUpdateIncome = {
+            _id: income._id,
+            ...submitData,
+          };
+          let updatedIncome: Income = await IncomeAPI.updateUserIncome(
+            updateData,
+            userID
+          );
+          updateIncomeState(updatedIncome);
+          notify(createUpdateIncomeString(income, updateData));
+          selectIncome(e, null);
         }
-        hideIncomeFormState(e);
+        if (hideIncomeFormState) hideIncomeFormState(e);
       } else {
         if (formData.title === "" || formErrors.title)
           setFlashErrors((flash) => ({ ...flash, title: true }));
@@ -221,4 +243,4 @@ const useNewIncomeForm = ({
   };
 };
 
-export default useNewIncomeForm;
+export default useIncomeForm;
