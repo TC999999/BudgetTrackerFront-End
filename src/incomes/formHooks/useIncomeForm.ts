@@ -42,7 +42,7 @@ type input = {
   ) => void;
 };
 
-// custom hook for the form for adding a new income for a single user
+// custom hook for the form for adding a new income or updating a single income for a single user
 const useIncomeForm = ({
   initialState,
   initialErrors,
