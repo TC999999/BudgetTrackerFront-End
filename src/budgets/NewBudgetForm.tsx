@@ -3,35 +3,58 @@ import {
   newBudgetInterface,
   BudgetFormErrors,
   BudgetFlashErrors,
+  BudgetInterface,
 } from "../interfaces/budgetInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
+import { useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
+import useBudget from "./formHooks/useBudget";
 
 type Props = {
-  formData: newBudgetInterface;
-  formErrors: BudgetFormErrors;
-  flashErrors: BudgetFlashErrors;
-  availableFunds: number;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent) => Promise<void>;
-  handlePress: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   hideForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
+  addBudget: (newBudget: BudgetInterface) => void;
 };
 
 // returns form for creating a new budget
 const BudgetForm: React.FC<Props> = ({
-  formData,
-  formErrors,
-  flashErrors,
-  availableFunds,
-  handleChange,
-  handleSubmit,
-  handlePress,
-  handleDelete,
   hideForm,
-}): JSX.Element => {
-  return (
+  addBudget,
+}): JSX.Element | null => {
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.loading.loadingInfo,
+    shallowEqual
+  );
+  const initialState: newBudgetInterface = {
+    title: "",
+    moneyAllocated: 0,
+  };
+  const initialErrors: BudgetFormErrors = { title: "", moneyAllocated: "" };
+
+  const initialFlashErrors: BudgetFlashErrors = {
+    title: false,
+    moneyAllocated: false,
+  };
+
+  const {
+    formData,
+    formErrors,
+    flashErrors,
+    availableFunds,
+    handlePress,
+    handleDelete,
+    handleChange,
+    handleSubmit,
+  } = useBudget({
+    initialState,
+    initialErrors,
+    initialFlashErrors,
+    addBudget,
+    hideForm,
+  });
+
+  return !formLoading ? (
     <div tabIndex={-1} id="budget-form-div" className="modal-layer-1">
       <div className="modal-layer-2">
         <div id="new-budget-form" className="modal-layer-3">
@@ -126,7 +149,7 @@ const BudgetForm: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default BudgetForm;

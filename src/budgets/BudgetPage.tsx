@@ -4,7 +4,7 @@ import { useAppDispatch } from "../features/hooks";
 import { AppDispatch } from "../features/store";
 import { setLoadError, setPageLoading } from "../features/slices/loadSlice";
 import ListHeader from "../ListHeader";
-import NewBudgetWindow from "./NewBudget";
+import NewBudgetForm from "./NewBudgetForm";
 import BudgetList from "./BudgetList";
 import BudgetPageButtons from "./BudgetPageButtons";
 import { makeBudgetList } from "../helpers/makeBudgetList";
@@ -91,7 +91,7 @@ const BudgetPage = (): JSX.Element => {
       <main>
         <ListHeader type="Budgets" itemListLength={budgetList.length} />
         {showBudgetForm && (
-          <NewBudgetWindow hideForm={HideForm} addBudget={addBudget} />
+          <NewBudgetForm hideForm={HideForm} addBudget={addBudget} />
         )}
 
         <BudgetList allBudgets={budgetList} />
