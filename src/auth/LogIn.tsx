@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import useLogIn from "./hooks/useLogIn";
 
 // form for logging in a user
-const LogInForm = (): JSX.Element => {
+const LogIn = (): JSX.Element => {
   const {
     formData,
     formErrors,
@@ -130,4 +130,4 @@ const LogInForm = (): JSX.Element => {
   );
 };
 
-export default LogInForm;
+export default LogIn;

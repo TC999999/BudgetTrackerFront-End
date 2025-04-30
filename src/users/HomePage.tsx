@@ -1,4 +1,4 @@
-import LogInForm from "../auth/LogInForm";
+import LogIn from "../auth/LogIn";
 import Dashboard from "./Dashboard";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 import { useAppSelector } from "../features/hooks";
@@ -13,9 +13,7 @@ const HomePage = (): JSX.Element => {
   );
 
   return (
-    <div className="Home-Page">
-      {userExists ? <Dashboard /> : <LogInForm />}
-    </div>
+    <div className="Home-Page">{userExists ? <Dashboard /> : <LogIn />}</div>
   );
 };
 
