@@ -16,22 +16,27 @@ import {
 } from "../../helpers/handleUserInfoErrors";
 import UserAPI from "../../apis/UserAPI";
 
-type input = {
-  id?: string;
-  initialState: ConfirmUserInfo;
-  initialErrors: UserInfoErrors;
-  initialFlashErrors: UserInfoFlashErrors;
-};
+type input = string | undefined;
 
 // custom hooks for a form to update a single user
-const useEditUser = ({
-  id,
-  initialState,
-  initialErrors,
-  initialFlashErrors,
-}: input) => {
+const useEditUser = (id: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
+
+  const initialState: ConfirmUserInfo = {
+    username: "retrieving data",
+    email: "retrieving data",
+  };
+
+  const initialErrors: UserInfoErrors = {
+    username: "",
+    email: "",
+  };
+
+  const initialFlashErrors: UserInfoFlashErrors = {
+    username: false,
+    email: false,
+  };
 
   const [formData, setFormData] = useState<ConfirmUserInfo>(initialState);
   const [formErrors, setFormErrors] = useState<UserInfoErrors>(initialErrors);

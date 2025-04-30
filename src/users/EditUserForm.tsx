@@ -1,30 +1,9 @@
 import { useParams } from "react-router-dom";
-import {
-  ConfirmUserInfo,
-  UserInfoErrors,
-  UserInfoFlashErrors,
-} from "../interfaces/authInterfaces";
-import useEditUser from "./formHooks/useEditUser";
+import useEditUser from "./hooks/useEditUser";
 
 // returns a form component for updating a single user
 const EditUserForm = (): JSX.Element => {
   const { id } = useParams();
-
-  const initialState: ConfirmUserInfo = {
-    username: "retrieving data",
-    email: "retrieving data",
-  };
-
-  const initialErrors: UserInfoErrors = {
-    username: "",
-    email: "",
-  };
-
-  const initialFlashErrors: UserInfoFlashErrors = {
-    username: false,
-    email: false,
-  };
-
   const {
     formData,
     formErrors,
@@ -33,7 +12,7 @@ const EditUserForm = (): JSX.Element => {
     submitErrorFlash,
     handleChange,
     handleSubmit,
-  } = useEditUser({ id, initialState, initialErrors, initialFlashErrors });
+  } = useEditUser(id);
 
   return (
     <div

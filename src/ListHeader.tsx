@@ -36,7 +36,6 @@ const ListHeader: React.FC<Props> = ({ type, itemListLength }) => {
           return "Recent Miscellaneous Transactions";
         case "Expenses":
           return "Expenses Made";
-
         case "Recent Expenses":
           return "Recent Budget Expenses";
       }
