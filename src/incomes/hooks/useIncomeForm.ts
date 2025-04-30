@@ -43,7 +43,7 @@ type input = {
 };
 
 // custom hook for the form for adding a new income or updating a single income for a single user
-const useIncome = ({
+const useIncomeForm = ({
   initialState,
   initialErrors,
   initialFlashErrors,
@@ -243,4 +243,4 @@ const useIncome = ({
   };
 };
 
-export default useIncome;
+export default useIncomeForm;

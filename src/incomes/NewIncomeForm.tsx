@@ -7,7 +7,7 @@ import {
 } from "../interfaces/incomeInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-import useIncome from "./formHooks/useIncome";
+import useIncomeForm from "./hooks/useIncomeForm";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import IncomeForm from "./IncomeForm";
@@ -69,7 +69,7 @@ const NewIncomeForm: React.FC<Props> = ({
     handleMonth,
     handleWeek,
     handleSubmit,
-  } = useIncome({
+  } = useIncomeForm({
     initialState,
     initialErrors,
     initialFlashErrors,

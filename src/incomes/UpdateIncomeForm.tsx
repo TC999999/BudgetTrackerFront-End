@@ -10,7 +10,7 @@ import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import { constructUpdateTimeObj } from "../helpers/constructUpdateTimeObj";
 import IncomeForm from "./IncomeForm";
-import useIncome from "./formHooks/useIncome";
+import useIncomeForm from "./hooks/useIncomeForm";
 
 type Props = {
   income: Income;
@@ -64,7 +64,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     handleMonth,
     handleWeek,
     handleSubmit,
-  } = useIncome({
+  } = useIncomeForm({
     initialState,
     initialErrors,
     initialFlashErrors,

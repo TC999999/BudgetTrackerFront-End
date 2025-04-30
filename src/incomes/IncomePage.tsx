@@ -7,7 +7,6 @@ import { Income } from "../interfaces/incomeInterfaces";
 import ListHeader from "../ListHeader";
 import IncomeAPI from "../apis/IncomeAPI";
 import IncomeList from "./IncomeList";
-// import NewIncomeWindow from "./NewIncome";
 import NewIncomeForm from "./NewIncomeForm";
 import IncomePageButtons from "./IncomePageButtons";
 import { toast, Id } from "react-toastify";
