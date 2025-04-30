@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { removeUserError } from "../../features/slices/authSlice";
 import { registerUser } from "../../features/actions/auth";
 import {
@@ -76,138 +76,157 @@ const useSignUp = () => {
 
   // updates form data when user inputs data, if there are any errors in inputs, lets the user know
   // (e.g. username contains spaces betwwen characters, password length too long, email address is invalid)
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    if (submitError) setSubmitError("");
-    if (name === "username") {
-      handleSignUpInputErrors(name, value, setFormErrors);
-    } else if (name === "password" || name === "email") {
-      handleSignUpInputErrors(name, value, setFormErrors);
-    }
-    setFormData((data) => ({ ...data, [name]: value }));
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const { name, value } = e.target;
+      if (submitError) setSubmitError("");
+      if (name === "username" || name === "password" || name === "email") {
+        handleSignUpInputErrors(name, value, setFormErrors);
+      }
+      setFormData((data) => ({ ...data, [name]: value }));
+    },
+    [submitError, formErrors, formData]
+  );
 
   // make for state visible unless income list already has 3 incomes
-  const showIncomeFormState = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    if (formData.incomes.length < 3) {
-      setShowIncomeForm(true);
-    } else {
-      notify();
-    }
-  };
+  const showIncomeFormState = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      if (formData.incomes.length < 3) {
+        setShowIncomeForm(true);
+      } else {
+        notify();
+      }
+    },
+    [formData.incomes, showIncomeForm]
+  );
 
   // update state to make income form invisible
-  const changeIncomeFormState = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
-  ): void => {
-    e.preventDefault();
-    setShowIncomeForm(!showIncomeForm);
-  };
+  const changeIncomeFormState = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+    ): void => {
+      e.preventDefault();
+      setShowIncomeForm(!showIncomeForm);
+    },
+    [showIncomeForm]
+  );
 
   // add new income from form to list of incomes in sign up form data
-  const handleIncomes = (
-    e: React.FormEvent,
-    income: SubmitIncomeSignUp
-  ): void => {
-    e.preventDefault();
-    setFormData((data) => ({
-      ...data,
-      incomes: [...formData.incomes, income],
-    }));
-  };
+  const handleIncomes = useCallback(
+    (e: React.FormEvent, income: SubmitIncomeSignUp): void => {
+      e.preventDefault();
+      setFormData((data) => ({
+        ...data,
+        incomes: [...formData.incomes, income],
+      }));
+    },
+    [formData.incomes]
+  );
 
   // remove income from form from list of incomes in sign up form data
-  const removeIncome = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    index: number
-  ): void => {
-    e.preventDefault();
-    let newIncomes = formData.incomes.filter((v, i) => {
-      if (i !== index) return v;
-    });
-    setFormData((data) => ({
-      ...data,
-      incomes: newIncomes,
-    }));
-  };
+  const removeIncome = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+      index: number
+    ): void => {
+      e.preventDefault();
+      let newIncomes = formData.incomes.filter((v, i) => {
+        if (i !== index) return v;
+      });
+      setFormData((data) => ({
+        ...data,
+        incomes: newIncomes,
+      }));
+    },
+    [formData.incomes]
+  );
 
   // updates form data state when the user checks or unchecks the checkbox that this is a trusted device
-  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name } = e.target;
-    setFormData((data) => ({ ...data, [name]: e.target.checked }));
-  };
+  const handleCheckBox = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const { name } = e.target;
+      setFormData((data) => ({ ...data, [name]: e.target.checked }));
+    },
+    [formData]
+  );
 
   // sends new user info to db and creates a new account for user; automatially logs them in as well. If there
   // are any errors in inputs, does not submit data and flashes errorful inputs. If backend error occurs,
   // returns to this page (e.g. username or email already exist).
   // Additionally, temporarily saves info into localstorage since submitting data causes the page to rerender,
   // so this is used to prevent the information (except password) from being cleared.
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    const { totalAssets } = formData;
-    try {
-      const signUpInfo: SignUpInterface = {
-        ...formData,
-        totalAssets: totalAssets / 100,
-      };
-      if (handleSignUpSubmitErrors(signUpInfo, setFormErrors) && !submitError) {
-        localStorage.setItem(
-          "userInputs",
-          JSON.stringify({ ...formData, password: "" })
-        );
-        await dispatch(registerUser(signUpInfo)).unwrap();
-        localStorage.removeItem("userInputs");
-        navigate("/");
-      } else {
-        if (formErrors.username || formData.username === "")
-          setFlashErrors((flash) => ({ ...flash, username: true }));
-        if (formErrors.password || formData.password === "")
-          setFlashErrors((flash) => ({ ...flash, password: true }));
-        if (formErrors.email || formData.email === "")
-          setFlashErrors((flash) => ({ ...flash, email: true }));
-        if (submitError) setSubmitErrorFlash(true);
-        setTimeout(() => {
-          setFlashErrors({ username: false, password: false, email: false });
-          setSubmitErrorFlash(false);
-        }, 500);
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent): Promise<void> => {
+      e.preventDefault();
+      const { totalAssets } = formData;
+      try {
+        const signUpInfo: SignUpInterface = {
+          ...formData,
+          totalAssets: totalAssets / 100,
+        };
+        if (
+          handleSignUpSubmitErrors(signUpInfo, setFormErrors) &&
+          !submitError
+        ) {
+          localStorage.setItem(
+            "userInputs",
+            JSON.stringify({ ...formData, password: "" })
+          );
+          await dispatch(registerUser(signUpInfo)).unwrap();
+          localStorage.removeItem("userInputs");
+          navigate("/");
+        } else {
+          if (formErrors.username || formData.username === "")
+            setFlashErrors((flash) => ({ ...flash, username: true }));
+          if (formErrors.password || formData.password === "")
+            setFlashErrors((flash) => ({ ...flash, password: true }));
+          if (formErrors.email || formData.email === "")
+            setFlashErrors((flash) => ({ ...flash, email: true }));
+          if (submitError) setSubmitErrorFlash(true);
+          setTimeout(() => {
+            setFlashErrors({ username: false, password: false, email: false });
+            setSubmitErrorFlash(false);
+          }, 500);
+        }
+      } catch (err: any) {
+        console.log(err);
       }
-    } catch (err: any) {
-      console.log(err);
-    }
-  };
+    },
+    [formData, submitError, formErrors, flashErrors, submitErrorFlash]
+  );
 
   // when user clicks key on in-app keypad, pushes number clicked onto the formData's totalAssets field and
   // creates a new string, unless the new currency is greater than the allowed max asset value
-  const handlePress = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    let num = +e.currentTarget.value;
-    let newNum = currencyConverter(formData.totalAssets, num);
-    if (newNum > maxNum.current) {
-      setKeyPadError(true);
-    } else {
-      setFormData((data) => ({ ...data, totalAssets: newNum }));
-    }
-  };
+  const handlePress = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      let num = +e.currentTarget.value;
+      let newNum = currencyConverter(formData.totalAssets, num);
+      if (newNum > maxNum.current) {
+        setKeyPadError(true);
+      } else {
+        setFormData((data) => ({ ...data, totalAssets: newNum }));
+      }
+    },
+    [formData, maxNum.current]
+  );
 
   // removes the rightmost number from the formData's totalAssets string and creates a new string
-  const handleDelete = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    let newNum = numPop(formData.totalAssets);
-    setFormData((data) => ({
-      ...data,
-      totalAssets: newNum,
-    }));
-    if (keyPadError) {
-      setKeyPadError(false);
-    }
-  };
+  const handleDelete = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      let newNum = numPop(formData.totalAssets);
+      setFormData((data) => ({
+        ...data,
+        totalAssets: newNum,
+      }));
+      if (keyPadError) {
+        setKeyPadError(false);
+      }
+    },
+    [formData.totalAssets, keyPadError]
+  );
 
   return {
     formData,

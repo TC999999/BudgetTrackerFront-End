@@ -1,15 +1,9 @@
 import { loading } from "../interfaces/loadingInterfaces";
-import {
-  Transaction,
-  NewTransaction,
-  NewTransactionErrors,
-  NewTransactionFlashErrors,
-} from "../interfaces/transactionInterfaces";
+import { Transaction } from "../interfaces/transactionInterfaces";
 import KeyPad from "../KeyPad";
-import useAddTransaction from "./formHooks/useAddTransaction";
+import useAddTransaction from "./hooks/useAddTransaction";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
-import { DateTime } from "luxon";
 
 type Props = {
   hideForm: (
@@ -29,26 +23,6 @@ const AddTransactionForm: React.FC<Props> = ({
     shallowEqual
   );
 
-  const initialState: NewTransaction = {
-    title: "",
-    value: 0,
-    operation: "add",
-    date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
-  };
-
-  // inital empty string errors for error state
-  const initialErrors: NewTransactionErrors = {
-    title: "",
-    value: "",
-    date: "",
-  };
-
-  const initialFlashErrors: NewTransactionFlashErrors = {
-    title: false,
-    value: false,
-    date: false,
-  };
-
   const {
     formData,
     formErrors,
@@ -60,9 +34,6 @@ const AddTransactionForm: React.FC<Props> = ({
     handleRadio,
     handleSubmit,
   } = useAddTransaction({
-    initialState,
-    initialErrors,
-    initialFlashErrors,
     hideForm,
     updateTransactions,
   });

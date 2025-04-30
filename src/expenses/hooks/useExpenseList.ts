@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { deleteExpenseInterface } from "../../interfaces/expenseInterfaces";
 import { UserContextInterface } from "../../interfaces/userInterfaces";
 import { BudgetUpdate } from "../../interfaces/budgetInterfaces";
@@ -52,52 +52,61 @@ const useExpenseList = ({ budgetID, filterExpense, updateBudget }: input) => {
 
   // updates state to show the prompt window for when a user clicks delete
   // expense button on an expense card
-  const showSecondPrompt = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    expense: infoInterface
-  ): void => {
-    e.preventDefault();
-    setSelectedExpense(expense);
-  };
+  const showSecondPrompt = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+      expense: infoInterface
+    ): void => {
+      e.preventDefault();
+      setSelectedExpense(expense);
+    },
+    [selectedExpense]
+  );
 
   // updates state to hide the prompt window for when a user either clicks cancel on the prompt window or
   // after the user successfully submits a delete request
-  const hidePrompt = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    setSelectedExpense(null);
-  };
+  const hidePrompt = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      setSelectedExpense(null);
+    },
+    [selectedExpense]
+  );
 
   // makes a request to delete a single expense from the db, and if the user is on the single
   // budget page, update the expense list state with that expense filtered out; additionally,
   // update the budget value to account for the money spent on that expense
-  const deleteExpense = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    info: infoInterface
-  ): Promise<void> => {
-    try {
-      e.preventDefault();
-      dispatch(setFormLoading(true));
-      if (budgetID) {
-        let submitData: deleteExpenseInterface = {
-          _id: info._id,
-          transaction: info.transaction!,
-          budgetID,
-        };
-        let { delExpense, newUserBudget } = await ExpenseAPI.deleteExpense(
-          submitData,
-          user!._id
-        );
-        callFilterExpense(delExpense._id);
-        callUpdateBudget(newUserBudget);
-        setSelectedExpense(null);
-        notifyDelete(delExpense.title);
+  const deleteExpense = useCallback(
+    async (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+      info: infoInterface
+    ): Promise<void> => {
+      try {
+        e.preventDefault();
+        dispatch(setFormLoading(true));
+        if (budgetID) {
+          let submitData: deleteExpenseInterface = {
+            _id: info._id,
+            transaction: info.transaction!,
+            budgetID,
+          };
+          let { delExpense, newUserBudget } = await ExpenseAPI.deleteExpense(
+            submitData,
+            user!._id
+          );
+          callFilterExpense(delExpense._id);
+          callUpdateBudget(newUserBudget);
+          setSelectedExpense(null);
+          notifyDelete(delExpense.title);
+        }
+      } catch (err: any) {
+        notifyError(JSON.parse(err.message));
+      } finally {
+        dispatch(setFormLoading(false));
       }
-    } catch (err: any) {
-      notifyError(JSON.parse(err.message));
-    } finally {
-      dispatch(setFormLoading(false));
-    }
-  };
+    },
+    [selectedExpense, user?._id]
+  );
 
   return { selectedExpense, showSecondPrompt, hidePrompt, deleteExpense };
 };

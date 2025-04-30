@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { AppDispatch } from "../../features/store";
 import { shallowEqual } from "react-redux";
@@ -81,96 +81,105 @@ const useExpenseForm = ({
 
   // pushes number on the key clicked by user to the right side of the new expense's transaction value and
   // returns a new string
-  const handlePress = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    let num = +e.currentTarget.value;
-    let newNum = currencyConverter(formData.transaction, num);
-    handleExpenseInputErrors("transaction", newNum, setFormErrors);
-    let original = parseFloat(originalMoney.current) * 100;
-    if (newNum <= original) {
-      let newAvailableMoney = original - newNum;
+  const handlePress = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      let num = +e.currentTarget.value;
+      let newNum = currencyConverter(formData.transaction, num);
+      handleExpenseInputErrors("transaction", newNum, setFormErrors);
+      let original = parseFloat(originalMoney.current) * 100;
+      if (newNum <= original) {
+        let newAvailableMoney = original - newNum;
+        setFormData((data) => ({
+          ...data,
+          transaction: newNum,
+        }));
+        setAvailableMoney((newAvailableMoney / 100).toFixed(2));
+      } else {
+        setFormErrors((data) => ({
+          ...data,
+          transaction:
+            "Expense transaction value cannot exceed available budget",
+        }));
+        setTimeout(() => {
+          setFormErrors((data) => ({
+            ...data,
+            transaction: "",
+          }));
+        }, 1500);
+      }
+    },
+    [formData, formErrors]
+  );
+
+  // pops number from the right side of the new expense's transaction value and
+  // returns a new string
+  const handleDelete = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      let newNum: number = numPop(formData.transaction);
+      handleExpenseInputErrors("transaction", newNum, setFormErrors);
       setFormData((data) => ({
         ...data,
         transaction: newNum,
       }));
+      let newAvailableMoney = parseFloat(originalMoney.current) * 100 - newNum;
       setAvailableMoney((newAvailableMoney / 100).toFixed(2));
-    } else {
-      setFormErrors((data) => ({
-        ...data,
-        transaction: "Expense transaction value cannot exceed available budget",
-      }));
-      setTimeout(() => {
-        setFormErrors((data) => ({
-          ...data,
-          transaction: "",
-        }));
-      }, 1500);
-    }
-  };
-
-  // pops number from the right side of the new expense's transaction value and
-  // returns a new string
-  const handleDelete = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    let newNum: number = numPop(formData.transaction);
-    handleExpenseInputErrors("transaction", newNum, setFormErrors);
-    setFormData((data) => ({
-      ...data,
-      transaction: newNum,
-    }));
-    let newAvailableMoney = parseFloat(originalMoney.current) * 100 - newNum;
-    setAvailableMoney((newAvailableMoney / 100).toFixed(2));
-  };
+    },
+    [formData, formErrors]
+  );
 
   // updates form data values based on user input, if input contains errors (e.g. expense title too long),
   // updates form error state and lets user know
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    handleExpenseInputErrors(name, value, setFormErrors);
-    setFormData((data) => ({ ...data, [name]: value }));
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const { name, value } = e.target;
+      handleExpenseInputErrors(name, value, setFormErrors);
+      setFormData((data) => ({ ...data, [name]: value }));
+    },
+    [formErrors, formData]
+  );
 
   // sends new expense data to backend to be added to db and updates user state. If any inputs
   // contain errors, does not send data and flashes errorful inputs
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    try {
-      if (handleExpenseSubmitErrors(formData, setFormErrors)) {
-        dispatch(setFormLoading(true));
-        let submitData: submitNewExpense = {
-          ...formData,
-          budgetID: budget?._id,
-          transaction: formData.transaction / 100,
-        };
-        const { spentMoney, newExpense } = await ExpenseAPI.addNewExpense(
-          submitData,
-          user!._id
-        );
-        addExpense(newExpense);
-        updateBudget(spentMoney);
-        hideExpenseForm(e, "showExpenseForm");
-        notify(submitData.title, submitData.transaction);
-      } else {
-        if (formErrors.title || formData.title === "")
-          setFlashErrors((flash) => ({ ...flash, title: true }));
-        if (formErrors.date || formData.date === "")
-          setFlashErrors((flash) => ({ ...flash, date: true }));
-        if (formErrors.transaction || formData.transaction === 0)
-          setFlashErrors((flash) => ({ ...flash, transaction: true }));
-        setTimeout(() => {
-          setFlashErrors({ title: false, date: false, transaction: false });
-        }, 500);
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent): Promise<void> => {
+      e.preventDefault();
+      try {
+        if (handleExpenseSubmitErrors(formData, setFormErrors)) {
+          dispatch(setFormLoading(true));
+          let submitData: submitNewExpense = {
+            ...formData,
+            budgetID: budget?._id,
+            transaction: formData.transaction / 100,
+          };
+          const { spentMoney, newExpense } = await ExpenseAPI.addNewExpense(
+            submitData,
+            user!._id
+          );
+          addExpense(newExpense);
+          updateBudget(spentMoney);
+          hideExpenseForm(e, "showExpenseForm");
+          notify(submitData.title, submitData.transaction);
+        } else {
+          if (formErrors.title || formData.title === "")
+            setFlashErrors((flash) => ({ ...flash, title: true }));
+          if (formErrors.date || formData.date === "")
+            setFlashErrors((flash) => ({ ...flash, date: true }));
+          if (formErrors.transaction || formData.transaction === 0)
+            setFlashErrors((flash) => ({ ...flash, transaction: true }));
+          setTimeout(() => {
+            setFlashErrors({ title: false, date: false, transaction: false });
+          }, 500);
+        }
+      } catch (err: any) {
+        notifyError(JSON.parse(err.message));
+      } finally {
+        dispatch(setFormLoading(false));
       }
-    } catch (err: any) {
-      notifyError(JSON.parse(err.message));
-    } finally {
-      dispatch(setFormLoading(false));
-    }
-  };
+    },
+    [formData, formErrors, flashErrors, user?._id]
+  );
 
   return {
     formData,

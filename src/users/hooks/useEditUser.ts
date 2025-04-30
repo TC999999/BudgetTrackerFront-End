@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useAppDispatch } from "../../features/hooks";
 import { AppDispatch } from "../../features/store";
@@ -66,43 +66,52 @@ const useEditUser = (id: input) => {
     getUser();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    if (submitError) setSubmitError("");
-    let { name, value } = e.target;
-    if (name === "username" || name === "email") {
-      handleUserInfoInputErrors(name, value, setFormErrors);
-      setFormData((data) => ({ ...data, [name]: value }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    try {
-      if (handleUserInfoSubmitErrors(formData, setFormErrors) && !submitError) {
-        let { username, email } = formData;
-        const submitData: SubmitUserInfoEdit = {
-          _id: id!,
-          username,
-          email,
-        };
-        await dispatch(editUser(submitData)).unwrap();
-        navigate("/");
-      } else {
-        if (formErrors.username || formData.username === "")
-          setFlashErrors((flash) => ({ ...flash, username: true }));
-        if (formErrors.email || formData.email === "")
-          setFlashErrors((flash) => ({ ...flash, email: true }));
-        if (submitError) setSubmitErrorFlash(true);
-        setTimeout(() => {
-          setFlashErrors({ username: false, email: false });
-          setSubmitErrorFlash(false);
-        }, 500);
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      e.preventDefault();
+      if (submitError) setSubmitError("");
+      let { name, value } = e.target;
+      if (name === "username" || name === "email") {
+        handleUserInfoInputErrors(name, value, setFormErrors);
+        setFormData((data) => ({ ...data, [name]: value }));
       }
-    } catch (err: any) {
-      setSubmitError(err.message);
-    }
-  };
+    },
+    [submitError, formErrors, formData]
+  );
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent): Promise<void> => {
+      e.preventDefault();
+      try {
+        if (
+          handleUserInfoSubmitErrors(formData, setFormErrors) &&
+          !submitError
+        ) {
+          let { username, email } = formData;
+          const submitData: SubmitUserInfoEdit = {
+            _id: id!,
+            username,
+            email,
+          };
+          await dispatch(editUser(submitData)).unwrap();
+          navigate("/");
+        } else {
+          if (formErrors.username || formData.username === "")
+            setFlashErrors((flash) => ({ ...flash, username: true }));
+          if (formErrors.email || formData.email === "")
+            setFlashErrors((flash) => ({ ...flash, email: true }));
+          if (submitError) setSubmitErrorFlash(true);
+          setTimeout(() => {
+            setFlashErrors({ username: false, email: false });
+            setSubmitErrorFlash(false);
+          }, 500);
+        }
+      } catch (err: any) {
+        setSubmitError(err.message);
+      }
+    },
+    [formData, submitError, formErrors, flashErrors, submitErrorFlash]
+  );
 
   return {
     formData,

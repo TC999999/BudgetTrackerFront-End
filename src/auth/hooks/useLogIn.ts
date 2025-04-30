@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { removeUserError } from "../../features/slices/authSlice";
 import { logInUser } from "../../features/actions/auth";
 import {
@@ -57,20 +57,25 @@ const useLogIn = () => {
 
   // handles changes to login form, if user makes any errors while inputting data, the frontend lets them know
   // Additionally, if the redux user status has an error, removes that error.
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (submitError) setSubmitError("");
-
-    const { name, value } = e.target;
-    if (name === "username" || name === "password")
-      handleLogInInputErrors(name, value, setFormErrors);
-    setFormData((data) => ({ ...data, [name]: value }));
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      if (submitError) setSubmitError("");
+      const { name, value } = e.target;
+      if (name === "username" || name === "password")
+        handleLogInInputErrors(name, value, setFormErrors);
+      setFormData((data) => ({ ...data, [name]: value }));
+    },
+    [submitError, formData, formErrors]
+  );
 
   // updates form data state when the user checks or unchecks the checkbox that this is a trusted device
-  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name } = e.target;
-    setFormData((data) => ({ ...data, [name]: e.target.checked }));
-  };
+  const handleCheckBox = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const { name } = e.target;
+      setFormData((data) => ({ ...data, [name]: e.target.checked }));
+    },
+    [formData]
+  );
 
   // submits login information and retrieves user data. If there are any errors in the inputs (username has
   // spaces between characters or password length too short), does not submit data and the errorful inputs
@@ -78,34 +83,37 @@ const useLogIn = () => {
   // Additionally, temporarily sets username info into local storage in case username and password is invalid since
   // submitting login form causes page to rerender and formdata to clear so user does not need to reenter
   // username.
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    try {
-      const logInInfo: LogInInterface = {
-        ...formData,
-      };
-      if (handleLogInSubmitErrors(logInInfo, setFormErrors) && !submitError) {
-        localStorage.setItem(
-          "userInputs",
-          JSON.stringify({ ...formData, password: "" })
-        );
-        await dispatch(logInUser(logInInfo));
-        localStorage.removeItem("userInputs");
-      } else {
-        if (submitError) setSubmitErrorFlash(true);
-        if (formErrors.username || formData.username === "")
-          setFlashErrors((flash) => ({ ...flash, username: true }));
-        if (formErrors.password || formData.password === "")
-          setFlashErrors((flash) => ({ ...flash, password: true }));
-        setTimeout(() => {
-          setFlashErrors({ username: false, password: false });
-          setSubmitErrorFlash(false);
-        }, 500);
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent): Promise<void> => {
+      e.preventDefault();
+      try {
+        const logInInfo: LogInInterface = {
+          ...formData,
+        };
+        if (handleLogInSubmitErrors(logInInfo, setFormErrors) && !submitError) {
+          localStorage.setItem(
+            "userInputs",
+            JSON.stringify({ ...formData, password: "" })
+          );
+          await dispatch(logInUser(logInInfo));
+          localStorage.removeItem("userInputs");
+        } else {
+          if (submitError) setSubmitErrorFlash(true);
+          if (formErrors.username || formData.username === "")
+            setFlashErrors((flash) => ({ ...flash, username: true }));
+          if (formErrors.password || formData.password === "")
+            setFlashErrors((flash) => ({ ...flash, password: true }));
+          setTimeout(() => {
+            setFlashErrors({ username: false, password: false });
+            setSubmitErrorFlash(false);
+          }, 500);
+        }
+      } catch (err: any) {
+        console.log(err);
       }
-    } catch (err: any) {
-      console.log(err);
-    }
-  };
+    },
+    [submitError, formData, formErrors, flashErrors, submitErrorFlash]
+  );
 
   return {
     formData,

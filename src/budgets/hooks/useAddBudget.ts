@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { AppDispatch } from "../../features/store";
 import { shallowEqual } from "react-redux";
@@ -68,90 +68,98 @@ const useAddBudget = ({
   // Pushes a number on the key pressed by the user to the right of the new budget funds value and creates
   // a new string. If the new budget value exceeds the user's current total asset value, the new budget funds
   // value will not update.
-  const handlePress = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    let num: number = +e.currentTarget.value;
-    let newNum: number = currencyConverter(formData.moneyAllocated, num);
-    handleBudgetInputErrors("moneyAllocated", newNum, setFormErrors);
-    if (newNum <= user!.totalAssets * 100) {
-      setFormData((data) => ({ ...data, moneyAllocated: newNum }));
-      setAvailableFunds(user!.totalAssets * 100 - newNum);
-    } else {
-      setFormErrors((data) => ({
-        ...data,
-        moneyAllocated:
-          "Budget funds cannot exceed remaining total asset value!",
-      }));
-      setTimeout(() => {
+  const handlePress = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      let num: number = +e.currentTarget.value;
+      let newNum: number = currencyConverter(formData.moneyAllocated, num);
+      handleBudgetInputErrors("moneyAllocated", newNum, setFormErrors);
+      if (newNum <= user!.totalAssets * 100) {
+        setFormData((data) => ({ ...data, moneyAllocated: newNum }));
+        setAvailableFunds(user!.totalAssets * 100 - newNum);
+      } else {
         setFormErrors((data) => ({
           ...data,
-          moneyAllocated: "",
+          moneyAllocated:
+            "Budget funds cannot exceed remaining total asset value!",
         }));
-      }, 1500);
-    }
-  };
+        setTimeout(() => {
+          setFormErrors((data) => ({
+            ...data,
+            moneyAllocated: "",
+          }));
+        }, 1500);
+      }
+    },
+    [user?.totalAssets, formData, formErrors, availableFunds]
+  );
 
   // Pops the rightmost number on the new budget funds value and creates
   // a new string without that number.
-  const handleDelete = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    let newNum: number = numPop(formData.moneyAllocated);
-    handleBudgetInputErrors("moneyAllocated", newNum, setFormErrors);
-    setFormData((data) => ({
-      ...data,
-      moneyAllocated: newNum,
-    }));
-    setAvailableFunds(user!.totalAssets * 100 - newNum);
-  };
+  const handleDelete = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      let newNum: number = numPop(formData.moneyAllocated);
+      handleBudgetInputErrors("moneyAllocated", newNum, setFormErrors);
+      setFormData((data) => ({
+        ...data,
+        moneyAllocated: newNum,
+      }));
+      setAvailableFunds(user!.totalAssets * 100 - newNum);
+    },
+    [formData, formErrors, availableFunds]
+  );
 
   // updates the values of the form data on user input. If the inputs contain any errors, updates form errors
   // state and lets user know that errors exist
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    if (name === "title" || name === "moneyAllocated") {
-      handleBudgetInputErrors(name, value, setFormErrors);
-      setFormData((data) => ({ ...data, [name]: value }));
-    }
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const { name, value } = e.target;
+      if (name === "title" || name === "moneyAllocated") {
+        handleBudgetInputErrors(name, value, setFormErrors);
+        setFormData((data) => ({ ...data, [name]: value }));
+      }
+    },
+    [formData, formErrors]
+  );
 
   // sends new budget info to db and updates user state in redux with new budget. If inputs contain errors on
   // submission, does not send data and flashes errorful inputs for user.
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    try {
-      if (handleBudgetSubmitErrors(formData, setFormErrors)) {
-        dispatch(setFormLoading(true));
-        let submitData: submitBudget = {
-          userID: user!._id,
-          ...formData,
-          moneyAllocated: formData.moneyAllocated / 100,
-        };
-        let { newUserBudget, newAssets } = await BudgetAPI.addNewBudget(
-          submitData
-        );
-        dispatch(setTotalAssets(newAssets));
-        addBudget(newUserBudget);
-        hideForm(e);
-        notify(submitData.title, submitData.moneyAllocated);
-      } else {
-        if (formErrors.title || formData.title === "")
-          setFlashErrors((flash) => ({ ...flash, title: true }));
-        if (formErrors.moneyAllocated || formData.moneyAllocated === 0)
-          setFlashErrors((flash) => ({ ...flash, moneyAllocated: true }));
-        setTimeout(() => {
-          setFlashErrors({ title: false, moneyAllocated: false });
-        }, 500);
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent): Promise<void> => {
+      e.preventDefault();
+      try {
+        if (handleBudgetSubmitErrors(formData, setFormErrors)) {
+          dispatch(setFormLoading(true));
+          let submitData: submitBudget = {
+            userID: user!._id,
+            ...formData,
+            moneyAllocated: formData.moneyAllocated / 100,
+          };
+          let { newUserBudget, newAssets } = await BudgetAPI.addNewBudget(
+            submitData
+          );
+          dispatch(setTotalAssets(newAssets));
+          addBudget(newUserBudget);
+          hideForm(e);
+          notify(submitData.title, submitData.moneyAllocated);
+        } else {
+          if (formErrors.title || formData.title === "")
+            setFlashErrors((flash) => ({ ...flash, title: true }));
+          if (formErrors.moneyAllocated || formData.moneyAllocated === 0)
+            setFlashErrors((flash) => ({ ...flash, moneyAllocated: true }));
+          setTimeout(() => {
+            setFlashErrors({ title: false, moneyAllocated: false });
+          }, 500);
+        }
+      } catch (err: any) {
+        notifyError(JSON.parse(err.message));
+      } finally {
+        dispatch(setFormLoading(false));
       }
-    } catch (err: any) {
-      notifyError(JSON.parse(err.message));
-    } finally {
-      dispatch(setFormLoading(false));
-    }
-  };
+    },
+    [formData, formErrors, user?._id, flashErrors]
+  );
 
   return {
     formData,
