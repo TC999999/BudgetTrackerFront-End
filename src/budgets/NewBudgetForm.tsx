@@ -8,7 +8,7 @@ import {
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
-import useBudget from "./formHooks/useBudget";
+import useBudget from "./hooks/useAddBudget";
 
 type Props = {
   hideForm: (

@@ -3,46 +3,69 @@ import {
   BudgetEditInterface,
   UpdateBudgetFormErrors,
   UpdateBudgetFlashErrors,
+  BudgetUpdate,
 } from "../interfaces/budgetInterfaces";
+import { loading } from "../interfaces/loadingInterfaces";
+import { useAppSelector } from "../features/hooks";
+import { shallowEqual } from "react-redux";
+import useEditBudget from "./hooks/useEditBudgets";
 import KeyPad from "../KeyPad";
 
 type Props = {
-  formData: BudgetEditInterface;
-  formErrors: UpdateBudgetFormErrors;
-  flashErrors: UpdateBudgetFlashErrors;
   budget: BudgetInterface;
-  newTotalAssets: string;
-  newBudget: string;
-  newRemainingMoney: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => Promise<void>;
-  handlePress: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  handleRadio: (e: React.ChangeEvent<HTMLInputElement>) => void;
   hideEditForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
     form: "showEditForm"
   ) => void;
+
+  updateBudget: (updatedBudget: BudgetUpdate) => void;
 };
 
 const EditBudgetForm: React.FC<Props> = ({
-  formData,
-  formErrors,
-  flashErrors,
   budget,
-  newTotalAssets,
-  newBudget,
-  newRemainingMoney,
-  handleChange,
-  handleSubmit,
-  handlePress,
-  handleDelete,
-  handleRadio,
+  updateBudget,
   hideEditForm,
-}): JSX.Element => {
-  return (
+}): JSX.Element | null => {
+  const initialState: BudgetEditInterface = {
+    title: budget.title,
+    addedMoney: 0,
+    operation: "add",
+  };
+
+  const initialErrors: UpdateBudgetFormErrors = {
+    title: "",
+    addedMoney: "",
+  };
+
+  const initialFlashErrors: UpdateBudgetFlashErrors = { title: false };
+
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.loading.loadingInfo,
+    shallowEqual
+  );
+
+  const {
+    formData,
+    formErrors,
+    flashErrors,
+    newRemainingMoney,
+    newBudget,
+    newTotalAssets,
+    handlePress,
+    handleDelete,
+    handleRadio,
+    handleChange,
+    handleSubmit,
+  } = useEditBudget({
+    initialState,
+    initialErrors,
+    initialFlashErrors,
+    budget,
+    hideEditForm,
+    updateBudget,
+  });
+
+  return !formLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2-lg">
         <div className="edit-budget-form-div text-center modal-layer-3">
@@ -214,7 +237,7 @@ const EditBudgetForm: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default EditBudgetForm;

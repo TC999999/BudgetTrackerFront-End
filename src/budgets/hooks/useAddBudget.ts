@@ -31,7 +31,7 @@ type input = {
   ) => void;
 };
 
-const useBudget = ({
+const useAddBudget = ({
   initialState,
   initialErrors,
   initialFlashErrors,
@@ -165,4 +165,4 @@ const useBudget = ({
   };
 };
 
-export default useBudget;
+export default useAddBudget;

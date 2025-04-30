@@ -58,12 +58,12 @@ export const createUpdateBudgetString = (
       case "add":
         addOrRemove = `Added $${(submitData.addedMoney / 100).toFixed(
           2
-        )} from available assets.`;
+        )} to total savings balance.`;
         break;
       case "subtract":
         addOrRemove = `Removed $${(submitData.addedMoney / 100).toFixed(
           2
-        )} and added it to available assets.`;
+        )} and added it to total savings balance.`;
         break;
     }
   }
