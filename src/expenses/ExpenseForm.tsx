@@ -10,7 +10,7 @@ import {
 } from "../interfaces/expenseInterfaces";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
-import useExpense from "./formHooks/useExpense";
+import useExpenseForm from "./hooks/useExpenseForm";
 import { DateTime } from "luxon";
 
 type Props = {
@@ -65,7 +65,7 @@ const ExpenseForm: React.FC<Props> = ({
     handleDelete,
     handleChange,
     handleSubmit,
-  } = useExpense({
+  } = useExpenseForm({
     initialState,
     initialMoney,
     initialErrors,

@@ -9,21 +9,9 @@ import ListHeader from "../ListHeader";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import useSingleBudget from "./hooks/useSingleBudget";
 
-type FormStateInterface = {
-  showExpenseForm: boolean;
-  showDeleteForm: boolean;
-  showEditForm: boolean;
-};
-
 // returns page for a single user's budget based on budget id ("/budgets/:id")
 const SingleBudgetPage = (): JSX.Element => {
   const { budgetID, id } = useParams();
-
-  const initialFormState: FormStateInterface = {
-    showExpenseForm: false,
-    showDeleteForm: false,
-    showEditForm: false,
-  };
 
   const {
     currentBudget,
@@ -34,7 +22,7 @@ const SingleBudgetPage = (): JSX.Element => {
     updateBudget,
     addExpense,
     filterExpense,
-  } = useSingleBudget({ budgetID, id, initialFormState });
+  } = useSingleBudget({ budgetID, id });
 
   return (
     <div id="single-budget-page">

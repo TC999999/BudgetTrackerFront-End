@@ -1,32 +1,18 @@
-import {
-  LogInInterface,
-  LogInErrors,
-  LogInFlashErrors,
-} from "../interfaces/authInterfaces";
 import { Link } from "react-router-dom";
-
-type Props = {
-  formData: LogInInterface;
-  logInErrors: LogInErrors;
-  flashErrors: LogInFlashErrors;
-  submitError: string;
-  submitErrorFlash: boolean;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent) => Promise<void>;
-  handleCheckBox: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
+import useLogIn from "./hooks/useLogIn";
 
 // form for logging in a user
-const LogInForm: React.FC<Props> = ({
-  formData,
-  logInErrors,
-  flashErrors,
-  submitError,
-  submitErrorFlash,
-  handleChange,
-  handleSubmit,
-  handleCheckBox,
-}) => {
+const LogInForm = (): JSX.Element => {
+  const {
+    formData,
+    formErrors,
+    flashErrors,
+    submitError,
+    submitErrorFlash,
+    handleChange,
+    handleCheckBox,
+    handleSubmit,
+  } = useLogIn();
   return (
     <div
       tabIndex={-1}
@@ -42,7 +28,7 @@ const LogInForm: React.FC<Props> = ({
               </label>
               <input
                 className={`input 
-                ${logInErrors.username ? "input-error" : "input-valid"} ${
+                ${formErrors.username ? "input-error" : "input-valid"} ${
                   flashErrors.username && "animate-blinkError"
                 }`}
                 id="login_username"
@@ -53,9 +39,9 @@ const LogInForm: React.FC<Props> = ({
                 onChange={handleChange}
                 maxLength={30}
               />
-              {logInErrors.username && (
+              {formErrors.username && (
                 <div className="username-error text-red-600 font-bold">
-                  <p>{logInErrors.username}</p>
+                  <p>{formErrors.username}</p>
                 </div>
               )}
             </div>
@@ -65,7 +51,7 @@ const LogInForm: React.FC<Props> = ({
               </label>
               <input
                 className={`input 
-                  ${logInErrors.password ? "input-error" : "input-valid"} ${
+                  ${formErrors.password ? "input-error" : "input-valid"} ${
                   flashErrors.password && "animate-blinkError"
                 }`}
                 id="login_password"
@@ -76,9 +62,9 @@ const LogInForm: React.FC<Props> = ({
                 onChange={handleChange}
                 maxLength={20}
               />
-              {logInErrors.password && (
+              {formErrors.password && (
                 <div className="password-error text-red-600 font-bold">
-                  <p>{logInErrors.password}</p>
+                  <p>{formErrors.password}</p>
                 </div>
               )}
             </div>

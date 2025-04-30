@@ -39,7 +39,7 @@ type input = {
 };
 
 // custom hook for new expense forms
-const useExpense = ({
+const useExpenseForm = ({
   initialState,
   initialMoney,
   initialErrors,
@@ -184,4 +184,4 @@ const useExpense = ({
   };
 };
 
-export default useExpense;
+export default useExpenseForm;

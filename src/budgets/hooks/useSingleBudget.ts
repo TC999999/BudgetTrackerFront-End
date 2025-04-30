@@ -22,12 +22,19 @@ type FormStateInterface = {
 type input = {
   budgetID?: string;
   id?: string;
-  initialFormState: FormStateInterface;
 };
 
-const useSingleBudget = ({ budgetID, id, initialFormState }: input) => {
+// custom hook for page displaying a single budget, includes showing forms, adding new expenses to their
+// proper places in the list, and filtering out deleted expenses
+const useSingleBudget = ({ budgetID, id }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
+
+  const initialFormState: FormStateInterface = {
+    showExpenseForm: false,
+    showDeleteForm: false,
+    showEditForm: false,
+  };
 
   const notify = (message: string): Id => toast.error(message);
   const [currentBudget, setCurrentBudget] = useState<BudgetInterface>({
