@@ -37,14 +37,6 @@ const IncomeSkeletonCard = (): JSX.Element => {
             </div>
           </div>
         </div>
-        {/* <div className="flex justify-around">
-          <div>
-            <Skeleton />
-          </div>
-          <div>
-            <Skeleton />
-          </div>
-        </div> */}
       </div>
     </div>
   );
