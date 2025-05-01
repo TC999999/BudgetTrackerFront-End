@@ -19,6 +19,9 @@ import {
 } from "../../helpers/handleSignUpErrors";
 import { toast, Id } from "react-toastify";
 
+// custom hook for when a user initially registers: includes handlers for text inputs, the custom keypad component
+// inputs, showing the form for initial incomes, handling the checkbox for trusted devices, and handling data
+// submission
 const useSignUp = () => {
   const initialState: SignUpInterface = {
     username: "",

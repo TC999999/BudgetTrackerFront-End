@@ -30,6 +30,9 @@ type input = {
   updateTransactions: (newTransaction: Transaction) => void;
 };
 
+// custom hook for form for adding a new transaction: includes handlers for calculating the new value of
+// the remaining savings, key presses on the custom keypad component, presses of the radio buttons to update
+// options, and submitting the data
 const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (notification: string): Id => toast.success(notification);

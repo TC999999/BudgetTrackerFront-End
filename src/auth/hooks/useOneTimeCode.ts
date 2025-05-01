@@ -9,7 +9,7 @@ import {
 import ResetPasswordAPI from "../../apis/ResetPasswordAPI";
 import { joinOTPCode } from "../../helpers/joinOTPCode";
 
-// custom hooks for one time user verification code when resetting a password: includes handling for when a
+// custom hook for one time user verification code when resetting a password: includes handling for when a
 // user presses a key on the custom keypad component or when the user submits the code.
 const useOneTimeCode = ({
   changeStep,

@@ -13,8 +13,8 @@ import { toast, Id } from "react-toastify";
 
 type input = UserInfoInterface;
 
-// custom hook for dashboard: includes retrieval of recent expenses and transactions, showing and hiding the
-// form for new transactions, and adding new transactions to the recent transaction list
+// custom hook for dashboard: includes retrieval of recent expenses and transactions on initial render,
+// showing and hiding the form for new transactions, and adding new transactions to the recent transaction list
 const useDashboard = (user: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();

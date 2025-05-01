@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { ListHeaderType } from "../interfaces/miscTypes";
 
-// custom hook for list headers: includes the title, noting the max length of the list, and the message describing
-// the list
+// custom hook for list headers strings: includes the title, noting the max length of the list, and the
+// message describing the list
 const useListHeader = ({ type, itemListLength }: ListHeaderType) => {
   // returns the title for the list depending on the type in props
   const constructTitle: string = useMemo(() => {

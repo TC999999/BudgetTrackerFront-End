@@ -14,6 +14,9 @@ type input = {
   removeFromIncomeState: (id: string) => void;
 };
 
+// custom hook for component containing list of incomes: includes handlers for selecting an income
+// for both edit and deletion, showing/hiding the form for updating/deleting a single income, and
+// deleting a single income
 const useIncomeList = ({ removeFromIncomeState }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
 

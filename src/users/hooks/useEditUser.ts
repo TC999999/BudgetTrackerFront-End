@@ -18,7 +18,8 @@ import UserAPI from "../../apis/UserAPI";
 
 type input = string | undefined;
 
-// custom hooks for a form to update a single user
+// custom hooks for a form to update a single user: includes retrieval of user data upon initial render, handlers for
+// changes in text inputs, and submitting the data
 const useEditUser = (id: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();

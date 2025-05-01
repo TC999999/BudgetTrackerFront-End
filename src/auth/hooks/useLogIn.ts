@@ -15,6 +15,8 @@ import {
 } from "../../helpers/handleLogInErrors";
 import { shallowEqual } from "react-redux";
 
+// custom hook for logging in a user: includes error handler, handler for updating state when the input changes, and
+// a handler for submitting the data
 const useLogIn = () => {
   const initialState: LogInInterface = {
     username: "",

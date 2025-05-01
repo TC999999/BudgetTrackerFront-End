@@ -38,7 +38,8 @@ type input = {
   updateBudget: (updatedBudget: BudgetUpdate) => void;
 };
 
-// custom hook for new expense forms
+// custom hook for form for adding a new expense: includes handling of the custom keypad component, changes
+// in title text input, and submission of form data
 const useExpenseForm = ({
   initialState,
   initialMoney,
