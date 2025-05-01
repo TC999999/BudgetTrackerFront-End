@@ -118,3 +118,10 @@ export type PasswordResetSubmit = {
   email: string;
   newPassword: string;
 };
+
+export type PasswordResetInput = {
+  changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
+  changeLoading: (loadingStatus: boolean) => void;
+  changeSubmitError: (e: React.FormEvent, newSubmitError: string) => void;
+  currentUser: ConfirmUserInfo;
+};
