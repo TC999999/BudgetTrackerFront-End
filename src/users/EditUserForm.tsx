@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import useEditUser from "./hooks/useEditUser";
 
-// returns a form component for updating a single user
+// returns a form component for updating a single current user
 const EditUserForm = (): JSX.Element => {
   const { id } = useParams();
   const {

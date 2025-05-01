@@ -4,7 +4,6 @@ import { UserContextInterface } from "../interfaces/userInterfaces";
 import AddTransactionForm from "../transactions/AddTransactionForm";
 import Recents from "./Recents";
 import UserCard from "./UserCard";
-
 import useDashboard from "./hooks/useDashboard";
 
 // returns the main page for users who are logged in: shows their current total assets and

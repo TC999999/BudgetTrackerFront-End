@@ -13,6 +13,8 @@ import BudgetAPI from "../../apis/BudgetAPI";
 
 type input = string | undefined;
 
+// custom hooks for the page containing a list of all of a user's budgets: includes retrieval of budgets on render,
+// adding new budgets to the list after a form submission, and showing and hiding the form for new budget
 const useBudgetPage = (id: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();

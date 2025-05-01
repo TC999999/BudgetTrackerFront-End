@@ -18,6 +18,8 @@ import BudgetAPI from "../../apis/BudgetAPI";
 
 type input = BudgetInterface;
 
+// custom hooks for form to delete a budget: includes notifications, handling of radio buttons,
+// and handling of submitting data
 const useDeleteBudget = (budget: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();

@@ -31,6 +31,8 @@ type input = {
   ) => void;
 };
 
+// custom hook for adding a budget: includes changes to text input, button presses on the custom keypad component,
+// and submitting the data
 const useAddBudget = ({
   initialState,
   initialErrors,

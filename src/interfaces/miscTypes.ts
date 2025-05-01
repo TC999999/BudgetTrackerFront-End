@@ -12,3 +12,14 @@ export type ActionInterface = {
   type: string;
   payload: any;
 };
+
+export type ListHeaderType = {
+  type:
+    | "Incomes"
+    | "Transactions"
+    | "Recent Transactions"
+    | "Budgets"
+    | "Expenses"
+    | "Recent Expenses";
+  itemListLength?: number;
+};
