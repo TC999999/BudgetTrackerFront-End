@@ -4,7 +4,8 @@ import { useAppDispatch } from "./../features/hooks";
 import { AppDispatch } from "./../features/store";
 import { logOutUser } from "./../features/actions/auth";
 
-// custom hook for navbar functions
+// custom hook for navbar functions: includes showing or hiding prompt asking if a user really wants to log out,
+// logging out fully, and navigating to a specific url
 const useNavbar = () => {
   const [showPrompt, setShowPrompt] = useState<boolean>(false);
   const dispatch: AppDispatch = useAppDispatch();

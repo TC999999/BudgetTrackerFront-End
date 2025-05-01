@@ -12,10 +12,17 @@ import SingleBudgetPage from "./budgets/SingleBudgetPage";
 import IncomePage from "./incomes/IncomePage";
 import SignUp from "./auth/SignUp";
 import ResetPassword from "./auth/ResetPassword";
+import { useAppSelector } from "./features/hooks";
+import { UserContextInterface } from "./interfaces/userInterfaces";
+import { shallowEqual } from "react-redux";
 
 // main frontend route list for application
-const RoutesList = (): JSX.Element => {
-  return (
+const RoutesList = (): JSX.Element | null => {
+  const { loading }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
+    shallowEqual
+  );
+  return !loading ? (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route element={<NotLoggedInRoutes />}>
@@ -36,7 +43,7 @@ const RoutesList = (): JSX.Element => {
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
-  );
+  ) : null;
 };
 
 export default RoutesList;
