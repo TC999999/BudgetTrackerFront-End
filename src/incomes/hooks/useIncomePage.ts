@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import { setLoadError, setPageLoading } from "../../features/slices/loadSlice";
 import { useAppDispatch } from "../../features/hooks";
@@ -42,47 +42,60 @@ const useIncomePage = (id: input) => {
   }, [id]);
 
   // adds a single income to state after a form submission
-  const addToIncomeState = (income: Income): void => {
-    setIncomes((incomes) => [...incomes, income]);
-  };
+  const addToIncomeState = useCallback(
+    (income: Income): void => {
+      setIncomes((incomes) => [...incomes, income]);
+    },
+    [incomes]
+  );
 
   // updates a single income in state after a form submission
-  const updateIncomeState = (income: Income): void => {
-    setIncomes((incomes) =>
-      incomes.map((i) => {
-        return i._id === income._id ? income : i;
-      })
-    );
-  };
+  const updateIncomeState = useCallback(
+    (income: Income): void => {
+      setIncomes((incomes) =>
+        incomes.map((i) => {
+          return i._id === income._id ? income : i;
+        })
+      );
+    },
+    [incomes]
+  );
 
   // removes a single income from state after a button press
-  const removeFromIncomeState = (id: string): void => {
-    setIncomes((incomes) =>
-      incomes.filter((i) => {
-        return i._id !== id;
-      })
-    );
-  };
+  const removeFromIncomeState = useCallback(
+    (id: string): void => {
+      setIncomes((incomes) =>
+        incomes.filter((i) => {
+          return i._id !== id;
+        })
+      );
+    },
+    [incomes]
+  );
 
   // updates state to show new income form unless the user already has 3 incomes
-  const showIncomeFormState = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
-    e.preventDefault();
-    if (incomes.length < 3) {
-      setShowIncomeForm(true);
-    } else {
-      notify();
-    }
-  };
+  const showIncomeFormState = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      if (incomes.length < 3) {
+        setShowIncomeForm(true);
+      } else {
+        notify();
+      }
+    },
+    [showIncomeForm]
+  );
 
   // updates state to hide new income form
-  const hideIncomeFormState = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
-  ): void => {
-    e.preventDefault();
-    setShowIncomeForm(false);
-  };
+  const hideIncomeFormState = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+    ): void => {
+      e.preventDefault();
+      setShowIncomeForm(false);
+    },
+    [showIncomeForm]
+  );
 
   return {
     showIncomeForm,
