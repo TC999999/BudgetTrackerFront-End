@@ -1,10 +1,5 @@
 import KeyPad from "../KeyPad";
-import {
-  newBudgetInterface,
-  BudgetFormErrors,
-  BudgetFlashErrors,
-  BudgetInterface,
-} from "../interfaces/budgetInterfaces";
+import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
@@ -26,16 +21,6 @@ const BudgetForm: React.FC<Props> = ({
     (store) => store.loading.loadingInfo,
     shallowEqual
   );
-  const initialState: newBudgetInterface = {
-    title: "",
-    moneyAllocated: 0,
-  };
-  const initialErrors: BudgetFormErrors = { title: "", moneyAllocated: "" };
-
-  const initialFlashErrors: BudgetFlashErrors = {
-    title: false,
-    moneyAllocated: false,
-  };
 
   const {
     formData,
@@ -47,9 +32,6 @@ const BudgetForm: React.FC<Props> = ({
     handleChange,
     handleSubmit,
   } = useBudget({
-    initialState,
-    initialErrors,
-    initialFlashErrors,
     addBudget,
     hideForm,
   });

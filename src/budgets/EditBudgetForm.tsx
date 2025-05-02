@@ -1,10 +1,4 @@
-import {
-  BudgetInterface,
-  BudgetEditInterface,
-  UpdateBudgetFormErrors,
-  UpdateBudgetFlashErrors,
-  BudgetUpdate,
-} from "../interfaces/budgetInterfaces";
+import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
@@ -21,24 +15,13 @@ type Props = {
   updateBudget: (updatedBudget: BudgetUpdate) => void;
 };
 
+// shows a form for editing a single budget for a single user: the user can change the title or add or subtract a
+// specified number of funds
 const EditBudgetForm: React.FC<Props> = ({
   budget,
   updateBudget,
   hideEditForm,
 }): JSX.Element | null => {
-  const initialState: BudgetEditInterface = {
-    title: budget.title,
-    addedMoney: 0,
-    operation: "add",
-  };
-
-  const initialErrors: UpdateBudgetFormErrors = {
-    title: "",
-    addedMoney: "",
-  };
-
-  const initialFlashErrors: UpdateBudgetFlashErrors = { title: false };
-
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
     shallowEqual
@@ -57,9 +40,6 @@ const EditBudgetForm: React.FC<Props> = ({
     handleChange,
     handleSubmit,
   } = useEditBudget({
-    initialState,
-    initialErrors,
-    initialFlashErrors,
     budget,
     hideEditForm,
     updateBudget,

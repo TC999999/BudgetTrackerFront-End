@@ -5,6 +5,7 @@ type Props = {
   showForm: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
+// shows a row of buttons for budgets page
 const BudgetPageButtons: React.FC<Props> = ({ budgetList, showForm }) => {
   return (
     <header id="additional-nav-header">

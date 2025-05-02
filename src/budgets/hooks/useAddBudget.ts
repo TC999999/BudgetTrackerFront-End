@@ -22,9 +22,6 @@ import { error } from "../../interfaces/miscTypes";
 import { UserContextInterface } from "../../interfaces/userInterfaces";
 
 type input = {
-  initialState: newBudgetInterface;
-  initialErrors: BudgetFormErrors;
-  initialFlashErrors: BudgetFlashErrors;
   addBudget: (newBudget: BudgetInterface) => void;
   hideForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
@@ -33,13 +30,7 @@ type input = {
 
 // custom hook for adding a budget: includes changes to text input, button presses on the custom keypad component,
 // and submitting the data
-const useAddBudget = ({
-  initialState,
-  initialErrors,
-  initialFlashErrors,
-  addBudget,
-  hideForm,
-}: input) => {
+const useAddBudget = ({ addBudget, hideForm }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (title: string, moneyAllocated: number): Id =>
     toast.success(
@@ -54,6 +45,17 @@ const useAddBudget = ({
     (store) => store.user.userInfo,
     shallowEqual
   );
+
+  const initialState: newBudgetInterface = {
+    title: "",
+    moneyAllocated: 0,
+  };
+  const initialErrors: BudgetFormErrors = { title: "", moneyAllocated: "" };
+
+  const initialFlashErrors: BudgetFlashErrors = {
+    title: false,
+    moneyAllocated: false,
+  };
 
   // sets state for new budget form data
   const [formData, setFormData] = useState<newBudgetInterface>(initialState);

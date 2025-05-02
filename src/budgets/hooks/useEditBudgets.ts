@@ -28,10 +28,6 @@ import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
 
 type input = {
-  initialState: BudgetEditInterface;
-  initialErrors: UpdateBudgetFormErrors;
-  initialFlashErrors: UpdateBudgetFlashErrors;
-
   budget: BudgetInterface;
   hideEditForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
@@ -41,14 +37,10 @@ type input = {
   updateBudget: (updatedBudget: BudgetUpdate) => void;
 };
 
-const useEditBudget = ({
-  initialState,
-  initialErrors,
-  initialFlashErrors,
-  budget,
-  hideEditForm,
-  updateBudget,
-}: input) => {
+// custom hook for form for updating a single budget: includes handlers for text inputs for both change
+// in funds and title, key presses on custom key pad component, radio buttons that checks if the funds are being
+// added or subtracted, and submission of data
+const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
 
   const notify = (notificationString: string): Id =>
@@ -61,6 +53,19 @@ const useEditBudget = ({
     (store) => store.user.userInfo,
     shallowEqual
   );
+
+  const initialState: BudgetEditInterface = {
+    title: budget.title,
+    addedMoney: 0,
+    operation: "add",
+  };
+
+  const initialErrors: UpdateBudgetFormErrors = {
+    title: "",
+    addedMoney: "",
+  };
+
+  const initialFlashErrors: UpdateBudgetFlashErrors = { title: false };
 
   // sets state for form data used to update this budget
   const [formData, setFormData] = useState<BudgetEditInterface>(initialState);
