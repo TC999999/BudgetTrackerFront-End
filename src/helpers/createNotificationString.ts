@@ -23,18 +23,18 @@ export const createUpdateIncomeString = (
   let titleChange: string =
     income.title === submitData.title
       ? ""
-      : `Title changed to ${submitData.title}. `;
+      : ` Title changed to ${submitData.title}.`;
   let salaryChange: string =
     +income.salary === submitData.salary
       ? ""
-      : `Salary changed to $${submitData.salary.toFixed(2)}. `;
+      : ` Salary changed to $${submitData.salary.toFixed(2)}.`;
   let intervalChange: string =
     income.readableUpdateTimeString === submitData.readableUpdateTimeString
       ? ""
-      : `Now updates at ${submitData.readableUpdateTimeString}.`;
+      : ` Now updates at ${submitData.readableUpdateTimeString}.`;
 
   return (
-    `${income.title} income successfully updated! ` +
+    `${income.title} income successfully updated!` +
     titleChange +
     salaryChange +
     intervalChange
@@ -50,23 +50,25 @@ export const createUpdateBudgetString = (
   let addOrRemove: string = "";
 
   if (originalTitle !== submitData.title) {
-    titleChange = `Title changed to ${submitData.title}.`;
+    titleChange = ` Title changed to ${submitData.title}.`;
   }
 
   if (submitData.addedMoney > 0) {
     switch (submitData.operation) {
       case "add":
-        addOrRemove = `Added $${(submitData.addedMoney / 100).toFixed(
+        addOrRemove = ` Added $${(submitData.addedMoney / 100).toFixed(
           2
         )} to total savings balance.`;
         break;
       case "subtract":
-        addOrRemove = `Removed $${(submitData.addedMoney / 100).toFixed(
+        addOrRemove = ` Removed $${(submitData.addedMoney / 100).toFixed(
           2
         )} and added it to total savings balance.`;
         break;
     }
   }
 
-  return `${originalTitle} budget updated successfully! ${titleChange} ${addOrRemove}`;
+  return (
+    `${originalTitle} budget updated successfully!` + titleChange + addOrRemove
+  );
 };

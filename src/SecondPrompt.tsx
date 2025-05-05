@@ -41,21 +41,21 @@ const SecondPrompt: React.FC<Props> = ({
     if (itemForDeletion) deleteFunction(e, itemForDeletion);
   };
 
-  const remainingMoney = useMemo(() => {
+  const remainingMoney: string | undefined = useMemo(() => {
     if (BudgetFunds && itemForDeletion?.transaction)
       return calcNewMoneyRemaining(
         BudgetFunds.moneyRemaining,
         itemForDeletion.transaction
       );
-  }, []);
+  }, [BudgetFunds, itemForDeletion]);
 
-  const moneySpent = useMemo(() => {
+  const moneySpent: string | undefined = useMemo(() => {
     if (BudgetFunds && itemForDeletion?.transaction)
       return calcNewMoneySpent(
         BudgetFunds.moneySpent,
         itemForDeletion.transaction
       );
-  }, []);
+  }, [BudgetFunds, itemForDeletion]);
 
   return !formLoading ? (
     <div className="modal-layer-1">

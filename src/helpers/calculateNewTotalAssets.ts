@@ -17,8 +17,9 @@ export const calculateNewTotalAssets = (
   }
 };
 
-// Used for edit user forms: calcuates the new total asset value to be displayed on a form before submitting.
-// if operation is add, adds new funds to total assets and vice versa if operation is subtract
+// Used for new transaction form: calcuates the new total asset value to be displayed on a
+// form before submitting. if operation is add, adds new funds to total assets and
+// vice versa if operation is subtract
 export const calculateNewTotalAssetsUserDashboard = (
   totalAssets: number,
   newFunds: number,
