@@ -1,4 +1,4 @@
-import { SignUpInterface, SignUpErrors } from "../interfaces/authInterfaces";
+import { SignUpErrors, SignUpSensitive } from "../interfaces/authInterfaces";
 import { isEmail } from "validator";
 
 // returns custom strings for username input value errors in sign up form
@@ -29,6 +29,18 @@ const returnPasswordErrors = (value: string): string => {
   return "";
 };
 
+const returnConfirmPasswordErrors = (
+  password: string,
+  confirmPassword: string
+): string => {
+  if (confirmPassword === "") {
+    return "New password confirmation cannot be empty";
+  } else if (confirmPassword !== password) {
+    return "Does not match new password above!";
+  }
+  return "";
+};
+
 // returns custom strings for email input value errors in sign up form
 const returnEmailErrors = (value: string): string => {
   if (value.length === 0) {
@@ -41,9 +53,10 @@ const returnEmailErrors = (value: string): string => {
 
 // updates sign up form errors state when input value changes
 export const handleSignUpInputErrors = (
-  name: "username" | "password" | "email",
+  name: "username" | "password" | "email" | "confirmPassword",
   value: string,
-  setter: React.Dispatch<React.SetStateAction<SignUpErrors>>
+  setter: React.Dispatch<React.SetStateAction<SignUpErrors>>,
+  password?: string
 ): void => {
   switch (name) {
     case "username":
@@ -55,6 +68,13 @@ export const handleSignUpInputErrors = (
     case "email":
       setter((data) => ({ ...data, email: returnEmailErrors(value) }));
       break;
+    case "confirmPassword":
+      if (password)
+        setter((data) => ({
+          ...data,
+          confirmPassword: returnConfirmPasswordErrors(password, value),
+        }));
+      break;
     default:
       break;
   }
@@ -62,15 +82,26 @@ export const handleSignUpInputErrors = (
 
 // updates sign up form errors state when form is submitted; returns true if all input values are error free
 export const handleSignUpSubmitErrors = (
-  signUpInfo: SignUpInterface,
+  signUpInfo: SignUpSensitive,
   setter: React.Dispatch<React.SetStateAction<SignUpErrors>>
 ): boolean => {
   handleSignUpInputErrors("username", signUpInfo.username, setter);
   handleSignUpInputErrors("password", signUpInfo.password, setter);
+  handleSignUpInputErrors(
+    "confirmPassword",
+    signUpInfo.confirmPassword,
+    setter,
+    signUpInfo.password
+  );
   handleSignUpInputErrors("email", signUpInfo.email, setter);
+
   return (
     returnUsernameErrors(signUpInfo.username) === "" &&
     returnPasswordErrors(signUpInfo.password) === "" &&
+    returnConfirmPasswordErrors(
+      signUpInfo.password,
+      signUpInfo.confirmPassword
+    ) === "" &&
     returnEmailErrors(signUpInfo.email) === ""
   );
 };

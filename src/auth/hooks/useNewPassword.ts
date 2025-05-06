@@ -85,7 +85,7 @@ const useNewPassword = ({
           };
           await ResetPasswordAPI.resetPassword(submitData);
           changeStep(e, "success");
-          changeSubmitError(e, "");
+          changeSubmitError("", e);
           changeLoading(false);
         } else {
           if (formErrors.newPassword || formData.newPassword === "")
@@ -101,7 +101,7 @@ const useNewPassword = ({
         }
       } catch (err: any) {
         changeLoading(false);
-        changeSubmitError(e, err.message);
+        changeSubmitError(err.message, e);
       }
     },
     [formData, formErrors, flashErrors]

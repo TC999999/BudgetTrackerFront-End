@@ -1,7 +1,10 @@
 import { MdError } from "react-icons/md";
 
 type Props = {
-  changeSubmitError: (e: React.FormEvent, newSubmitError: string) => void;
+  changeSubmitError: (
+    newSubmitError: string,
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
   submitError: string;
 };
 
@@ -29,7 +32,7 @@ const ErrorWindow: React.FC<Props> = ({
             </div>
           </div>
           <button
-            onClick={(e) => changeSubmitError(e, "")}
+            onClick={(e) => changeSubmitError("", e)}
             className="border-2 border-red-700 bg-red-400 p-2 rounded-lg font-bold duration-150 hover:bg-red-700 hover:text-white active:bg-red-100 active:text-white"
           >
             Exit

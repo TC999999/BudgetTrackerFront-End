@@ -15,7 +15,7 @@ export const registerUser = createAsyncThunk<
   try {
     let res = await axios({
       method: "post",
-      url: `${API_URL}/auth/register`,
+      url: `${API_URL}/register/create`,
       data,
       withCredentials: true,
     });

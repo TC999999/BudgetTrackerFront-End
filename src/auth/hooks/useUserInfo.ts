@@ -14,7 +14,7 @@ import {
 type input = {
   changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
   changeLoading: (loadingStatus: boolean) => void;
-  changeSubmitError: (e: React.FormEvent, newSubmitError: string) => void;
+  changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   changeUser: (e: React.FormEvent, newUser: ConfirmUserInfo) => void;
 };
 
@@ -71,7 +71,7 @@ const useUserInfo = ({
             formData
           );
           changeStep(e, "oneTimeCode");
-          changeSubmitError(e, "");
+          changeSubmitError("", e);
           changeUser(e, res);
           changeLoading(false);
         } else {
@@ -85,7 +85,7 @@ const useUserInfo = ({
         }
       } catch (err: any) {
         changeLoading(false);
-        changeSubmitError(e, err.message);
+        changeSubmitError(err.message, e);
       }
     },
     [formData, formErrors, flashErrors]

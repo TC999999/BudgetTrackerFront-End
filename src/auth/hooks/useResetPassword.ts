@@ -71,8 +71,8 @@ const useResetPassword = () => {
   // changes submit error state and causes error window to appear
   const changeSubmitError = useCallback(
     (
-      e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>,
-      newSubmitError: string
+      newSubmitError: string,
+      e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
     ): void => {
       e.preventDefault();
       setSubmitError(newSubmitError);

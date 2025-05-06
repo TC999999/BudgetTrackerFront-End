@@ -11,13 +11,26 @@ export type LogInInterface = {
   trusted: boolean;
 };
 
+export type SignUpSensitive = {
+  username: string;
+  password: string;
+  confirmPassword: string;
+  email: string;
+};
+
+export type SignUpSensitiveSubmit = {
+  username: string;
+  password: string;
+  email: string;
+};
+
 export type SignUpInterface = {
   username: string;
   password: string;
   totalAssets: number;
   email: string;
   incomes: SubmitIncomeSignUp[];
-  trusted: true;
+  trusted: boolean;
 };
 
 export type LogInErrors = {
@@ -27,6 +40,7 @@ export type LogInErrors = {
 
 export interface SignUpErrors extends LogInErrors {
   email: string;
+  confirmPassword: string;
 }
 
 export type LogInFlashErrors = {
@@ -36,6 +50,7 @@ export type LogInFlashErrors = {
 
 export interface SignUpFlashErrors extends LogInFlashErrors {
   email: boolean;
+  confirmPassword: boolean;
 }
 
 export type SubmitUserInfoEdit = {
@@ -122,6 +137,6 @@ export type PasswordResetSubmit = {
 export type PasswordResetInput = {
   changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
   changeLoading: (loadingStatus: boolean) => void;
-  changeSubmitError: (e: React.FormEvent, newSubmitError: string) => void;
+  changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   currentUser: ConfirmUserInfo;
 };

@@ -45,7 +45,7 @@ const ResetPassword = (): JSX.Element => {
           <div id="progress-headers" className="grid grid-cols-4">
             <div
               id="confirm-info-header"
-              className={`pt-4 pb-8 flex justify-center items-center rounded-l-sm border-r-2 ${
+              className={`pt-4 pb-8 text-xs sm:text-base  flex justify-center items-center rounded-l-sm border-r-2 ${
                 currentStep === "userInfo"
                   ? "underline text-green-500 bg-green-100"
                   : ""
@@ -56,18 +56,18 @@ const ResetPassword = (): JSX.Element => {
             </div>
             <div
               id="verification-code-header"
-              className={`pt-4 pb-8 flex justify-center items-center border-r-2 ${
+              className={`pt-4 pb-8 text-xs sm:text-base flex justify-center items-center border-r-2 ${
                 currentStep === "oneTimeCode"
                   ? "underline text-green-500 bg-green-100"
                   : ""
               } ${stepList.oneTimeCode ? "text-green-700 bg-green-500" : ""}`}
             >
-              <p>Verification Code</p>
+              <p>Enter Code</p>
               <CiCircleCheck className="text-xl" />
             </div>
             <div
               id="password-reset-header"
-              className={`pt-4 pb-8 flex justify-center items-center border-r-2${
+              className={`pt-4 pb-8 text-xs sm:text-base  flex justify-center items-center border-r-2${
                 currentStep === "newPassword"
                   ? "underline text-green-500 bg-green-100"
                   : ""
@@ -78,7 +78,7 @@ const ResetPassword = (): JSX.Element => {
             </div>
             <div
               id="success-header"
-              className={`pt-4 pb-8 flex justify-center items-center rounded-r-sm ${
+              className={`pt-4 pb-8 text-xs sm:text-base  flex justify-center items-center rounded-r-sm ${
                 currentStep === "success"
                   ? "underline text-green-500 bg-green-100"
                   : ""

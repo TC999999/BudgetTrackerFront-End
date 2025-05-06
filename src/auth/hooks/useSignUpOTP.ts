@@ -1,22 +1,31 @@
+import RegisterAPI from "../../apis/Register";
 import { useState, useCallback } from "react";
 import {
   OneTimeCodeFormData,
   OneTimeCodeSelect,
   OneTimeCodeData,
   digits,
-  PasswordResetInput,
+  SignUpInterface,
 } from "../../interfaces/authInterfaces";
-import ResetPasswordAPI from "../../apis/ResetPasswordAPI";
 import { joinOTPCode } from "../../helpers/joinOTPCode";
+import { step } from "../../interfaces/registerInterfaces";
 
-// custom hook for one time user verification code when resetting a password: includes handling for when a
-// user presses a key on the custom keypad component or when the user submits the code.
-const useOneTimeCode = ({
-  changeStep,
+type input = {
+  changeLoading: (loadingStatus: boolean) => void;
+  changeStep(e: React.FormEvent, newStep: step): void;
+  changeSubmitError: (
+    newSubmitError: string,
+    e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+  registerData: SignUpInterface;
+};
+
+const useSignUpOTP = ({
   changeLoading,
+  changeStep,
   changeSubmitError,
-  currentUser,
-}: PasswordResetInput) => {
+  registerData,
+}: input) => {
   // initial numbers for each number box
   const initialState: OneTimeCodeFormData = {
     0: "0",
@@ -81,17 +90,17 @@ const useOneTimeCode = ({
           changeLoading(true);
           let code: string = joinOTPCode(formData);
           let data: OneTimeCodeData = {
-            username: currentUser.username,
-            email: currentUser.email,
+            username: registerData.username,
+            email: registerData.email,
             code,
           };
-          await ResetPasswordAPI.confirmOTP(data);
-          changeStep(e, "newPassword");
-          changeSubmitError("", e);
-          changeLoading(false);
+          await RegisterAPI.confirmOTP(data);
+          changeStep(e, "showAdditionalForm");
+          if (e) changeSubmitError("", e);
         } catch (err: any) {
-          changeLoading(false);
           changeSubmitError(err.message, e);
+        } finally {
+          changeLoading(false);
         }
       } else {
         changeSubmitError("Please fill all 6 boxes of the code.", e);
@@ -110,4 +119,4 @@ const useOneTimeCode = ({
   };
 };
 
-export default useOneTimeCode;
+export default useSignUpOTP;

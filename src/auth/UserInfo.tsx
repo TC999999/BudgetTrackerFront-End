@@ -4,7 +4,7 @@ import useUserInfo from "./hooks/useUserInfo";
 type Props = {
   changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
   changeLoading: (loadingStatus: boolean) => void;
-  changeSubmitError: (e: React.FormEvent, newSubmitError: string) => void;
+  changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   changeUser: (e: React.FormEvent, newUser: ConfirmUserInfo) => void;
 };
 
