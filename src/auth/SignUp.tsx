@@ -125,12 +125,10 @@ const SignUp = (): JSX.Element => {
           />
         )}
 
-        {submitError && (
-          <ErrorWindow
-            changeSubmitError={changeSubmitError}
-            submitError={submitError}
-          />
-        )}
+        <ErrorWindow
+          changeSubmitError={changeSubmitError}
+          submitError={submitError}
+        />
       </div>
     </main>
   );

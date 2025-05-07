@@ -9,7 +9,7 @@ import {
 const handleBudgetTitleErrors = (title: string): string => {
   if (title.length === 0) {
     return "Budget title input cannot be empty";
-  } else if (!/^[\w ]+$/i.test(title)) {
+  } else if (!/^[\w-'":/ ]+$/i.test(title)) {
     return "Budget title input contains invalid characters";
   } else if (/^\s+|\s+$/g.test(title)) {
     return "Budget title input cannot have spaces at beginning or end.";

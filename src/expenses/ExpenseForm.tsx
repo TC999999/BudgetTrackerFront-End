@@ -112,14 +112,10 @@ const ExpenseForm: React.FC<Props> = ({
                 </div>
               )}
               <div className="flex flex-col">
-                <small>
-                  Make sure your title has between 20 to 3 characters.
-                </small>
-                <small>
-                  Your new expense title may only include letters, numbers, and
-                  spaces.
-                </small>
+                <small>Title length must be between 3 to 20 characters.</small>
+                <small>Title may include any letters or numbers.</small>
                 <small>Spaces may only be between characters.</small>
+                <small>Allowed Special Characters: ("", '', -, :, /)</small>
               </div>
             </div>
             <div id="date-div" className="mb-2">
@@ -168,7 +164,7 @@ const ExpenseForm: React.FC<Props> = ({
                 </div>
               )}
               <small>
-                Expense may not exceed remaining funds for {budget.title}
+                Expense value may not exceed remaining funds for {budget.title}
               </small>
             </div>
             <div id="keyPad-div">

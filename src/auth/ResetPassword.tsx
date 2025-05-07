@@ -126,12 +126,10 @@ const ResetPassword = (): JSX.Element => {
           />
         )}
         {currentStep === "success" && <PasswordResetSuccess />}
-        {submitError && (
-          <ErrorWindow
-            changeSubmitError={changeSubmitError}
-            submitError={submitError}
-          />
-        )}
+        <ErrorWindow
+          changeSubmitError={changeSubmitError}
+          submitError={submitError}
+        />
       </div>
     </div>
   );

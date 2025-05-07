@@ -22,38 +22,28 @@ const SignUpSensitive: React.FC<Props> = ({
   changeStep,
   changeSubmitError,
 }) => {
-  const {
-    formData,
-    submitError,
-    formErrors,
-    flashErrors,
-    submitErrorFlash,
-    handleChange,
-    handleSubmit,
-  } = useSignUpSensitive({
-    handleDataChange,
-    changeLoading,
-    changeStep,
-    changeSubmitError,
-  });
+  const { formData, formErrors, flashErrors, handleChange, handleSubmit } =
+    useSignUpSensitive({
+      handleDataChange,
+      changeLoading,
+      changeStep,
+      changeSubmitError,
+    });
   return (
     <div id="sensitive-register-form-div">
-      <header>
-        <h1 className="text-center text-lg sm:text-3xl text-green-500 font-bold underline">
+      <header className="text-center">
+        <h1 className="text-lg sm:text-3xl text-green-500 font-bold underline">
           Enter Your New Account Information Here
         </h1>
+        <h2 className="text-md sm:text-lg italic">
+          Afterwards, we will send you and email with a verification code that
+          you will have to input to create your account.
+        </h2>
+        <small>
+          (<span className="text-red-700">*</span>: <i>required</i>)
+        </small>
       </header>
       <form onSubmit={handleSubmit}>
-        {submitError && (
-          <div
-            id="register-error"
-            className={`text-red-600 text-xl font-bold ${
-              submitErrorFlash ? "animate-blinkErrorText" : ""
-            }`}
-          >
-            <p>{submitError}</p>
-          </div>
-        )}
         <div id="username-div" className="py-4">
           <label className="text-lg block" htmlFor="username">
             Username: <small className="text-red-700">*</small>
@@ -119,9 +109,10 @@ const SignUpSensitive: React.FC<Props> = ({
         </div>
         <div className="confirm-password-div">
           <label className="text-lg block" htmlFor="confirmPassword">
-            Confirm your new password here
+            Confirm your password here:{" "}
+            <small className="text-red-700">*</small>
           </label>
-          <div className="flex justify-center">
+          <div className="flex justify-center items-center">
             <input
               type="password"
               className={`input ${

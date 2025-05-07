@@ -7,7 +7,7 @@ import {
 const handleExpenseTitleErrors = (title: string): string => {
   if (title.length === 0) {
     return "Expense title cannot be empty";
-  } else if (!/^[\w ]+$/i.test(title)) {
+  } else if (!/^[\w-'":/ ]+$/i.test(title)) {
     return "Expense title input contains invalid characters";
   } else if (/^\s+|\s+$/g.test(title)) {
     return "Expense title input cannot have spaces at beginning or end.";

@@ -43,6 +43,5 @@ export const calculateNewTotalAssetsWithoutOperation = (
 ): string => {
   let totalAssetsNum = +totalAssets;
   let newAssets: number = totalAssetsNum + newFunds;
-
   return newAssets.toFixed(2);
 };

@@ -1,5 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
-import { removeUserError } from "../../features/slices/authSlice";
+import { useState, useCallback } from "react";
 import {
   SignUpSensitive,
   SignUpSensitiveSubmit,
@@ -7,10 +6,6 @@ import {
   SignUpFlashErrors,
 } from "../../interfaces/authInterfaces";
 import RegisterAPI from "../../apis/Register";
-import { UserContextInterface } from "../../interfaces/userInterfaces";
-import { useAppDispatch, useAppSelector } from "../../features/hooks";
-import { AppDispatch } from "../../features/store";
-import { shallowEqual } from "react-redux";
 import {
   handleSignUpInputErrors,
   handleSignUpSubmitErrors,
@@ -49,37 +44,17 @@ const useSignUpSensitive = ({
     confirmPassword: "",
     email: "",
   };
-  const dispatch: AppDispatch = useAppDispatch();
-
-  const { error }: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo,
-    shallowEqual
-  );
 
   const [formData, setFormData] = useState<SignUpSensitive>(initialState);
 
   const [formErrors, setFormErrors] = useState(initialErrors);
   const [submitError, setSubmitError] = useState<string>("");
-  const [submitErrorFlash, setSubmitErrorFlash] = useState<boolean>(false);
   const [flashErrors, setFlashErrors] = useState<SignUpFlashErrors>({
     username: false,
     password: false,
     confirmPassword: false,
     email: false,
   });
-
-  useEffect((): void => {
-    if (error) {
-      console.log(error);
-      setSubmitError(error);
-      dispatch(removeUserError());
-    }
-    let inputs: string | null = localStorage.getItem("userInputs");
-    if (inputs) {
-      setFormData(JSON.parse(inputs));
-      localStorage.removeItem("userInputs");
-    }
-  }, [error]);
 
   // updates form data when user inputs data, if there are any errors in inputs, lets the user know
   // (e.g. username contains spaces betwwen characters, password length too long, email address is invalid)
@@ -109,14 +84,10 @@ const useSignUpSensitive = ({
         if (handleSignUpSubmitErrors(formData, setFormErrors) && !submitError) {
           changeLoading(true);
           const { username, password, email } = formData;
-          localStorage.setItem(
-            "userInputs",
-            JSON.stringify({ ...formData, password: "", confirmPassword: "" })
-          );
 
           await RegisterAPI.createOTP({ username, email });
           handleDataChange(e, { username, password, email });
-          localStorage.removeItem("userInputs");
+
           changeStep(e, "showOTPForm");
         } else {
           if (formErrors.username || formData.username === "")
@@ -127,7 +98,6 @@ const useSignUpSensitive = ({
             setFlashErrors((flash) => ({ ...flash, confirmPassword: true }));
           if (formErrors.email || formData.email === "")
             setFlashErrors((flash) => ({ ...flash, email: true }));
-          if (submitError) setSubmitErrorFlash(true);
           setTimeout(() => {
             setFlashErrors({
               username: false,
@@ -135,7 +105,6 @@ const useSignUpSensitive = ({
               confirmPassword: false,
               email: false,
             });
-            setSubmitErrorFlash(false);
           }, 500);
         }
       } catch (err: any) {
@@ -144,15 +113,13 @@ const useSignUpSensitive = ({
         changeLoading(false);
       }
     },
-    [formData, submitError, formErrors, flashErrors, submitErrorFlash]
+    [formData, submitError, formErrors, flashErrors]
   );
 
   return {
     formData,
-    submitError,
     formErrors,
     flashErrors,
-    submitErrorFlash,
     handleChange,
     handleSubmit,
   };

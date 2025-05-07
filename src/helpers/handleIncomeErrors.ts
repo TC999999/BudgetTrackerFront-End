@@ -3,7 +3,7 @@ import { NewIncome, IncomeErrors } from "../interfaces/incomeInterfaces";
 // returns custom strings for input errors for income forms title input (new or update)
 const returnTitleErrors = (title: string): string => {
   if (title.length === 0) return "Income title cannot be empty";
-  else if (!/^[\w ]+$/i.test(title))
+  else if (!/^[\w-'":/ ]+$/i.test(title))
     return "Income title input contains invalid characters";
   else if (/^\s+|\s+$/g.test(title))
     return "Income title input cannot have spaces at beginning or end.";

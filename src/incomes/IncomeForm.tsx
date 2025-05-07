@@ -87,10 +87,10 @@ const IncomeForm: React.FC<Props> = ({
                     </div>
                   )}
                   <div id="income-title-requirements" className="flex flex-col">
-                    <small>Title must be between 4-20 characters</small>
-                    <small>Title may include letters and numbers.</small>
-                    <small>Title cannot contain special characters</small>
-                    <small>(e.g. !, ?, @, #, () [], /).</small>
+                    <small>Title length must be between 4-20 characters.</small>
+                    <small>Title may include any letters or numbers.</small>
+                    <small>Spaces may only be between characters.</small>
+                    <small>Special Characters Allowed: ("", '', -, :, /)</small>
                   </div>
                 </div>
                 <div id="new-income-salary-div">

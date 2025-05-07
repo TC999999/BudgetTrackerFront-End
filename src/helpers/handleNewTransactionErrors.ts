@@ -7,7 +7,7 @@ import {
 const handleTransactionTitleErrors = (title: string): string => {
   if (title.length === 0) {
     return "Transaction title cannot be empty";
-  } else if (!/^[\w ]+$/i.test(title)) {
+  } else if (!/^[\w-'":/ ]+$/i.test(title)) {
     return "Transaction title input contains invalid characters";
   } else if (/^\s+|\s+$/g.test(title)) {
     return "Transaction title input cannot have spaces at beginning or end.";

@@ -111,9 +111,14 @@ const EditBudgetForm: React.FC<Props> = ({
                     </div>
                   )}
 
-                  <small>
-                    Make sure your title has between 20 to 3 characters
-                  </small>
+                  <div className="flex flex-col">
+                    <small>
+                      Title length must be between 3 to 20 characters.
+                    </small>
+                    <small>Title may include any letters or numbers.</small>
+                    <small>Spaces may only be between characters.</small>
+                    <small>Allowed Special Characters: ("", '', -, :, /)</small>
+                  </div>
                 </div>
                 <div className="added-funds-div mb-2">
                   <label

@@ -22,7 +22,7 @@ const UserInfo: React.FC<Props> = ({
   return (
     <div id="user-info-form-page">
       <div id="user-info-form-div">
-        <h1 className="text-center text-xl p-2">
+        <h1 className="text-center text-xl sm:text-3xl p-2 text-green-500 font-bold underline">
           Confirm Your Information Here
         </h1>
         <h1 className="font-bold text-center p-2">
