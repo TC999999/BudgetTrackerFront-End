@@ -9,7 +9,7 @@ import RegisterAPI from "../../apis/Register";
 import {
   handleSignUpInputErrors,
   handleSignUpSubmitErrors,
-} from "../../helpers/handleSignUpErrors";
+} from "../../helpers/errorHandlers/handleSignUpErrors";
 import { step } from "../../interfaces/registerInterfaces";
 
 type input = {

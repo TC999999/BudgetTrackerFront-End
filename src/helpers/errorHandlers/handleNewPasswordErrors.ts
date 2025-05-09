@@ -1,34 +1,11 @@
 import {
   PasswordResetInfo,
   PasswordResetErrors,
-} from "../interfaces/authInterfaces";
-
-// returns custom strings for input errors for new password form password input
-const returnNewPasswordErrors = (newPassword: string): string => {
-  if (newPassword.length === 0) {
-    return "New Password is Empty.";
-  } else if (!/^[\w!?&$#%]+$/i.test(newPassword)) {
-    return "Password input contains invalid characters.";
-  } else if (newPassword.length > 20) {
-    return "New Password is too long.";
-  } else if (newPassword.length < 16 && newPassword.length > 0) {
-    return "New Password is too short.";
-  }
-  return "";
-};
-
-// returns custom strings for input errors for new password form confirmation input
-const returnConfirmPasswordErrors = (
-  newPassword: string,
-  confirmNewPassword: string
-): string => {
-  if (confirmNewPassword === "") {
-    return "New password confirmation cannot be empty";
-  } else if (confirmNewPassword !== newPassword) {
-    return "Does not match new password above!";
-  }
-  return "";
-};
+} from "../../interfaces/authInterfaces";
+import {
+  returnPasswordErrors,
+  returnConfirmPasswordErrors,
+} from "./commonHandlers";
 
 // updates new password form error state when input values change
 export const handleConfirmPasswordInputErrors = (
@@ -41,7 +18,7 @@ export const handleConfirmPasswordInputErrors = (
     case "newPassword":
       setter((data) => ({
         ...data,
-        newPassword: returnNewPasswordErrors(newPassword),
+        newPassword: returnPasswordErrors(newPassword),
       }));
       break;
     case "confirmNewPassword":
@@ -75,7 +52,7 @@ export const handleConfirmPasswordSubmitErrors = (
   );
 
   return (
-    returnNewPasswordErrors(newPasswordInfo.newPassword) === "" &&
+    returnPasswordErrors(newPasswordInfo.newPassword) === "" &&
     returnConfirmPasswordErrors(
       newPasswordInfo.newPassword,
       newPasswordInfo.confirmNewPassword

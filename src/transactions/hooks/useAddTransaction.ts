@@ -18,7 +18,7 @@ import {
   handleUserComparisons,
   handleUserEditInputErrors,
   handleEditUserSubmitErrors,
-} from "../../helpers/handleNewTransactionErrors";
+} from "../../helpers/errorHandlers/handleNewTransactionErrors";
 import { createUpdateUserString } from "../../helpers/createNotificationString";
 import { toast, Id } from "react-toastify";
 import { DateTime } from "luxon";

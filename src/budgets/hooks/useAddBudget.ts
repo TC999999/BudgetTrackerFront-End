@@ -14,7 +14,7 @@ import { currencyConverter, numPop } from "../../helpers/currencyConverter";
 import {
   handleBudgetInputErrors,
   handleBudgetSubmitErrors,
-} from "../../helpers/handleBudgetErrors";
+} from "../../helpers/errorHandlers/handleBudgetErrors";
 import { setTotalAssets } from "../../features/slices/authSlice";
 import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
@@ -133,7 +133,6 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
   const handleSubmit = useCallback(
     async (e: React.FormEvent): Promise<void> => {
       e.preventDefault();
-      console.log(formData);
       try {
         if (handleBudgetSubmitErrors(formData, setFormErrors)) {
           dispatch(setFormLoading(true));

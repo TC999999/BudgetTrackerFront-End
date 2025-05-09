@@ -333,7 +333,9 @@ const IncomeForm: React.FC<Props> = ({
                 Cancel
               </button>
 
-              <button className="submit-button">Add Income</button>
+              <button className="submit-button">
+                {type === "New" ? "Add" : "Update"} Income
+              </button>
             </div>
           </form>
         </div>

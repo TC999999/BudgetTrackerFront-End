@@ -12,7 +12,7 @@ import { AppDispatch } from "../../features/store";
 import {
   handleLogInInputErrors,
   handleLogInSubmitErrors,
-} from "../../helpers/handleLogInErrors";
+} from "../../helpers/errorHandlers/handleLogInErrors";
 import { shallowEqual } from "react-redux";
 
 // custom hook for logging in a user: includes error handler, handler for updating state when the input changes, and

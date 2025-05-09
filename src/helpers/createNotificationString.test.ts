@@ -42,7 +42,7 @@ describe("helper function for creating strings for toast notifications when upda
     incomeUpdate = {
       _id: "1",
       title: "test income",
-      salary: "300.00",
+      salary: 300,
       cronString: "0 12 * * 3",
       readableUpdateTimeString: "Noon on every Wednesday",
       lastReceived: "2025-04-30T12:00:00.000+00:00",

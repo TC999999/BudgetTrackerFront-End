@@ -3,29 +3,8 @@ import {
   BudgetFormErrors,
   UpdateBudgetFormErrors,
   BudgetEditInterface,
-} from "../interfaces/budgetInterfaces";
-
-// returns custom strings for input errors in budget form title
-const handleBudgetTitleErrors = (title: string): string => {
-  if (title.length === 0) {
-    return "Budget title input cannot be empty";
-  } else if (!/^[\w-'":/ ]+$/i.test(title)) {
-    return "Budget title input contains invalid characters";
-  } else if (/^\s+|\s+$/g.test(title)) {
-    return "Budget title input cannot have spaces at beginning or end.";
-  } else if (0 < title.length && title.length < 3) {
-    return "Budget title input is too short";
-  } else if (title.length > 20) {
-    return "Budget title input is too long";
-  } else {
-    return "";
-  }
-};
-
-// returns custom strings for input errors in budget form allocated fund value
-const handleBudgetFundsErrors = (funds: number): string => {
-  return funds <= 0 ? "Allocated budget funds must be greater than $0.00" : "";
-};
+} from "../../interfaces/budgetInterfaces";
+import { returnTitleErrors, returnValueErrors } from "./commonHandlers";
 
 // returns custom strings for input errors in budget form radio select if selected value is add
 const handleAddErrors = (newAssets: number, totalAssets: number): string => {
@@ -79,14 +58,17 @@ export const handleBudgetInputErrors = (
   switch (name) {
     case "title":
       if (typeof value === "string") {
-        setter((data) => ({ ...data, title: handleBudgetTitleErrors(value) }));
+        setter((data) => ({
+          ...data,
+          title: returnTitleErrors(value, "Budget"),
+        }));
       }
       break;
     case "moneyAllocated":
       if (typeof value === "number") {
         setter((data) => ({
           ...data,
-          moneyAllocated: handleBudgetFundsErrors(value),
+          moneyAllocated: returnValueErrors(value, "Budget"),
         }));
       }
       break;
@@ -104,14 +86,17 @@ export const handleUpdateBudgetInputErrors = (
   switch (name) {
     case "title":
       if (typeof value === "string") {
-        setter((data) => ({ ...data, title: handleBudgetTitleErrors(value) }));
+        setter((data) => ({
+          ...data,
+          title: returnTitleErrors(value, "Budget"),
+        }));
       }
       break;
     case "addedMoney":
       if (typeof value === "number") {
         setter((data) => ({
           ...data,
-          addedMoney: handleBudgetFundsErrors(value),
+          addedMoney: returnValueErrors(value, "Budget"),
         }));
       }
       break;
@@ -133,8 +118,8 @@ export const handleBudgetSubmitErrors = (
     setter
   );
   return (
-    handleBudgetTitleErrors(newBudgetInfo.title) === "" &&
-    handleBudgetFundsErrors(newBudgetInfo.moneyAllocated) === ""
+    returnTitleErrors(newBudgetInfo.title, "Budget") === "" &&
+    returnValueErrors(newBudgetInfo.moneyAllocated, "Budget") === ""
   );
 };
 
@@ -145,5 +130,5 @@ export const handleUpdateBudgetSubmitErrors = (
   setter: React.Dispatch<React.SetStateAction<UpdateBudgetFormErrors>>
 ): boolean => {
   handleUpdateBudgetInputErrors("title", newBudgetInfo.title, setter);
-  return handleBudgetTitleErrors(newBudgetInfo.title) === "";
+  return returnTitleErrors(newBudgetInfo.title, "Budget") === "";
 };

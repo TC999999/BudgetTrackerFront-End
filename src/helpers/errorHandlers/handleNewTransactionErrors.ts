@@ -1,34 +1,12 @@
 import {
   NewTransactionErrors,
   NewTransaction,
-} from "../interfaces/transactionInterfaces";
-
-// returns custom strings for input errors in transaction form title
-const handleTransactionTitleErrors = (title: string): string => {
-  if (title.length === 0) {
-    return "Transaction title cannot be empty";
-  } else if (!/^[\w-'":/ ]+$/i.test(title)) {
-    return "Transaction title input contains invalid characters";
-  } else if (/^\s+|\s+$/g.test(title)) {
-    return "Transaction title input cannot have spaces at beginning or end.";
-  } else if (0 < title.length && title.length < 3) {
-    return "Transaction title too short";
-  } else if (20 < title.length) {
-    return "Transaction title too long";
-  } else {
-    return "";
-  }
-};
-
-// returns custom string error if transaction value is 0 or less
-const handleUserAssetsErrors = (newAssets: number): string => {
-  return newAssets <= 0 ? "Transaction value must be greater than $0.00" : "";
-};
-
-// returns custom strings for input errors in transaction form date
-const handleTransactionDateErrors = (date: string): string => {
-  return date.length <= 0 ? "Transaction Date is Required" : "";
-};
+} from "../../interfaces/transactionInterfaces";
+import {
+  returnTitleErrors,
+  returnValueErrors,
+  returnDateErrors,
+} from "./commonHandlers";
 
 // returns custom string error if operation is subtract when new asset value exceeds original asset value
 const handleSubtractErrors = (
@@ -86,18 +64,21 @@ export const handleUserEditInputErrors = (
       if (typeof value === "string")
         setter((data) => ({
           ...data,
-          title: handleTransactionTitleErrors(value),
+          title: returnTitleErrors(value, "Transaction"),
         }));
       break;
     case "value":
       if (typeof value === "number")
-        setter((data) => ({ ...data, value: handleUserAssetsErrors(value) }));
+        setter((data) => ({
+          ...data,
+          value: returnValueErrors(value, "Transaction"),
+        }));
       break;
     case "date":
       if (typeof value === "string")
         setter((data) => ({
           ...data,
-          date: handleTransactionDateErrors(value),
+          date: returnDateErrors(value, "Transaction"),
         }));
       break;
     default:
@@ -115,8 +96,8 @@ export const handleEditUserSubmitErrors = (
   handleUserEditInputErrors("title", newAssetInfo.title, setter);
   handleUserEditInputErrors("date", newAssetInfo.date, setter);
   return (
-    handleTransactionTitleErrors(newAssetInfo.title) === "" &&
-    handleUserAssetsErrors(newAssetInfo.value) === "" &&
-    handleTransactionDateErrors(newAssetInfo.date) === ""
+    returnTitleErrors(newAssetInfo.title, "Transaction") === "" &&
+    returnValueErrors(newAssetInfo.value, "Transaction") === "" &&
+    returnDateErrors(newAssetInfo.date, "Transaction") === ""
   );
 };

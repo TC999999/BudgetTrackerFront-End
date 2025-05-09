@@ -23,7 +23,7 @@ import {
   handleUpdateBudgetInputErrors,
   handleUpdateBudgetSubmitErrors,
   handleUpdateBudgetComparisons,
-} from "../../helpers/handleBudgetErrors";
+} from "../../helpers/errorHandlers/handleBudgetErrors";
 import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
 

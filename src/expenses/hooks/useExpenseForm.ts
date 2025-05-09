@@ -8,7 +8,7 @@ import { getRemainingMoney } from "../../helpers/getRemainingMoney";
 import {
   handleExpenseInputErrors,
   handleExpenseSubmitErrors,
-} from "../../helpers/handleExpenseErrors";
+} from "../../helpers/errorHandlers/handleExpenseErrors";
 import {
   newExpenseInterface,
   ExpenseFormErrors,

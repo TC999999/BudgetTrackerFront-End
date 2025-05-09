@@ -10,7 +10,7 @@ import ResetPasswordAPI from "../../apis/ResetPasswordAPI";
 import {
   handleConfirmPasswordInputErrors,
   handleConfirmPasswordSubmitErrors,
-} from "../../helpers/handleNewPasswordErrors";
+} from "../../helpers/errorHandlers/handleNewPasswordErrors";
 
 // custom hook for creating a new password after verifying the code: includes changes in input, and submitting
 // data

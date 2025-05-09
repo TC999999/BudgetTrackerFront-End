@@ -13,7 +13,7 @@ import {
 import {
   handleUserInfoInputErrors,
   handleUserInfoSubmitErrors,
-} from "../../helpers/handleUserInfoErrors";
+} from "../../helpers/errorHandlers/handleUserInfoErrors";
 import UserAPI from "../../apis/UserAPI";
 
 type input = string | undefined;

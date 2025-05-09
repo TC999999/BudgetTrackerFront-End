@@ -1,55 +1,10 @@
-import { SignUpErrors, SignUpSensitive } from "../interfaces/authInterfaces";
-import { isEmail } from "validator";
-
-// returns custom strings for username input value errors in sign up form
-const returnUsernameErrors = (value: string): string => {
-  if (value.length === 0) {
-    return "Username input cannot be empty.";
-  } else if (!/^[\w]+$/i.test(value)) {
-    return "Username input contains invalid characters.";
-  } else if (value.length > 30) {
-    return "Username input is too long.";
-  } else if (value.length < 6 && value.length > 0) {
-    return "Username input is too short.";
-  }
-  return "";
-};
-
-// returns custom strings for password input value errors in sign up form
-const returnPasswordErrors = (value: string): string => {
-  if (value.length === 0) {
-    return "Password input cannot be empty.";
-  } else if (!/^[\w!?&$#%]+$/i.test(value)) {
-    return "Password input contains invalid characters.";
-  } else if (value.length > 20) {
-    return "Password input is too long.";
-  } else if (value.length < 16 && value.length > 0) {
-    return "Password input is too short.";
-  }
-  return "";
-};
-
-const returnConfirmPasswordErrors = (
-  password: string,
-  confirmPassword: string
-): string => {
-  if (confirmPassword === "") {
-    return "New password confirmation cannot be empty";
-  } else if (confirmPassword !== password) {
-    return "Does not match new password above!";
-  }
-  return "";
-};
-
-// returns custom strings for email input value errors in sign up form
-const returnEmailErrors = (value: string): string => {
-  if (value.length === 0) {
-    return "Email Address input cannot be is empty.";
-  } else if (!isEmail(value)) {
-    return "Invalid Email Address";
-  }
-  return "";
-};
+import { SignUpErrors, SignUpSensitive } from "../../interfaces/authInterfaces";
+import {
+  returnUsernameErrors,
+  returnPasswordErrors,
+  returnConfirmPasswordErrors,
+  returnEmailErrors,
+} from "./commonHandlers";
 
 // updates sign up form errors state when input value changes
 export const handleSignUpInputErrors = (

@@ -20,3 +20,9 @@ export type NewTransactionInterface = {
   };
   transaction: Transaction;
 };
+
+export type EditUserInfo = {
+  usernme: string;
+  email: string;
+  password: string;
+};

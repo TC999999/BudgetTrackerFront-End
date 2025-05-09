@@ -9,7 +9,7 @@ import ResetPasswordAPI from "../../apis/ResetPasswordAPI";
 import {
   handleUserInfoInputErrors,
   handleUserInfoSubmitErrors,
-} from "../../helpers/handleUserInfoErrors";
+} from "../../helpers/errorHandlers/handleUserInfoErrors";
 
 type input = {
   changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;

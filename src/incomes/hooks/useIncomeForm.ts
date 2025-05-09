@@ -3,7 +3,7 @@ import { makeReadableUpdateTimeString } from "../../helpers/makeReadableUpdateTi
 import {
   handleIncomeInputErrors,
   handleIncomeSubmitErrors,
-} from "../../helpers/handleIncomeErrors";
+} from "../../helpers/errorHandlers/handleIncomeErrors";
 import { currencyConverter, numPop } from "../../helpers/currencyConverter";
 import { makeCronString } from "../../helpers/makeCronString";
 import { createUpdateIncomeString } from "../../helpers/createNotificationString";

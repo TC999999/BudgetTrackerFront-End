@@ -1,4 +1,4 @@
-import { LogInInterface, LogInErrors } from "../interfaces/authInterfaces";
+import { LogInInterface, LogInErrors } from "../../interfaces/authInterfaces";
 
 // returns string if username login input value is empty string
 const returnUsernameErrors = (value: string): string => {
