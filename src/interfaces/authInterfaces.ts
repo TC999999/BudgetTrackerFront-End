@@ -53,12 +53,6 @@ export interface SignUpFlashErrors extends LogInFlashErrors {
   confirmPassword: boolean;
 }
 
-export type SubmitUserInfoEdit = {
-  _id: string;
-  username: string;
-  email: string;
-};
-
 export type CurrentStep =
   | "userInfo"
   | "oneTimeCode"

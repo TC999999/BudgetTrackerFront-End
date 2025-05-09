@@ -5,15 +5,15 @@ import { AppDispatch } from "../../features/store";
 import { editUser } from "../../features/actions/users";
 import { setPageLoading, setLoadError } from "../../features/slices/loadSlice";
 import {
-  ConfirmUserInfo,
-  SubmitUserInfoEdit,
-  UserInfoErrors,
-  UserInfoFlashErrors,
-} from "../../interfaces/authInterfaces";
+  EditUser,
+  SubmitEditUser,
+  EditUserErrors,
+  EditUserFlashErrors,
+} from "../../interfaces/userInterfaces";
 import {
-  handleUserInfoInputErrors,
-  handleUserInfoSubmitErrors,
-} from "../../helpers/errorHandlers/handleUserInfoErrors";
+  handleUserEditInputErrors,
+  handleUserEditSubmitErrors,
+} from "../../helpers/errorHandlers/handleUserEditErrors";
 import UserAPI from "../../apis/UserAPI";
 
 type input = string | undefined;
@@ -24,25 +24,28 @@ const useEditUser = (id: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
 
-  const initialState: ConfirmUserInfo = {
-    username: "retrieving data",
-    email: "retrieving data",
-  };
-
-  const initialErrors: UserInfoErrors = {
+  const initialState: EditUser = {
     username: "",
     email: "",
+    password: "",
   };
 
-  const initialFlashErrors: UserInfoFlashErrors = {
+  const initialErrors: EditUserErrors = {
+    username: "",
+    email: "",
+    password: "",
+  };
+
+  const initialFlashErrors: EditUserFlashErrors = {
     username: false,
     email: false,
+    password: false,
   };
 
-  const [formData, setFormData] = useState<ConfirmUserInfo>(initialState);
-  const [formErrors, setFormErrors] = useState<UserInfoErrors>(initialErrors);
+  const [formData, setFormData] = useState<EditUser>(initialState);
+  const [formErrors, setFormErrors] = useState<EditUserErrors>(initialErrors);
   const [flashErrors, setFlashErrors] =
-    useState<UserInfoFlashErrors>(initialFlashErrors);
+    useState<EditUserFlashErrors>(initialFlashErrors);
   const [submitError, setSubmitError] = useState<string>("");
   const [submitErrorFlash, setSubmitErrorFlash] = useState<boolean>(false);
 
@@ -52,11 +55,11 @@ const useEditUser = (id: input) => {
         dispatch(setPageLoading(true));
         if (id) {
           const userInfo = await UserAPI.getUser(id);
-          setFormData(userInfo);
+          setFormData((user) => ({ ...user, ...userInfo }));
         }
-        setFormErrors(initialErrors);
-        setFlashErrors(initialFlashErrors);
-        setSubmitError("");
+        // setFormErrors(initialErrors);
+        // setFlashErrors(initialFlashErrors);
+        // setSubmitError("");
       } catch (err: any) {
         dispatch(setLoadError(JSON.parse(err.message)));
         navigate("/error");
@@ -72,8 +75,8 @@ const useEditUser = (id: input) => {
       e.preventDefault();
       if (submitError) setSubmitError("");
       let { name, value } = e.target;
-      if (name === "username" || name === "email") {
-        handleUserInfoInputErrors(name, value, setFormErrors);
+      if (name === "username" || name === "email" || name === "password") {
+        handleUserEditInputErrors(name, value, setFormErrors);
         setFormData((data) => ({ ...data, [name]: value }));
       }
     },
@@ -85,14 +88,15 @@ const useEditUser = (id: input) => {
       e.preventDefault();
       try {
         if (
-          handleUserInfoSubmitErrors(formData, setFormErrors) &&
+          handleUserEditSubmitErrors(formData, setFormErrors) &&
           !submitError
         ) {
-          let { username, email } = formData;
-          const submitData: SubmitUserInfoEdit = {
+          let { username, email, password } = formData;
+          const submitData: SubmitEditUser = {
             _id: id!,
             username,
             email,
+            password,
           };
           await dispatch(editUser(submitData)).unwrap();
           navigate("/");
@@ -101,9 +105,11 @@ const useEditUser = (id: input) => {
             setFlashErrors((flash) => ({ ...flash, username: true }));
           if (formErrors.email || formData.email === "")
             setFlashErrors((flash) => ({ ...flash, email: true }));
+          if (formErrors.password || formData.password === "")
+            setFlashErrors((flash) => ({ ...flash, password: true }));
           if (submitError) setSubmitErrorFlash(true);
           setTimeout(() => {
-            setFlashErrors({ username: false, email: false });
+            setFlashErrors({ username: false, email: false, password: false });
             setSubmitErrorFlash(false);
           }, 500);
         }

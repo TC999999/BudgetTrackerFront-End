@@ -21,8 +21,27 @@ export type NewTransactionInterface = {
   transaction: Transaction;
 };
 
-export type EditUserInfo = {
-  usernme: string;
+export type EditUser = {
+  username: string;
   email: string;
   password: string;
+};
+
+export type SubmitEditUser = {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+};
+
+export type EditUserErrors = {
+  username: string;
+  email: string;
+  password: string;
+};
+
+export type EditUserFlashErrors = {
+  username: boolean;
+  email: boolean;
+  password: boolean;
 };

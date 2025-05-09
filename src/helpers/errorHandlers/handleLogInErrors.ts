@@ -1,14 +1,5 @@
 import { LogInInterface, LogInErrors } from "../../interfaces/authInterfaces";
-
-// returns string if username login input value is empty string
-const returnUsernameErrors = (value: string): string => {
-  return value.length === 0 ? "Username is Empty" : "";
-};
-
-// returns string if password login user input value is empty string
-const returnPasswordErrors = (value: string): string => {
-  return value.length === 0 ? "Password is Empty" : "";
-};
+import { returnEmptyInputErrors } from "./commonHandlers";
 
 // updates login form error state when input value changes
 export const handleLogInInputErrors = (
@@ -18,10 +9,16 @@ export const handleLogInInputErrors = (
 ): void => {
   switch (name) {
     case "username":
-      setter((data) => ({ ...data, username: returnUsernameErrors(value) }));
+      setter((data) => ({
+        ...data,
+        username: returnEmptyInputErrors(value, "Username"),
+      }));
       break;
     case "password":
-      setter((data) => ({ ...data, password: returnPasswordErrors(value) }));
+      setter((data) => ({
+        ...data,
+        password: returnEmptyInputErrors(value, "Password"),
+      }));
       break;
   }
 };
@@ -34,7 +31,7 @@ export const handleLogInSubmitErrors = (
   handleLogInInputErrors("username", logInInfo.username, setter);
   handleLogInInputErrors("password", logInInfo.password, setter);
   return (
-    returnUsernameErrors(logInInfo.username) === "" &&
-    returnPasswordErrors(logInInfo.password) === ""
+    returnEmptyInputErrors(logInInfo.username, "Username") === "" &&
+    returnEmptyInputErrors(logInInfo.password, "Password") === ""
   );
 };

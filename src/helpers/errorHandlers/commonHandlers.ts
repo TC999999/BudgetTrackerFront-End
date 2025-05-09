@@ -28,6 +28,12 @@ export const returnPasswordErrors = (newPassword: string): string => {
   return "";
 };
 
+type auth = "Username" | "Password";
+// returns string if input value is empty string (When we're looking for values that already exist and not creating new ones)
+export const returnEmptyInputErrors = (value: string, type: auth): string => {
+  return value.length === 0 ? `${type} input cannot be empty` : "";
+};
+
 // returns custom strings for input errors for new password confirmation input
 export const returnConfirmPasswordErrors = (
   newPassword: string,

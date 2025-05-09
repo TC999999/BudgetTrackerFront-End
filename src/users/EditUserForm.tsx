@@ -32,7 +32,7 @@ const EditUserForm = (): JSX.Element => {
       <form onSubmit={handleSubmit}>
         <div id="username-input">
           <label className="text-base smt:text-lg block" htmlFor="username">
-            Username:
+            Your New Username:
           </label>
           <input
             className={`input ${formErrors.username ? "input-error" : ""} ${
@@ -43,6 +43,7 @@ const EditUserForm = (): JSX.Element => {
             name="username"
             value={formData.username}
             onChange={handleChange}
+            placeholder="Type Your New Username Here"
           />
           <div
             id="username-errors"
@@ -62,9 +63,10 @@ const EditUserForm = (): JSX.Element => {
             <small>(e.g. !, ?, @, #, () [], /).</small>
           </div>
         </div>
+
         <div id="email-input">
           <label className="text-base smt:text-lg  block" htmlFor="email">
-            Email:
+            Your New Email:
           </label>
           <input
             className={`input ${formErrors.email ? "input-error" : ""} ${
@@ -75,13 +77,36 @@ const EditUserForm = (): JSX.Element => {
             name="email"
             value={formData.email}
             onChange={handleChange}
+            placeholder="Type Your New Email Address Here"
           />
-
           <div id="email-errors" className="text-center text-red-600 font-bold">
             {formErrors.email}
           </div>
           <div id="email-instructions" className="text-sm sm:text-base">
             <small>Your new email address must be valid</small>
+          </div>
+        </div>
+
+        <div id="password-input">
+          <label className="text-base smt:text-lg block" htmlFor="password">
+            Confirm Your Password:
+          </label>
+          <input
+            className={`input ${formErrors.password ? "input-error" : ""} ${
+              flashErrors.password ? "animate-blinkError" : ""
+            }`}
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Type Your Password Here to Confirm this Edit"
+          />
+          <div
+            id="password-errors"
+            className="text-center text-red-600 font-bold"
+          >
+            {formErrors.password}
           </div>
         </div>
 
