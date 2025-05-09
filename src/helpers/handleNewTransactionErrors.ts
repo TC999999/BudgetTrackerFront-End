@@ -1,6 +1,6 @@
 import {
   NewTransactionErrors,
-  NewTransactionUI,
+  NewTransaction,
 } from "../interfaces/transactionInterfaces";
 
 // returns custom strings for input errors in transaction form title
@@ -108,7 +108,7 @@ export const handleUserEditInputErrors = (
 // updates user update form errors state when the form is submitted; returns true if all inputs are error
 // free
 export const handleEditUserSubmitErrors = (
-  newAssetInfo: NewTransactionUI,
+  newAssetInfo: NewTransaction,
   setter: React.Dispatch<React.SetStateAction<NewTransactionErrors>>
 ): boolean => {
   handleUserEditInputErrors("value", newAssetInfo.value, setter);

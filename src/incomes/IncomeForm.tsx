@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   IncomeErrors,
   NewIncome,
@@ -7,6 +8,7 @@ import {
 import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
 import KeyPad from "../KeyPad";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
   type: "Update" | "New";
@@ -46,6 +48,9 @@ const IncomeForm: React.FC<Props> = ({
   hide,
   incomeTitle,
 }) => {
+  const newSalary = useMemo(() => {
+    return dollarConverter(formData.salary);
+  }, [formData.salary]);
   return (
     <div className="modal-layer-1">
       <div className="modal-layer-2-lg">
@@ -104,7 +109,7 @@ const IncomeForm: React.FC<Props> = ({
                     } ${flashErrors.salary ? "animate-blinkError" : ""}`}
                     id="salary"
                     name="salary"
-                    value={`$${(formData.salary / 100).toFixed(2)}`}
+                    value={newSalary}
                     placeholder={"$0.00"}
                     readOnly
                   />

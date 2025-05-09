@@ -12,12 +12,12 @@ export type submitBudget = {
 export type BudgetEditInterface = {
   title: string;
   addedMoney: number;
-  operation: string;
+  operation: "add" | "subtract";
 };
 
 export type BudgetUpdate = {
   title?: string;
-  moneyAllocated?: string;
+  moneyAllocated?: number;
   moneySpent?: number;
 };
 
@@ -31,12 +31,12 @@ export type SubmitBudgetUpdateInterface = {
 export interface BudgetInterface {
   _id: string;
   title: string;
-  moneyAllocated: string;
+  moneyAllocated: number;
   moneySpent: number;
 }
 
 export interface BudgetListInterface extends BudgetInterface {
-  moneyRemaining: string;
+  moneyRemaining: number;
 }
 
 export type DeleteBudgetInterface = {
@@ -64,4 +64,4 @@ export type UpdateBudgetFormErrors = {
   addedMoney: string;
 };
 
-export type budgetFunds = { moneySpent: number; moneyRemaining: string };
+export type budgetFunds = { moneySpent: number; moneyRemaining: number };

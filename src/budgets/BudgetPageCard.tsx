@@ -5,10 +5,16 @@ import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import Skeleton from "react-loading-skeleton";
-// import "react-loading-skeleton/dist/skeleton.css";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
-  budget: BudgetInterface | null;
+  budget: BudgetInterface;
+};
+
+type budgetData = {
+  moneyAllocated: string;
+  moneySpent: string;
+  moneyRemaining: string;
 };
 
 // returns large card for a single budget not in a list; to use for the SingleBudgetPage
@@ -20,11 +26,15 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
 
   // calculates the remaining amount of money based on the current budget's total funds allocated and
   // total money spend from this budget. Changes when the money spent increases or decreses
-  const moneyRemaining: string = useMemo<string>(
-    () =>
-      getRemainingMoney(budget?.moneyAllocated || "", budget?.moneySpent || 0),
-    [budget]
-  );
+  const budgetData: budgetData = useMemo<budgetData>(() => {
+    return {
+      moneyAllocated: dollarConverter(budget.moneyAllocated),
+      moneySpent: dollarConverter(budget.moneySpent),
+      moneyRemaining: dollarConverter(
+        getRemainingMoney(budget.moneyAllocated, budget.moneySpent)
+      ),
+    };
+  }, [budget.moneyAllocated, budget.moneySpent]);
 
   return (
     <header className="budget-page-card border-2 border-green-500 px-6 py-4 m-4 shadow-md rounded-lg bg-white">
@@ -39,7 +49,7 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
           {pageLoading ? (
             <Skeleton width={200} />
           ) : (
-            `$${budget?.moneyAllocated}`
+            `${budgetData.moneyAllocated}`
           )}
         </p>
       </div>
@@ -51,8 +61,8 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
         ) : (
           <progress
             className="budget-progress-bar w-full [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-green-400 [&::-moz-progress-bar]:bg-green-400"
-            max={budget?.moneyAllocated}
-            value={budget?.moneySpent}
+            max={budget.moneyAllocated}
+            value={budget.moneySpent}
           ></progress>
         )}
       </div>
@@ -60,13 +70,21 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
         <div className="budget-money-spend-div text-center col-start-1 col-end-3">
           <p className="budget-money-spend">Money Spent:</p>
           <p className="text-green-700 text-xl font-bold sm:text-3xl duration-150">
-            {pageLoading ? <Skeleton width={100} /> : `$${budget?.moneySpent}`}
+            {pageLoading ? (
+              <Skeleton width={100} />
+            ) : (
+              `${budgetData.moneySpent}`
+            )}
           </p>
         </div>
         <div className="budget-money-remaining-div text-center col-start-4 col-end-6">
           <p className="budget-money-remaining">Money Remaining:</p>
           <p className="text-green-700 text-xl font-bold sm:text-3xl duration-150">
-            {pageLoading ? <Skeleton width={100} /> : `$${moneyRemaining}`}
+            {pageLoading ? (
+              <Skeleton width={100} />
+            ) : (
+              `${budgetData.moneyRemaining}`
+            )}
           </p>
         </div>
       </div>

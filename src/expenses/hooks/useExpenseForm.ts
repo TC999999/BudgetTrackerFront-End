@@ -4,6 +4,7 @@ import { AppDispatch } from "../../features/store";
 import { shallowEqual } from "react-redux";
 import { setFormLoading } from "../../features/slices/loadSlice";
 import { currencyConverter, numPop } from "../../helpers/currencyConverter";
+import { getRemainingMoney } from "../../helpers/getRemainingMoney";
 import {
   handleExpenseInputErrors,
   handleExpenseSubmitErrors,
@@ -23,12 +24,9 @@ import { error } from "../../interfaces/miscTypes";
 import { UserContextInterface } from "../../interfaces/userInterfaces";
 import { toast, Id } from "react-toastify";
 import ExpenseAPI from "../../apis/ExpenseAPI";
+import { DateTime } from "luxon";
 
 type input = {
-  initialState: newExpenseInterface;
-  initialMoney: string;
-  initialErrors: ExpenseFormErrors;
-  initialFlashErrors: ExpenseFlashErrors;
   budget: BudgetInterface;
   hideExpenseForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
@@ -41,10 +39,6 @@ type input = {
 // custom hook for form for adding a new expense: includes handling of the custom keypad component, changes
 // in title text input, and submission of form data
 const useExpenseForm = ({
-  initialState,
-  initialMoney,
-  initialErrors,
-  initialFlashErrors,
   budget,
   hideExpenseForm,
   addExpense,
@@ -65,13 +59,35 @@ const useExpenseForm = ({
     shallowEqual
   );
 
+  const initialState: newExpenseInterface = {
+    title: "",
+    transaction: 0,
+    date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
+  };
+  const initialMoney: number = getRemainingMoney(
+    budget.moneyAllocated,
+    budget.moneySpent
+  );
+
+  const initialErrors: ExpenseFormErrors = {
+    title: "",
+    transaction: "",
+    date: "",
+  };
+
+  const initialFlashErrors: ExpenseFlashErrors = {
+    title: false,
+    transaction: false,
+    date: false,
+  };
+
   // sets ref for the original amount of remaining money that the budget for this expense has
-  const originalMoney = useRef<string>(initialMoney);
+  const originalMoney = useRef<number>(initialMoney);
   // form data state for new expense
   const [formData, setFormData] = useState<newExpenseInterface>(initialState);
   // sets state for the changing amount of remaining money that the budget for this expense has if expense
   // was to be applied
-  const [availableMoney, setAvailableMoney] = useState<string>(initialMoney);
+  const [availableMoney, setAvailableMoney] = useState<number>(initialMoney);
   // sets error strings for expense form to be shown to user
   const [formErrors, setFormErrors] =
     useState<ExpenseFormErrors>(initialErrors);
@@ -88,14 +104,14 @@ const useExpenseForm = ({
       let num = +e.currentTarget.value;
       let newNum = currencyConverter(formData.transaction, num);
       handleExpenseInputErrors("transaction", newNum, setFormErrors);
-      let original = parseFloat(originalMoney.current) * 100;
+      let original = originalMoney.current;
       if (newNum <= original) {
         let newAvailableMoney = original - newNum;
         setFormData((data) => ({
           ...data,
           transaction: newNum,
         }));
-        setAvailableMoney((newAvailableMoney / 100).toFixed(2));
+        setAvailableMoney(newAvailableMoney);
       } else {
         setFormErrors((data) => ({
           ...data,
@@ -124,8 +140,8 @@ const useExpenseForm = ({
         ...data,
         transaction: newNum,
       }));
-      let newAvailableMoney = parseFloat(originalMoney.current) * 100 - newNum;
-      setAvailableMoney((newAvailableMoney / 100).toFixed(2));
+      let newAvailableMoney = originalMoney.current - newNum;
+      setAvailableMoney(newAvailableMoney);
     },
     [formData, formErrors]
   );
@@ -152,7 +168,6 @@ const useExpenseForm = ({
           let submitData: submitNewExpense = {
             ...formData,
             budgetID: budget?._id,
-            transaction: formData.transaction / 100,
           };
           const { spentMoney, newExpense } = await ExpenseAPI.addNewExpense(
             submitData,

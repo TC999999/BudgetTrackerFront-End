@@ -77,15 +77,15 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
     useState<UpdateBudgetFlashErrors>(initialFlashErrors);
   // calculates the initial remaining funds value for this budget
   const remainingMoney = useRef<number>(
-    +getRemainingMoney(budget.moneyAllocated, budget.moneySpent) * 100
+    getRemainingMoney(budget.moneyAllocated, budget.moneySpent)
   );
 
   // calculates the new remaining funds value for this budget based on the initial remaining money,
   // the change of money by the user, and whether the user intends to add to or subtract from the initial
   // value
-  const newRemainingMoney: string = useMemo<string>(() => {
+  const newRemainingMoney: number = useMemo<number>(() => {
     return getNewBudgetValue(
-      (remainingMoney.current / 100).toFixed(2),
+      remainingMoney.current,
       formData.addedMoney,
       formData.operation
     );
@@ -94,7 +94,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
   // calculates the new total funds value for this budget based on the budget's allocated funds,
   // the change of money by the user, and whether the user intends to add to or subtract from the initial
   // value
-  const newBudget: string = useMemo<string>(() => {
+  const newBudget: number = useMemo<number>(() => {
     return getNewBudgetValue(
       budget.moneyAllocated,
       formData.addedMoney,
@@ -105,7 +105,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
   // calculates the new total assets value  based on the original total asset value,
   // the change of money by the user, and whether the user intends to add to or subtract from the initial
   // value
-  const newTotalAssets: string = useMemo<string>(() => {
+  const newTotalAssets: number = useMemo<number>(() => {
     return calculateNewTotalAssets(
       user!.totalAssets,
       formData.addedMoney,
@@ -215,8 +215,8 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
             title: formData.title,
             addedMoney:
               formData.operation === "add"
-                ? formData.addedMoney / 100
-                : -formData.addedMoney / 100,
+                ? formData.addedMoney
+                : -formData.addedMoney,
           };
           let { newUserBudget, newAssets } = await BudgetAPI.updateBudget(
             submitData

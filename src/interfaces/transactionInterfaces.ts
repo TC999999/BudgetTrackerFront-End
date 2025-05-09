@@ -4,13 +4,13 @@ export type Transaction = {
   fromIncome: boolean;
   operation: "add" | "subtract";
   title: string;
-  transaction: string;
+  transaction: number;
 };
 
 export type NewTransaction = {
   title: string;
   value: number;
-  operation: string;
+  operation: "add" | "subtract";
   date: string;
 };
 

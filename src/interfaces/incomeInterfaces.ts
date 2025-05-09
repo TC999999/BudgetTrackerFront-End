@@ -9,7 +9,7 @@ export type UpdateTime = {
 export type Income = {
   _id: string;
   title: string;
-  salary: string;
+  salary: number;
   cronString: string;
   readableUpdateTimeString: string;
   lastReceived: string;

@@ -9,6 +9,7 @@ import {
 import { infoInterface } from "../interfaces/miscTypes";
 import { FaTrashAlt } from "react-icons/fa";
 import { shallowEqual } from "react-redux";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 // If isFrontPage is true, shows name of budget; if not, shows
 // delete button instead
@@ -41,7 +42,7 @@ const ExpenseCard: React.FC<Props> = ({
         {expense.title}
       </div>
       <div className="expense-transaction p-1 text-red-700 text-sm sm:text-base duration-150 text-center content-center">
-        -${expense.transaction}
+        -{dollarConverter(expense.transaction)}
       </div>
 
       <div className="expense-date p-1 text-sm sm:text-base duration-150 text-center content-center">

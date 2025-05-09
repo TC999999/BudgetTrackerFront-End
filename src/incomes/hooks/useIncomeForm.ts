@@ -204,11 +204,12 @@ const useIncomeForm = ({
           let cronString: string = makeCronString(updateTime);
           let submitData: SubmitIncomeSignUp = {
             title,
-            salary: salary / 100,
+            salary,
             cronString,
             readableUpdateTimeString,
           };
           if (handleIncomes) {
+            console.log(submitData);
             handleIncomes(e, submitData);
           } else if (addToIncomeState && userID) {
             let newIncome: Income = await IncomeAPI.addNewUserIncome(

@@ -50,6 +50,7 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
     title: "",
     moneyAllocated: 0,
   };
+
   const initialErrors: BudgetFormErrors = { title: "", moneyAllocated: "" };
 
   const initialFlashErrors: BudgetFlashErrors = {
@@ -61,7 +62,7 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
   const [formData, setFormData] = useState<newBudgetInterface>(initialState);
   // sets state for available funds that changes if the new budget fund value changes
   const [availableFunds, setAvailableFunds] = useState<number>(
-    user!.totalAssets * 100
+    user!.totalAssets
   );
   // sets state for errors in the form inputs, updates if errors are detcted
   const [formErrors, setFormErrors] = useState<BudgetFormErrors>(initialErrors);
@@ -78,9 +79,9 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
       let num: number = +e.currentTarget.value;
       let newNum: number = currencyConverter(formData.moneyAllocated, num);
       handleBudgetInputErrors("moneyAllocated", newNum, setFormErrors);
-      if (newNum <= user!.totalAssets * 100) {
+      if (newNum <= user!.totalAssets) {
         setFormData((data) => ({ ...data, moneyAllocated: newNum }));
-        setAvailableFunds(user!.totalAssets * 100 - newNum);
+        setAvailableFunds(user!.totalAssets - newNum);
       } else {
         setFormErrors((data) => ({
           ...data,
@@ -109,7 +110,7 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
         ...data,
         moneyAllocated: newNum,
       }));
-      setAvailableFunds(user!.totalAssets * 100 - newNum);
+      setAvailableFunds(user!.totalAssets - newNum);
     },
     [formData, formErrors, availableFunds]
   );
@@ -132,13 +133,13 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
   const handleSubmit = useCallback(
     async (e: React.FormEvent): Promise<void> => {
       e.preventDefault();
+      console.log(formData);
       try {
         if (handleBudgetSubmitErrors(formData, setFormErrors)) {
           dispatch(setFormLoading(true));
           let submitData: submitBudget = {
             userID: user!._id,
             ...formData,
-            moneyAllocated: formData.moneyAllocated / 100,
           };
           let { newUserBudget, newAssets } = await BudgetAPI.addNewBudget(
             submitData

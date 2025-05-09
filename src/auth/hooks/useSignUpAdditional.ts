@@ -45,7 +45,7 @@ const useSignUpAdditional = ({
   }, [error]);
 
   // max value for total assets
-  const maxNum = useRef<number>(99999999999999);
+  const maxNum = useRef<number>(999999999999.99);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -123,8 +123,8 @@ const useSignUpAdditional = ({
   const handlePress = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();
-      let num = +e.currentTarget.value;
-      let newNum = currencyConverter(formData.totalAssets, num);
+      let num: number = +e.currentTarget.value;
+      let newNum: number = currencyConverter(formData.totalAssets, num);
       if (newNum > maxNum.current) {
         setKeyPadError(true);
       } else {
@@ -159,11 +159,10 @@ const useSignUpAdditional = ({
     async (e: React.FormEvent): Promise<void> => {
       e.preventDefault();
       changeLoading(true);
-      const { totalAssets } = formData;
+
       try {
         const signUpInfo: SignUpInterface = {
           ...formData,
-          totalAssets: totalAssets / 100,
         };
         await dispatch(registerUser(signUpInfo)).unwrap();
         navigate("/");

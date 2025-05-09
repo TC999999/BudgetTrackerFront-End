@@ -67,7 +67,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
   // sets state for initial form data
   const [formData, setFormData] = useState<NewTransaction>(initialState);
   // reference hook for maximum value for new asset value
-  const maxNum = useRef<number>(99999999999999);
+  const maxNum = useRef<number>(999999999999.99);
   // sets state for input errors in form
   const [formErrors, setFormErrors] =
     useState<NewTransactionErrors>(initialErrors);
@@ -78,7 +78,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
   // calcuates new asset value based on original asset value, the inputted monetary value to be added or
   // subtracted from the original, and the operation that changes with the press of a radio button. Used to
   // display on the form window for users.
-  const newTotalAssets: string = useMemo<string>(() => {
+  const newTotalAssets: number = useMemo<number>(() => {
     return calculateNewTotalAssetsUserDashboard(
       user!.totalAssets,
       formData.value,
@@ -111,7 +111,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
           setFormErrors,
           formData.operation,
           maxNum.current,
-          user!.totalAssets * 100
+          user!.totalAssets
         )
       ) {
         setFormData((data) => ({
@@ -181,7 +181,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
           const { value, operation } = formData;
           const submitData: NewTransactionUI = {
             ...formData,
-            value: operation === "add" ? +value / 100 : -value / 100,
+            value: operation === "add" ? +value : -value,
           };
           let { transaction } = await dispatch(
             addToAssets(submitData)

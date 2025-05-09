@@ -8,6 +8,7 @@ import {
   calcNewMoneyRemaining,
   calcNewMoneySpent,
 } from "./helpers/calculateExpenseDelete";
+import { dollarConverter } from "./helpers/currencyConverter";
 import { FaArrowRight } from "react-icons/fa6";
 
 type Props = {
@@ -43,17 +44,18 @@ const SecondPrompt: React.FC<Props> = ({
 
   const remainingMoney: string | undefined = useMemo(() => {
     if (BudgetFunds && itemForDeletion?.transaction)
-      return calcNewMoneyRemaining(
-        BudgetFunds.moneyRemaining,
-        itemForDeletion.transaction
+      return dollarConverter(
+        calcNewMoneyRemaining(
+          BudgetFunds.moneyRemaining,
+          itemForDeletion.transaction
+        )
       );
   }, [BudgetFunds, itemForDeletion]);
 
   const moneySpent: string | undefined = useMemo(() => {
     if (BudgetFunds && itemForDeletion?.transaction)
-      return calcNewMoneySpent(
-        BudgetFunds.moneySpent,
-        itemForDeletion.transaction
+      return dollarConverter(
+        calcNewMoneySpent(BudgetFunds.moneySpent, itemForDeletion.transaction)
       );
   }, [BudgetFunds, itemForDeletion]);
 
@@ -76,7 +78,7 @@ const SecondPrompt: React.FC<Props> = ({
               <p>
                 The money spent on this expense (
                 <span className="text-green-600 font-bold">
-                  ${itemForDeletion.transaction}
+                  {dollarConverter(itemForDeletion.transaction)}
                 </span>
                 ) will be returned to the allocated funds for this budget.
               </p>
@@ -98,13 +100,13 @@ const SecondPrompt: React.FC<Props> = ({
                         Funds Remaining
                       </td>
                       <td className="text-xl text-green-700">
-                        ${BudgetFunds.moneyRemaining}
+                        {dollarConverter(BudgetFunds.moneyRemaining)}
                       </td>
                       <td>
                         <FaArrowRight />
                       </td>
                       <td className="text-xl text-green-700">
-                        ${remainingMoney}
+                        {remainingMoney}
                       </td>
                     </tr>
                     <tr>
@@ -112,12 +114,12 @@ const SecondPrompt: React.FC<Props> = ({
                         Funds Spent
                       </td>
                       <td className="text-xl text-green-700">
-                        ${BudgetFunds.moneySpent}
+                        {dollarConverter(BudgetFunds.moneySpent)}
                       </td>
                       <td>
                         <FaArrowRight />
                       </td>
-                      <td className="text-xl text-green-700">${moneySpent}</td>
+                      <td className="text-xl text-green-700">{moneySpent}</td>
                     </tr>
                   </tbody>
                 </table>

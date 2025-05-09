@@ -3,6 +3,7 @@ import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import useDeleteBudget from "./hooks/useDeleteBudget";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
   hideDeleteForm: (
@@ -89,7 +90,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
                     <label htmlFor="remaining">
                       Return Remaining Funds Only (
                       <span className="font-bold text-green-700">
-                        ${remainingMoney}
+                        {dollarConverter(remainingMoney)}
                       </span>
                       )
                     </label>
@@ -117,7 +118,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
                   <label htmlFor="all">
                     Return All Funds (
                     <span className="font-bold text-green-700">
-                      ${budget.moneyAllocated}
+                      {dollarConverter(budget.moneyAllocated)}
                     </span>
                     )
                   </label>

@@ -4,6 +4,8 @@ import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import useEditBudget from "./hooks/useEditBudgets";
 import KeyPad from "../KeyPad";
+import { useMemo } from "react";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
   budget: BudgetInterface;
@@ -45,6 +47,22 @@ const EditBudgetForm: React.FC<Props> = ({
     updateBudget,
   });
 
+  const convertNewTotalAssets = useMemo(() => {
+    return dollarConverter(newTotalAssets);
+  }, [newTotalAssets]);
+
+  const convertNewBudget = useMemo(() => {
+    return dollarConverter(newBudget);
+  }, [newBudget]);
+
+  const convertNewRemainingMoney = useMemo(() => {
+    return dollarConverter(newRemainingMoney);
+  }, [newRemainingMoney]);
+
+  const convertNewAddedMoney = useMemo(() => {
+    return dollarConverter(formData.addedMoney);
+  }, [formData.addedMoney]);
+
   return !formLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2-lg">
@@ -62,7 +80,7 @@ const EditBudgetForm: React.FC<Props> = ({
                     Your New Total Asset Value Will Be
                   </h3>
                   <p className="text-green-700 text-3xl sm:text-4xl font-bold">
-                    ${newTotalAssets}
+                    {convertNewTotalAssets}
                   </p>
                 </div>
                 <div className="sm:border-2 sm:p-4 sm:shadow-md">
@@ -70,7 +88,7 @@ const EditBudgetForm: React.FC<Props> = ({
                     {budget.title} Budget Will Have a New Total Value of
                   </h3>
                   <p className="text-green-700 text-3xl sm:text-4xl  font-bold">
-                    {newBudget}
+                    {convertNewBudget}
                   </p>
                 </div>
                 <div className="sm:border-2 sm:p-4 sm:shadow-md">
@@ -78,7 +96,7 @@ const EditBudgetForm: React.FC<Props> = ({
                     {budget.title} Budget Will Have a New Remaining Value of
                   </h3>
                   <p className="text-green-700 text-3xl sm:text-4xl  font-bold">
-                    {newRemainingMoney}
+                    {convertNewRemainingMoney}
                   </p>
                 </div>
               </div>
@@ -135,7 +153,7 @@ const EditBudgetForm: React.FC<Props> = ({
                     type="text"
                     name="moneyAllocated"
                     placeholder="0.00"
-                    value={`$${(formData.addedMoney / 100).toFixed(2)}`}
+                    value={convertNewAddedMoney}
                     readOnly
                   />
                   {formErrors.addedMoney && (

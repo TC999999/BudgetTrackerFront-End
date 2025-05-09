@@ -40,7 +40,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
   const initialState: UpdateIncome = {
     _id: income._id,
     title: income.title,
-    salary: +income.salary * 100,
+    salary: income.salary,
     updateTime: constructUpdateTimeObj(income.cronString),
   };
 

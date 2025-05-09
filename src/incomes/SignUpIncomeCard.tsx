@@ -1,5 +1,8 @@
 import { SubmitIncomeSignUp } from "../interfaces/incomeInterfaces";
 import { FaTrashAlt } from "react-icons/fa";
+import { useMemo } from "react";
+
+import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
   income: SubmitIncomeSignUp;
@@ -16,13 +19,17 @@ const SignUpIncomeCard: React.FC<Props> = ({
   removeIncome,
   index,
 }): JSX.Element => {
+  const value = useMemo(() => {
+    return dollarConverter(income.salary);
+  }, [income.salary]);
+
   return (
     <div className="submit-income-card border-2 p-2 border-green-600 rounded-lg bg-gray-200 m-2">
       <div className="flex justify-between">
         <div>
           <h1 className="text-xl font-bold">{income.title}</h1>
           <p>
-            <b>Value:</b> ${income.salary.toFixed(2)}
+            <b>Value:</b> {value}
           </p>
           <p>
             <b>Received at:</b> {income.readableUpdateTimeString}

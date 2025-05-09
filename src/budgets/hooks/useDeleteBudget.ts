@@ -39,8 +39,8 @@ const useDeleteBudget = (budget: input) => {
 
   // constant used if user chooses to return the remaining funds of the budget only
 
-  let remainingMoney = useRef<string>(
-    getRemainingMoney(budget.moneyAllocated, +budget.moneySpent)
+  let remainingMoney = useRef<number>(
+    getRemainingMoney(budget.moneyAllocated, budget.moneySpent)
   );
 
   // initial form data for deleting a budget, the first two remain constant while the last one changes
@@ -56,7 +56,7 @@ const useDeleteBudget = (budget: input) => {
     useState<DeleteBudgetInterface>(deleteBudgetData);
 
   // calculates what the user's new total asset value will be before submitting the form
-  let newAssets: string = useMemo<string>(
+  let newAssets: number = useMemo<number>(
     () =>
       calculateNewTotalAssetsWithoutOperation(
         user!.totalAssets,

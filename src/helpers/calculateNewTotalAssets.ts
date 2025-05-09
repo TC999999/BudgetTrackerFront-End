@@ -4,16 +4,13 @@
 export const calculateNewTotalAssets = (
   totalAssets: number,
   newFunds: number,
-  operation: string
-): string => {
-  let totalAssetsNum = +totalAssets * 100;
+  operation: "add" | "subtract"
+): number => {
   switch (operation) {
     case "add":
-      return ((totalAssetsNum - newFunds) / 100).toFixed(2);
+      return (totalAssets * 100 - newFunds * 100) / 100;
     case "subtract":
-      return ((totalAssetsNum + newFunds) / 100).toFixed(2);
-    default:
-      return "";
+      return (totalAssets * 100 + newFunds * 100) / 100;
   }
 };
 
@@ -23,16 +20,13 @@ export const calculateNewTotalAssets = (
 export const calculateNewTotalAssetsUserDashboard = (
   totalAssets: number,
   newFunds: number,
-  operation: string
-): string => {
-  let totalAssetsNum = totalAssets * 100;
+  operation: "add" | "subtract"
+): number => {
   switch (operation) {
     case "add":
-      return ((totalAssetsNum + newFunds) / 100).toFixed(2);
+      return (totalAssets * 100 + newFunds * 100) / 100;
     case "subtract":
-      return ((totalAssetsNum - newFunds) / 100).toFixed(2);
-    default:
-      return "";
+      return (totalAssets * 100 - newFunds * 100) / 100;
   }
 };
 
@@ -40,8 +34,7 @@ export const calculateNewTotalAssetsUserDashboard = (
 export const calculateNewTotalAssetsWithoutOperation = (
   totalAssets: number,
   newFunds: number
-): string => {
-  let totalAssetsNum = +totalAssets;
-  let newAssets: number = totalAssetsNum + newFunds;
-  return newAssets.toFixed(2);
+): number => {
+  let newAssets: number = (totalAssets * 100 + newFunds * 100) / 100;
+  return newAssets;
 };

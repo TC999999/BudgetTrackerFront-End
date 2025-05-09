@@ -4,12 +4,19 @@ import KeyPad from "../KeyPad";
 import useAddTransaction from "./hooks/useAddTransaction";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
+import { dollarConverter } from "../helpers/currencyConverter";
+import { useMemo } from "react";
 
 type Props = {
   hideForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   updateTransactions: (newTransaction: Transaction) => void;
+};
+
+type conversion = {
+  convertNewTotalAssets: string;
+  convertNewValue: string;
 };
 
 // returns form modal for users to add a new miscellaneous transaction using funds directly
@@ -38,6 +45,13 @@ const AddTransactionForm: React.FC<Props> = ({
     updateTransactions,
   });
 
+  const conversion: conversion = useMemo<conversion>(() => {
+    return {
+      convertNewTotalAssets: dollarConverter(newTotalAssets),
+      convertNewValue: dollarConverter(formData.value),
+    };
+  }, [newTotalAssets, formData.value]);
+
   return !formLoading ? (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
       <div className="modal-layer-2-lg">
@@ -48,7 +62,7 @@ const AddTransactionForm: React.FC<Props> = ({
             </h1>
             <h2 className="text-lg">Your New Total Savings Value Will Be:</h2>
             <h2 className="text-4xl text-green-700 font-bold">
-              ${newTotalAssets}
+              {conversion.convertNewTotalAssets}
             </h2>
           </header>
           <form onSubmit={handleSubmit}>
@@ -121,7 +135,7 @@ const AddTransactionForm: React.FC<Props> = ({
                     type="text"
                     name="addedAssets"
                     placeholder="0.00"
-                    value={`$${(formData.value / 100).toFixed(2)}`}
+                    value={conversion.convertNewValue}
                     required
                     readOnly
                   />
@@ -184,7 +198,6 @@ const AddTransactionForm: React.FC<Props> = ({
                 </div>
               </div>
             </div>
-
             <div>
               <p>
                 <small>

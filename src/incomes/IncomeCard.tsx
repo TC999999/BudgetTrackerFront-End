@@ -6,6 +6,7 @@ import {
 } from "../helpers/makeDateString";
 import { useMemo } from "react";
 import { infoInterface } from "../interfaces/miscTypes";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
   income: Income;
@@ -37,6 +38,12 @@ const IncomeCard: React.FC<Props> = ({
     [income.nextReceived]
   );
 
+  const convertSalary = useMemo<string>(
+    () => dollarConverter(income.salary),
+
+    [income.salary]
+  );
+
   return (
     <div className="flex justify-center">
       <div className="p-2 m-4 w-96 sm:w-2/3 text-center border-4 border-green-700 bg-white rounded-lg">
@@ -49,7 +56,7 @@ const IncomeCard: React.FC<Props> = ({
           <div className="salary-information flex justify-center items-center text-xl sm:text-3xl lg:m-4 lg:p-2  lg:w-96 lg:border-2 lg:border-green-700 lg:rounded-lg lg:shadow-lg">
             <div>
               <p className="underline">Salary: </p>
-              <p className="salary-number-value font-bold">${income.salary}</p>
+              <p className="salary-number-value font-bold">{convertSalary}</p>
               <p className="readable-salary-interval">
                 {income.readableUpdateTimeString}
               </p>

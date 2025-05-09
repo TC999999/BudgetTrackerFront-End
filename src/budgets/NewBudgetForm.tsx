@@ -3,13 +3,20 @@ import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
+import { dollarConverter } from "../helpers/currencyConverter";
 import useBudget from "./hooks/useAddBudget";
+import { useMemo } from "react";
 
 type Props = {
   hideForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   addBudget: (newBudget: BudgetInterface) => void;
+};
+
+type conversion = {
+  convertAvailableFunds: string;
+  convertMoneyAllocated: string;
 };
 
 // returns form for creating a new budget
@@ -25,8 +32,8 @@ const BudgetForm: React.FC<Props> = ({
   const {
     formData,
     formErrors,
-    flashErrors,
     availableFunds,
+    flashErrors,
     handlePress,
     handleDelete,
     handleChange,
@@ -35,6 +42,13 @@ const BudgetForm: React.FC<Props> = ({
     addBudget,
     hideForm,
   });
+
+  const conversion: conversion = useMemo<conversion>(() => {
+    return {
+      convertAvailableFunds: dollarConverter(availableFunds),
+      convertMoneyAllocated: dollarConverter(formData.moneyAllocated),
+    };
+  }, [availableFunds, formData.moneyAllocated]);
 
   return !formLoading ? (
     <div tabIndex={-1} id="budget-form-div" className="modal-layer-1">
@@ -46,7 +60,7 @@ const BudgetForm: React.FC<Props> = ({
             </h1>
             <h2 className="text-2xl mx-2">Available Funds:</h2>
             <h2 className="text-5xl font-bold text-green-700">
-              ${(availableFunds / 100).toFixed(2)}
+              {conversion.convertAvailableFunds}
             </h2>
           </header>
           <form onSubmit={handleSubmit}>
@@ -88,8 +102,8 @@ const BudgetForm: React.FC<Props> = ({
                 id="budget_allocation"
                 type="text"
                 name="moneyAllocated"
-                placeholder="0.00"
-                value={`$${(formData.moneyAllocated / 100).toFixed(2)}`}
+                placeholder="$0.00"
+                value={conversion.convertMoneyAllocated}
                 onChange={handleChange}
                 required
                 readOnly

@@ -1,17 +1,12 @@
 import KeyPad from "../KeyPad";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
-import { getRemainingMoney } from "../helpers/getRemainingMoney";
-import {
-  newExpenseInterface,
-  ExpenseFormErrors,
-  ExpenseInterface,
-  ExpenseFlashErrors,
-} from "../interfaces/expenseInterfaces";
+import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 import { BudgetInterface, BudgetUpdate } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import useExpenseForm from "./hooks/useExpenseForm";
-import { DateTime } from "luxon";
+import { useMemo } from "react";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
   hideExpenseForm: (
@@ -21,6 +16,11 @@ type Props = {
   budget: BudgetInterface;
   addExpense: (newExpense: ExpenseInterface) => void;
   updateBudget: (updatedBudget: BudgetUpdate) => void;
+};
+
+type conversion = {
+  convertAvailableFunds: string;
+  convertTransaction: string;
 };
 
 // returns form for adding a new expense for a single budget that belongs to a single user
@@ -35,27 +35,6 @@ const ExpenseForm: React.FC<Props> = ({
     shallowEqual
   );
 
-  const initialState: newExpenseInterface = {
-    title: "",
-    transaction: 0,
-    date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
-  };
-  const initialMoney: string = getRemainingMoney(
-    budget?.moneyAllocated || "",
-    budget?.moneySpent || 0
-  );
-  const initialErrors: ExpenseFormErrors = {
-    title: "",
-    transaction: "",
-    date: "",
-  };
-
-  const initialFlashErrors: ExpenseFlashErrors = {
-    title: false,
-    transaction: false,
-    date: false,
-  };
-
   const {
     formData,
     availableMoney,
@@ -66,15 +45,18 @@ const ExpenseForm: React.FC<Props> = ({
     handleChange,
     handleSubmit,
   } = useExpenseForm({
-    initialState,
-    initialMoney,
-    initialErrors,
-    initialFlashErrors,
     budget,
     hideExpenseForm,
     addExpense,
     updateBudget,
   });
+
+  const conversion: conversion = useMemo<conversion>(() => {
+    return {
+      convertAvailableFunds: dollarConverter(availableMoney),
+      convertTransaction: dollarConverter(formData.transaction),
+    };
+  }, [availableMoney, formData.transaction]);
 
   return !formLoading ? (
     <div tabIndex={-1} id="new-expense-form-div" className="modal-layer-1">
@@ -86,7 +68,7 @@ const ExpenseForm: React.FC<Props> = ({
             </h2>
             <h2 className="text-lg">Remaining {budget.title} Budget Funds:</h2>
             <h2 className="text-4xl text-green-700 font-bold">
-              ${availableMoney}
+              {conversion.convertAvailableFunds}
             </h2>
           </header>
           <form onSubmit={handleSubmit}>
@@ -152,8 +134,8 @@ const ExpenseForm: React.FC<Props> = ({
                 id="expense_transaction"
                 type="text"
                 name="trasaction"
-                placeholder="0.00"
-                value={`$${(formData.transaction / 100).toFixed(2)}`}
+                placeholder="$0.00"
+                value={conversion.convertTransaction}
                 readOnly
               />
               {formErrors.transaction && (

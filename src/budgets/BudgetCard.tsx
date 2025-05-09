@@ -4,6 +4,8 @@ import { shallowEqual } from "react-redux";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
 
+import { dollarConverter } from "../helpers/currencyConverter";
+
 type Props = {
   budget: BudgetListInterface;
 };
@@ -25,7 +27,7 @@ const BudgetCard: React.FC<Props> = ({ budget }): JSX.Element => {
               Total Funds Allocated:
             </p>
             <p className="budget-money-allocation-value text-3xl text-green-900">
-              ${budget.moneyAllocated}
+              {dollarConverter(budget.moneyAllocated)}
             </p>
           </header>
           <div className="budget-progress-bar-div my-4 flex justify-center">
@@ -40,14 +42,14 @@ const BudgetCard: React.FC<Props> = ({ budget }): JSX.Element => {
               <p className="budget-money-spent">Funds</p>
               <p className="budget-money-spent">Spent:</p>
               <p className="budget-money-spent-value text-xl font-bold text-green-900">
-                ${budget.moneySpent}
+                {dollarConverter(budget.moneySpent)}
               </p>
             </div>
             <div className="budget-money-remaining-div text-center">
               <p className="budget-money-remaining">Funds</p>
               <p className="budget-money-remaining">Remaining:</p>
               <p className="budget-money-remaining-value text-xl font-bold text-green-900">
-                ${budget.moneyRemaining}
+                {dollarConverter(budget.moneyRemaining)}
               </p>
             </div>
           </div>

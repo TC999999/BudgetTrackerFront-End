@@ -1,7 +1,8 @@
-import React from "react";
+import { useMemo } from "react";
 import { SignUpInterface } from "../interfaces/authInterfaces";
 import KeyPad from "../KeyPad";
 import SignUpIncomeCard from "../incomes/SignUpIncomeCard";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
   formData: SignUpInterface;
@@ -29,6 +30,10 @@ const SignUpAdditionalForm: React.FC<Props> = ({
   handleCheckBox,
   handleSubmit,
 }) => {
+  const newTotalAssets = useMemo(() => {
+    return dollarConverter(formData.totalAssets);
+  }, [formData.totalAssets]);
+
   return (
     <div
       id="additional-register-form"
@@ -55,7 +60,7 @@ const SignUpAdditionalForm: React.FC<Props> = ({
               type="text"
               name="totalAssets"
               placeholder="0.00"
-              value={`$${(formData.totalAssets / 100).toFixed(2)}`}
+              value={newTotalAssets}
               onChange={handleChange}
               readOnly
             />

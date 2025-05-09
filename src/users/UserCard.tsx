@@ -1,5 +1,7 @@
 import { UserInfoInterface } from "../interfaces/userInterfaces";
 import { useNavigate, NavigateFunction } from "react-router-dom";
+import { dollarConverter } from "../helpers/currencyConverter";
+import { useMemo } from "react";
 
 type Props = {
   user: UserInfoInterface;
@@ -7,6 +9,11 @@ type Props = {
 };
 const UserCard: React.FC<Props> = ({ user, showForm }) => {
   const navigate: NavigateFunction = useNavigate();
+
+  const totalAssets = useMemo(() => {
+    return dollarConverter(user.totalAssets);
+  }, [user.totalAssets]);
+
   return (
     <header
       id="dashboard-usercard"
@@ -15,7 +22,7 @@ const UserCard: React.FC<Props> = ({ user, showForm }) => {
       <div id="dashboard-information" className="text-green-700">
         <h1 className="text-2xl sm:text-4xl font-bold">{user.username}</h1>
         <p className="text-xl">Total Savings Available:</p>
-        <p className="text-3xl sm:text-5xl font-bold">${user.totalAssets}</p>
+        <p className="text-3xl sm:text-5xl font-bold">{totalAssets}</p>
       </div>
       <div id="buttons" className="flex flex-col items-center m-4">
         <button

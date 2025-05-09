@@ -1,6 +1,7 @@
 import { NewTransactionUI } from "../interfaces/transactionInterfaces";
 import { Income, SubmitUpdateIncome } from "../interfaces/incomeInterfaces";
 import { BudgetEditInterface } from "../interfaces/budgetInterfaces";
+import { dollarConverter } from "./currencyConverter";
 
 // returns custom strings for notifications when updating users' total assets
 export const createUpdateUserString = (
@@ -8,9 +9,9 @@ export const createUpdateUserString = (
 ): string => {
   const addOrRemove: string =
     submitData.value >= 0
-      ? `Added $${submitData.value.toFixed(2)} to total savings balance.`
-      : `Removed $${(submitData.value * -1).toFixed(
-          2
+      ? `Added ${dollarConverter(submitData.value)} to total savings balance.`
+      : `Removed ${dollarConverter(
+          submitData.value * -1
         )} from total savings balance.`;
   return "Sucessfully noted transaction! " + addOrRemove;
 };
@@ -27,7 +28,7 @@ export const createUpdateIncomeString = (
   let salaryChange: string =
     +income.salary === submitData.salary
       ? ""
-      : ` Salary changed to $${submitData.salary.toFixed(2)}.`;
+      : ` Salary changed to ${dollarConverter(submitData.salary)}.`;
   let intervalChange: string =
     income.readableUpdateTimeString === submitData.readableUpdateTimeString
       ? ""
@@ -56,13 +57,13 @@ export const createUpdateBudgetString = (
   if (submitData.addedMoney > 0) {
     switch (submitData.operation) {
       case "add":
-        addOrRemove = ` Added $${(submitData.addedMoney / 100).toFixed(
-          2
+        addOrRemove = ` Added ${dollarConverter(
+          submitData.addedMoney
         )} to total savings balance.`;
         break;
       case "subtract":
-        addOrRemove = ` Removed $${(submitData.addedMoney / 100).toFixed(
-          2
+        addOrRemove = ` Removed $${dollarConverter(
+          submitData.addedMoney
         )} and added it to total savings balance.`;
         break;
     }
