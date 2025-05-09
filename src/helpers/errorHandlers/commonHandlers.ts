@@ -21,9 +21,9 @@ export const returnPasswordErrors = (newPassword: string): string => {
   } else if (!/^[\w!?&$#%]+$/i.test(newPassword)) {
     return "Password input contains invalid characters.";
   } else if (newPassword.length > 20) {
-    return "Password must be less than 20 characters.";
+    return "Password length must be less than 20 characters.";
   } else if (newPassword.length < 16 && newPassword.length > 0) {
-    return "Password must be greater than 16 characters.";
+    return "Password length must be greater than 16 characters.";
   }
   return "";
 };
@@ -31,7 +31,7 @@ export const returnPasswordErrors = (newPassword: string): string => {
 type auth = "Username" | "Password";
 // returns string if input value is empty string (When we're looking for values that already exist and not creating new ones)
 export const returnEmptyInputErrors = (value: string, type: auth): string => {
-  return value.length === 0 ? `${type} input cannot be empty` : "";
+  return value.length === 0 ? `${type} input cannot be empty.` : "";
 };
 
 // returns custom strings for input errors for new password confirmation input
@@ -50,7 +50,7 @@ export const returnConfirmPasswordErrors = (
 // returns custom string error for email input
 export const returnEmailErrors = (value: string): string => {
   if (value.length === 0) {
-    return "Email address input cannot be empty";
+    return "Email address input cannot be empty.";
   } else if (!isEmail(value)) {
     return "Email address is invalid.";
   }
@@ -82,5 +82,5 @@ export const returnValueErrors = (value: number, type: title): string => {
 
 // returns custom strings for input errors in dates
 export const returnDateErrors = (date: string, type: title): string => {
-  return date.length <= 0 ? `${type} Date is Required` : "";
+  return date.length <= 0 ? `${type} Date is Required.` : "";
 };
