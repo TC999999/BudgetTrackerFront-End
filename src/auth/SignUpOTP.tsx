@@ -42,7 +42,7 @@ const SignUpOTP: React.FC<Props> = ({
           One-Time-One-Use Verification Code
         </h1>
         <h1 className="font-bold text-center p-2">
-          A 6-digit verification code was just sent to your linked email. This
+          A 6-digit verification code was just sent to the provided email. This
           code will expire after 10 minutes. Please enter the code below.
         </h1>
         <div id="one-time-code-form">

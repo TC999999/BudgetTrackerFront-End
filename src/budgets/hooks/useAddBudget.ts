@@ -20,6 +20,7 @@ import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
 import { error } from "../../interfaces/miscTypes";
 import { UserContextInterface } from "../../interfaces/userInterfaces";
+import { dollarConverter } from "../../helpers/currencyConverter";
 
 type input = {
   addBudget: (newBudget: BudgetInterface) => void;
@@ -34,8 +35,8 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (title: string, moneyAllocated: number): Id =>
     toast.success(
-      `${title} budget created successfully! $${moneyAllocated.toFixed(
-        2
+      `${title} budget created successfully! ${dollarConverter(
+        moneyAllocated
       )} allocated to this budget.`
     );
   const notifyError = (error: error): Id =>

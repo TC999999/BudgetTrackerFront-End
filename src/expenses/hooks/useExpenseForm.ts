@@ -3,7 +3,11 @@ import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { AppDispatch } from "../../features/store";
 import { shallowEqual } from "react-redux";
 import { setFormLoading } from "../../features/slices/loadSlice";
-import { currencyConverter, numPop } from "../../helpers/currencyConverter";
+import {
+  currencyConverter,
+  dollarConverter,
+  numPop,
+} from "../../helpers/currencyConverter";
 import { getRemainingMoney } from "../../helpers/getRemainingMoney";
 import {
   handleExpenseInputErrors,
@@ -47,8 +51,8 @@ const useExpenseForm = ({
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (title: string, transaction: number): Id =>
     toast.success(
-      `${title} expense created successfully! $${transaction.toFixed(
-        2
+      `${title} expense created successfully! ${dollarConverter(
+        transaction
       )} spent. $${availableMoney} remaining in ${budget.title}.`
     );
   const notifyError = (error: error) =>

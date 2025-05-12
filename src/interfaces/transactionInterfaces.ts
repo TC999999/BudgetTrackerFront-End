@@ -15,6 +15,7 @@ export type NewTransaction = {
 };
 
 export type NewTransactionUI = {
+  _id: string;
   title: string;
   value: number;
   date: string;

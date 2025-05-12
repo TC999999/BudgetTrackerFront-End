@@ -15,6 +15,7 @@ import { getRemainingMoney } from "../../helpers/getRemainingMoney";
 import { calculateNewTotalAssetsWithoutOperation } from "../../helpers/calculateNewTotalAssets";
 import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
+import { dollarConverter } from "../../helpers/currencyConverter";
 
 type input = BudgetInterface;
 
@@ -25,8 +26,8 @@ const useDeleteBudget = (budget: input) => {
   const navigate: NavigateFunction = useNavigate();
   const notify = (title: string, addBackToAssets: number): Id =>
     toast.success(
-      `${title} budget deleted successfully! $${addBackToAssets.toFixed(
-        2
+      `${title} budget deleted successfully! ${dollarConverter(
+        addBackToAssets
       )} added to available assets.`
     );
   const notifyError = (error: error): Id =>

@@ -181,6 +181,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
           const { value, operation } = formData;
           const submitData: NewTransactionUI = {
             ...formData,
+            _id: user!._id,
             value: operation === "add" ? +value : -value,
           };
           let { transaction } = await dispatch(

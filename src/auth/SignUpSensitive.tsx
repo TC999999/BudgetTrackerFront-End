@@ -36,8 +36,8 @@ const SignUpSensitive: React.FC<Props> = ({
           Enter Your New Account Information Here
         </h1>
         <h2 className="text-md sm:text-lg italic">
-          Afterwards, we will send you and email with a verification code that
-          you will have to input to create your account.
+          Afterwards, we will send an email to the provided address with a
+          verification code that you will have to input to create your account.
         </h2>
         <small>
           (<span className="text-red-700">*</span>: <i>required</i>)
