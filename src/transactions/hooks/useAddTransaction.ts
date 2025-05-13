@@ -149,6 +149,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
     (e: React.ChangeEvent<HTMLInputElement>): void => {
       const { name, value } = e.target;
       if (
+        (value === "add" || value === "subtract") &&
         !handleUserComparisons(
           formData.value,
           setFormErrors,

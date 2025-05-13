@@ -10,7 +10,7 @@ import {
 
 // updates form errors state on expense form when input value changes
 export const handleExpenseInputErrors = (
-  name: string,
+  name: "title" | "transaction" | "date",
   value: string | number,
   setter: React.Dispatch<React.SetStateAction<ExpenseFormErrors>>
 ): void => {

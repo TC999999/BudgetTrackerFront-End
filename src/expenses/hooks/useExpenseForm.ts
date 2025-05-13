@@ -155,8 +155,10 @@ const useExpenseForm = ({
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
       const { name, value } = e.target;
-      handleExpenseInputErrors(name, value, setFormErrors);
-      setFormData((data) => ({ ...data, [name]: value }));
+      if (name === "title" || name === "transaction" || name === "date") {
+        handleExpenseInputErrors(name, value, setFormErrors);
+        setFormData((data) => ({ ...data, [name]: value }));
+      }
     },
     [formErrors, formData]
   );

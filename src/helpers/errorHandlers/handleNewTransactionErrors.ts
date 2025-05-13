@@ -27,7 +27,7 @@ const handleAddErrors = (newAssets: number, maxVal: number): string => {
 export const handleUserComparisons = (
   newAssets: number,
   setter: React.Dispatch<React.SetStateAction<NewTransactionErrors>>,
-  operation: string,
+  operation: "add" | "subtract",
   maxVal: number,
   totalAssets: number
 ): boolean => {
@@ -41,7 +41,7 @@ export const handleUserComparisons = (
       }));
       errorExists = subtractMessage.length > 0;
       break;
-    default:
+    case "add":
       let addMessage = handleAddErrors(newAssets, maxVal);
       setter((data) => ({
         ...data,

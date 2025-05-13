@@ -7,19 +7,22 @@ import {
 import { returnTitleErrors, returnValueErrors } from "./commonHandlers";
 
 // returns custom strings for input errors in budget form radio select if selected value is add
-const handleAddErrors = (newAssets: number, totalAssets: number): string => {
+export const handleAddErrors = (
+  newAssets: number,
+  totalAssets: number
+): string => {
   return newAssets > totalAssets
-    ? "New funds cannot be more that total assets"
+    ? "New funds cannot be more that total savings."
     : "";
 };
 
 // returns custom strings for input errors in budget form radio select if selected value is subtract
-const handleSubtractErrors = (
+export const handleSubtractErrors = (
   newAssets: number,
   remainingMoney: number
 ): string => {
   return newAssets > remainingMoney
-    ? "New funds cannot be more than remaining budget funds"
+    ? "New funds cannot be more than remaining budget funds."
     : "";
 };
 
