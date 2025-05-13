@@ -6,6 +6,8 @@ import {
 } from "../helpers/transactionType";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import { ImCheckmark } from "react-icons/im";
+import { dollarConverter } from "../helpers/currencyConverter";
+import { returnBudgetColor } from "../helpers/returnBudgetColor";
 
 type Props = {
   transaction: Transaction;
@@ -22,26 +24,30 @@ const TransactionCard: React.FC<Props> = ({ transaction }): JSX.Element => {
   );
 
   return (
-    <div className="transaction-card grid grid-cols-5 p-4">
-      <div className="transaction-title p-1 text-sm sm:text-base duration-150 text-center content-center">
+    <div className="transaction-card grid grid-cols-7 p-2">
+      <div className="transaction-title p-2 text-xs sm:text-base duration-150 text-center content-center">
         {transaction.title}
       </div>
 
       <div
-        className={`expense-transaction p-1 text-sm sm:text-base duration-150 text-center content-center
+        className={`expense-transaction p-2 text-xs sm:text-base duration-150 text-center content-center
       ${transactionValue.current.add ? "text-blue-700" : "text-red-700"}`}
       >
         {transactionValue.current.value}
       </div>
 
-      <div className="transaction-date p-1 text-sm sm:text-base duration-150 text-center content-center">
+      <div className="transaction-date p-2 text-xs sm:text-base duration-150 text-center content-center">
         <p>{dateTime.current.date}</p>
         <p>{dateTime.current.time}</p>
       </div>
 
-      <div className="transaction-incomme p-1 text-sm sm:text-base duration-150 text-center content-center">
+      <div className="transaction-new-balance p-2 text-xs sm:text-base duration-150 text-center content-center">
+        <p>{dollarConverter(transaction.newBalance)}</p>
+      </div>
+
+      <div className="transaction-incomme p-2 text-xs sm:text-base duration-150 text-center content-center">
         {"fromIncome" in transaction && transaction.fromIncome ? (
-          <div className="flex justify-center content-center">
+          <div className="flex justify-center content-center text-green-700">
             <ImCheckmark />
           </div>
         ) : (
@@ -49,14 +55,28 @@ const TransactionCard: React.FC<Props> = ({ transaction }): JSX.Element => {
         )}
       </div>
 
-      <div className="transaction-misc p-1 text-sm sm:text-base duration-150 text-center content-center">
-        {"fromIncome" in transaction && !transaction.fromIncome ? (
-          <div className="flex justify-center content-center">
+      <div className="transaction-misc p-2 text-xs sm:text-base duration-150 text-center content-center">
+        {"fromIncome" in transaction &&
+        !transaction.fromIncome &&
+        transaction.budgetOperation === "-" ? (
+          <div className="flex justify-center content-center text-green-700">
             <ImCheckmark />
           </div>
         ) : (
           <p>-</p>
         )}
+      </div>
+
+      <div
+        className={`transaction-budget-op p-2 text-xs sm:text-base duration-150 text-center content-center`}
+      >
+        <div
+          className={`flex justify-center content-center ${returnBudgetColor(
+            transaction.budgetOperation
+          )}`}
+        >
+          {transaction.budgetOperation}
+        </div>
       </div>
     </div>
   );

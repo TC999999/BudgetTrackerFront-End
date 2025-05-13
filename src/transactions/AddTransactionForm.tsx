@@ -112,6 +112,7 @@ const AddTransactionForm: React.FC<Props> = ({
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
+                    readOnly
                   />
                   {formErrors.date && (
                     <div className="error-message">
@@ -125,7 +126,7 @@ const AddTransactionForm: React.FC<Props> = ({
               <div id="transaction_inputs">
                 <div className="added-assets-div">
                   <label className="text-gray-700 block" htmlFor="addedAssets">
-                    What is the value of this transaction? ($ U.S.):{" "}
+                    What is the value of this transaction? ($ U.S.):
                   </label>
                   <input
                     className={`input sm:text-sm sm:w-64 md:text-base md:w-96  ${

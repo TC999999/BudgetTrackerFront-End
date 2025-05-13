@@ -62,7 +62,7 @@ export const createUpdateBudgetString = (
         )} to total savings balance.`;
         break;
       case "subtract":
-        addOrRemove = ` Removed $${dollarConverter(
+        addOrRemove = ` Removed ${dollarConverter(
           submitData.addedMoney
         )} and added it to total savings balance.`;
         break;

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
@@ -25,6 +26,10 @@ const DeleteBudgetForm: React.FC<Props> = ({
 
   const { formData, newAssets, remainingMoney, handleChange, handleSubmit } =
     useDeleteBudget(budget);
+
+  const convertNewAssets = useMemo(() => {
+    return dollarConverter(newAssets);
+  }, [newAssets]);
 
   return !formLoading ? (
     <div id="delete-budget-form-div" className="modal-layer-1">
@@ -128,7 +133,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
             <div id="new-assets">
               <p className="text-lg p-1">Your New Total Savings Will Be:</p>
               <p className="text-3xl sm:text-4xl font-bold text-green-700 p-1 duration-150">
-                ${newAssets}
+                {convertNewAssets}
               </p>
             </div>
 

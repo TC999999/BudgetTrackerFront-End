@@ -26,6 +26,7 @@ export type SubmitBudgetUpdateInterface = {
   title: string;
   addedMoney: number;
   budgetID: string;
+  operation: "add" | "subtract";
 };
 
 export interface BudgetInterface {

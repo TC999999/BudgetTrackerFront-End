@@ -9,6 +9,7 @@ import { UserContextInterface } from ".././interfaces/userInterfaces";
 import { toast, Id } from "react-toastify";
 import TokenAPI from ".././apis/TokenAPI";
 import { API_URL } from ".././features/config";
+import { dollarConverter } from "../helpers/currencyConverter";
 
 // custom hook for entire application: includes retrieving core user data (username and total savings value); also
 // listens for server side events for when a single user's income is updated (connection url is unique to user)
@@ -50,7 +51,9 @@ const useApp = () => {
         if (data.newTotalAssets) {
           dispatch(incomeUpdate(data));
           notify(
-            `Recieved Income! Your total savings are now $${data.newTotalAssets.totalAssets} `
+            `Recieved Income! Your total savings are now ${dollarConverter(
+              data.newTotalAssets.totalAssets
+            )} `
           );
         }
       };

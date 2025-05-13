@@ -23,13 +23,15 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
     >
       <header
         id="transaction-list-headers"
-        className="grid grid-cols-5 bg-green-200 border-b-2 border-green-500 p-2"
+        className="grid grid-cols-7 bg-green-200 border-b-2 border-green-500 p-2"
       >
         <b className="table-header">Name</b>
         <b className="table-header">Value</b>
         <b className="table-header">Date</b>
+        <b className="table-header">Balance</b>
         <b className="table-header">Income</b>
         <b className="table-header">Misc.</b>
+        <b className="table-header">Budget</b>
       </header>
 
       <div id="transaction-card-list" className="stripedTransactions">

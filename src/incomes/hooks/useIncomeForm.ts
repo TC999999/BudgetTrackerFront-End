@@ -209,7 +209,6 @@ const useIncomeForm = ({
             readableUpdateTimeString,
           };
           if (handleIncomes) {
-            console.log(submitData);
             handleIncomes(e, submitData);
           } else if (addToIncomeState && userID) {
             let newIncome: Income = await IncomeAPI.addNewUserIncome(

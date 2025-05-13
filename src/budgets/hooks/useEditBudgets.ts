@@ -213,6 +213,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
             userID: user!._id,
             budgetID: budget._id,
             title: formData.title,
+            operation: formData.operation === "add" ? "subtract" : "add",
             addedMoney:
               formData.operation === "add"
                 ? formData.addedMoney

@@ -5,6 +5,8 @@ export type Transaction = {
   operation: "add" | "subtract";
   title: string;
   transaction: number;
+  budgetOperation: "Created" | "Edited" | "Deleted" | "-";
+  newBalance: number;
 };
 
 export type NewTransaction = {
