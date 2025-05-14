@@ -84,7 +84,7 @@ const ExpenseForm: React.FC<Props> = ({
                   <input
                     className={`input ${
                       formErrors.title ? "input-error" : "input-valid"
-                    } ${flashErrors.title && "animate-blinkError"}`}
+                    } ${flashErrors.title && "animate-blink-error"}`}
                     id="expense_title"
                     type="text"
                     name="title"
@@ -115,7 +115,7 @@ const ExpenseForm: React.FC<Props> = ({
                     type="datetime-local"
                     className={`input ${
                       formErrors.date ? "input-error" : "input-valid-date"
-                    } ${flashErrors.date && "animate-blinkError"}`}
+                    } ${flashErrors.date && "animate-blink-error"}`}
                     id="expense_date"
                     name="date"
                     value={formData.date}
@@ -139,7 +139,7 @@ const ExpenseForm: React.FC<Props> = ({
                   <input
                     className={`input ${
                       formErrors.transaction ? "input-error" : ""
-                    } ${flashErrors.transaction && "animate-blinkError"}`}
+                    } ${flashErrors.transaction && "animate-blink-error"}`}
                     id="expense_transaction"
                     type="text"
                     name="trasaction"

@@ -35,9 +35,9 @@ const EditUserForm = (): JSX.Element => {
             Your New Username:
           </label>
           <input
-            className={`input ${formErrors.username ? "input-error" : ""} ${
-              flashErrors.username ? "animate-blinkError" : ""
-            }`}
+            className={`input ${
+              formErrors.username ? "input-error" : "input-valid"
+            } ${flashErrors.username ? "animate-blink-error" : ""}`}
             type="text"
             id="username"
             name="username"
@@ -69,9 +69,9 @@ const EditUserForm = (): JSX.Element => {
             Your New Email:
           </label>
           <input
-            className={`input ${formErrors.email ? "input-error" : ""} ${
-              flashErrors.email ? "animate-blinkError" : ""
-            }`}
+            className={`input ${
+              formErrors.email ? "input-error" : "input-valid"
+            } ${flashErrors.email ? "animate-blink-error" : ""}`}
             type="text"
             id="email"
             name="email"
@@ -92,9 +92,9 @@ const EditUserForm = (): JSX.Element => {
             Confirm Your Password:
           </label>
           <input
-            className={`input ${formErrors.password ? "input-error" : ""} ${
-              flashErrors.password ? "animate-blinkError" : ""
-            }`}
+            className={`input ${
+              formErrors.password ? "input-error" : "input-valid"
+            } ${flashErrors.password ? "animate-blink-error" : ""}`}
             type="password"
             id="password"
             name="password"
@@ -111,7 +111,9 @@ const EditUserForm = (): JSX.Element => {
         </div>
 
         <div id="submit-error" className="text-center text-red-600 font-bold">
-          <p className={`${submitErrorFlash ? "animate-blinkErrorText" : ""}`}>
+          <p
+            className={`${submitErrorFlash ? "animate-blink-error-text" : ""}`}
+          >
             {submitError}
           </p>
         </div>

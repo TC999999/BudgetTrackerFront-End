@@ -51,7 +51,7 @@ const SignUpSensitive: React.FC<Props> = ({
           <input
             className={`input ${
               formErrors.username ? "input-error" : "input-valid"
-            } ${flashErrors.username && "animate-blinkError"}`}
+            } ${flashErrors.username && "animate-blink-error"}`}
             id="signup_username"
             type="text"
             name="username"
@@ -81,7 +81,7 @@ const SignUpSensitive: React.FC<Props> = ({
           <input
             className={`input ${
               formErrors.password ? "input-error" : "input-valid"
-            } ${flashErrors.password && "animate-blinkError"}`}
+            } ${flashErrors.password && "animate-blink-error"}`}
             id="signup_password"
             type="password"
             name="password"
@@ -117,7 +117,7 @@ const SignUpSensitive: React.FC<Props> = ({
               type="password"
               className={`input ${
                 formErrors.confirmPassword ? "input-error" : "input-valid"
-              } ${flashErrors.confirmPassword && "animate-blinkError"}`}
+              } ${flashErrors.confirmPassword && "animate-blink-error"}`}
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
@@ -152,7 +152,7 @@ const SignUpSensitive: React.FC<Props> = ({
           <input
             className={`input ${
               formErrors.email ? "input-error" : "input-valid"
-            } ${flashErrors.email && "animate-blinkError"}`}
+            } ${flashErrors.email && "animate-blink-error"}`}
             id="signup_email"
             type="text"
             name="email"

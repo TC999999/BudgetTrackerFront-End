@@ -40,7 +40,7 @@ const UserInfo: React.FC<Props> = ({
                 type="text"
                 className={`userInfo-input ${
                   formErrors.username ? "input-error" : "input-valid"
-                } ${flashErrors.username && "animate-blinkError"}`}
+                } ${flashErrors.username && "animate-blink-error"}`}
                 id="username"
                 name="username"
                 value={formData.username}
@@ -61,7 +61,7 @@ const UserInfo: React.FC<Props> = ({
                 type="text"
                 className={`userInfo-input ${
                   formErrors.email ? "input-error" : "input-valid"
-                } ${flashErrors.email && "animate-blinkError"}`}
+                } ${flashErrors.email && "animate-blink-error"}`}
                 id="email"
                 name="email"
                 placeholder="type email connected to username here"

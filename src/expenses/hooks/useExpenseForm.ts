@@ -53,7 +53,9 @@ const useExpenseForm = ({
     toast.success(
       `${title} expense created successfully! ${dollarConverter(
         transaction
-      )} spent. $${availableMoney} remaining in ${budget.title}.`
+      )} spent. ${dollarConverter(availableMoney)} remaining in ${
+        budget.title
+      }.`
     );
   const notifyError = (error: error) =>
     toast.error(`${error.status} Error: ${error.message}`);

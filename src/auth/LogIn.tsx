@@ -29,7 +29,7 @@ const LogIn = (): JSX.Element => {
               <input
                 className={`input 
                 ${formErrors.username ? "input-error" : "input-valid"} ${
-                  flashErrors.username && "animate-blinkError"
+                  flashErrors.username && "animate-blink-error"
                 }`}
                 id="login_username"
                 type="text"
@@ -52,7 +52,7 @@ const LogIn = (): JSX.Element => {
               <input
                 className={`input 
                   ${formErrors.password ? "input-error" : "input-valid"} ${
-                  flashErrors.password && "animate-blinkError"
+                  flashErrors.password && "animate-blink-error"
                 }`}
                 id="login_password"
                 type="password"
@@ -96,7 +96,7 @@ const LogIn = (): JSX.Element => {
             {submitError && (
               <div
                 className={`error-message text-center text-red-500 text-xl font-bold ${
-                  submitErrorFlash ? "animate-blinkErrorText" : ""
+                  submitErrorFlash ? "animate-blink-error-text" : ""
                 }`}
               >
                 <p>{submitError}</p>

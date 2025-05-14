@@ -74,8 +74,8 @@ const AddTransactionForm: React.FC<Props> = ({
                   </label>
                   <input
                     className={`input sm:text-sm md:text-base ${
-                      formErrors.title ? "input-error" : ""
-                    } ${flashErrors.title ? "animate-blinkError" : ""}`}
+                      formErrors.title ? "input-error" : "input-valid"
+                    } ${flashErrors.title ? "animate-blink-error" : ""}`}
                     id="title"
                     type="text"
                     name="title"
@@ -107,7 +107,7 @@ const AddTransactionForm: React.FC<Props> = ({
                     type="datetime-local"
                     className={`input  ${
                       formErrors.date ? "input-error" : "input-valid-date"
-                    } ${flashErrors.date && "animate-blinkError"}`}
+                    } ${flashErrors.date && "animate-blink-error"}`}
                     id="expense_date"
                     name="date"
                     value={formData.date}
@@ -131,7 +131,7 @@ const AddTransactionForm: React.FC<Props> = ({
                   <input
                     className={`input sm:text-sm sm:w-64 md:text-base md:w-96  ${
                       formErrors.value ? "input-error" : ""
-                    } ${flashErrors.value ? "animate-blinkError" : ""}`}
+                    } ${flashErrors.value ? "animate-blink-error" : ""}`}
                     id="added_assets"
                     type="text"
                     name="addedAssets"

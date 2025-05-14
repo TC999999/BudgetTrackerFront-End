@@ -1,5 +1,5 @@
 import { Transaction } from "../interfaces/transactionInterfaces";
-import TransactionCard from "./TransactionCard";
+import TransactionCard from "./transactionCard";
 import TableSkeletonCard from "../skeleton/TableSkeletonCard";
 import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
@@ -19,7 +19,7 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
   return (
     <div
       id="transactions-list"
-      className="bg-white border-2 border-green-500 m-2 rounded-md h-100"
+      className="bg-white border-2 border-green-500 m-2 rounded-md"
     >
       <header
         id="transaction-list-headers"

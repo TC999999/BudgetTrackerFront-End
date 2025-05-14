@@ -29,7 +29,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
               type="password"
               className={`userInfo-input ${
                 formErrors.newPassword ? "input-error" : "input-valid"
-              } ${flashErrors.newPassword && "animate-blinkError"}`}
+              } ${flashErrors.newPassword && "animate-blink-error"}`}
               id="newPassword"
               name="newPassword"
               value={formData.newPassword}
@@ -54,7 +54,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
                 type="password"
                 className={`userInfo-input ${
                   formErrors.confirmNewPassword ? "input-error" : "input-valid"
-                } ${flashErrors.confirmNewPassword && "animate-blinkError"}`}
+                } ${flashErrors.confirmNewPassword && "animate-blink-error"}`}
                 id="confirmNewPassword"
                 name="confirmNewPassword"
                 value={formData.confirmNewPassword}

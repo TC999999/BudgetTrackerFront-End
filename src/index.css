@@ -1,97 +1,163 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer utilities {
-  .input {
-    @apply text-gray-900 text-lg sm:text-2xl text-center py-2 mb-2 w-full border-2 focus:outline-none;
+@plugin '@tailwindcss/forms' {
+  strategy: "class";
+}
+
+@theme {
+  --animate-blink-error: blink 0.5s infinite;
+  --animate-blink-error-text: blinkText 0.5s infinite;
+
+  @keyframes blink {
+    20%,
+    60%,
+    100% {
+      background: #f59993;
+    }
+    0%,
+    40%,
+    80% {
+      background: white;
+    }
   }
-
-  .input-email {
-    @apply text-gray-900 text-lg text-center py-3 mb-2 w-96 border-2 focus:outline-none;
+  @keyframes blinkText {
+    20%,
+    60%,
+    100% {
+      color: white;
+    }
+    0%,
+    40%,
+    80% {
+      color: #f70515;
+    }
   }
+}
 
-  .input-error {
-    @apply bg-red-100 border-red-600;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
   }
+}
 
-  .input-valid {
-    @apply focus:border-green-600;
-  }
+@utility input {
+  @apply text-gray-900 text-lg sm:text-2xl text-center py-2 mb-2 w-full border-2 focus:outline-hidden;
+}
 
-  .input-valid-date {
-    @apply active:border-green-600;
-  }
+@utility input-email {
+  @apply text-gray-900 text-lg text-center py-3 mb-2 w-96 border-2 focus:outline-hidden;
+}
 
-  .submit-button {
-    @apply bg-green-300 border-2 border-emerald-900 rounded-full p-2 hover:bg-green-900 hover:text-gray-100 active:bg-green-100 active:text-emerald-900 transition duration-150;
-  }
+@utility input-error {
+  @apply bg-red-100 border-red-600;
+}
 
-  .cancel-button {
-    @apply bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full p-2 hover:bg-gray-200 hover:text-gray-600 active:bg-gray-100 transition duration-150;
-  }
+@utility input-valid {
+  @apply focus:border-green-600;
+}
 
-  .delete-button {
-    @apply bg-red-300 border-2 border-red-900 rounded-full p-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900 transition duration-150;
-  }
+@utility input-valid-date {
+  @apply active:border-green-600;
+}
 
-  .checkbox {
-    @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150;
-  }
+@utility submit-button {
+  @apply bg-green-300 border-2 border-emerald-900 rounded-full p-2 hover:bg-green-900 hover:text-gray-100 active:bg-green-100 active:text-emerald-900 transition duration-150;
+}
 
-  .checkbox-add {
-    @apply text-green-600 hover:ring-green-600 focus:ring-green-600;
-  }
+@utility cancel-button {
+  @apply bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full p-2 hover:bg-gray-200 hover:text-gray-600 active:bg-gray-100 transition duration-150;
+}
 
-  .radio {
-    @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150;
-  }
+@utility delete-button {
+  @apply bg-red-300 border-2 border-red-900 rounded-full p-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900 transition duration-150;
+}
 
-  .radio-add {
-    @apply text-green-600 hover:ring-green-600 focus:ring-green-600;
-  }
+@utility checkbox {
+  @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150;
+}
 
-  .radio-subtract {
-    @apply text-red-600 hover:ring-red-600 focus:ring-red-600;
-  }
+@utility checkbox-add {
+  @apply text-green-600 hover:ring-green-600 focus:ring-green-600;
+}
 
-  .radio-remaining {
-    @apply text-blue-600 hover:ring-blue-600 focus:ring-blue-600;
-  }
+@utility radio {
+  @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150;
+}
 
-  .radio-none {
-    @apply text-gray-600 hover:ring-gray-600 focus:ring-gray-600;
-  }
+@utility radio-add {
+  @apply text-green-600 hover:ring-green-600 focus:ring-green-600;
+}
 
-  .list-header {
-    @apply text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold transition duration-150;
-  }
+@utility radio-subtract {
+  @apply text-red-600 hover:ring-red-600 focus:ring-red-600;
+}
 
-  .table-header {
-    @apply text-sm sm:text-base transition duration-150 text-center content-center;
-  }
+@utility radio-remaining {
+  @apply text-blue-600 hover:ring-blue-600 focus:ring-blue-600;
+}
 
-  .striped .expense-card:nth-child(even) {
+@utility radio-none {
+  @apply text-gray-600 hover:ring-gray-600 focus:ring-gray-600;
+}
+
+@utility list-header {
+  @apply text-2xl sm:text-3xl lg:text-4xl underline text-emerald-600 font-bold transition duration-150;
+}
+
+@utility table-header {
+  @apply text-sm sm:text-base transition duration-150 text-center content-center;
+}
+
+@utility striped {
+  & .expense-card:nth-child(even) {
     @apply bg-green-200;
   }
+}
 
-  .stripedTransactions .transaction-card:nth-child(even) {
+@utility expense-card {
+  .striped &:nth-child(even) {
     @apply bg-green-200;
   }
+}
 
-  .stripedBudgets li:nth-child(even) .budget-card {
+@utility stripedTransactions {
+  & .transaction-card:nth-child(even) {
+    @apply bg-green-200;
+  }
+}
+
+@utility transaction-card {
+  .stripedTransactions &:nth-child(even) {
+    @apply bg-green-200;
+  }
+}
+
+@utility stripedBudgets {
+  & li:nth-child(even) .budget-card {
     @apply bg-green-500 border-white text-white hover:bg-green-600 hover:ring-emerald-500/50;
   }
 
-  .stripedBudgets li.budget-card-border {
+  & li.budget-card-border {
     @apply w-5/6 md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5;
   }
 
-  .stripedBudgets li:nth-child(even) progress.budget-progress-bar {
+  & li:nth-child(even) progress.budget-progress-bar {
     @apply [&::-webkit-progress-bar]:bg-green-200 [&::-webkit-progress-value]:bg-slate-400;
   }
 
-  .stripedBudgets
+  &
     li:nth-child(even)
     :is(
       p.budget-money-allocation-value,
@@ -100,52 +166,110 @@
     ) {
     @apply text-slate-200;
   }
+}
 
-  .keypad-key-buttons .button {
+@utility budget-card {
+  .stripedBudgets li:nth-child(even) & {
+    @apply bg-green-500 border-white text-white hover:bg-green-600 hover:ring-emerald-500/50;
+  }
+}
+
+@utility budget-card-border {
+  .stripedBudgets &li {
+    @apply w-5/6 md:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5;
+  }
+}
+
+@utility budget-progress-bar {
+  .stripedBudgets li:nth-child(even) &progress {
+    @apply [&::-webkit-progress-bar]:bg-green-200 [&::-webkit-progress-value]:bg-slate-400;
+  }
+}
+
+@utility budget-money-allocation-value {
+  .stripedBudgets
+    li:nth-child(even)
+    :is(& p, p.budget-money-spent-value, p.budget-money-remaining-value) {
+    @apply text-slate-200;
+  }
+}
+
+@utility budget-money-spent-value {
+  .stripedBudgets
+    li:nth-child(even)
+    :is(p.budget-money-allocation-value, & p, p.budget-money-remaining-value) {
+    @apply text-slate-200;
+  }
+}
+
+@utility budget-money-remaining-value {
+  .stripedBudgets
+    li:nth-child(even)
+    :is(p.budget-money-allocation-value, p.budget-money-spent-value, & p) {
+    @apply text-slate-200;
+  }
+}
+
+@utility keypad-key-buttons {
+  & .button {
     @apply bg-gray-400 text-center px-2 py-2 border border-gray-900 hover:bg-blue-100 active:bg-blue-400 active:text-gray-100;
   }
 
-  .keypad-key-buttons .button-delete {
+  & .button-delete {
     @apply bg-orange-400 text-center px-2 py-2 border border-gray-900 hover:bg-orange-100 active:bg-orange-400 active:text-gray-100;
   }
+}
 
-  .modal-layer-1 {
-    @apply bg-gray-500 bg-opacity-50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full;
+@utility button {
+  .keypad-key-buttons & {
+    @apply bg-gray-400 text-center px-2 py-2 border border-gray-900 hover:bg-blue-100 active:bg-blue-400 active:text-gray-100;
   }
+}
 
-  .modal-layer-2 {
-    @apply relative w-full p-4 max-w-md max-h-full;
+@utility button-delete {
+  .keypad-key-buttons & {
+    @apply bg-orange-400 text-center px-2 py-2 border border-gray-900 hover:bg-orange-100 active:bg-orange-400 active:text-gray-100;
   }
+}
 
-  .modal-layer-2-lg {
-    @apply relative p-4 max-w-full max-h-full;
-  }
+@utility modal-layer-1 {
+  @apply bg-black/25 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full;
+}
 
-  .modal-layer-3 {
-    @apply relative bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full;
-  }
+@utility modal-layer-2 {
+  @apply relative w-full p-4 max-w-md max-h-full;
+}
 
-  .nav-button {
-    @apply border p-1 text-sm sm:p-2 sm:text-lg rounded-full transition duration-150;
-  }
+@utility modal-layer-2-lg {
+  @apply relative p-4 max-w-full max-h-full;
+}
 
+@utility modal-layer-3 {
+  @apply relative bg-gray-100 rounded-lg shadow-xs border-2 border-green-900 px-2 py-2 w-full;
+}
+
+@utility nav-button {
+  @apply border p-1 text-sm sm:p-2 sm:text-lg rounded-full transition duration-150;
+}
+
+@utility userInfo-input {
+  @apply text-gray-900 text-2xl text-center mb-4 w-full border-2 focus:outline-hidden;
+}
+
+@utility digitPlace {
+  @apply border-2 border-gray-500 bg-gray-100 w-24 text-center p-2 m-2 text-2xl;
+}
+
+@utility digitPlace-full {
+  @apply bg-green-200 border-green-600;
+}
+
+@utility digitPlace-select {
+  @apply bg-blue-200 border-blue-600;
+}
+
+@layer utilities {
   #additional-nav-header {
     @apply sticky top-20 sm:top-28 p-3 bg-emerald-900 z-10;
-  }
-
-  .userInfo-input {
-    @apply text-gray-900 text-2xl text-center mb-4 w-full border-2 focus:outline-none;
-  }
-
-  .digitPlace {
-    @apply border-2 border-gray-500 bg-gray-100 w-24 text-center p-2 m-2 text-2xl;
-  }
-
-  .digitPlace-full {
-    @apply bg-green-200 border-green-600;
-  }
-
-  .digitPlace-select {
-    @apply bg-blue-200 border-blue-600;
   }
 }

@@ -75,7 +75,7 @@ const IncomeForm: React.FC<Props> = ({
                   <input
                     className={`input sm:text-sm md:text-base ${
                       formErrors.title ? "input-error" : "input-valid"
-                    } ${flashErrors.title ? "animate-blinkError" : ""}`}
+                    } ${flashErrors.title ? "animate-blink-error" : ""}`}
                     type="text"
                     id="title"
                     name="title"
@@ -106,7 +106,7 @@ const IncomeForm: React.FC<Props> = ({
                     type="text"
                     className={`input sm:text-sm md:text-base ${
                       formErrors.salary && "input-error"
-                    } ${flashErrors.salary ? "animate-blinkError" : ""}`}
+                    } ${flashErrors.salary ? "animate-blink-error" : ""}`}
                     id="salary"
                     name="salary"
                     value={newSalary}

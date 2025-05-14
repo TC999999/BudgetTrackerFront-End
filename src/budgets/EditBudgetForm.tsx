@@ -113,7 +113,7 @@ const EditBudgetForm: React.FC<Props> = ({
                   <input
                     className={`input ${
                       formErrors.title ? "input-error" : "input-valid"
-                    } ${flashErrors.title && "animate-blinkError"}`}
+                    } ${flashErrors.title && "animate-blink-error"}`}
                     id="budget_title"
                     type="text"
                     name="title"
