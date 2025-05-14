@@ -65,7 +65,7 @@ const EditBudgetForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
-      <div className="modal-layer-2-lg">
+      <div className="modal-layer-2-lg animate-form-fade-in">
         <div className="edit-budget-form-div text-center modal-layer-3">
           <header>
             <h2 className="text-3xl text-green-800 font-bold underline">

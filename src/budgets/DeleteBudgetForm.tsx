@@ -33,7 +33,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <div id="delete-budget-form-div" className="modal-layer-1">
-      <div className="modal-layer-2">
+      <div className="modal-layer-2 animate-form-fade-in">
         <div id="delete-budget-form" className=" text-center modal-layer-3">
           <header className="transition duration-150">
             <h3 className="text-3xl sm:text-4xl font-bold text-red-700 underline">

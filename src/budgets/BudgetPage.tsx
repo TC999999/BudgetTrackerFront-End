@@ -13,7 +13,10 @@ const BudgetPage = (): JSX.Element => {
 
   return (
     <div id="all-budget-page">
-      <BudgetPageButtons budgetList={budgetList} showForm={showForm} />
+      <BudgetPageButtons
+        budgetListLength={budgetList.length}
+        showForm={showForm}
+      />
       <main>
         <ListHeader type="Budgets" itemListLength={budgetList.length} />
         {showBudgetForm && (

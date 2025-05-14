@@ -11,7 +11,7 @@ const Logout: React.FC<Props> = ({
 }): JSX.Element | null => {
   return showPrompt ? (
     <div className="modal-layer-1">
-      <div className="modal-layer-2">
+      <div className="modal-layer-2 animate-form-fade-in">
         <div className="modal-layer-3">
           <header className="text-xl sm:text-3xl text-center text-green-700 font-bold">
             Are You Sure You Want to Log Out?

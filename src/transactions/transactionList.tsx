@@ -50,7 +50,7 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
 
         {pageLoading && (
           <div>
-            <TableSkeletonCard cards={5} cols="5" />
+            <TableSkeletonCard cards={5} cols="7" />
           </div>
         )}
 

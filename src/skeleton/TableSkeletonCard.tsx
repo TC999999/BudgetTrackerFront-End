@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton";
 import CardTextSkeleton from "./CardTextSkeleton";
 
-type Props = { cards: number; cols: "4" | "5" };
+type Props = { cards: number; cols: "4" | "7" };
 // returns a list of  skeleton cards to be used for TransactionList.tsx before the expenses load
 const SkeletonCard: React.FC<Props> = ({ cards, cols }) => {
   return Array(cards)
@@ -15,7 +15,9 @@ const SkeletonCard: React.FC<Props> = ({ cards, cols }) => {
         <Skeleton wrapper={CardTextSkeleton} />
         <Skeleton wrapper={CardTextSkeleton} />
         <Skeleton wrapper={CardTextSkeleton} />
-        {cols === "5" && <Skeleton wrapper={CardTextSkeleton} />}
+        {cols === "7" && <Skeleton wrapper={CardTextSkeleton} />}
+        {cols === "7" && <Skeleton wrapper={CardTextSkeleton} />}
+        {cols === "7" && <Skeleton wrapper={CardTextSkeleton} />}
       </div>
     ));
 };

@@ -60,7 +60,7 @@ const ExpenseForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <div tabIndex={-1} id="new-expense-form-div" className="modal-layer-1">
-      <div className="modal-layer-2-lg">
+      <div className="modal-layer-2-lg animate-form-fade-in">
         <div id="new-expense-form" className="modal-layer-3 text-center">
           <header>
             <h2 className="text-3xl text-green-800 font-bold underline">

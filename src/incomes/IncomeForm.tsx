@@ -53,7 +53,7 @@ const IncomeForm: React.FC<Props> = ({
   }, [formData.salary]);
   return (
     <div className="modal-layer-1">
-      <div className="modal-layer-2-lg">
+      <div className="modal-layer-2-lg animate-form-fade-in">
         <div className="modal-layer-3 text-center">
           <header>
             <h1 className="text-3xl text-green-800 font-bold underline">

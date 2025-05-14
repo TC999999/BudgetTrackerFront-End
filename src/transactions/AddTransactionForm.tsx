@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { loading } from "../interfaces/loadingInterfaces";
 import { Transaction } from "../interfaces/transactionInterfaces";
 import KeyPad from "../KeyPad";
@@ -5,7 +6,6 @@ import useAddTransaction from "./hooks/useAddTransaction";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import { dollarConverter } from "../helpers/currencyConverter";
-import { useMemo } from "react";
 
 type Props = {
   hideForm: (
@@ -54,7 +54,7 @@ const AddTransactionForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
-      <div className="modal-layer-2-lg">
+      <div className="modal-layer-2-lg animate-form-fade-in">
         <div className="add-to-assets-form text-center modal-layer-3">
           <header>
             <h1 className="text-3xl text-green-800 font-bold underline">

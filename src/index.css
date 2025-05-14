@@ -7,6 +7,9 @@
 @theme {
   --animate-blink-error: blink 0.5s infinite;
   --animate-blink-error-text: blinkText 0.5s infinite;
+  --animate-form-fade-in: formFadeIn 0.2s;
+  --animate-form-fade-out: formFadeOut 0.2s;
+  --animate-additional-buttons: additionalButtons 0.15s;
 
   @keyframes blink {
     20%,
@@ -30,6 +33,86 @@
     40%,
     80% {
       color: #f70515;
+    }
+  }
+
+  @keyframes formFadeIn {
+    0% {
+      opacity: 0;
+      bottom: 20px;
+    }
+    25% {
+      opacity: 0.25;
+      bottom: 15px;
+    }
+    50% {
+      opacity: 0.5;
+      bottom: 10px;
+    }
+    75% {
+      opacity: 0.75;
+      bottom: 5px;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes formFadeOut {
+    0% {
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.75;
+      bottom: 5px;
+    }
+    50% {
+      opacity: 0.5;
+      bottom: 10px;
+    }
+    75% {
+      opacity: 0.25;
+      bottom: 15px;
+    }
+    100% {
+      opacity: 0;
+      bottom: 20px;
+    }
+  }
+
+  @keyframes additionalButtons {
+    0% {
+      bottom: 50px;
+    }
+    10% {
+      bottom: 45px;
+    }
+    20% {
+      bottom: 40px;
+    }
+    30% {
+      bottom: 35px;
+    }
+    40% {
+      bottom: 30px;
+    }
+    50% {
+      bottom: 25px;
+    }
+    60% {
+      bottom: 20px;
+    }
+    70% {
+      bottom: 15px;
+    }
+    80% {
+      bottom: 10px;
+    }
+    90% {
+      bottom: 5px;
+    }
+    100% {
+      bottom: 0px;
     }
   }
 }
@@ -270,6 +353,6 @@
 
 @layer utilities {
   #additional-nav-header {
-    @apply sticky top-20 sm:top-28 p-3 bg-emerald-900 z-10;
+    @apply relative p-3 bg-emerald-900 z-10;
   }
 }

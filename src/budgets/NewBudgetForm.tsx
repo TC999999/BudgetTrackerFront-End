@@ -5,6 +5,7 @@ import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import { dollarConverter } from "../helpers/currencyConverter";
 import useBudget from "./hooks/useAddBudget";
+import useFormAnimation from "../hooks/useFormAnimation";
 import { useMemo } from "react";
 
 type Props = {
@@ -29,6 +30,8 @@ const BudgetForm: React.FC<Props> = ({
     shallowEqual
   );
 
+  const { animationClass, changeAnimationClass } = useFormAnimation(hideForm);
+
   const {
     formData,
     formErrors,
@@ -52,7 +55,7 @@ const BudgetForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <div tabIndex={-1} id="budget-form-div" className="modal-layer-1">
-      <div className="modal-layer-2">
+      <div className={`modal-layer-2 ${animationClass}`}>
         <div id="new-budget-form" className="modal-layer-3">
           <header className="text-center">
             <h1 className="text-3xl text-green-800 font-bold underline">
@@ -130,7 +133,10 @@ const BudgetForm: React.FC<Props> = ({
               />
             </div>
             <div id="button" className="flex justify-between m-2">
-              <button className="cancel-button" onClick={(e) => hideForm(e)}>
+              <button
+                className="cancel-button"
+                onClick={(e) => changeAnimationClass(e)}
+              >
                 Cancel
               </button>
               <button id="add-budget-button" className="submit-button">
