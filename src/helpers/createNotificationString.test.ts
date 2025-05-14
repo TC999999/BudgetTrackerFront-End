@@ -11,6 +11,7 @@ import { describe, it, expect, beforeEach, beforeAll } from "vitest";
 describe("helper functions for creating strings for toast notifications when adding a transaction", () => {
   it("should create a string using data for a new transaction when adding to balance", () => {
     const newTransaction: NewTransactionUI = {
+      _id: "1",
       title: "new transaction",
       value: 200,
       date: "2025-01-01T00:00:00.000+00:00",
@@ -23,6 +24,7 @@ describe("helper functions for creating strings for toast notifications when add
 
   it("should create a string using data for a new transaction when subtracting from balance", () => {
     const newTransaction: NewTransactionUI = {
+      _id: "2",
       title: "new transaction",
       value: -200,
       date: "2025-01-01T00:00:00.000+00:00",
