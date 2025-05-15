@@ -66,7 +66,7 @@ const useExpenseList = ({ budgetID, filterExpense, updateBudget }: input) => {
   // updates state to hide the prompt window for when a user either clicks cancel on the prompt window or
   // after the user successfully submits a delete request
   const hidePrompt = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent) => {
       e.preventDefault();
       setSelectedExpense(null);
     },

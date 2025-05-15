@@ -2,7 +2,7 @@ import { daysString, monthString } from "./timeMaps";
 
 // used for income forms and cards: returns string that changes depending on the month and
 // dayofmonth values have numeric values or not
-const makeEndString = (month: string, dayOfMonth: string) => {
+export const makeEndString = (month: string, dayOfMonth: string) => {
   if (month !== "*" && dayOfMonth !== "*") {
     return " every year";
   } else {

@@ -46,6 +46,7 @@ const useSingleBudget = ({ budgetID, id }: input) => {
         if (budgetID && id) {
           let budget = await BudgetAPI.getUserBudget(budgetID, id);
           let expenses = await ExpenseAPI.getAllBudgetExpenses(budgetID, id);
+          console.log(expenses);
           setCurrentBudget(budget);
           setExpenses(expenses);
         }

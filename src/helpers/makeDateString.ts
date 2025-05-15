@@ -6,7 +6,6 @@ export type dateInfo = {
 // takes dateTime string and converts it into and returns two separate strings for both the date
 // and the time
 export const makeDateString = (dateString: string): dateInfo => {
-  // if(!dateString) return 'no data for this time'
   let d: Date = new Date(dateString);
   let date: string = d.toLocaleDateString("en-US", {
     month: "short",
@@ -18,7 +17,6 @@ export const makeDateString = (dateString: string): dateInfo => {
     minute: "2-digit",
   });
 
-  // return `${date} at ${time}`
   return {
     date,
     time,
