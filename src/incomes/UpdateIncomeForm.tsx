@@ -15,8 +15,7 @@ import useIncomeForm from "./hooks/useIncomeForm";
 type Props = {
   income: Income;
   selectIncome: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-    income: null
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   updateIncomeState: (income: Income) => void;
 };

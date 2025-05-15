@@ -9,6 +9,7 @@ import { months, hours, minutes, daysOfWeek } from "../helpers/timeMaps";
 import { getDaysInAMonth } from "../helpers/getDaysInAMonth";
 import KeyPad from "../KeyPad";
 import { dollarConverter } from "../helpers/currencyConverter";
+import useFormAnimation from "../hooks/useFormAnimation";
 
 type Props = {
   type: "Update" | "New";
@@ -25,8 +26,7 @@ type Props = {
   handleWeek: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleSubmit: (e: React.FormEvent) => Promise<void>;
   hide: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-    income: null
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   incomeTitle?: string;
 };
@@ -51,9 +51,14 @@ const IncomeForm: React.FC<Props> = ({
   const newSalary = useMemo(() => {
     return dollarConverter(formData.salary);
   }, [formData.salary]);
+
+  const { animationClass, changeAnimationClass } = useFormAnimation(hide);
+
   return (
     <div className="modal-layer-1">
-      <div className="modal-layer-2-lg animate-form-fade-in">
+      <div
+        className={`modal-layer-2-lg animate-form-fade-in ${animationClass}`}
+      >
         <div className="modal-layer-3 text-center">
           <header>
             <h1 className="text-3xl text-green-800 font-bold underline">
@@ -329,7 +334,10 @@ const IncomeForm: React.FC<Props> = ({
               </section>
             </div>
             <div id="buttons" className="flex justify-between m-2">
-              <button className="cancel-button" onClick={(e) => hide(e, null)}>
+              <button
+                className="cancel-button"
+                onClick={(e) => changeAnimationClass(e)}
+              >
                 Cancel
               </button>
 

@@ -6,6 +6,7 @@ import useAddTransaction from "./hooks/useAddTransaction";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import { dollarConverter } from "../helpers/currencyConverter";
+import useFormAnimation from "../hooks/useFormAnimation";
 
 type Props = {
   hideForm: (
@@ -45,6 +46,8 @@ const AddTransactionForm: React.FC<Props> = ({
     updateTransactions,
   });
 
+  const { animationClass, changeAnimationClass } = useFormAnimation(hideForm);
+
   const conversion: conversion = useMemo<conversion>(() => {
     return {
       convertNewTotalAssets: dollarConverter(newTotalAssets),
@@ -54,7 +57,9 @@ const AddTransactionForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <div tabIndex={-1} className="add-to-assets-form-div modal-layer-1">
-      <div className="modal-layer-2-lg animate-form-fade-in">
+      <div
+        className={`modal-layer-2-lg animate-form-fade-in ${animationClass}`}
+      >
         <div className="add-to-assets-form text-center modal-layer-3">
           <header>
             <h1 className="text-3xl text-green-800 font-bold underline">
@@ -217,7 +222,7 @@ const AddTransactionForm: React.FC<Props> = ({
                 <div>
                   <button
                     className="cancel-button"
-                    onClick={(e) => hideForm(e)}
+                    onClick={(e) => changeAnimationClass(e)}
                   >
                     Cancel
                   </button>

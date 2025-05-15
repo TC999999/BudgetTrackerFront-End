@@ -10,13 +10,16 @@ import {
 } from "./helpers/calculateExpenseDelete";
 import { dollarConverter } from "./helpers/currencyConverter";
 import { FaArrowRight } from "react-icons/fa6";
+import useFormAnimation from "./hooks/useFormAnimation";
 
 type Props = {
   deleteFunction: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     info: infoInterface
   ) => Promise<void>;
-  hidePrompt: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  hidePrompt: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+  ) => void;
   itemForDeletion: infoInterface | null;
   BudgetFunds?: budgetFunds;
   type: "Expense" | "Income";
@@ -59,9 +62,11 @@ const SecondPrompt: React.FC<Props> = ({
       );
   }, [BudgetFunds, itemForDeletion]);
 
+  const { animationClass, changeAnimationClass } = useFormAnimation(hidePrompt);
+
   return !formLoading ? (
     <div className="modal-layer-1">
-      <div className="modal-layer-2 animate-form-fade-in">
+      <div className={`modal-layer-2 ${animationClass}`}>
         <div className="modal-layer-3 text-center">
           <header>
             <h1 className="text-3xl text-green-700">
@@ -130,7 +135,7 @@ const SecondPrompt: React.FC<Props> = ({
             <button
               id="cancel-button"
               className="p-2 border border-gray-600 bg-gray-500 text-white rounded-full hover:bg-gray-200 hover:text-black active:bg-gray-300"
-              onClick={(e) => hidePrompt(e)}
+              onClick={(e) => changeAnimationClass(e)}
             >
               Cancel
             </button>

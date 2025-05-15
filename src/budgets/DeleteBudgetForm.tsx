@@ -4,12 +4,12 @@ import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import useDeleteBudget from "./hooks/useDeleteBudget";
+import useFormAnimation from "../hooks/useFormAnimation";
 import { dollarConverter } from "../helpers/currencyConverter";
 
 type Props = {
   hideDeleteForm: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    form: "showDeleteForm"
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   budget: BudgetInterface;
 };
@@ -31,9 +31,12 @@ const DeleteBudgetForm: React.FC<Props> = ({
     return dollarConverter(newAssets);
   }, [newAssets]);
 
+  const { animationClass, changeAnimationClass } =
+    useFormAnimation(hideDeleteForm);
+
   return !formLoading ? (
     <div id="delete-budget-form-div" className="modal-layer-1">
-      <div className="modal-layer-2 animate-form-fade-in">
+      <div className={`modal-layer-2 ${animationClass}`}>
         <div id="delete-budget-form" className=" text-center modal-layer-3">
           <header className="transition duration-150">
             <h3 className="text-3xl sm:text-4xl font-bold text-red-700 underline">
@@ -162,7 +165,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
               <div id="buttons" className="flex justify-between m-2">
                 <button
                   className="cancel-button"
-                  onClick={(e) => hideDeleteForm(e, "showDeleteForm")}
+                  onClick={(e) => changeAnimationClass(e)}
                 >
                   Cancel
                 </button>

@@ -9,7 +9,7 @@
   --animate-blink-error-text: blinkText 0.5s infinite;
   --animate-form-fade-in: formFadeIn 0.2s;
   --animate-form-fade-out: formFadeOut 0.2s;
-  --animate-additional-buttons: additionalButtons 0.15s;
+  --animate-additional-buttons-entrance: additionalButtonsEntrance 0.15s;
 
   @keyframes blink {
     20%,
@@ -80,7 +80,7 @@
     }
   }
 
-  @keyframes additionalButtons {
+  @keyframes additionalButtonsEntrance {
     0% {
       bottom: 50px;
     }
@@ -352,7 +352,11 @@
 }
 
 @layer utilities {
-  #additional-nav-header {
+  #additional-nav-header-relative {
     @apply relative p-3 bg-emerald-900 z-10;
+  }
+
+  #additional-nav-header-sticky {
+    @apply sticky p-3 bg-emerald-900 z-10 top-20 sm:top-28;
   }
 }

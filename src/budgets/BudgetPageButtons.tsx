@@ -1,3 +1,5 @@
+import useNavAnimation from "../hooks/useNavAnimation";
+
 type Props = {
   budgetListLength: number;
   showForm: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -5,8 +7,13 @@ type Props = {
 
 // shows a row of buttons for budgets page
 const BudgetPageButtons: React.FC<Props> = ({ budgetListLength, showForm }) => {
+  const { aniID, handleEntranceAnimationEnd } = useNavAnimation();
   return (
-    <header id="additional-nav-header" className="animate-additional-buttons">
+    <header
+      id={aniID}
+      className="animate-additional-buttons-entrance"
+      onAnimationEnd={handleEntranceAnimationEnd}
+    >
       <nav className="buttons flex justify-around w-full">
         <button
           id="show-budget-form-button"

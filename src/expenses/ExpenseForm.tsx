@@ -7,11 +7,11 @@ import { loading } from "../interfaces/loadingInterfaces";
 import useExpenseForm from "./hooks/useExpenseForm";
 import { useMemo } from "react";
 import { dollarConverter } from "../helpers/currencyConverter";
+import useFormAnimation from "../hooks/useFormAnimation";
 
 type Props = {
   hideExpenseForm: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-    form: "showExpenseForm"
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   budget: BudgetInterface;
   addExpense: (newExpense: ExpenseInterface) => void;
@@ -58,9 +58,14 @@ const ExpenseForm: React.FC<Props> = ({
     };
   }, [availableMoney, formData.transaction]);
 
+  const { animationClass, changeAnimationClass } =
+    useFormAnimation(hideExpenseForm);
+
   return !formLoading ? (
     <div tabIndex={-1} id="new-expense-form-div" className="modal-layer-1">
-      <div className="modal-layer-2-lg animate-form-fade-in">
+      <div
+        className={`modal-layer-2-lg animate-form-fade-in ${animationClass}`}
+      >
         <div id="new-expense-form" className="modal-layer-3 text-center">
           <header>
             <h2 className="text-3xl text-green-800 font-bold underline">
@@ -170,7 +175,7 @@ const ExpenseForm: React.FC<Props> = ({
               <button
                 id="cancel-button"
                 className="cancel-button"
-                onClick={(e) => hideExpenseForm(e, "showExpenseForm")}
+                onClick={(e) => changeAnimationClass(e)}
               >
                 Cancel
               </button>

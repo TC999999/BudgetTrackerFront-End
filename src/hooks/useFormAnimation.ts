@@ -16,7 +16,7 @@ const useFormAnimation = (setter: setter) => {
       e.preventDefault();
       setTimeout(() => {
         setter(e);
-      }, 190);
+      }, 195);
       setAnimationClass("animate-form-fade-out");
     },
     [animationClass]

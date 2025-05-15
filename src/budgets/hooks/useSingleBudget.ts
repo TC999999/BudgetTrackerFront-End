@@ -13,11 +13,7 @@ import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
 import ExpenseAPI from "../../apis/ExpenseAPI";
 
-type FormStateInterface = {
-  showExpenseForm: boolean;
-  showDeleteForm: boolean;
-  showEditForm: boolean;
-};
+type FormState = "showExpenseForm" | "showDeleteForm" | "showEditForm" | null;
 
 type input = {
   budgetID?: string;
@@ -30,24 +26,17 @@ const useSingleBudget = ({ budgetID, id }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
 
-  const initialFormState: FormStateInterface = {
-    showExpenseForm: false,
-    showDeleteForm: false,
-    showEditForm: false,
-  };
-
   const notify = (message: string): Id => toast.error(message);
   const [currentBudget, setCurrentBudget] = useState<BudgetInterface>({
     _id: "",
     title: "",
     moneySpent: 0,
-    moneyAllocated: "",
+    moneyAllocated: 0,
   });
 
   const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
 
-  const [formsState, setFormsState] =
-    useState<FormStateInterface>(initialFormState);
+  const [formsState, setFormsState] = useState<FormState>(null);
 
   // retrieves budget from db based on id string in url parameters upon initial render
   useEffect((): void => {
@@ -80,16 +69,13 @@ const useSingleBudget = ({ budgetID, id }: input) => {
       e.preventDefault();
       if (
         form === "showExpenseForm" &&
-        formsState.showExpenseForm === false &&
+        formsState === "showExpenseForm" &&
         currentBudget &&
         +currentBudget.moneyAllocated === +currentBudget.moneySpent
       ) {
         notify("You have used all of the allocated funds for this budget");
       } else {
-        setFormsState((formState) => ({
-          ...formState,
-          [form]: !formsState[form],
-        }));
+        setFormsState(form);
       }
     },
     [formsState, currentBudget]
@@ -98,14 +84,10 @@ const useSingleBudget = ({ budgetID, id }: input) => {
   // callback function to hide forms when cancelling or after submission
   const changeFormState = useCallback(
     (
-      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-      form: "showExpenseForm" | "showDeleteForm" | "showEditForm"
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
     ): void => {
       e.preventDefault();
-      setFormsState((formState) => ({
-        ...formState,
-        [form]: false,
-      }));
+      setFormsState(null);
     },
     [formsState]
   );

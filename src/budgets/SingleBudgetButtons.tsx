@@ -1,4 +1,5 @@
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
+import useNavAnimation from "../hooks/useNavAnimation";
 
 type Props = {
   currentBudget: BudgetInterface;
@@ -11,8 +12,13 @@ const SingleBudgetButtons: React.FC<Props> = ({
   currentBudget,
   showFormState,
 }) => {
+  const { aniID, handleEntranceAnimationEnd } = useNavAnimation();
   return (
-    <header id="additional-nav-header">
+    <header
+      id={aniID}
+      className="animate-additional-buttons-entrance"
+      onAnimationEnd={handleEntranceAnimationEnd}
+    >
       <nav id="buttons" className="flex justify-around w-full">
         <button
           id="edit-budget-form-button"

@@ -32,20 +32,20 @@ const SingleBudgetPage = (): JSX.Element => {
       />
       <main>
         <BudgetPageCard budget={currentBudget} />
-        {formsState.showEditForm && (
+        {formsState === "showEditForm" && (
           <EditBudgetForm
             budget={currentBudget}
             hideEditForm={changeFormState}
             updateBudget={updateBudget}
           />
         )}
-        {formsState.showDeleteForm && (
+        {formsState === "showDeleteForm" && (
           <DeleteBudgetForm
             hideDeleteForm={changeFormState}
             budget={currentBudget}
           />
         )}
-        {formsState.showExpenseForm && (
+        {formsState === "showExpenseForm" && (
           <ExpenseForm
             hideExpenseForm={changeFormState}
             budget={currentBudget}

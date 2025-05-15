@@ -3,6 +3,7 @@ import { loading } from "../interfaces/loadingInterfaces";
 import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import useEditBudget from "./hooks/useEditBudgets";
+import useFormAnimation from "../hooks/useFormAnimation";
 import KeyPad from "../KeyPad";
 import { useMemo } from "react";
 import { dollarConverter } from "../helpers/currencyConverter";
@@ -10,11 +11,16 @@ import { dollarConverter } from "../helpers/currencyConverter";
 type Props = {
   budget: BudgetInterface;
   hideEditForm: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-    form: "showEditForm"
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
-
   updateBudget: (updatedBudget: BudgetUpdate) => void;
+};
+
+type conversion = {
+  convertNewTotalAssets: string;
+  convertNewBudget: string;
+  convertNewRemainingMoney: string;
+  convertNewAddedMoney: string;
 };
 
 // shows a form for editing a single budget for a single user: the user can change the title or add or subtract a
@@ -47,25 +53,21 @@ const EditBudgetForm: React.FC<Props> = ({
     updateBudget,
   });
 
-  const convertNewTotalAssets = useMemo(() => {
-    return dollarConverter(newTotalAssets);
-  }, [newTotalAssets]);
+  const conversion: conversion = useMemo(() => {
+    return {
+      convertNewTotalAssets: dollarConverter(newTotalAssets),
+      convertNewBudget: dollarConverter(newBudget),
+      convertNewRemainingMoney: dollarConverter(newRemainingMoney),
+      convertNewAddedMoney: dollarConverter(formData.addedMoney),
+    };
+  }, [newTotalAssets, newBudget, newRemainingMoney, formData.addedMoney]);
 
-  const convertNewBudget = useMemo(() => {
-    return dollarConverter(newBudget);
-  }, [newBudget]);
-
-  const convertNewRemainingMoney = useMemo(() => {
-    return dollarConverter(newRemainingMoney);
-  }, [newRemainingMoney]);
-
-  const convertNewAddedMoney = useMemo(() => {
-    return dollarConverter(formData.addedMoney);
-  }, [formData.addedMoney]);
+  const { animationClass, changeAnimationClass } =
+    useFormAnimation(hideEditForm);
 
   return !formLoading ? (
     <div tabIndex={-1} className="modal-layer-1">
-      <div className="modal-layer-2-lg animate-form-fade-in">
+      <div className={`modal-layer-2-lg ${animationClass}`}>
         <div className="edit-budget-form-div text-center modal-layer-3">
           <header>
             <h2 className="text-3xl text-green-800 font-bold underline">
@@ -80,7 +82,7 @@ const EditBudgetForm: React.FC<Props> = ({
                     Your New Total Asset Value Will Be
                   </h3>
                   <p className="text-green-700 text-3xl sm:text-4xl font-bold">
-                    {convertNewTotalAssets}
+                    {conversion.convertNewTotalAssets}
                   </p>
                 </div>
                 <div className="sm:border-2 sm:p-4 sm:shadow-md">
@@ -88,7 +90,7 @@ const EditBudgetForm: React.FC<Props> = ({
                     {budget.title} Budget Will Have a New Total Value of
                   </h3>
                   <p className="text-green-700 text-3xl sm:text-4xl  font-bold">
-                    {convertNewBudget}
+                    {conversion.convertNewBudget}
                   </p>
                 </div>
                 <div className="sm:border-2 sm:p-4 sm:shadow-md">
@@ -96,7 +98,7 @@ const EditBudgetForm: React.FC<Props> = ({
                     {budget.title} Budget Will Have a New Remaining Value of
                   </h3>
                   <p className="text-green-700 text-3xl sm:text-4xl  font-bold">
-                    {convertNewRemainingMoney}
+                    {conversion.convertNewRemainingMoney}
                   </p>
                 </div>
               </div>
@@ -153,7 +155,7 @@ const EditBudgetForm: React.FC<Props> = ({
                     type="text"
                     name="moneyAllocated"
                     placeholder="0.00"
-                    value={convertNewAddedMoney}
+                    value={conversion.convertNewAddedMoney}
                     readOnly
                   />
                   {formErrors.addedMoney && (
@@ -229,7 +231,7 @@ const EditBudgetForm: React.FC<Props> = ({
           <div id="buttons" className="flex justify-between m-2">
             <button
               className="cancel-button"
-              onClick={(e) => hideEditForm(e, "showEditForm")}
+              onClick={(e) => changeAnimationClass(e)}
             >
               Cancel
             </button>
