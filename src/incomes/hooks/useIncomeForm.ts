@@ -40,6 +40,9 @@ type input = {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
     income: null
   ) => void;
+  unselectIncome?: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+  ) => void;
 };
 
 // custom hook for the form for adding a new income or updating a single income for a single user: includes handlers

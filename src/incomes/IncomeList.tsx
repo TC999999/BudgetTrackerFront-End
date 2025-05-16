@@ -30,6 +30,7 @@ const IncomeList: React.FC<Props> = ({
     selectedIncomeForEdit,
     selectedIncomeForDelete,
     selectIncome,
+    unselectIncome,
     showSecondPrompt,
     hidePrompt,
     deleteIncome,
@@ -49,7 +50,7 @@ const IncomeList: React.FC<Props> = ({
       {selectedIncomeForEdit && (
         <UpdateIncomeForm
           income={selectedIncomeForEdit}
-          selectIncome={selectIncome}
+          unselectIncome={unselectIncome}
           updateIncomeState={updateIncomeState}
         />
       )}

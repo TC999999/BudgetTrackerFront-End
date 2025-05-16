@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useAppDispatch } from "../../features/hooks";
 import { AppDispatch } from "../../features/store";
@@ -10,11 +10,14 @@ import {
   EditUserErrors,
   EditUserFlashErrors,
 } from "../../interfaces/userInterfaces";
+import { ConfirmUserInfo } from "../../interfaces/authInterfaces";
 import {
   handleUserEditInputErrors,
   handleUserEditSubmitErrors,
 } from "../../helpers/errorHandlers/handleUserEditErrors";
 import UserAPI from "../../apis/UserAPI";
+import { toast, Id } from "react-toastify";
+import { createEditUserString } from "../../helpers/createNotificationString";
 
 type input = string | undefined;
 
@@ -23,11 +26,18 @@ type input = string | undefined;
 const useEditUser = (id: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
+  const notify = (message: string): Id =>
+    toast.success(message, { autoClose: 10000 });
 
   const initialState: EditUser = {
     username: "",
     email: "",
     password: "",
+  };
+
+  const initialNotificationData: ConfirmUserInfo = {
+    username: "",
+    email: "",
   };
 
   const initialErrors: EditUserErrors = {
@@ -48,6 +58,7 @@ const useEditUser = (id: input) => {
     useState<EditUserFlashErrors>(initialFlashErrors);
   const [submitError, setSubmitError] = useState<string>("");
   const [submitErrorFlash, setSubmitErrorFlash] = useState<boolean>(false);
+  const notificationData = useRef<ConfirmUserInfo>(initialNotificationData);
 
   useEffect((): void => {
     const getUser = async (): Promise<void> => {
@@ -56,6 +67,10 @@ const useEditUser = (id: input) => {
         if (id) {
           const userInfo = await UserAPI.getUser(id);
           setFormData((user) => ({ ...user, ...userInfo }));
+          notificationData.current = {
+            username: userInfo.username,
+            email: userInfo.email,
+          };
         }
         // setFormErrors(initialErrors);
         // setFlashErrors(initialFlashErrors);
@@ -99,6 +114,14 @@ const useEditUser = (id: input) => {
             password,
           };
           await dispatch(editUser(submitData)).unwrap();
+          notify(
+            createEditUserString(
+              username,
+              notificationData.current.username,
+              email,
+              notificationData.current.email
+            )
+          );
           navigate("/");
         } else {
           if (formErrors.username || formData.username === "")

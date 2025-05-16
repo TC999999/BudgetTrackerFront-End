@@ -14,7 +14,7 @@ import useIncomeForm from "./hooks/useIncomeForm";
 
 type Props = {
   income: Income;
-  selectIncome: (
+  unselectIncome: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   updateIncomeState: (income: Income) => void;
@@ -23,7 +23,8 @@ type Props = {
 // returns a form for users to update their own incomes
 const UpdateIncomeForm: React.FC<Props> = ({
   income,
-  selectIncome,
+
+  unselectIncome,
   updateIncomeState,
 }): JSX.Element | null => {
   const { user }: UserContextInterface = useAppSelector(
@@ -70,7 +71,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     userID: user?._id,
     income,
     updateIncomeState,
-    selectIncome,
+    unselectIncome,
   });
 
   return !formLoading ? (
@@ -88,7 +89,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
       handleMonth={handleMonth}
       handleWeek={handleWeek}
       handleSubmit={handleSubmit}
-      hide={selectIncome}
+      hide={unselectIncome}
       incomeTitle={income.title}
     />
   ) : null;

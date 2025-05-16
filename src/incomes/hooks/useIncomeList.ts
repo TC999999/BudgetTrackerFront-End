@@ -43,10 +43,21 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
   const selectIncome = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-      income: Income | null
+      income: Income
     ): void => {
       e.preventDefault();
       setSelectedIncomeForEdit(income);
+    },
+    [selectedIncomeForEdit]
+  );
+
+  // changes state for selected income for edit
+  const unselectIncome = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+    ): void => {
+      e.preventDefault();
+      setSelectedIncomeForEdit(null);
     },
     [selectedIncomeForEdit]
   );
@@ -67,7 +78,7 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
   // updates state to hide the prompt window for when a user either clicks cancel on the prompt window or
   // after the user successfully submits a delete request
   const hidePrompt = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent) => {
       e.preventDefault();
       setSelectedIncomeForDelete(null);
     },
@@ -107,6 +118,7 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
     selectedIncomeForEdit,
     selectedIncomeForDelete,
     selectIncome,
+    unselectIncome,
     showSecondPrompt,
     hidePrompt,
     deleteIncome,

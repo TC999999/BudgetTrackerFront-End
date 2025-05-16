@@ -3,6 +3,25 @@ import { Income, SubmitUpdateIncome } from "../interfaces/incomeInterfaces";
 import { BudgetEditInterface } from "../interfaces/budgetInterfaces";
 import { dollarConverter } from "./currencyConverter";
 
+//returns custom strings for notifications when updating a user's profile
+export const createEditUserString = (
+  newUsername: string,
+  originalUsername: string,
+  newEmail: string,
+  originalEmail: string
+): string => {
+  let usernameStr: string = "";
+  let emailStr: string = "";
+
+  if (newUsername !== originalUsername)
+    usernameStr = ` Your username has been changed to ${newUsername}.`;
+
+  if (newEmail !== originalEmail)
+    emailStr = ` Your email address has been changed to ${newEmail}. We will be sending a confirmation email to this address now. If you do not receive an email at the new email adress, please check to see if it is spelled correctly. If you still don't see a confirmation email, please contact our team.`;
+
+  return "Profile updated successfully!" + usernameStr + emailStr;
+};
+
 // returns custom strings for notifications when updating users' total assets
 export const createUpdateUserString = (
   submitData: NewTransactionUI
