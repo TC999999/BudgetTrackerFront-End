@@ -5,12 +5,12 @@ type Props = {
   children: ReactNode;
 };
 
-const Page: React.FC<Props> = ({ children }) => {
+const Buttons: React.FC<Props> = ({ children }) => {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      initial={{ y: -60 }}
+      animate={{ y: 0 }}
+      exit={{ y: -60 }}
       transition={{ duration: 0.2 }}
     >
       {children}
@@ -18,4 +18,4 @@ const Page: React.FC<Props> = ({ children }) => {
   );
 };
 
-export default Page;
+export default Buttons;

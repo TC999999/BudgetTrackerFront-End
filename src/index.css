@@ -375,7 +375,7 @@
 }
 
 @utility modal-layer-3 {
-  @apply relative bg-gray-100 rounded-lg shadow-xs border-2 border-green-900 px-2 py-2 w-full;
+  @apply relative bg-gray-100 rounded-lg shadow-xs border-2 border-green-900 px-2 py-2 w-full text-center;
 }
 
 @utility nav-button {
@@ -399,11 +399,7 @@
 }
 
 @layer utilities {
-  #additional-nav-header-relative {
-    @apply relative p-3 bg-emerald-900 z-10;
-  }
-
-  #additional-nav-header-sticky {
-    @apply sticky p-3 bg-emerald-900 z-10 top-20 sm:top-28;
+  #additional-nav-header {
+    @apply p-3 bg-emerald-900 z-10;
   }
 }

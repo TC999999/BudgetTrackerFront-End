@@ -3,7 +3,7 @@ import { Tab, Box } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { RecentExpense } from "../interfaces/expenseInterfaces";
 import { Transaction } from "../interfaces/transactionInterfaces";
-import TransactionList from "../transactions/TransactionList";
+import TransactionList from "../transactions/transactionList";
 import ExpenseList from "../expenses/ExpenseList";
 import ListHeader from "../ListHeader";
 

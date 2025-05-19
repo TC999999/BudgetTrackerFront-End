@@ -5,6 +5,7 @@ import AddTransactionForm from "../transactions/AddTransactionForm";
 import Recents from "./Recents";
 import UserCard from "./UserCard";
 import useDashboard from "./hooks/useDashboard";
+import Page from "../motionWrappers/Page";
 
 // returns the main page for users who are logged in: shows their current total assets and
 const Dashboard = (): JSX.Element => {
@@ -22,18 +23,19 @@ const Dashboard = (): JSX.Element => {
   } = useDashboard(user!);
 
   return (
-    <div id="dashboard-homepage">
-      <main className="relative animate-page-entrance">
+    <Page>
+      <main>
         <UserCard user={user!} showForm={ShowForm} />
-        {showAssetForm && (
-          <AddTransactionForm
-            hideForm={HideForm}
-            updateTransactions={updateTransactions}
-          />
-        )}
+
+        <AddTransactionForm
+          hideForm={HideForm}
+          updateTransactions={updateTransactions}
+          show={showAssetForm}
+        />
+
         <Recents expenses={expenses} transactions={transactions} />
       </main>
-    </div>
+    </Page>
   );
 };
 
