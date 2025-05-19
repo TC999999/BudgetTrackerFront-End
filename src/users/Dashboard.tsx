@@ -23,7 +23,7 @@ const Dashboard = (): JSX.Element => {
 
   return (
     <div id="dashboard-homepage">
-      <main>
+      <main className="relative animate-page-entrance">
         <UserCard user={user!} showForm={ShowForm} />
         {showAssetForm && (
           <AddTransactionForm

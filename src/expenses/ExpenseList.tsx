@@ -42,7 +42,7 @@ const ExpenseList: React.FC<Props> = ({
   return (
     <div
       id="expense-list"
-      className="bg-white border-2 border-green-500 m-2 rounded-md h-full"
+      className="bg-white border-2 border-green-500 m-2 rounded-md"
     >
       {selectedExpense && (
         <SecondPrompt
@@ -55,7 +55,7 @@ const ExpenseList: React.FC<Props> = ({
       )}
       <header
         id="expense-list-headers"
-        className="grid grid-cols-4 bg-green-200 border-b-2 border-green-500 p-2"
+        className="grid grid-cols-4 bg-green-200 border-b-2 border-green-500 p-2 rounded-t-sm"
       >
         <b className="table-header">Name</b>
         <b className="table-header">Cost</b>
@@ -89,8 +89,8 @@ const ExpenseList: React.FC<Props> = ({
         )}
 
         {!pageLoading && !expensesList.length && (
-          <div className="no-expenses text-center text-xl p-4">
-            <p className="italic"> No Expenses Yet</p>
+          <div className="no-expenses text-center text-xl p-2">
+            <p className="italic">No Expenses Yet</p>
           </div>
         )}
       </div>

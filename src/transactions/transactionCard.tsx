@@ -24,7 +24,7 @@ const TransactionCard: React.FC<Props> = ({ transaction }): JSX.Element => {
   );
 
   return (
-    <div className="transaction-card grid grid-cols-7 p-2">
+    <div className="transaction-card grid grid-cols-7 p-4">
       <div className="transaction-title p-2 text-xs sm:text-base duration-150 text-center content-center">
         {transaction.title}
       </div>

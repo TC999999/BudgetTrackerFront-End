@@ -17,7 +17,7 @@ const BudgetPage = (): JSX.Element => {
         budgetListLength={budgetList.length}
         showForm={showForm}
       />
-      <main>
+      <main className="relative animate-page-entrance">
         <ListHeader type="Budgets" itemListLength={budgetList.length} />
         {showBudgetForm && (
           <NewBudgetForm hideForm={hideForm} addBudget={addBudget} />

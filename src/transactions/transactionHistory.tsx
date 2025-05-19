@@ -11,7 +11,10 @@ const TransactionHistory = (): JSX.Element => {
   // if there are no transactions in the list state, returns an on page loading message
   // instead
   return (
-    <div className="transaction-history-page">
+    <div
+      id="transaction-history-page"
+      className="relative animate-page-entrance"
+    >
       <section>
         <ListHeader type="Transactions" />
         <TransactionList transactions={transactions} />

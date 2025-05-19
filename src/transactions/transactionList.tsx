@@ -23,7 +23,7 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
     >
       <header
         id="transaction-list-headers"
-        className="grid grid-cols-7 bg-green-200 border-b-2 border-green-500 p-2"
+        className="grid grid-cols-7 bg-green-200 border-b-2 border-green-500 p-2 rounded-t-sm"
       >
         <b className="table-header">Name</b>
         <b className="table-header">Value</b>

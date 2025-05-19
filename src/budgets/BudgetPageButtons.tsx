@@ -1,4 +1,5 @@
 import useNavAnimation from "../hooks/useNavAnimation";
+import { motion, AnimatePresence } from "motion/react";
 
 type Props = {
   budgetListLength: number;

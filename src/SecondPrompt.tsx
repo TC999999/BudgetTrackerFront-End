@@ -69,7 +69,7 @@ const SecondPrompt: React.FC<Props> = ({
       <div className={`modal-layer-2 ${animationClass}`}>
         <div className="modal-layer-3 text-center">
           <header>
-            <h1 className="text-3xl text-green-700">
+            <h1 className="text-3xl text-green-700 font-bold">
               Are You Sure You Want To Delete This {type}?
             </h1>
           </header>

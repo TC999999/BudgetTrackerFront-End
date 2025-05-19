@@ -30,7 +30,7 @@ const SingleBudgetPage = (): JSX.Element => {
         currentBudget={currentBudget}
         showFormState={showFormState}
       />
-      <main>
+      <main className="relative animate-page-entrance">
         <BudgetPageCard budget={currentBudget} />
         {formsState === "showEditForm" && (
           <EditBudgetForm
