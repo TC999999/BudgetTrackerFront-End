@@ -4,6 +4,7 @@ import NewBudgetForm from "./NewBudgetForm";
 import BudgetList from "./BudgetList";
 import BudgetPageButtons from "./BudgetPageButtons";
 import useBudgetPage from "./hooks/useBudgetPage";
+import Page from "../motionWrappers/Page";
 
 // returns page for list of all budgets the user currently has
 const BudgetPage = (): JSX.Element => {
@@ -17,14 +18,19 @@ const BudgetPage = (): JSX.Element => {
         budgetListLength={budgetList.length}
         showForm={showForm}
       />
-      <main className="relative animate-page-entrance">
-        <ListHeader type="Budgets" itemListLength={budgetList.length} />
-        {showBudgetForm && (
-          <NewBudgetForm hideForm={hideForm} addBudget={addBudget} />
-        )}
+      <Page>
+        <main>
+          <ListHeader type="Budgets" itemListLength={budgetList.length} />
 
-        <BudgetList allBudgets={budgetList} />
-      </main>
+          <NewBudgetForm
+            hideForm={hideForm}
+            addBudget={addBudget}
+            show={showBudgetForm}
+          />
+
+          <BudgetList allBudgets={budgetList} />
+        </main>
+      </Page>
     </div>
   );
 };
