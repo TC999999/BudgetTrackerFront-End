@@ -8,6 +8,7 @@ import SingleBudgetButtons from "./SingleBudgetButtons";
 import ListHeader from "../ListHeader";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import useSingleBudget from "./hooks/useSingleBudget";
+import Page from "../motionWrappers/Page";
 
 // returns page for a single user's budget based on budget id ("/budgets/:id")
 const SingleBudgetPage = (): JSX.Element => {
@@ -30,47 +31,81 @@ const SingleBudgetPage = (): JSX.Element => {
         currentBudget={currentBudget}
         showFormState={showFormState}
       />
-      <main className="relative animate-page-entrance">
-        <BudgetPageCard budget={currentBudget} />
-        {formsState === "showEditForm" && (
-          <EditBudgetForm
-            budget={currentBudget}
-            hideEditForm={changeFormState}
-            updateBudget={updateBudget}
-          />
-        )}
-        {formsState === "showDeleteForm" && (
-          <DeleteBudgetForm
-            hideDeleteForm={changeFormState}
-            budget={currentBudget}
-          />
-        )}
-        {formsState === "showExpenseForm" && (
-          <ExpenseForm
-            hideExpenseForm={changeFormState}
-            budget={currentBudget}
-            addExpense={addExpense}
-            updateBudget={updateBudget}
-          />
-        )}
-        <section id="budget-expense-list">
-          <ListHeader type="Expenses" />
-          <ExpenseList
-            expensesList={expenses}
-            isFrontPage={false}
-            budgetID={budgetID}
-            filterExpense={filterExpense}
-            updateBudget={updateBudget}
-            budgetFunds={{
-              moneyRemaining: getRemainingMoney(
-                currentBudget.moneyAllocated,
-                currentBudget.moneySpent
-              ),
-              moneySpent: currentBudget.moneySpent,
-            }}
-          />
-        </section>
-      </main>
+      <Page>
+        <main>
+          <BudgetPageCard budget={currentBudget} />
+
+          {/* {formsState.showEditForm && (
+            <EditBudgetForm
+              budget={currentBudget}
+              hideEditForm={changeFormState}
+              updateBudget={updateBudget}
+              show={formsState.showEditForm}
+            />
+          )}
+
+          {formsState.showDeleteForm && (
+            <DeleteBudgetForm
+              hideDeleteForm={changeFormState}
+              budget={currentBudget}
+              show={formsState.showDeleteForm}
+            />
+          )}
+
+          {formsState.showExpenseForm && (
+            <ExpenseForm
+              hideExpenseForm={changeFormState}
+              budget={currentBudget}
+              addExpense={addExpense}
+              updateBudget={updateBudget}
+              show={formsState.showExpenseForm}
+            />
+          )} */}
+
+          {currentBudget.moneyAllocated && (
+            <div id="budget-forms">
+              <EditBudgetForm
+                budget={currentBudget}
+                hideEditForm={changeFormState}
+                updateBudget={updateBudget}
+                show={formsState.showEditForm}
+              />
+
+              <DeleteBudgetForm
+                hideDeleteForm={changeFormState}
+                budget={currentBudget}
+                show={formsState.showDeleteForm}
+              />
+
+              <ExpenseForm
+                hideExpenseForm={changeFormState}
+                budget={currentBudget}
+                addExpense={addExpense}
+                updateBudget={updateBudget}
+                show={formsState.showExpenseForm}
+              />
+            </div>
+          )}
+
+          <section id="budget-expense-list">
+            <ListHeader type="Expenses" />
+            <ExpenseList
+              expensesList={expenses}
+              isFrontPage={false}
+              budgetID={budgetID}
+              filterExpense={filterExpense}
+              updateBudget={updateBudget}
+              budgetFunds={{
+                moneyRemaining: getRemainingMoney(
+                  currentBudget.moneyAllocated,
+                  currentBudget.moneySpent
+                ),
+                moneySpent: currentBudget.moneySpent,
+              }}
+            />
+          </section>
+        </main>
+      </Page>
     </div>
   );
 };

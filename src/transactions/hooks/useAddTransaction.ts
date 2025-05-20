@@ -190,6 +190,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
           ).unwrap();
           updateTransactions(transaction);
           hideForm(e);
+          setFormData(initialState);
           notify(createUpdateUserString(submitData));
         } else {
           if (formErrors.title || formData.title === "")
@@ -209,6 +210,16 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
     [formData, formErrors, flashErrors]
   );
 
+  const handleCancel = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      hideForm(e);
+      setFormData(initialState);
+      setFormErrors(initialErrors);
+    },
+    [formData, formErrors]
+  );
+
   return {
     formData,
     formErrors,
@@ -219,6 +230,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
     handleDelete,
     handleRadio,
     handleSubmit,
+    handleCancel,
   };
 };
 

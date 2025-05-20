@@ -17,11 +17,17 @@ import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
 import { dollarConverter } from "../../helpers/currencyConverter";
 
-type input = BudgetInterface;
+type input = {
+  budget: BudgetInterface;
+  hideDeleteForm: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+    form: "showDeleteForm"
+  ) => void;
+};
 
 // custom hooks for form to delete a budget: includes notifications, handling of radio buttons,
 // and handling of submitting data
-const useDeleteBudget = (budget: input) => {
+const useDeleteBudget = ({ budget, hideDeleteForm }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const notify = (title: string, addBackToAssets: number): Id =>
@@ -95,12 +101,22 @@ const useDeleteBudget = (budget: input) => {
     [formData, budget]
   );
 
+  const handleCancel = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      hideDeleteForm(e, "showDeleteForm");
+      setFormData((data) => ({ ...data, addBackToAssets: 0 }));
+    },
+    [formData]
+  );
+
   return {
     formData,
     newAssets,
     remainingMoney: remainingMoney.current,
     handleChange,
     handleSubmit,
+    handleCancel,
   };
 };
 

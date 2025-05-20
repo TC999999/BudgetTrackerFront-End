@@ -43,6 +43,7 @@ const AddTransactionForm: React.FC<Props> = ({
     handleDelete,
     handleRadio,
     handleSubmit,
+    handleCancel,
   } = useAddTransaction({
     hideForm,
     updateTransactions,
@@ -214,7 +215,10 @@ const AddTransactionForm: React.FC<Props> = ({
           </p>
           <div className="button-div flex justify-between">
             <div>
-              <button className="cancel-button" onClick={(e) => hideForm(e)}>
+              <button
+                className="cancel-button"
+                onClick={(e) => handleCancel(e)}
+              >
                 Cancel
               </button>
             </div>

@@ -28,7 +28,6 @@ import { error } from "../../interfaces/miscTypes";
 import { UserContextInterface } from "../../interfaces/userInterfaces";
 import { toast, Id } from "react-toastify";
 import ExpenseAPI from "../../apis/ExpenseAPI";
-import { DateTime } from "luxon";
 
 type input = {
   budget: BudgetInterface;
@@ -68,8 +67,9 @@ const useExpenseForm = ({
   const initialState: newExpenseInterface = {
     title: "",
     transaction: 0,
-    date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
+    date: "",
   };
+
   const initialMoney: number = getRemainingMoney(
     budget.moneyAllocated,
     budget.moneySpent
@@ -184,6 +184,7 @@ const useExpenseForm = ({
           addExpense(newExpense);
           updateBudget(spentMoney);
           hideExpenseForm(e, "showExpenseForm");
+          setFormData(initialState);
           notify(submitData.title, submitData.transaction);
         } else {
           if (formErrors.title || formData.title === "")
@@ -205,6 +206,16 @@ const useExpenseForm = ({
     [formData, formErrors, flashErrors, user?._id]
   );
 
+  const handleCancel = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      hideExpenseForm(e, "showExpenseForm");
+      setFormData(initialState);
+      setFormErrors(initialErrors);
+    },
+    [formData, formErrors]
+  );
+
   return {
     formData,
     availableMoney,
@@ -214,6 +225,7 @@ const useExpenseForm = ({
     handleDelete,
     handleChange,
     handleSubmit,
+    handleCancel,
   };
 };
 

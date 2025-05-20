@@ -37,7 +37,7 @@ export const handleUpdateBudgetComparisons = (
   let errorExists: boolean = false;
   switch (operation) {
     case "add":
-      let addMessage = handleAddErrors(newNum, totalAssets);
+      let addMessage = handleAddErrors(newNum * 100, totalAssets);
       setter((data) => ({ ...data, addedMoney: addMessage }));
       errorExists = addMessage.length > 0;
       break;

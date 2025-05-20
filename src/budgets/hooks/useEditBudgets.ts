@@ -225,6 +225,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
           updateBudget(newUserBudget);
           dispatch(setTotalAssets(newAssets));
           hideEditForm(e, "showEditForm");
+          setFormData(initialState);
           notify(createUpdateBudgetString(budget.title, formData));
         } else {
           if (formErrors.title || formData.title === "")
@@ -242,6 +243,16 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
     [formData, formErrors, user?._id, flashErrors]
   );
 
+  const handleCancel = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      hideEditForm(e, "showEditForm");
+      setFormData(initialState);
+      setFormErrors(initialErrors);
+    },
+    [formData, formErrors]
+  );
+
   return {
     formData,
     formErrors,
@@ -254,6 +265,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
     handleRadio,
     handleChange,
     handleSubmit,
+    handleCancel,
   };
 };
 

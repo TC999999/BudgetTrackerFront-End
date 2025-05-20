@@ -12,6 +12,8 @@ const Buttons: React.FC<Props> = ({ children }) => {
       animate={{ y: 0 }}
       exit={{ y: -60 }}
       transition={{ duration: 0.2 }}
+      id="additional-nav-header"
+      className="sticky top-20 sm:top-28"
     >
       {children}
     </motion.div>

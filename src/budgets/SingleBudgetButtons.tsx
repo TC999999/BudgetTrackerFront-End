@@ -1,5 +1,6 @@
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
-import useNavAnimation from "../hooks/useNavAnimation";
+
+import Buttons from "../motionWrappers/Buttons";
 
 type Props = {
   currentBudget: BudgetInterface;
@@ -8,18 +9,15 @@ type Props = {
     form: "showExpenseForm" | "showDeleteForm" | "showEditForm"
   ) => void;
 };
+
+// additional navigation buttons bar for the single budget page
 const SingleBudgetButtons: React.FC<Props> = ({
   currentBudget,
   showFormState,
 }) => {
-  const { aniID, handleEntranceAnimationEnd } = useNavAnimation();
   return (
-    <header
-      id={aniID}
-      className="animate-additional-buttons-entrance"
-      onAnimationEnd={handleEntranceAnimationEnd}
-    >
-      <nav id="buttons" className="flex justify-around w-full">
+    <Buttons>
+      <nav className="flex justify-around w-full">
         <button
           id="edit-budget-form-button"
           className="nav-button border-orange-300 text-white bg-orange-400 hover:bg-orange-200 hover:text-black active:bg-orange-300"
@@ -47,7 +45,7 @@ const SingleBudgetButtons: React.FC<Props> = ({
           Add Expense
         </button>
       </nav>
-    </header>
+    </Buttons>
   );
 };
 

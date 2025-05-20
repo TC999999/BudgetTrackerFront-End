@@ -21,13 +21,11 @@ const BudgetPage = (): JSX.Element => {
       <Page>
         <main>
           <ListHeader type="Budgets" itemListLength={budgetList.length} />
-
           <NewBudgetForm
             hideForm={hideForm}
             addBudget={addBudget}
             show={showBudgetForm}
           />
-
           <BudgetList allBudgets={budgetList} />
         </main>
       </Page>

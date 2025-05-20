@@ -13,7 +13,13 @@ import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
 import ExpenseAPI from "../../apis/ExpenseAPI";
 
-type FormState = "showExpenseForm" | "showDeleteForm" | "showEditForm" | null;
+type FormStateName = "showExpenseForm" | "showDeleteForm" | "showEditForm";
+
+type FormState = {
+  showExpenseForm: boolean;
+  showDeleteForm: boolean;
+  showEditForm: boolean;
+};
 
 type input = {
   budgetID?: string;
@@ -34,9 +40,14 @@ const useSingleBudget = ({ budgetID, id }: input) => {
     moneyAllocated: 0,
   });
 
-  const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
+  const initialFormState = {
+    showExpenseForm: false,
+    showDeleteForm: false,
+    showEditForm: false,
+  };
 
-  const [formsState, setFormsState] = useState<FormState>(null);
+  const [expenses, setExpenses] = useState<ExpenseInterface[]>([]);
+  const [formsState, setFormsState] = useState<FormState>(initialFormState);
 
   // retrieves budget from db based on id string in url parameters upon initial render
   useEffect((): void => {
@@ -64,18 +75,18 @@ const useSingleBudget = ({ budgetID, id }: input) => {
   const showFormState = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-      form: "showExpenseForm" | "showDeleteForm" | "showEditForm"
+      form: FormStateName
     ): void => {
       e.preventDefault();
       if (
         form === "showExpenseForm" &&
-        formsState === "showExpenseForm" &&
+        formsState.showExpenseForm &&
         currentBudget &&
         +currentBudget.moneyAllocated === +currentBudget.moneySpent
       ) {
         notify("You have used all of the allocated funds for this budget");
       } else {
-        setFormsState(form);
+        setFormsState((prev) => ({ ...prev, [form]: true }));
       }
     },
     [formsState, currentBudget]
@@ -84,10 +95,11 @@ const useSingleBudget = ({ budgetID, id }: input) => {
   // callback function to hide forms when cancelling or after submission
   const changeFormState = useCallback(
     (
-      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
+      form: FormStateName
     ): void => {
       e.preventDefault();
-      setFormsState(null);
+      setFormsState((prev) => ({ ...prev, [form]: null }));
     },
     [formsState]
   );

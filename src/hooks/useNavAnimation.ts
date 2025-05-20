@@ -1,19 +1,15 @@
 import { useState } from "react";
 
-type animationID =
-  | "additional-nav-header-relative"
-  | "additional-nav-header-sticky";
+type positionType = "relative" | "sticky";
 
 const useNavAnimation = () => {
-  const [aniID, setAniID] = useState<animationID>(
-    "additional-nav-header-relative"
-  );
+  const [positionType, setPositionType] = useState<positionType>("relative");
 
   const handleEntranceAnimationEnd = () => {
-    setAniID("additional-nav-header-sticky");
+    setPositionType("sticky");
   };
 
-  return { aniID, handleEntranceAnimationEnd };
+  return { positionType, handleEntranceAnimationEnd };
 };
 
 export default useNavAnimation;
