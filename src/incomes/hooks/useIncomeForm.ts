@@ -231,6 +231,8 @@ const useIncomeForm = ({
             unselectIncome(e);
           }
           if (hideIncomeFormState) hideIncomeFormState(e);
+          setFormData(initialState);
+          setFormErrors(initialErrors);
         } else {
           if (formData.title === "" || formErrors.title)
             setFlashErrors((flash) => ({ ...flash, title: true }));
