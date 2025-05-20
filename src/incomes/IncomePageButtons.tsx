@@ -1,4 +1,4 @@
-import useNavAnimation from "../hooks/useNavAnimation";
+import Buttons from "../motionWrappers/Buttons";
 
 type Props = {
   incomeListLength: number;
@@ -11,14 +11,8 @@ const IncomePageButtons: React.FC<Props> = ({
   incomeListLength,
   showIncomeFormState,
 }) => {
-  const { aniID, handleEntranceAnimationEnd } = useNavAnimation();
-
   return (
-    <header
-      id={aniID}
-      className="animate-additional-buttons-entrance"
-      onAnimationEnd={handleEntranceAnimationEnd}
-    >
+    <Buttons>
       <nav className="buttons flex justify-around w-full">
         <button
           className={`nav-button border-green-500 bg-green-400 ${
@@ -31,7 +25,7 @@ const IncomePageButtons: React.FC<Props> = ({
           Add New Income
         </button>
       </nav>
-    </header>
+    </Buttons>
   );
 };
 

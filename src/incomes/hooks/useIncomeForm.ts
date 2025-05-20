@@ -36,10 +36,7 @@ type input = {
   addToIncomeState?: (income: Income) => void;
   handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
   updateIncomeState?: (income: Income) => void;
-  selectIncome?: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
-    income: null
-  ) => void;
+
   unselectIncome?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
@@ -58,7 +55,7 @@ const useIncomeForm = ({
   addToIncomeState,
   handleIncomes,
   updateIncomeState,
-  selectIncome,
+  unselectIncome,
 }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (message: string): Id => toast.success(message);
@@ -220,7 +217,7 @@ const useIncomeForm = ({
             );
             addToIncomeState(newIncome);
             notify(`${submitData.title} income created successfully!`);
-          } else if (updateIncomeState && userID && income && selectIncome) {
+          } else if (updateIncomeState && userID && income && unselectIncome) {
             let updateData: SubmitUpdateIncome = {
               _id: income._id,
               ...submitData,
@@ -231,7 +228,7 @@ const useIncomeForm = ({
             );
             updateIncomeState(updatedIncome);
             notify(createUpdateIncomeString(income, updateData));
-            selectIncome(e, null);
+            unselectIncome(e);
           }
           if (hideIncomeFormState) hideIncomeFormState(e);
         } else {
@@ -252,6 +249,18 @@ const useIncomeForm = ({
     [formData, formErrors, flashErrors]
   );
 
+  const handleCancel = useCallback(
+    (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
+    ): void => {
+      e.preventDefault();
+      if (hideIncomeFormState) hideIncomeFormState(e);
+      setFormData(initialState);
+      setFormErrors(initialErrors);
+    },
+    [formData, formErrors]
+  );
+
   return {
     formData,
     formErrors,
@@ -265,6 +274,7 @@ const useIncomeForm = ({
     handleMonth,
     handleWeek,
     handleSubmit,
+    handleCancel,
   };
 };
 

@@ -18,13 +18,16 @@ type Props = {
   ) => void;
   addToIncomeState?: (income: Income) => void;
   handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
+  show: boolean;
 };
 
 // returns form to add new income, used for both registration and the income page
 const NewIncomeForm: React.FC<Props> = ({
   hideIncomeFormState,
   addToIncomeState,
+
   handleIncomes,
+  show,
 }): JSX.Element | null => {
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
@@ -69,6 +72,7 @@ const NewIncomeForm: React.FC<Props> = ({
     handleMonth,
     handleWeek,
     handleSubmit,
+    handleCancel,
   } = useIncomeForm({
     initialState,
     initialErrors,
@@ -86,6 +90,7 @@ const NewIncomeForm: React.FC<Props> = ({
       formErrors={formErrors}
       flashErrors={flashErrors}
       readableUpdateTimeString={readableUpdateTimeString}
+      show={show}
       handleChange={handleChange}
       handlePress={handlePress}
       handleDelete={handleDelete}
@@ -94,7 +99,7 @@ const NewIncomeForm: React.FC<Props> = ({
       handleMonth={handleMonth}
       handleWeek={handleWeek}
       handleSubmit={handleSubmit}
-      hide={hideIncomeFormState}
+      hide={handleCancel}
     />
   ) : null;
 };

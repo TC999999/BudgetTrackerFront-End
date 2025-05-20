@@ -18,14 +18,15 @@ type Props = {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   updateIncomeState: (income: Income) => void;
+  show: boolean;
 };
 
 // returns a form for users to update their own incomes
 const UpdateIncomeForm: React.FC<Props> = ({
   income,
-
   unselectIncome,
   updateIncomeState,
+  show,
 }): JSX.Element | null => {
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
@@ -81,6 +82,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
       formErrors={formErrors}
       flashErrors={flashErrors}
       readableUpdateTimeString={readableUpdateTimeString}
+      show={show}
       handleChange={handleChange}
       handlePress={handlePress}
       handleDelete={handleDelete}

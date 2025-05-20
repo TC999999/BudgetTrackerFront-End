@@ -4,6 +4,7 @@ import IncomeList from "./IncomeList";
 import NewIncomeForm from "./NewIncomeForm";
 import IncomePageButtons from "./IncomePageButtons";
 import useIncomePage from "./hooks/useIncomePage";
+import Page from "../motionWrappers/Page";
 
 // Shows the list of incomes the current user has
 const IncomePage = (): JSX.Element => {
@@ -24,20 +25,23 @@ const IncomePage = (): JSX.Element => {
         incomeListLength={incomes.length}
         showIncomeFormState={showIncomeFormState}
       />
-      <main className="relative animate-page-entrance">
-        {showIncomeForm && (
+
+      <Page>
+        <main className="relative animate-page-entrance">
           <NewIncomeForm
             hideIncomeFormState={hideIncomeFormState}
             addToIncomeState={addToIncomeState}
+            show={showIncomeForm}
           />
-        )}
-        <ListHeader type="Incomes" itemListLength={incomes.length} />
-        <IncomeList
-          incomeList={incomes}
-          removeFromIncomeState={removeFromIncomeState}
-          updateIncomeState={updateIncomeState}
-        />
-      </main>
+
+          <ListHeader type="Incomes" itemListLength={incomes.length} />
+          <IncomeList
+            incomeList={incomes}
+            removeFromIncomeState={removeFromIncomeState}
+            updateIncomeState={updateIncomeState}
+          />
+        </main>
+      </Page>
     </div>
   );
 };

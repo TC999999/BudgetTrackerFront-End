@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import useEditUser from "./hooks/useEditUser";
+import Page from "../motionWrappers/Page";
 
 // returns a form component for updating a single current user
 const EditUserForm = (): JSX.Element => {
@@ -15,9 +16,9 @@ const EditUserForm = (): JSX.Element => {
   } = useEditUser(id);
 
   return (
-    <div id="edit-user-page" className="relative animate-page-entrance">
+    <Page>
       <div
-        id="edit-user-info-form"
+        id="edit-user-page"
         className="p-4 m-4 bg-gray-100 border-2 border-green-700 rounded-lg"
       >
         <header className="text-center">
@@ -128,7 +129,7 @@ const EditUserForm = (): JSX.Element => {
           </div>
         </form>
       </div>
-    </div>
+    </Page>
   );
 };
 

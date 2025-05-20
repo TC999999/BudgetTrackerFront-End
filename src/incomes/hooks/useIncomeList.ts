@@ -35,6 +35,8 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
   const [selectedIncomeForEdit, setSelectedIncomeForEdit] =
     useState<Income | null>(null);
 
+  const [showEditForm, setShowEditForm] = useState<boolean>(false);
+
   // to use for deleting a single income, retrieve info to be used for income deletion
   const [selectedIncomeForDelete, setSelectedIncomeForDelete] =
     useState<infoInterface | null>(null);
@@ -47,6 +49,7 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
     ): void => {
       e.preventDefault();
       setSelectedIncomeForEdit(income);
+      setShowEditForm(true);
     },
     [selectedIncomeForEdit]
   );
@@ -57,7 +60,10 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
     ): void => {
       e.preventDefault();
-      setSelectedIncomeForEdit(null);
+      setShowEditForm(false);
+      setTimeout(() => {
+        setSelectedIncomeForEdit(null);
+      }, 150);
     },
     [selectedIncomeForEdit]
   );
@@ -115,6 +121,7 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
   );
 
   return {
+    showEditForm,
     selectedIncomeForEdit,
     selectedIncomeForDelete,
     selectIncome,
