@@ -148,6 +148,9 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
           addBudget(newUserBudget);
           hideForm(e);
           notify(submitData.title, submitData.moneyAllocated);
+          setFormData(initialState);
+          setFormErrors(initialErrors);
+          setAvailableFunds(user!.totalAssets);
         } else {
           if (formErrors.title || formData.title === "")
             setFlashErrors((flash) => ({ ...flash, title: true }));
@@ -163,7 +166,18 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
         dispatch(setFormLoading(false));
       }
     },
-    [formData, formErrors, user?._id, flashErrors]
+    [formData, formErrors, user?._id, availableFunds, flashErrors]
+  );
+
+  const handleCancel = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      hideForm(e);
+      setFormData(initialState);
+      setFormErrors(initialErrors);
+      setAvailableFunds(user!.totalAssets);
+    },
+    [formData, formErrors, availableFunds]
   );
 
   return {
@@ -175,6 +189,7 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
     handleDelete,
     handleChange,
     handleSubmit,
+    handleCancel,
   };
 };
 

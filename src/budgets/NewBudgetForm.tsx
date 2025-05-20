@@ -41,6 +41,7 @@ const BudgetForm: React.FC<Props> = ({
     handleDelete,
     handleChange,
     handleSubmit,
+    handleCancel,
   } = useBudget({
     addBudget,
     hideForm,
@@ -132,7 +133,7 @@ const BudgetForm: React.FC<Props> = ({
             />
           </div>
           <div id="button" className="flex justify-between m-2">
-            <button className="cancel-button" onClick={(e) => hideForm(e)}>
+            <button className="cancel-button" onClick={(e) => handleCancel(e)}>
               Cancel
             </button>
             <button id="add-budget-button" className="submit-button">

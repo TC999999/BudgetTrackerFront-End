@@ -211,6 +211,7 @@ const useExpenseForm = ({
       e.preventDefault();
       hideExpenseForm(e, "showExpenseForm");
       setFormData(initialState);
+      setAvailableMoney(initialMoney);
       setFormErrors(initialErrors);
     },
     [formData, formErrors]
