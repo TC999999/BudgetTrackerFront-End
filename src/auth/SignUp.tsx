@@ -5,6 +5,7 @@ import ErrorWindow from "./ErrorWindow";
 import useSignUp from "./hooks/useSignUp";
 import { CiCircleCheck } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import { AnimatePresence } from "motion/react";
 
 // returns window allowing users to create a new account
 const SignUp = (): JSX.Element => {
@@ -98,33 +99,33 @@ const SignUp = (): JSX.Element => {
             </Link>
           </div>
         </header>
-
-        {currentStep === "showSensitiveForm" && (
-          <SignUpSensitive
-            handleDataChange={handleDataChange}
-            changeLoading={changeLoading}
-            changeStep={changeStep}
-            changeSubmitError={changeSubmitError}
-          />
-        )}
-
-        {currentStep === "showOTPForm" && (
-          <SignUpOTP
-            registerData={registerData}
-            changeLoading={changeLoading}
-            changeStep={changeStep}
-            changeSubmitError={changeSubmitError}
-          />
-        )}
-
-        {currentStep === "showAdditionalForm" && (
-          <SignUpAdditional
-            changeLoading={changeLoading}
-            changeSubmitError={changeSubmitError}
-            initialState={registerData}
-          />
-        )}
-
+        <AnimatePresence mode="wait">
+          <div key={currentStep}>
+            <SignUpSensitive
+              key="showSensitiveForm"
+              handleDataChange={handleDataChange}
+              changeLoading={changeLoading}
+              changeStep={changeStep}
+              changeSubmitError={changeSubmitError}
+              show={currentStep === "showSensitiveForm"}
+            />
+            <SignUpOTP
+              key="showOTPForm"
+              registerData={registerData}
+              changeLoading={changeLoading}
+              changeStep={changeStep}
+              changeSubmitError={changeSubmitError}
+              show={currentStep === "showOTPForm"}
+            />
+            <SignUpAdditional
+              key="showAdditionalForm"
+              changeLoading={changeLoading}
+              changeSubmitError={changeSubmitError}
+              initialState={registerData}
+              show={currentStep === "showAdditionalForm"}
+            />
+          </div>
+        </AnimatePresence>
         <ErrorWindow
           changeSubmitError={changeSubmitError}
           submitError={submitError}

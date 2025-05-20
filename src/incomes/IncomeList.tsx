@@ -29,6 +29,7 @@ const IncomeList: React.FC<Props> = ({
   const {
     showEditForm,
     selectedIncomeForEdit,
+    showDeleteForm,
     selectedIncomeForDelete,
     selectIncome,
     unselectIncome,
@@ -45,6 +46,7 @@ const IncomeList: React.FC<Props> = ({
           hidePrompt={hidePrompt}
           itemForDeletion={selectedIncomeForDelete}
           type={"Income"}
+          show={showDeleteForm}
         />
       )}
 

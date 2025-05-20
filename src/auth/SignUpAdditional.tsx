@@ -2,17 +2,20 @@ import { SignUpInterface } from "../interfaces/authInterfaces";
 import NewIncomeForm from "../incomes/NewIncomeForm";
 import SignUpAdditionalForm from "./SignUpAdditionalForm";
 import useSignUpAdditional from "./hooks/useSignUpAdditional";
+import AuthTabs from "../motionWrappers/AuthTabs";
 
 type Props = {
   initialState: SignUpInterface;
   changeLoading: (loadingStatus: boolean) => void;
   changeSubmitError: (newSubmitError: string) => void;
+  show: boolean;
 };
 
 const SignUpAdditional: React.FC<Props> = ({
   initialState,
   changeLoading,
   changeSubmitError,
+  show,
 }) => {
   const {
     formData,
@@ -29,13 +32,12 @@ const SignUpAdditional: React.FC<Props> = ({
     handleSubmit,
   } = useSignUpAdditional({ initialState, changeLoading, changeSubmitError });
   return (
-    <div>
-      {showIncomeForm && (
-        <NewIncomeForm
-          hideIncomeFormState={changeIncomeFormState}
-          handleIncomes={handleIncomes}
-        />
-      )}
+    <AuthTabs show={show}>
+      <NewIncomeForm
+        hideIncomeFormState={changeIncomeFormState}
+        handleIncomes={handleIncomes}
+        show={showIncomeForm}
+      />
 
       <SignUpAdditionalForm
         formData={formData}
@@ -48,7 +50,7 @@ const SignUpAdditional: React.FC<Props> = ({
         removeIncome={removeIncome}
         handleCheckBox={handleCheckBox}
       />
-    </div>
+    </AuthTabs>
   );
 };
 

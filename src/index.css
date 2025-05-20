@@ -379,7 +379,7 @@
 }
 
 @utility nav-button {
-  @apply border p-1 text-sm sm:p-2 sm:text-lg rounded-full transition duration-150;
+  @apply border p-1 text-sm sm:p-2 sm:text-lg rounded-full transition duration-150 hover:scale-105;
 }
 
 @utility userInfo-input {

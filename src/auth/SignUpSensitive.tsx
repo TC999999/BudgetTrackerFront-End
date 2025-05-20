@@ -2,6 +2,7 @@ import useSignUpSensitive from "./hooks/useSignUpSensitive";
 import { SignUpSensitiveSubmit } from "../interfaces/authInterfaces";
 import { step } from "../interfaces/registerInterfaces";
 import { GiPadlock, GiPadlockOpen } from "react-icons/gi";
+import AuthTabs from "../motionWrappers/AuthTabs";
 
 type Props = {
   handleDataChange: (
@@ -14,6 +15,7 @@ type Props = {
     newSubmitError: string,
     e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
+  show: boolean;
 };
 
 const SignUpSensitive: React.FC<Props> = ({
@@ -21,6 +23,7 @@ const SignUpSensitive: React.FC<Props> = ({
   changeLoading,
   changeStep,
   changeSubmitError,
+  show,
 }) => {
   const { formData, formErrors, flashErrors, handleChange, handleSubmit } =
     useSignUpSensitive({
@@ -30,7 +33,7 @@ const SignUpSensitive: React.FC<Props> = ({
       changeSubmitError,
     });
   return (
-    <div id="sensitive-register-form-div">
+    <AuthTabs show={show}>
       <header className="text-center">
         <h1 className="text-lg sm:text-3xl text-green-500 font-bold underline">
           Enter Your New Account Information Here
@@ -173,7 +176,7 @@ const SignUpSensitive: React.FC<Props> = ({
           <button className="submit-button">Get Verification Code</button>
         </div>
       </form>
-    </div>
+    </AuthTabs>
   );
 };
 

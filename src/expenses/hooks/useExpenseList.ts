@@ -28,6 +28,9 @@ const useExpenseList = ({ budgetID, filterExpense, updateBudget }: input) => {
   const [selectedExpense, setSelectedExpense] = useState<infoInterface | null>(
     null
   );
+
+  const [showDeleteExpenseForm, setShowDeleteExpenseForm] =
+    useState<boolean>(false);
   const notifyDelete = (expenseTitle: string): Id =>
     toast.success(`${expenseTitle} expense successfully deleted`);
 
@@ -59,6 +62,7 @@ const useExpenseList = ({ budgetID, filterExpense, updateBudget }: input) => {
     ): void => {
       e.preventDefault();
       setSelectedExpense(expense);
+      setShowDeleteExpenseForm(true);
     },
     [selectedExpense]
   );
@@ -68,7 +72,10 @@ const useExpenseList = ({ budgetID, filterExpense, updateBudget }: input) => {
   const hidePrompt = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent) => {
       e.preventDefault();
-      setSelectedExpense(null);
+      setShowDeleteExpenseForm(false);
+      setTimeout(() => {
+        setSelectedExpense(null);
+      }, 200);
     },
     [selectedExpense]
   );
@@ -108,7 +115,13 @@ const useExpenseList = ({ budgetID, filterExpense, updateBudget }: input) => {
     [selectedExpense, user?._id]
   );
 
-  return { selectedExpense, showSecondPrompt, hidePrompt, deleteExpense };
+  return {
+    selectedExpense,
+    showDeleteExpenseForm,
+    showSecondPrompt,
+    hidePrompt,
+    deleteExpense,
+  };
 };
 
 export default useExpenseList;

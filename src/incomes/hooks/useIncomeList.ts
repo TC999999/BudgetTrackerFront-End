@@ -41,6 +41,8 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
   const [selectedIncomeForDelete, setSelectedIncomeForDelete] =
     useState<infoInterface | null>(null);
 
+  const [showDeleteForm, setShowDeleteForm] = useState<boolean>(false);
+
   // changes state for selected income for edit
   const selectIncome = useCallback(
     (
@@ -77,6 +79,7 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
     ): void => {
       e.preventDefault();
       setSelectedIncomeForDelete(income);
+      setShowDeleteForm(true);
     },
     [selectedIncomeForDelete]
   );
@@ -86,7 +89,10 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
   const hidePrompt = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent) => {
       e.preventDefault();
-      setSelectedIncomeForDelete(null);
+      setShowDeleteForm(false);
+      setTimeout(() => {
+        setSelectedIncomeForDelete(null);
+      }, 200);
     },
     [selectedIncomeForDelete]
   );
@@ -123,6 +129,7 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
   return {
     showEditForm,
     selectedIncomeForEdit,
+    showDeleteForm,
     selectedIncomeForDelete,
     selectIncome,
     unselectIncome,

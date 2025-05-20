@@ -36,8 +36,13 @@ const ExpenseList: React.FC<Props> = ({
     shallowEqual
   );
 
-  const { selectedExpense, showSecondPrompt, hidePrompt, deleteExpense } =
-    useExpenseList({ budgetID, filterExpense, updateBudget });
+  const {
+    selectedExpense,
+    showDeleteExpenseForm,
+    showSecondPrompt,
+    hidePrompt,
+    deleteExpense,
+  } = useExpenseList({ budgetID, filterExpense, updateBudget });
 
   return (
     <div
@@ -51,6 +56,7 @@ const ExpenseList: React.FC<Props> = ({
           hidePrompt={hidePrompt}
           type={"Expense"}
           BudgetFunds={budgetFunds}
+          show={showDeleteExpenseForm}
         />
       )}
       <header
