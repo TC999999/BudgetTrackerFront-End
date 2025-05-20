@@ -8,6 +8,7 @@ type Props = {
 const Buttons: React.FC<Props> = ({ children }) => {
   return (
     <motion.div
+      key="buttons"
       initial={{ y: -60 }}
       animate={{ y: 0 }}
       exit={{ y: -60 }}

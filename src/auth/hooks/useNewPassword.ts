@@ -4,7 +4,7 @@ import {
   PasswordResetErrors,
   PasswordResetFlashErrors,
   PasswordResetSubmit,
-  PasswordResetInput,
+  PasswordResetInputHook,
 } from "../../interfaces/authInterfaces";
 import ResetPasswordAPI from "../../apis/ResetPasswordAPI";
 import {
@@ -19,7 +19,7 @@ const useNewPassword = ({
   changeLoading,
   changeSubmitError,
   currentUser,
-}: PasswordResetInput) => {
+}: PasswordResetInputHook) => {
   // initial data for resetting password;
   //    newPassword: the user's new password
   //    confirmPassword: if the user's new password is valid, type the new password again to confirm

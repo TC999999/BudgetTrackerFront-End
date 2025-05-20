@@ -3,12 +3,13 @@ import { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
+  show: boolean;
 };
 
-const Page: React.FC<Props> = ({ children }) => {
-  return (
+const AuthTabs: React.FC<Props> = ({ children, show }) => {
+  return show ? (
     <motion.div
-      key="page"
+      key="authTab"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
@@ -16,7 +17,7 @@ const Page: React.FC<Props> = ({ children }) => {
     >
       {children}
     </motion.div>
-  );
+  ) : null;
 };
 
-export default Page;
+export default AuthTabs;

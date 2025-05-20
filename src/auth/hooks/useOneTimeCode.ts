@@ -4,7 +4,7 @@ import {
   OneTimeCodeSelect,
   OneTimeCodeData,
   digits,
-  PasswordResetInput,
+  PasswordResetInputHook,
 } from "../../interfaces/authInterfaces";
 import ResetPasswordAPI from "../../apis/ResetPasswordAPI";
 import { joinOTPCode } from "../../helpers/joinOTPCode";
@@ -16,7 +16,7 @@ const useOneTimeCode = ({
   changeLoading,
   changeSubmitError,
   currentUser,
-}: PasswordResetInput) => {
+}: PasswordResetInputHook) => {
   // initial numbers for each number box
   const initialState: OneTimeCodeFormData = {
     0: "0",

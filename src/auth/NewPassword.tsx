@@ -1,6 +1,7 @@
 import { PasswordResetInput } from "../interfaces/authInterfaces";
 import { GiPadlock, GiPadlockOpen } from "react-icons/gi";
 import useNewPassword from "./hooks/useNewPassword";
+import AuthTabs from "../motionWrappers/AuthTabs";
 
 // returns window for users to reset their passwords
 const NewPassword: React.FC<PasswordResetInput> = ({
@@ -8,6 +9,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
   changeLoading,
   changeSubmitError,
   currentUser,
+  show,
 }): JSX.Element => {
   const { formData, formErrors, flashErrors, handleChange, handleSubmit } =
     useNewPassword({
@@ -18,7 +20,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
     });
 
   return (
-    <div id="create-new-password-div">
+    <AuthTabs show={show}>
       <div id="create-new-password-form">
         <form onSubmit={handleSubmit}>
           <div id="new-password-div">
@@ -92,7 +94,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
           </div>
         </form>
       </div>
-    </div>
+    </AuthTabs>
   );
 };
 

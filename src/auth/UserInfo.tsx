@@ -1,11 +1,13 @@
 import { ConfirmUserInfo, CurrentStep } from "../interfaces/authInterfaces";
 import useUserInfo from "./hooks/useUserInfo";
+import AuthTabs from "../motionWrappers/AuthTabs";
 
 type Props = {
   changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
   changeLoading: (loadingStatus: boolean) => void;
   changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   changeUser: (e: React.FormEvent, newUser: ConfirmUserInfo) => void;
+  show: boolean;
 };
 
 // For to input user email and username to make a request for a one time verification
@@ -15,12 +17,13 @@ const UserInfo: React.FC<Props> = ({
   changeLoading,
   changeSubmitError,
   changeUser,
+  show,
 }): JSX.Element => {
   const { formData, formErrors, flashErrors, handleChange, handleSubmit } =
     useUserInfo({ changeStep, changeLoading, changeSubmitError, changeUser });
 
   return (
-    <div id="user-info-form-page">
+    <AuthTabs show={show}>
       <div id="user-info-form-div">
         <h1 className="text-center text-xl sm:text-3xl p-2 text-green-500 font-bold underline">
           Confirm Your Information Here
@@ -86,7 +89,7 @@ const UserInfo: React.FC<Props> = ({
           </form>
         </div>
       </div>
-    </div>
+    </AuthTabs>
   );
 };
 

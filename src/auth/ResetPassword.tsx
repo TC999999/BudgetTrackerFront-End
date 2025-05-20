@@ -6,6 +6,7 @@ import ErrorWindow from "./ErrorWindow";
 import PasswordResetSuccess from "./PasswordResetSuccess";
 import { CiCircleCheck } from "react-icons/ci";
 import useResetPassword from "./hooks/useResetPassword";
+import { AnimatePresence } from "motion/react";
 
 // main page for users attempting to reset password
 const ResetPassword = (): JSX.Element => {
@@ -101,31 +102,39 @@ const ResetPassword = (): JSX.Element => {
           </div>
         </div>
 
-        {currentStep === "userInfo" && (
-          <UserInfo
-            changeStep={changeStep}
-            changeLoading={changeLoading}
-            changeSubmitError={changeSubmitError}
-            changeUser={changeUser}
-          />
-        )}
-        {currentStep === "oneTimeCode" && (
-          <OneTimeCode
-            changeStep={changeStep}
-            changeLoading={changeLoading}
-            changeSubmitError={changeSubmitError}
-            currentUser={currentUser}
-          />
-        )}
-        {currentStep === "newPassword" && (
-          <NewPassword
-            changeStep={changeStep}
-            changeLoading={changeLoading}
-            changeSubmitError={changeSubmitError}
-            currentUser={currentUser}
-          />
-        )}
-        {currentStep === "success" && <PasswordResetSuccess />}
+        <AnimatePresence mode="wait">
+          <div key={currentStep}>
+            <UserInfo
+              key="userInfo"
+              changeStep={changeStep}
+              changeLoading={changeLoading}
+              changeSubmitError={changeSubmitError}
+              changeUser={changeUser}
+              show={currentStep === "userInfo"}
+            />
+            <OneTimeCode
+              key="oneTimeCode"
+              changeStep={changeStep}
+              changeLoading={changeLoading}
+              changeSubmitError={changeSubmitError}
+              currentUser={currentUser}
+              show={currentStep === "oneTimeCode"}
+            />
+            <NewPassword
+              key="newPassword"
+              changeStep={changeStep}
+              changeLoading={changeLoading}
+              changeSubmitError={changeSubmitError}
+              currentUser={currentUser}
+              show={currentStep === "newPassword"}
+            />
+            <PasswordResetSuccess
+              key="success"
+              show={currentStep === "success"}
+            />
+          </div>
+        </AnimatePresence>
+
         <ErrorWindow
           changeSubmitError={changeSubmitError}
           submitError={submitError}

@@ -1,6 +1,7 @@
 import { PasswordResetInput } from "../interfaces/authInterfaces";
 import FullKeyPad from "../FullKeyPad";
 import useOneTimeCode from "./hooks/useOneTimeCode";
+import AuthTabs from "../motionWrappers/AuthTabs";
 
 // returns page to enter one time
 const OneTimeCode: React.FC<PasswordResetInput> = ({
@@ -8,6 +9,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
   changeLoading,
   changeSubmitError,
   currentUser,
+  show,
 }): JSX.Element => {
   const {
     formData,
@@ -24,7 +26,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
   });
 
   return (
-    <div id="one-time-code-div">
+    <AuthTabs show={show}>
       <div id="one-time-code">
         <h1 className="text-center text-xl p-2">
           One-Time-One-Use Verification Code
@@ -96,7 +98,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
           </div>
         </div>
       </div>
-    </div>
+    </AuthTabs>
   );
 };
 

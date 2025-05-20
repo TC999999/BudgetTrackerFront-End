@@ -133,4 +133,12 @@ export type PasswordResetInput = {
   changeLoading: (loadingStatus: boolean) => void;
   changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   currentUser: ConfirmUserInfo;
+  show: boolean;
+};
+
+export type PasswordResetInputHook = {
+  changeStep: (e: React.FormEvent, newStep: CurrentStep) => void;
+  changeLoading: (loadingStatus: boolean) => void;
+  changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
+  currentUser: ConfirmUserInfo;
 };
