@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { AppDispatch } from "../../features/store";
 import { setTotalAssets } from "../../features/slices/authSlice";
@@ -80,6 +80,13 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
     getRemainingMoney(budget.moneyAllocated, budget.moneySpent)
   );
 
+  useEffect(() => {
+    remainingMoney.current = getRemainingMoney(
+      budget.moneyAllocated,
+      budget.moneySpent
+    );
+  }, [budget.moneyAllocated, budget.moneySpent]);
+
   // calculates the new remaining funds value for this budget based on the initial remaining money,
   // the change of money by the user, and whether the user intends to add to or subtract from the initial
   // value
@@ -89,7 +96,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
       formData.addedMoney,
       formData.operation
     );
-  }, [formData]);
+  }, [formData.addedMoney, formData.operation, remainingMoney.current]);
 
   // calculates the new total funds value for this budget based on the budget's allocated funds,
   // the change of money by the user, and whether the user intends to add to or subtract from the initial
@@ -226,6 +233,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
           dispatch(setTotalAssets(newAssets));
           hideEditForm(e, "showEditForm");
           setFormData(initialState);
+          remainingMoney.current = newRemainingMoney;
           notify(createUpdateBudgetString(budget.title, formData));
         } else {
           if (formErrors.title || formData.title === "")

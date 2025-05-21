@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import {
   BudgetInterface,
@@ -45,10 +45,16 @@ const useDeleteBudget = ({ budget, hideDeleteForm }: input) => {
   );
 
   // constant used if user chooses to return the remaining funds of the budget only
-
   let remainingMoney = useRef<number>(
     getRemainingMoney(budget.moneyAllocated, budget.moneySpent)
   );
+
+  useEffect(() => {
+    remainingMoney.current = getRemainingMoney(
+      budget.moneyAllocated,
+      budget.moneySpent
+    );
+  }, [budget.moneyAllocated, budget.moneySpent]);
 
   // initial form data for deleting a budget, the first two remain constant while the last one changes
   // based on which radio button the user selects

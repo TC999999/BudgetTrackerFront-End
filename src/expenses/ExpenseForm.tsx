@@ -53,6 +53,7 @@ const ExpenseForm: React.FC<Props> = ({
     hideExpenseForm,
     addExpense,
     updateBudget,
+    show,
   });
 
   const conversion: conversion = useMemo<conversion>(() => {

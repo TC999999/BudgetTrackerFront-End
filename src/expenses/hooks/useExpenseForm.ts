@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { AppDispatch } from "../../features/store";
 import { shallowEqual } from "react-redux";
@@ -28,6 +28,7 @@ import { error } from "../../interfaces/miscTypes";
 import { UserContextInterface } from "../../interfaces/userInterfaces";
 import { toast, Id } from "react-toastify";
 import ExpenseAPI from "../../apis/ExpenseAPI";
+import { DateTime } from "luxon";
 
 type input = {
   budget: BudgetInterface;
@@ -37,6 +38,7 @@ type input = {
   ) => void;
   addExpense: (newExpense: ExpenseInterface) => void;
   updateBudget: (updatedBudget: BudgetUpdate) => void;
+  show: boolean;
 };
 
 // custom hook for form for adding a new expense: includes handling of the custom keypad component, changes
@@ -46,6 +48,7 @@ const useExpenseForm = ({
   hideExpenseForm,
   addExpense,
   updateBudget,
+  show,
 }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (title: string, transaction: number): Id =>
@@ -97,10 +100,29 @@ const useExpenseForm = ({
   // sets error strings for expense form to be shown to user
   const [formErrors, setFormErrors] =
     useState<ExpenseFormErrors>(initialErrors);
-
   // booleans for form errors to be flashed on submission
   const [flashErrors, setFlashErrors] =
     useState<ExpenseFlashErrors>(initialFlashErrors);
+
+  useEffect(() => {
+    if (show === true) {
+      console.log("Hello");
+      setFormData((prev) => ({
+        ...prev,
+        date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
+      }));
+    }
+  }, [show]);
+
+  useEffect(() => {
+    setAvailableMoney(
+      getRemainingMoney(budget.moneyAllocated, budget.moneySpent)
+    );
+    originalMoney.current = getRemainingMoney(
+      budget.moneyAllocated,
+      budget.moneySpent
+    );
+  }, [budget.moneyAllocated, budget.moneySpent]);
 
   // pushes number on the key clicked by user to the right side of the new expense's transaction value and
   // returns a new string

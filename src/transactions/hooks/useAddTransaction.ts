@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { UserContextInterface } from "../../interfaces/userInterfaces";
 import { error } from "../../interfaces/miscTypes";
 import {
@@ -28,12 +28,13 @@ type input = {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
   updateTransactions: (newTransaction: Transaction) => void;
+  show: boolean;
 };
 
 // custom hook for form for adding a new transaction: includes handlers for calculating the new value of
 // the remaining savings, key presses on the custom keypad component, presses of the radio buttons to update
 // options, and submitting the data
-const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
+const useAddTransaction = ({ hideForm, updateTransactions, show }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (notification: string): Id => toast.success(notification);
   const notifyError = (error: error): Id =>
@@ -48,7 +49,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
     title: "",
     value: 0,
     operation: "add",
-    date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
+    date: "",
   };
 
   // inital empty string errors for error state
@@ -74,6 +75,15 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
   // sets state for flashing inputs after attempting to submit errorful data in form
   const [flashErrors, setFlashErrors] =
     useState<NewTransactionFlashErrors>(initialFlashErrors);
+
+  useEffect(() => {
+    if (show === true) {
+      setFormData((prev) => ({
+        ...prev,
+        date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
+      }));
+    }
+  }, [show]);
 
   // calcuates new asset value based on original asset value, the inputted monetary value to be added or
   // subtracted from the original, and the operation that changes with the press of a radio button. Used to
@@ -210,6 +220,7 @@ const useAddTransaction = ({ hideForm, updateTransactions }: input) => {
     [formData, formErrors, flashErrors]
   );
 
+  // hides the form and resets all form data and form error data back to its original state
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       e.preventDefault();

@@ -33,6 +33,7 @@ const AddTransactionForm: React.FC<Props> = ({
     shallowEqual
   );
 
+  // custom hook values for new transaction form
   const {
     formData,
     formErrors,
@@ -47,6 +48,7 @@ const AddTransactionForm: React.FC<Props> = ({
   } = useAddTransaction({
     hideForm,
     updateTransactions,
+    show,
   });
 
   const conversion: conversion = useMemo<conversion>(() => {

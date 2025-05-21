@@ -150,7 +150,6 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
           notify(submitData.title, submitData.moneyAllocated);
           setFormData(initialState);
           setFormErrors(initialErrors);
-          setAvailableFunds(user!.totalAssets);
         } else {
           if (formErrors.title || formData.title === "")
             setFlashErrors((flash) => ({ ...flash, title: true }));

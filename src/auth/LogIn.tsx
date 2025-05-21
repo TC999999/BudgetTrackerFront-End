@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import useLogIn from "./hooks/useLogIn";
+import { motion } from "motion/react";
 
 // form for logging in a user
 const LogIn = (): JSX.Element => {
@@ -18,9 +19,17 @@ const LogIn = (): JSX.Element => {
       tabIndex={-1}
       className="login-page-div bg-gray-500 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full max-h-full"
     >
-      <div className="login-page relative w-full p-4 max-w-md max-h-full">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.3 }}
+        className="login-page relative w-full p-4 max-w-md max-h-full"
+      >
         <div className="login-form relative p-10 bg-gray-100 rounded-lg shadow-sm border-2 border-green-900 px-2 py-2 w-full">
-          <h1 className="text-3xl font-bold underline">Log in Here!</h1>
+          <h1 className="text-3xl font-bold underline text-green-900 text-center">
+            Log in Here!
+          </h1>
           <form onSubmit={handleSubmit}>
             <div className="username-div">
               <label className="text-lg block" htmlFor="username">
@@ -125,7 +134,7 @@ const LogIn = (): JSX.Element => {
             </Link>
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
