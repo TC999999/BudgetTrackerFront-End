@@ -29,9 +29,9 @@ const UserInfo: React.FC<Props> = ({
           Confirm Your Information Here
         </h1>
         <h1 className="font-bold text-center p-2">
-          Please input your username and the email linked to your account below.
-          Afterwards, you will be sent a 6-digit verification code to the email
-          address you provided.
+          Please input your username and the email address linked to your
+          account below. Afterwards, you will be sent a 6-digit verification
+          code to the email address you provided.
         </h1>
         <div id="user-info-form">
           <form onSubmit={handleSubmit}>

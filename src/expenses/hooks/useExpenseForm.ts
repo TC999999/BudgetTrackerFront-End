@@ -106,7 +106,6 @@ const useExpenseForm = ({
 
   useEffect(() => {
     if (show === true) {
-      console.log("Hello");
       setFormData((prev) => ({
         ...prev,
         date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),

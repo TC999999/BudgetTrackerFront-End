@@ -15,6 +15,9 @@ import { setRegisterProgress } from "../../helpers/setResetProgress";
 // inputs, showing the form for initial incomes, handling the checkbox for trusted devices, and handling data
 // submission
 const useSignUp = () => {
+  // initial data for sign up interface
+  // (password is encrypted on backend, email address must be valid, trusted will determine
+  // length of refresh token life)
   const initialState: SignUpInterface = {
     username: "",
     password: "",
@@ -49,6 +52,7 @@ const useSignUp = () => {
     [currentStep]
   );
 
+  // updates data for registration
   const handleDataChange = useCallback(
     (
       e: React.FormEvent,
@@ -60,6 +64,7 @@ const useSignUp = () => {
     [registerData]
   );
 
+  // changes loading status when a form is submitted
   const changeLoading = useCallback(
     (loadingStatus: boolean): void => {
       dispatch(setFormLoading(loadingStatus));
@@ -67,6 +72,8 @@ const useSignUp = () => {
     [formLoading]
   );
 
+  // changes step if data is processed successfully (moves to verification
+  // code step if user data is entered correctly)
   const changeStep = useCallback(
     (e: React.FormEvent, newStep: step): void => {
       e.preventDefault();

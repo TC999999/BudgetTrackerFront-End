@@ -7,6 +7,7 @@ type Props = {
   show: boolean;
 };
 
+// wrapper for motion animation for modals (forms/prompts)
 const Modal: React.FC<Props> = ({ children, large, show }) => {
   return (
     <AnimatePresence>

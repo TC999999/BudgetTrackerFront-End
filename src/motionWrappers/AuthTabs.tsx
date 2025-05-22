@@ -6,6 +6,8 @@ type Props = {
   show: boolean;
 };
 
+// wrapper for motion animation for multipart forms (resetting password or
+// registering a new account)
 const AuthTabs: React.FC<Props> = ({ children, show }) => {
   return show ? (
     <motion.div

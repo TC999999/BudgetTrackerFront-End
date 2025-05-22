@@ -5,6 +5,7 @@ type Props = {
   children: ReactNode;
 };
 
+// wrapper for motion animation for additional nav bar for certain pages (incomes or budgets)
 const Buttons: React.FC<Props> = ({ children }) => {
   return (
     <motion.div

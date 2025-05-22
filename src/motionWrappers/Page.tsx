@@ -5,6 +5,7 @@ type Props = {
   children: ReactNode;
 };
 
+// wrapper for motion animation for full pages
 const Page: React.FC<Props> = ({ children }) => {
   return (
     <motion.div

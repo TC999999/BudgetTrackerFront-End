@@ -25,15 +25,13 @@ const IncomePage = (): JSX.Element => {
         incomeListLength={incomes.length}
         showIncomeFormState={showIncomeFormState}
       />
-
       <Page>
-        <main className="relative animate-page-entrance">
-          <NewIncomeForm
-            hideIncomeFormState={hideIncomeFormState}
-            addToIncomeState={addToIncomeState}
-            show={showIncomeForm}
-          />
-
+        <NewIncomeForm
+          hideIncomeFormState={hideIncomeFormState}
+          addToIncomeState={addToIncomeState}
+          show={showIncomeForm}
+        />
+        <main>
           <ListHeader type="Incomes" itemListLength={incomes.length} />
           <IncomeList
             incomeList={incomes}

@@ -8,11 +8,12 @@ export type transactionValAndType = {
   add: boolean;
 };
 
+// helper function that returns a string telling a user if a transaction added to or subtracted
+// from their total savings
 export function transactionType(
   transaction: Transaction
 ): transactionValAndType {
   let returnVal: transactionValAndType = {
-    // value: `+$${transaction.transaction}`,
     value: `+${dollarConverter(transaction.transaction)}`,
     add: true,
   };
