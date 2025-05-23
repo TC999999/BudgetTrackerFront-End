@@ -19,6 +19,7 @@ type input = {
   ) => void;
 };
 
+// custom hook for register form for optional data (current total savings or incomes)
 const useSignUpAdditional = ({
   initialState,
   changeLoading,

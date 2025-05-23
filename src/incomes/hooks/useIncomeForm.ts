@@ -251,6 +251,7 @@ const useIncomeForm = ({
     [formData, formErrors, flashErrors]
   );
 
+  // clears and resets form data and hides form when the user clicks cancel
   const handleCancel = useCallback(
     (
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent

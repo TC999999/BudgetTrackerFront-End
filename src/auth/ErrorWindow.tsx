@@ -8,7 +8,7 @@ type Props = {
   submitError: string;
 };
 
-// Error window for ResetPassword.tsx
+// Error window for ResetPassword.tsx and Register.tsx
 const ErrorWindow: React.FC<Props> = ({
   changeSubmitError,
   submitError,

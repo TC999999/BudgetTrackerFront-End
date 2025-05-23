@@ -11,6 +11,8 @@ type Props = {
   show: boolean;
 };
 
+// full page for both form for additional information for user sign up and a new income form for
+// initial incomes
 const SignUpAdditional: React.FC<Props> = ({
   initialState,
   changeLoading,

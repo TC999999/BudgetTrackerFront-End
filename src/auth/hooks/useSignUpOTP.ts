@@ -20,6 +20,8 @@ type input = {
   registerData: SignUpInterface;
 };
 
+// custom hook for register form for inputting a one time verification code after
+// submitting initial account data
 const useSignUpOTP = ({
   changeLoading,
   changeStep,

@@ -6,6 +6,7 @@ type Props = {
   logOutAndNavigate: () => Promise<void>;
 };
 
+// prompt that asks a user if they are sure they want to log out
 const Logout: React.FC<Props> = ({
   showPrompt,
   hidePrompt,

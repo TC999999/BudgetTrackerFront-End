@@ -17,12 +17,7 @@ export function transactionType(
     value: `+${dollarConverter(transaction.transaction)}`,
     add: true,
   };
-  if ("budget" in transaction) {
-    returnVal = {
-      value: `-${dollarConverter(transaction.transaction)}`,
-      add: false,
-    };
-  } else if ("operation" in transaction) {
+  if ("operation" in transaction) {
     if (transaction.operation === "add") {
       returnVal = {
         value: `+${dollarConverter(transaction.transaction)}`,
@@ -35,5 +30,23 @@ export function transactionType(
       };
     }
   }
+  // if ("budget" in transaction) {
+  //   returnVal = {
+  //     value: `-${dollarConverter(transaction.transaction)}`,
+  //     add: false,
+  //   };
+  // } else if ("operation" in transaction) {
+  //   if (transaction.operation === "add") {
+  //     returnVal = {
+  //       value: `+${dollarConverter(transaction.transaction)}`,
+  //       add: true,
+  //     };
+  //   } else {
+  //     returnVal = {
+  //       value: `-${dollarConverter(transaction.transaction)}`,
+  //       add: false,
+  //     };
+  //   }
+  // }
   return returnVal;
 }

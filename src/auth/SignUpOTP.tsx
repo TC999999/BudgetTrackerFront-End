@@ -15,6 +15,8 @@ type Props = {
   show: boolean;
 };
 
+// window for register form for users to enter the one time verification code sent to their email
+// address
 const SignUpOTP: React.FC<Props> = ({
   registerData,
   changeLoading,

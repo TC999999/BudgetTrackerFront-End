@@ -90,7 +90,7 @@ const AuthProgress: React.FC<Props> = ({
       >
         <progress
           className="w-full  [&::-webkit-progress-value]:bg-green-700"
-          max={99}
+          max={type === "register" ? 99 : 100}
           value={currentProgress}
         ></progress>
       </div>

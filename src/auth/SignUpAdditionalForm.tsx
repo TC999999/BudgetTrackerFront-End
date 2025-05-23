@@ -19,6 +19,8 @@ type Props = {
   handleSubmit: (e: React.FormEvent) => Promise<void>;
 };
 
+// form for any additional information for a user registering to the app (initial savings or initial
+// income list)
 const SignUpAdditionalForm: React.FC<Props> = ({
   formData,
   keyPadError,

@@ -3,7 +3,7 @@ import FullKeyPad from "../FullKeyPad";
 import useOneTimeCode from "./hooks/useOneTimeCode";
 import AuthTabs from "../motionWrappers/AuthTabs";
 
-// returns page to enter one time
+// returns page for users to enter one time code when resetting password
 const OneTimeCode: React.FC<PasswordResetInput> = ({
   changeStep,
   changeLoading,

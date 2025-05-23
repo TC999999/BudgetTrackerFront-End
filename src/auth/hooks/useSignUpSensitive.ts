@@ -25,6 +25,7 @@ type input = {
   ) => void;
 };
 
+// custom hook for register form for inputting important non-optional data (username, password, email)
 const useSignUpSensitive = ({
   handleDataChange,
   changeLoading,

@@ -18,6 +18,7 @@ type Props = {
   show: boolean;
 };
 
+// window for register form for users to input non-optional information (username, password, email)
 const SignUpSensitive: React.FC<Props> = ({
   handleDataChange,
   changeLoading,

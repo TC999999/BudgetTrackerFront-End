@@ -227,6 +227,7 @@ const useExpenseForm = ({
     [formData, formErrors, flashErrors, user?._id]
   );
 
+  // clears and resets form data and hides form when the user clicks cancel
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
