@@ -8,5 +8,10 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@emotion/styled"],
   },
-  test: { environment: "jsdom", globals: true, setUpFiles: "./tests/setup.ts" },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./test/setupTests.ts",
+    css: true,
+  },
 } as UserConfig);

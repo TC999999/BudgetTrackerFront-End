@@ -2,8 +2,12 @@ import { Link } from "react-router-dom";
 import useLogIn from "./hooks/useLogIn";
 import { motion } from "motion/react";
 
+type Props = {
+  onSubmit?: any;
+};
+
 // form for logging in a user
-const LogIn = (): JSX.Element => {
+const LogIn: React.FC<Props> = ({ onSubmit }): JSX.Element => {
   const {
     formData,
     formErrors,
@@ -14,6 +18,15 @@ const LogIn = (): JSX.Element => {
     handleCheckBox,
     handleSubmit,
   } = useLogIn();
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onSubmit) {
+      onSubmit();
+    } else {
+      handleSubmit(e);
+    }
+  };
   return (
     <div
       tabIndex={-1}
@@ -30,7 +43,7 @@ const LogIn = (): JSX.Element => {
           <h1 className="text-3xl font-bold underline text-green-900 text-center">
             Log in Here!
           </h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={submit}>
             <div className="username-div">
               <label className="text-lg block" htmlFor="username">
                 Username:
@@ -80,16 +93,16 @@ const LogIn = (): JSX.Element => {
             <div id="trusted-div" className="text-center">
               <div className="flex justify-center">
                 <div className="flex items-center">
-                  <input
-                    className="form-checkbox checkbox checkbox-add"
-                    id="login_trusted"
-                    type="checkbox"
-                    name="trusted"
-                    checked={formData.trusted}
-                    onChange={handleCheckBox}
-                  />
                   <label className="text-lg" htmlFor="trusted">
                     Do You Trust This Device?
+                    <input
+                      className="form-checkbox checkbox checkbox-add"
+                      id="login_trusted"
+                      type="checkbox"
+                      name="trusted"
+                      checked={formData.trusted}
+                      onChange={handleCheckBox}
+                    />
                   </label>
                 </div>
               </div>
@@ -98,7 +111,10 @@ const LogIn = (): JSX.Element => {
               </small>
             </div>
             <div className="button-div text-center m-2">
-              <button className="get-profile-button border-2 border-green-500 rounded-full bg-green-400 p-2 hover:bg-green-900 hover:text-white">
+              <button
+                id="get-profile-button"
+                className="border-2 border-green-500 rounded-full bg-green-400 p-2 hover:bg-green-900 hover:text-white"
+              >
                 Log In!
               </button>
             </div>
