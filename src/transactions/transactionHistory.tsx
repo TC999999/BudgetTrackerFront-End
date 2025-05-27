@@ -15,7 +15,7 @@ const TransactionHistory = (): JSX.Element => {
     <Page>
       <div id="transaction-history-page">
         <section>
-          <ListHeader type="Transactions" />
+          <ListHeader type="Savings" />
           <TransactionList transactions={transactions} />
         </section>
       </div>

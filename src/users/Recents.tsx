@@ -36,7 +36,7 @@ const Recents: React.FC<Props> = ({ expenses, transactions }) => {
           <TabList onChange={changeTab} allowScrollButtonsMobile centered>
             <Tab
               className="recent-transactions"
-              label="Recent Misc. Transactions"
+              label="Recent Savings Changes"
               value="1"
             />
             <Tab
@@ -52,7 +52,7 @@ const Recents: React.FC<Props> = ({ expenses, transactions }) => {
             id="recent-transactions-list"
             className="transition duration-150"
           >
-            <ListHeader type="Recent Transactions" />
+            <ListHeader type="Recent Savings" />
             <TransactionList transactions={transactions} />
           </section>
         </TabPanel>

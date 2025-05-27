@@ -16,8 +16,8 @@ export type ActionInterface = {
 export type ListHeaderType = {
   type:
     | "Incomes"
-    | "Transactions"
-    | "Recent Transactions"
+    | "Savings"
+    | "Recent Savings"
     | "Budgets"
     | "Expenses"
     | "Recent Expenses";

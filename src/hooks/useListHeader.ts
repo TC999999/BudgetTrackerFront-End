@@ -12,10 +12,10 @@ const useListHeader = ({ type, itemListLength }: ListHeaderType) => {
           return "All Current Incomes";
         case "Budgets":
           return "All Current Budgets";
-        case "Transactions":
-          return "Full Transaction History";
-        case "Recent Transactions":
-          return "Recent Miscellaneous Transactions";
+        case "Savings":
+          return "Full Savings Changes History";
+        case "Recent Savings":
+          return "Recent Changes to Savings";
         case "Expenses":
           return "Expenses Made";
         case "Recent Expenses":
@@ -48,10 +48,10 @@ const useListHeader = ({ type, itemListLength }: ListHeaderType) => {
           return "Here you may add, update, or delete any sources of income you may have. Each of below income values will be added to your total savings automatically on the time noted on 'Next Received On'. You are allowed a maximum of three incomes";
         case "Budgets":
           return "Here you may set aside funds in order to make plans for future budgets or record current budgets you may have. You are allowed a maximum of ten budgets.";
-        case "Transactions":
-          return "Here are all transactions made from funds directly from your savings. They cannot be edited or deleted. They may include incomes that you do not recieve anymore";
-        case "Recent Transactions":
-          return "Below are your most recent transactions (≤5), which includes both that you have documented yourself and from your incomes: past and present.";
+        case "Savings":
+          return "Here are all changes to your savings, which include direct transactions, receieved incomes, and any budget creation/edit/deletion. They cannot be edited or deleted. They may include budgets and incomes that you do not recieve anymore.";
+        case "Recent Savings":
+          return "Below are your most recent changes to your savings (≤5), which includes direct transactions, receieved incomes, and any budget creations/edits/deletions.";
         case "Expenses":
           return "Below are all expenses made using funds from this budget. The total added value of all below expenses should not exceed the total funds allocated for this budget.";
         case "Recent Expenses":

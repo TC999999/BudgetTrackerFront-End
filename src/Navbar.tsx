@@ -38,7 +38,7 @@ const Navbar = (): JSX.Element | null => {
             className="nav-button border-amber-200 bg-amber-300 hover:bg-amber-600 hover:text-white active:bg-amber-100 active:text-gray-900"
             onClick={(e) => goToURL(e, `/transactions/user/${user?._id}`)}
           >
-            Transactions
+            Savings Changes
           </button>
 
           <button

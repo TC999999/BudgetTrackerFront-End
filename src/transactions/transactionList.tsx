@@ -30,7 +30,7 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
         <b className="table-header">Date</b>
         <b className="table-header">Balance</b>
         <b className="table-header">Income</b>
-        <b className="table-header">Misc.</b>
+        <b className="table-header">Transaction</b>
         <b className="table-header">Budget</b>
       </header>
 
