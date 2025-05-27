@@ -42,6 +42,7 @@ const AddTransactionForm: React.FC<Props> = ({
     handleChange,
     handlePress,
     handleDelete,
+    handleDate,
     handleRadio,
     handleSubmit,
     handleCancel,
@@ -123,6 +124,11 @@ const AddTransactionForm: React.FC<Props> = ({
                   </p>
                 </div>
               )}
+              <div>
+                <button className="misc-button" onClick={handleDate}>
+                  Update Date to Current
+                </button>
+              </div>
             </div>
           </div>
           <div id="transaction_inputs">
@@ -225,9 +231,7 @@ const AddTransactionForm: React.FC<Props> = ({
               </button>
             </div>
             <div>
-              <button className="add-asset-button bg-green-300 border-2 border-emerald-900 rounded-full px-2 py-2 hover:bg-green-900 hover:text-gray-100 active:bg-gray-100 active:text-emerald-900">
-                Add this Transaction
-              </button>
+              <button className="submit-button">Add this Transaction</button>
             </div>
           </div>
         </div>

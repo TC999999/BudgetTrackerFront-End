@@ -83,7 +83,7 @@ const useAddTransaction = ({ hideForm, updateTransactions, show }: input) => {
         date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
       }));
     }
-  }, [show]);
+  }, [show, formData.date]);
 
   // calcuates new asset value based on original asset value, the inputted monetary value to be added or
   // subtracted from the original, and the operation that changes with the press of a radio button. Used to
@@ -94,7 +94,19 @@ const useAddTransaction = ({ hideForm, updateTransactions, show }: input) => {
       formData.value,
       formData.operation
     );
-  }, [formData.value, formData.operation]);
+  }, [user!.totalAssets, formData.value, formData.operation]);
+
+  // updates date to current date
+  const handleDate = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      e.preventDefault();
+      setFormData((prev) => ({
+        ...prev,
+        date: DateTime.now().toFormat("yyyy-MM-dd'T'T"),
+      }));
+    },
+    [formData.date]
+  );
 
   // updates the formdata state if the input that was changed was the title or date input
   const handleChange = useCallback(
@@ -239,6 +251,7 @@ const useAddTransaction = ({ hideForm, updateTransactions, show }: input) => {
     handleChange,
     handlePress,
     handleDelete,
+    handleDate,
     handleRadio,
     handleSubmit,
     handleCancel,

@@ -73,19 +73,23 @@
 }
 
 @utility submit-button {
-  @apply bg-green-300 border-2 border-emerald-900 rounded-full p-2 hover:bg-green-900 hover:text-gray-100 active:bg-green-100 active:text-emerald-900 transition duration-150;
+  @apply bg-green-300 border-2 border-emerald-900 rounded-full p-2 hover:bg-green-900 hover:text-gray-100 active:bg-green-100 active:text-emerald-900 transition duration-150 cursor-pointer;
 }
 
 @utility cancel-button {
-  @apply bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full p-2 hover:bg-gray-200 hover:text-gray-600 active:bg-gray-100 transition duration-150;
+  @apply bg-gray-600 text-gray-100 border-2 border-gray-900 rounded-full p-2 hover:bg-gray-200 hover:text-gray-600 active:bg-gray-100 transition duration-150 cursor-pointer;
 }
 
 @utility delete-button {
-  @apply bg-red-300 border-2 border-red-900 rounded-full p-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900 transition duration-150;
+  @apply bg-red-300 border-2 border-red-900 rounded-full p-2 hover:bg-red-800 hover:text-white active:bg-red-100 active:text-red-900 transition duration-150 cursor-pointer;
+}
+
+@utility misc-button {
+  @apply bg-blue-300 border-2 border-blue-900 rounded-full p-2 hover:bg-blue-800 hover:text-white active:bg-blue-100 active:text-blue-900 transition duration-150 cursor-pointer;
 }
 
 @utility checkbox {
-  @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150;
+  @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150 cursor-pointer;
 }
 
 @utility checkbox-add {
@@ -93,7 +97,7 @@
 }
 
 @utility radio {
-  @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150;
+  @apply h-4 w-4 mx-2 bg-gray-100 border-gray-300 ring-2 ring-gray-200 duration-150 cursor-pointer;
 }
 
 @utility radio-add {

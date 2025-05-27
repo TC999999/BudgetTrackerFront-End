@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useAppSelector, useAppDispatch } from "../../features/hooks";
 import { AppDispatch } from "../../features/store";
 import { shallowEqual } from "react-redux";
@@ -62,14 +62,16 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
   // sets state for new budget form data
   const [formData, setFormData] = useState<newBudgetInterface>(initialState);
   // sets state for available funds that changes if the new budget fund value changes
-  const [availableFunds, setAvailableFunds] = useState<number>(
-    user!.totalAssets
-  );
+
   // sets state for errors in the form inputs, updates if errors are detcted
   const [formErrors, setFormErrors] = useState<BudgetFormErrors>(initialErrors);
   // sets state for if errors should be flashed if user attempts to submit errorful data
   const [flashErrors, setFlashErrors] =
     useState<BudgetFlashErrors>(initialFlashErrors);
+
+  const availableFunds = useMemo<number>(() => {
+    return user!.totalAssets - formData.moneyAllocated;
+  }, [user!.totalAssets, formData.moneyAllocated]);
 
   // Pushes a number on the key pressed by the user to the right of the new budget funds value and creates
   // a new string. If the new budget value exceeds the user's current total asset value, the new budget funds
@@ -82,7 +84,6 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
       handleBudgetInputErrors("moneyAllocated", newNum, setFormErrors);
       if (newNum <= user!.totalAssets) {
         setFormData((data) => ({ ...data, moneyAllocated: newNum }));
-        setAvailableFunds(user!.totalAssets - newNum);
       } else {
         setFormErrors((data) => ({
           ...data,
@@ -111,7 +112,6 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
         ...data,
         moneyAllocated: newNum,
       }));
-      setAvailableFunds(user!.totalAssets - newNum);
     },
     [formData, formErrors, availableFunds]
   );
@@ -174,7 +174,6 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
       hideForm(e);
       setFormData(initialState);
       setFormErrors(initialErrors);
-      setAvailableFunds(user!.totalAssets);
     },
     [formData, formErrors, availableFunds]
   );
