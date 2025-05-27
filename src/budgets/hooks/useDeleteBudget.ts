@@ -75,7 +75,7 @@ const useDeleteBudget = ({ budget, hideDeleteForm }: input) => {
         user!.totalAssets,
         formData.addBackToAssets
       ),
-    [formData.addBackToAssets]
+    [user!.totalAssets, formData.addBackToAssets]
   );
 
   // updates form data based on which radio button the user has selected

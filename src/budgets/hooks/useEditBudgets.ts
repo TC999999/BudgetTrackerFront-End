@@ -107,7 +107,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
       formData.addedMoney,
       formData.operation
     );
-  }, [formData.addedMoney, formData.operation]);
+  }, [budget.moneyAllocated, formData.addedMoney, formData.operation]);
 
   // calculates the new total assets value  based on the original total asset value,
   // the change of money by the user, and whether the user intends to add to or subtract from the initial
@@ -118,7 +118,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
       formData.addedMoney,
       formData.operation
     );
-  }, [formData.addedMoney, formData.operation]);
+  }, [user!.totalAssets, formData.addedMoney, formData.operation]);
 
   // pushes number on the key pressed by tbe userto the right of the current money change value and
   // creates a new money change string. If the the created string contains any errors (e.g. the added value

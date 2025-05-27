@@ -27,7 +27,7 @@ const UserCard: React.FC<Props> = ({ user, showForm }) => {
       <div id="buttons" className="flex flex-col items-center m-4">
         <button
           id="show-make-transaction-button"
-          className="border w-72 rounded-full bg-green-700 p-2 text-sm sm:text-base hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400 mb-2"
+          className="border w-72 rounded-full bg-green-700 p-2 text-sm sm:text-base hover:bg-green-300 hover:underline active:bg-gray-100 active:text-green-400 mb-2 cursor-pointer"
           onClick={(e) => showForm(e)}
         >
           Document a Transaction
@@ -35,7 +35,7 @@ const UserCard: React.FC<Props> = ({ user, showForm }) => {
 
         <button
           id="edit-button"
-          className="border w-72 rounded-full bg-orange-700 p-2 text-sm sm:text-base hover:bg-orange-300 hover:underline active:bg-gray-100 active:text-orange-400"
+          className="border w-72 rounded-full bg-orange-700 p-2 text-sm sm:text-base hover:bg-orange-300 hover:underline active:bg-gray-100 active:text-orange-400 cursor-pointer"
           onClick={() => navigate(`/user/${user._id}/edit`)}
         >
           Edit Profile

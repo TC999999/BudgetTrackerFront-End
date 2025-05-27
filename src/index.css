@@ -216,11 +216,11 @@
 
 @utility keypad-key-buttons {
   & .button {
-    @apply bg-gray-400 text-center px-2 py-2 border border-gray-900 hover:bg-blue-100 active:bg-blue-400 active:text-gray-100;
+    @apply bg-gray-400 text-center px-2 py-2 border border-gray-900 hover:bg-blue-100 active:bg-blue-400 active:text-gray-100 cursor-pointer;
   }
 
   & .button-delete {
-    @apply bg-orange-400 text-center px-2 py-2 border border-gray-900 hover:bg-orange-100 active:bg-orange-400 active:text-gray-100;
+    @apply bg-orange-400 text-center px-2 py-2 border border-gray-900 hover:bg-orange-100 active:bg-orange-400 active:text-gray-100 cursor-pointer;
   }
 }
 
@@ -253,7 +253,7 @@
 }
 
 @utility nav-button {
-  @apply border p-1 text-sm sm:p-2 sm:text-lg rounded-full transition duration-150 hover:scale-105;
+  @apply border p-1 text-sm sm:p-2 sm:text-lg rounded-full transition duration-150 hover:scale-105 cursor-pointer;
 }
 
 @utility userInfo-input {

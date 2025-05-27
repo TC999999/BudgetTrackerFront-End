@@ -77,14 +77,14 @@ const IncomeCard: React.FC<Props> = ({
         </div>
         <div className="flex justify-around">
           <button
-            className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-red-700 bg-red-600 rounded-full duration-150 hover:bg-red-300 hover:text-black"
+            className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-red-700 bg-red-600 rounded-full duration-150 hover:bg-red-300 hover:text-black cursor-pointer"
             onClick={(e) => showSecondPrompt(e, { _id: income._id })}
           >
             Delete Income
           </button>
 
           <button
-            className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-orange-700 bg-orange-600 rounded-full duration-150 hover:bg-orange-300 hover:text-black"
+            className="border-2 p-1 sm:p-2 mt-2 text-sm sm:text-base text-white border-orange-700 bg-orange-600 rounded-full duration-150 hover:bg-orange-300 hover:text-black cursor-pointer"
             onClick={(e) => selectIncome(e, income)}
           >
             Update Income
