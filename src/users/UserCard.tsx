@@ -6,13 +6,22 @@ import { useMemo } from "react";
 type Props = {
   user: UserInfoInterface;
   showForm: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  nav?: any;
 };
-const UserCard: React.FC<Props> = ({ user, showForm }) => {
+const UserCard: React.FC<Props> = ({ user, showForm, nav }) => {
   const navigate: NavigateFunction = useNavigate();
 
   const totalAssets = useMemo(() => {
     return dollarConverter(user.totalAssets);
   }, [user.totalAssets]);
+
+  const editUser = () => {
+    if (nav) {
+      nav();
+    } else {
+      navigate(`/user/${user._id}/edit`);
+    }
+  };
 
   return (
     <header
@@ -36,7 +45,7 @@ const UserCard: React.FC<Props> = ({ user, showForm }) => {
         <button
           id="edit-button"
           className="border w-72 rounded-full bg-orange-700 p-2 text-sm sm:text-base hover:bg-orange-300 hover:underline active:bg-gray-100 active:text-orange-400 cursor-pointer"
-          onClick={() => navigate(`/user/${user._id}/edit`)}
+          onClick={editUser}
         >
           Edit Profile
         </button>

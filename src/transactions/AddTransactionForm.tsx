@@ -14,6 +14,7 @@ type Props = {
   ) => void;
   updateTransactions: (newTransaction: Transaction) => void;
   show: boolean;
+  submit?: any;
 };
 
 type conversion = {
@@ -27,6 +28,7 @@ const AddTransactionForm: React.FC<Props> = ({
   hideForm,
   updateTransactions,
   show,
+  submit,
 }): JSX.Element | null => {
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
@@ -52,6 +54,15 @@ const AddTransactionForm: React.FC<Props> = ({
     show,
   });
 
+  const onSubmit = (e: React.FormEvent): void => {
+    e.preventDefault();
+    if (submit) {
+      submit();
+    } else {
+      handleSubmit(e);
+    }
+  };
+
   const conversion: conversion = useMemo<conversion>(() => {
     return {
       convertNewTotalAssets: dollarConverter(newTotalAssets),
@@ -70,7 +81,7 @@ const AddTransactionForm: React.FC<Props> = ({
           {conversion.convertNewTotalAssets}
         </h2>
       </header>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <div id="form_information" className="sm:flex sm:justify-center">
           <div id="title_and_date_inputs">
             <div className="transaction-title-div">
@@ -111,7 +122,7 @@ const AddTransactionForm: React.FC<Props> = ({
                 className={`input  ${
                   formErrors.date ? "input-error" : "input-valid-date"
                 } ${flashErrors.date && "animate-blink-error"}`}
-                id="expense_date"
+                id="date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
@@ -140,7 +151,7 @@ const AddTransactionForm: React.FC<Props> = ({
                 className={`input sm:text-sm sm:w-64 md:text-base md:w-96  ${
                   formErrors.value ? "input-error" : ""
                 } ${flashErrors.value ? "animate-blink-error" : ""}`}
-                id="added_assets"
+                id="addedAssets"
                 type="text"
                 name="addedAssets"
                 placeholder="0.00"
