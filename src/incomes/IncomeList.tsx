@@ -4,7 +4,6 @@ import { shallowEqual } from "react-redux";
 import IncomeCard from "./IncomeCard";
 import IncomeSkeleton from "../skeleton/IncomeSkeleton";
 import UpdateIncomeForm from "./UpdateIncomeForm";
-import OnPageLoading from "../OnPageLoading";
 import SecondPrompt from "../SecondPrompt";
 import useIncomeList from "./hooks/useIncomeList";
 import { loading } from "../interfaces/loadingInterfaces";
@@ -38,7 +37,7 @@ const IncomeList: React.FC<Props> = ({
     deleteIncome,
   } = useIncomeList({ removeFromIncomeState });
 
-  return !pageLoading ? (
+  return (
     <div id="income-list-and-edit-form">
       {selectedIncomeForDelete && (
         <SecondPrompt
@@ -83,8 +82,6 @@ const IncomeList: React.FC<Props> = ({
         )}
       </div>
     </div>
-  ) : (
-    <OnPageLoading loadingMsg="Incomes" />
   );
 };
 

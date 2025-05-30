@@ -18,6 +18,7 @@ type Props = {
   addExpense: (newExpense: ExpenseInterface) => void;
   updateBudget: (updatedBudget: BudgetUpdate) => void;
   show: boolean;
+  mock?: any;
 };
 
 type conversion = {
@@ -32,6 +33,7 @@ const ExpenseForm: React.FC<Props> = ({
   addExpense,
   updateBudget,
   show,
+  mock,
 }): JSX.Element | null => {
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
@@ -56,6 +58,15 @@ const ExpenseForm: React.FC<Props> = ({
     show,
   });
 
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mock) {
+      mock();
+    } else {
+      handleSubmit(e);
+    }
+  };
+
   const conversion: conversion = useMemo<conversion>(() => {
     return {
       convertAvailableFunds: dollarConverter(availableMoney),
@@ -75,7 +86,7 @@ const ExpenseForm: React.FC<Props> = ({
             {conversion.convertAvailableFunds}
           </h2>
         </header>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={onSubmit}>
           <div id="input-divs" className="sm:flex sm:justify-center">
             <div id="title-and-date-div" className="sm:mx-2">
               <div id="title-div" className="mb-2">
@@ -86,7 +97,7 @@ const ExpenseForm: React.FC<Props> = ({
                   className={`input ${
                     formErrors.title ? "input-error" : "input-valid"
                   } ${flashErrors.title && "animate-blink-error"}`}
-                  id="expense_title"
+                  id="title"
                   type="text"
                   name="title"
                   placeholder="What's this expense for?"
@@ -117,7 +128,7 @@ const ExpenseForm: React.FC<Props> = ({
                   className={`input ${
                     formErrors.date ? "input-error" : "input-valid-date"
                   } ${flashErrors.date && "animate-blink-error"}`}
-                  id="expense_date"
+                  id="date"
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
@@ -141,7 +152,7 @@ const ExpenseForm: React.FC<Props> = ({
                   className={`input ${
                     formErrors.transaction ? "input-error" : ""
                   } ${flashErrors.transaction && "animate-blink-error"}`}
-                  id="expense_transaction"
+                  id="transaction"
                   type="text"
                   name="trasaction"
                   placeholder="$0.00"

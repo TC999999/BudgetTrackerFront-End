@@ -20,3 +20,25 @@ export const LOADING_INITIAL_STATE_TEST: LoadingContext = {
     status: null,
   },
 };
+
+export const LOADING_INITIAL_STATE_TEST_PAGE_LOAD: LoadingContext = {
+  loadingInfo: {
+    pageLoading: true,
+    formLoading: false,
+  },
+  loadError: {
+    message: "",
+    status: null,
+  },
+};
+
+export const LOADING_INITIAL_STATE_TEST_ERROR: LoadingContext = {
+  loadingInfo: {
+    pageLoading: false,
+    formLoading: false,
+  },
+  loadError: {
+    message: "Bad Request",
+    status: 400,
+  },
+};

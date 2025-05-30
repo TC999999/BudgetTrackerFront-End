@@ -7,6 +7,8 @@ import loadReducer from "../src/features/slices/loadSlice.ts";
 import {
   AUTH_INITIAL_STATE_TEST,
   LOADING_INITIAL_STATE_TEST,
+  LOADING_INITIAL_STATE_TEST_PAGE_LOAD,
+  LOADING_INITIAL_STATE_TEST_ERROR,
 } from "./testReduxStore.ts";
 
 // renders a react component with both memory router (for useNavigate) and redux store
@@ -37,6 +39,52 @@ export const renderWithReduxTestStore = (ui: JSX.Element) => {
     preloadedState: {
       user: AUTH_INITIAL_STATE_TEST,
       loading: LOADING_INITIAL_STATE_TEST,
+    },
+  });
+
+  const renderResult = render(
+    <Provider store={store}>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </Provider>
+  );
+
+  return { ...renderResult, store };
+};
+
+// renders a react component with both memory router (for useNavigate) and
+// redux store with loading boolean
+export const renderWithReduxTestStorePageLoading = (ui: JSX.Element) => {
+  const store = configureStore({
+    reducer: combineReducers({
+      user: authReducer,
+      loading: loadReducer,
+    }),
+    preloadedState: {
+      user: AUTH_INITIAL_STATE_TEST,
+      loading: LOADING_INITIAL_STATE_TEST_PAGE_LOAD,
+    },
+  });
+
+  const renderResult = render(
+    <Provider store={store}>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </Provider>
+  );
+
+  return { ...renderResult, store };
+};
+
+// renders a react component with both memory router (for useNavigate) and redux store
+// that contains and error
+export const renderWithReduxTestStoreError = (ui: JSX.Element) => {
+  const store = configureStore({
+    reducer: combineReducers({
+      user: authReducer,
+      loading: loadReducer,
+    }),
+    preloadedState: {
+      user: AUTH_INITIAL_STATE_TEST,
+      loading: LOADING_INITIAL_STATE_TEST_ERROR,
     },
   });
 

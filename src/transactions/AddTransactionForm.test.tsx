@@ -84,14 +84,15 @@ describe("AddTransactionForm", () => {
       />
     );
     let setDate = DateTime.now().toFormat("yyyy-MM-dd'T'T");
-    expect(screen.getByLabelText("Transaction Date")).toContainHTML(setDate);
-    fireEvent.change(screen.getByLabelText("Transaction Date"), {
-      target: { value: "2000-01-01T00:00" },
-    });
-    expect(screen.getByLabelText("Transaction Date")).not.toContainHTML(
-      "2000-01-01T00:00"
+    expect(screen.getByLabelText("Transaction Date")).toHaveValue(setDate);
+    let newDate = DateTime.local(2025, 1, 1, 15, 30, 0, 0).toFormat(
+      "yyyy-MM-dd'T'T"
     );
-    expect(screen.getByLabelText("Transaction Date")).toContainHTML(setDate);
+    fireEvent.change(screen.getByLabelText("Transaction Date"), {
+      target: { value: newDate },
+    });
+    expect(screen.getByLabelText("Transaction Date")).not.toHaveValue(newDate);
+    expect(screen.getByLabelText("Transaction Date")).toHaveValue(setDate);
   });
 
   it("should be able to change transaction value", () => {
