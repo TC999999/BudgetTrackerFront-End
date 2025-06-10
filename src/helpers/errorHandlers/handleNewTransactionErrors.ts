@@ -9,7 +9,7 @@ import {
 } from "./commonHandlers";
 
 // returns custom string error if operation is subtract when new asset value exceeds original asset value
-const handleSubtractErrors = (
+export const handleSubtractErrors = (
   newAssets: number,
   totalAssets: number
 ): string => {
@@ -19,7 +19,7 @@ const handleSubtractErrors = (
 };
 
 // returns custom string error if operation is add when new asset value exceeds maximum asset value
-const handleAddErrors = (newAssets: number, maxVal: number): string => {
+export const handleAddErrors = (newAssets: number, maxVal: number): string => {
   return newAssets > maxVal ? "You've reached the maximum asset value." : "";
 };
 

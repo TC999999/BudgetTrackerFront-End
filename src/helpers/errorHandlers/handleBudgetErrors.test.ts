@@ -11,7 +11,16 @@ import {
   newBudgetInterface,
   BudgetEditInterface,
 } from "../../interfaces/budgetInterfaces";
-import { describe, it, expect, beforeAll, vi, Mock } from "vitest";
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  vi,
+  Mock,
+  afterEach,
+  beforeEach,
+} from "vitest";
 
 describe("add error handler", () => {
   it("returns correct string if budget value input is greater than user's total savings", () => {
@@ -38,167 +47,175 @@ describe("subtract error handler", () => {
 });
 
 describe("budget value comparison handler", () => {
-  let setter1: Mock;
-  let setter2: Mock;
-  let setter3: Mock;
-  let setter4: Mock;
+  let setter: Mock;
 
   beforeAll(() => {
-    setter1 = vi.fn();
-    setter2 = vi.fn();
-    setter3 = vi.fn();
-    setter4 = vi.fn();
+    setter = vi.fn();
   });
 
   it("should return that an error does not exist if numbers are correct when adding to a budget", () => {
     expect(
-      handleUpdateBudgetComparisons(100, 50000, "add", 400, setter1)
+      handleUpdateBudgetComparisons(100, 50000, "add", 400, setter)
     ).toBeFalsy();
-    expect(setter1).toHaveBeenCalledOnce();
+    expect(setter).toHaveBeenCalledOnce();
   });
 
   it("should return that an error does not exist if numbers are correct when subtracting from a budget", () => {
     expect(
-      handleUpdateBudgetComparisons(100, 50, "subtract", 400, setter2)
+      handleUpdateBudgetComparisons(100, 50, "subtract", 400, setter)
     ).toBeFalsy();
-    expect(setter2).toHaveBeenCalledOnce();
+    expect(setter).toHaveBeenCalledOnce();
   });
 
   it("should return that an error exists if numbers are incorrect when adding to a budget", () => {
     expect(
-      handleUpdateBudgetComparisons(100, 50, "add", 400, setter3)
+      handleUpdateBudgetComparisons(100, 50, "add", 400, setter)
     ).toBeTruthy();
-    expect(setter3).toHaveBeenCalledOnce();
+    expect(setter).toHaveBeenCalledOnce();
   });
 
   it("should return that an error exists if numbers are incorrect when subtracting from a budget", () => {
     expect(
-      handleUpdateBudgetComparisons(1000, 500, "subtract", 400, setter4)
+      handleUpdateBudgetComparisons(1000, 500, "subtract", 400, setter)
     ).toBeTruthy();
-    expect(setter4).toHaveBeenCalledOnce();
+    expect(setter).toHaveBeenCalledOnce();
+  });
+
+  afterEach(() => {
+    setter.mockClear();
   });
 });
 
-describe("input handler for new budget form", () => {
-  let setter1: Mock;
-  let setter2: Mock;
-  let falseSetter: Mock;
+describe("input error handler for new budget form", () => {
+  let setter: Mock;
 
   beforeAll(() => {
-    setter1 = vi.fn();
-    setter2 = vi.fn();
-    falseSetter = vi.fn();
+    setter = vi.fn();
   });
 
   it("should call setter function if title input is string type", () => {
-    handleBudgetInputErrors("title", "test budget", setter1);
-    expect(setter1).toHaveBeenCalledOnce();
+    handleBudgetInputErrors("title", "test budget", setter);
+    expect(setter).toHaveBeenCalledOnce();
   });
 
   it("should not call setter function if title input is not string type", () => {
-    handleBudgetInputErrors("title", 500, falseSetter);
-    expect(falseSetter).not.toHaveBeenCalledOnce();
+    handleBudgetInputErrors("title", 500, setter);
+    expect(setter).not.toHaveBeenCalledOnce();
   });
 
   it("should call setter function if value input is number type", () => {
-    handleBudgetInputErrors("moneyAllocated", 500, setter2);
-    expect(setter2).toHaveBeenCalledOnce();
+    handleBudgetInputErrors("moneyAllocated", 500, setter);
+    expect(setter).toHaveBeenCalledOnce();
   });
 
   it("should not call setter function if title input is not string type", () => {
-    handleBudgetInputErrors("moneyAllocated", "not a number", falseSetter);
-    expect(falseSetter).not.toHaveBeenCalledOnce();
+    handleBudgetInputErrors("moneyAllocated", "not a number", setter);
+    expect(setter).not.toHaveBeenCalledOnce();
+  });
+
+  afterEach(() => {
+    setter.mockClear();
   });
 });
 
-describe("input handler for update budget form", () => {
-  let setter1: Mock;
-  let setter2: Mock;
-  let falseSetter: Mock;
+describe("input error handler for update budget form", () => {
+  let setter: Mock;
 
   beforeAll(() => {
-    setter1 = vi.fn();
-    setter2 = vi.fn();
-    falseSetter = vi.fn();
+    setter = vi.fn();
   });
 
   it("should call setter function if title input is string type", () => {
-    handleUpdateBudgetInputErrors("title", "test budget", setter1);
-    expect(setter1).toHaveBeenCalledOnce();
+    handleUpdateBudgetInputErrors("title", "test budget", setter);
+    expect(setter).toHaveBeenCalledOnce();
   });
 
   it("should not call setter function if title input is not string type", () => {
-    handleUpdateBudgetInputErrors("title", 500, falseSetter);
-    expect(falseSetter).not.toHaveBeenCalledOnce();
+    handleUpdateBudgetInputErrors("title", 500, setter);
+    expect(setter).not.toHaveBeenCalledOnce();
   });
 
   it("should call setter function if value input is number type", () => {
-    handleUpdateBudgetInputErrors("addedMoney", 500, setter2);
-    expect(setter2).toHaveBeenCalledOnce();
+    handleUpdateBudgetInputErrors("addedMoney", 500, setter);
+    expect(setter).toHaveBeenCalledOnce();
   });
 
   it("should not call setter function if title input is not string type", () => {
-    handleUpdateBudgetInputErrors("addedMoney", "not a number", falseSetter);
-    expect(falseSetter).not.toHaveBeenCalledOnce();
+    handleUpdateBudgetInputErrors("addedMoney", "not a number", setter);
+    expect(setter).not.toHaveBeenCalledOnce();
+  });
+
+  afterEach(() => {
+    setter.mockClear();
   });
 });
 
 describe("submit error handler for new budget form", () => {
-  let setter1: Mock;
-  let setter2: Mock;
+  let setter: Mock;
+  let newBudget: newBudgetInterface;
 
   beforeAll(() => {
-    setter1 = vi.fn();
-    setter2 = vi.fn();
+    setter = vi.fn();
   });
 
-  it("should return true that no errors exist for correct new budget state", () => {
-    let newBudget: newBudgetInterface = {
+  beforeEach(() => {
+    newBudget = {
       title: "test budget",
       moneyAllocated: 1000,
     };
-    expect(handleBudgetSubmitErrors(newBudget, setter1)).toBeTruthy();
-    expect(setter1).toHaveBeenCalledTimes(2);
   });
 
-  it("should return false that errors exist for incorrect new budget state", () => {
-    let newBudgetError: newBudgetInterface = {
-      title: "This title is way too long to be used for a budget",
-      moneyAllocated: 1000,
-    };
-    expect(handleBudgetSubmitErrors(newBudgetError, setter2)).toBe(false);
-    expect(setter2).toHaveBeenCalledTimes(2);
+  it("should call setter twice and return true when all new budget is valid", () => {
+    expect(handleBudgetSubmitErrors(newBudget, setter)).toBeTruthy();
+    expect(setter).toHaveBeenCalledTimes(2);
+  });
+
+  it("should call setter twice and return false when title data is invalid", () => {
+    newBudget.title = " test *&bu^!udget   ";
+    expect(handleBudgetSubmitErrors(newBudget, setter)).toBe(false);
+    expect(setter).toHaveBeenCalledTimes(2);
+  });
+
+  it("should call setter twice and return false when allocated funds data is invalid", () => {
+    newBudget.moneyAllocated = 0;
+    expect(handleBudgetSubmitErrors(newBudget, setter)).toBe(false);
+    expect(setter).toHaveBeenCalledTimes(2);
+  });
+
+  afterEach(() => {
+    setter.mockClear();
   });
 });
 
 describe("submit error handler for update budget form", () => {
-  let setter1: Mock;
-  let setter2: Mock;
+  let setter: Mock;
+
+  let editBudget: BudgetEditInterface;
 
   beforeAll(() => {
-    setter1 = vi.fn();
-    setter2 = vi.fn();
+    setter = vi.fn();
   });
 
-  it("should return true that no errors exist for correct update budget state", () => {
-    let editBudget: BudgetEditInterface = {
+  beforeEach(() => {
+    editBudget = {
       title: "test budget",
       addedMoney: 100,
       operation: "add",
     };
-    expect(handleUpdateBudgetSubmitErrors(editBudget, setter1)).toBe(true);
-    expect(setter1).toHaveBeenCalledTimes(1);
   });
 
-  it("should return false that errors exist for incorrect new budget state", () => {
-    let editBudgetError: BudgetEditInterface = {
-      title: "This title is way too long to be used for a budget",
-      addedMoney: 100,
-      operation: "add",
-    };
-    expect(handleUpdateBudgetSubmitErrors(editBudgetError, setter2)).toBe(
-      false
-    );
-    expect(setter2).toHaveBeenCalledTimes(1);
+  it("should call setter once and return true when all update budget data is valid", () => {
+    expect(handleUpdateBudgetSubmitErrors(editBudget, setter)).toBe(true);
+    expect(setter).toHaveBeenCalledTimes(1);
+  });
+
+  it("should call setter once and return false when budget title data is invalid", () => {
+    editBudget.title = "new *_bud57get   ";
+    expect(handleUpdateBudgetSubmitErrors(editBudget, setter)).toBe(false);
+    expect(setter).toHaveBeenCalledTimes(1);
+  });
+
+  afterEach(() => {
+    setter.mockClear();
   });
 });
