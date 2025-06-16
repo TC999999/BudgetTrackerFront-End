@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeAll, Mock } from "vitest";
 import { renderWithReduxTestStore } from "../../utils/test-util";
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import ExpenseForm from "./ExpenseForm";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { DateTime } from "luxon";
@@ -229,5 +229,30 @@ describe("New Expense Form", () => {
     let submit = screen.getByRole("button", { name: "Add this Expense" });
     fireEvent.click(submit);
     expect(handleSubmit).toHaveBeenCalled();
+  });
+
+  it("should hide form when cancel button is clicked", () => {
+    renderWithReduxTestStore(
+      <ExpenseForm
+        hideExpenseForm={hideExpenseForm}
+        budget={testBudget}
+        addExpense={addExpense}
+        updateBudget={updateBudget}
+        show={true}
+      />
+    );
+
+    expect(
+      screen.getByRole("form-modal", { name: "add-expense-form" })
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(hideExpenseForm).toHaveBeenCalled();
+
+    waitFor(() => {
+      expect(
+        screen.getByRole("form-modal", { name: "add-expense-form" })
+      ).not.toBeInTheDocument();
+    });
   });
 });

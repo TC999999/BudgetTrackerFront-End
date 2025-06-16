@@ -209,9 +209,7 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
   // submits the new budget information to backed to be updated to the db. If the inputs contain errors
   // (e.g. title length is too long), does not send data and flashes the erroneous inputs to the user.
   const handleSubmit = useCallback(
-    async (
-      e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ): Promise<void> => {
+    async (e: React.FormEvent): Promise<void> => {
       e.preventDefault();
       try {
         if (handleUpdateBudgetSubmitErrors(formData, setFormErrors)) {

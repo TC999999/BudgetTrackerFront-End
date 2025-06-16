@@ -14,6 +14,7 @@ type Props = {
   ) => void;
   budget: BudgetInterface;
   show: boolean;
+  mockSubmit?: any;
 };
 
 // returns a form that allows the user to make a decision before deleting a budget
@@ -21,6 +22,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
   hideDeleteForm,
   budget,
   show,
+  mockSubmit,
 }): JSX.Element | null => {
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
@@ -36,13 +38,26 @@ const DeleteBudgetForm: React.FC<Props> = ({
     handleCancel,
   } = useDeleteBudget({ budget, hideDeleteForm });
 
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mockSubmit) {
+      mockSubmit();
+    } else {
+      handleSubmit(e);
+    }
+  };
+
   const convertNewAssets = useMemo(() => {
     return dollarConverter(newAssets);
   }, [newAssets]);
 
   return !formLoading ? (
     <Modal large={false} show={show}>
-      <div id="delete-budget-form">
+      <div
+        id="delete-budget-form"
+        role="form-modal"
+        aria-label="delete-budget-form"
+      >
         <header className="transition duration-150">
           <h3 className="text-3xl sm:text-4xl font-bold text-red-700 underline">
             Before You Delete
@@ -53,7 +68,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
             delete all records of the expenses made using its funds.
           </h2>
         </header>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={onSubmit}>
           <fieldset id="delete-choices">
             <legend className="text-lg sm:text-xl font-bold duration-150">
               Are you returning any funds to your total savings?

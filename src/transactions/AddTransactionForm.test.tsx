@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeAll, Mock } from "vitest";
 import { renderWithReduxTestStore } from "../../utils/test-util";
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import AddTransactionForm from "./AddTransactionForm";
 import { DateTime } from "luxon";
 
@@ -169,5 +169,26 @@ describe("AddTransactionForm", () => {
     let submit = screen.getByRole("button", { name: "Add this Transaction" });
     fireEvent.click(submit);
     expect(handleSubmit).toHaveBeenCalled();
+  });
+
+  it("should hide form when cancel button is clicked", () => {
+    const handleSubmit = vi.fn();
+    renderWithReduxTestStore(
+      <AddTransactionForm
+        show={true}
+        updateTransactions={updateTransactions}
+        hideForm={hideForm}
+        submit={handleSubmit}
+      />
+    );
+    let cancel = screen.getByRole("button", { name: "Cancel" });
+    fireEvent.click(cancel);
+    expect(hideForm).toHaveBeenCalled();
+
+    waitFor(() => {
+      expect(
+        screen.getByRole("form-modal", { name: "add-transaction-form" })
+      ).not.toBeInTheDocument();
+    });
   });
 });

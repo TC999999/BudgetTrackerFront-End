@@ -16,6 +16,7 @@ type Props = {
   ) => void;
   updateBudget: (updatedBudget: BudgetUpdate) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 type conversion = {
@@ -32,6 +33,7 @@ const EditBudgetForm: React.FC<Props> = ({
   updateBudget,
   hideEditForm,
   show,
+  mockSubmit,
 }): JSX.Element | null => {
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
@@ -57,6 +59,15 @@ const EditBudgetForm: React.FC<Props> = ({
     updateBudget,
   });
 
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mockSubmit) {
+      mockSubmit();
+    } else {
+      handleSubmit(e);
+    }
+  };
+
   const conversion: conversion = useMemo(() => {
     return {
       convertNewTotalAssets: dollarConverter(newTotalAssets),
@@ -68,7 +79,11 @@ const EditBudgetForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <Modal large={true} show={show}>
-      <div id="edit-budget-form-div">
+      <div
+        id="edit-budget-form-div"
+        role="form-modal"
+        aria-label="edit-budget-form"
+      >
         <header>
           <h2 className="text-3xl text-green-800 font-bold underline">
             Update {budget.title} Budget
@@ -104,22 +119,22 @@ const EditBudgetForm: React.FC<Props> = ({
             </div>
           </div>
           <div className="edit-budget-form">
-            <form>
+            <form onSubmit={onSubmit}>
               <div className="title-div mb-2">
                 <label className="text-gray-700 text-lg block" htmlFor="title">
                   Budget Title:{" "}
+                  <input
+                    className={`input ${
+                      formErrors.title ? "input-error" : "input-valid"
+                    } ${flashErrors.title && "animate-blink-error"}`}
+                    id="title"
+                    type="text"
+                    name="title"
+                    placeholder="What's this budget for?"
+                    value={formData.title}
+                    onChange={handleChange}
+                  />
                 </label>
-                <input
-                  className={`input ${
-                    formErrors.title ? "input-error" : "input-valid"
-                  } ${flashErrors.title && "animate-blink-error"}`}
-                  id="budget_title"
-                  type="text"
-                  name="title"
-                  placeholder="What's this budget for?"
-                  value={formData.title}
-                  onChange={handleChange}
-                />
                 {formErrors.title && (
                   <div>
                     <p className="text-lg text-red-700 font-bold">
@@ -143,18 +158,18 @@ const EditBudgetForm: React.FC<Props> = ({
                   htmlFor="moneyAllocated"
                 >
                   New Budget Funds($ U.S.):{" "}
+                  <input
+                    className={`input ${
+                      formErrors.addedMoney ? "input-error" : ""
+                    }`}
+                    id="moneyAllocated"
+                    type="text"
+                    name="moneyAllocated"
+                    placeholder="0.00"
+                    value={conversion.convertNewAddedMoney}
+                    readOnly
+                  />
                 </label>
-                <input
-                  className={`input ${
-                    formErrors.addedMoney ? "input-error" : ""
-                  }`}
-                  id="added_budget_allocation"
-                  type="text"
-                  name="moneyAllocated"
-                  placeholder="0.00"
-                  value={conversion.convertNewAddedMoney}
-                  readOnly
-                />
                 {formErrors.addedMoney && (
                   <div>
                     <p className="text-lg text-red-700 font-bold">
@@ -222,16 +237,17 @@ const EditBudgetForm: React.FC<Props> = ({
                   </div>
                 </fieldset>
               </div>
+              <div id="buttons" className="flex justify-between m-2">
+                <button
+                  className="cancel-button"
+                  onClick={(e) => handleCancel(e)}
+                >
+                  Cancel
+                </button>
+                <button className="submit-button">Edit Budget</button>
+              </div>
             </form>
           </div>
-        </div>
-        <div id="buttons" className="flex justify-between m-2">
-          <button className="cancel-button" onClick={(e) => handleCancel(e)}>
-            Cancel
-          </button>
-          <button onClick={(e) => handleSubmit(e)} className="submit-button">
-            Edit Budget
-          </button>
         </div>
       </div>
     </Modal>

@@ -76,7 +76,11 @@ const ExpenseForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <Modal large={true} show={show}>
-      <div id="new-expense-form">
+      <div
+        id="new-expense-form"
+        role="form-modal"
+        aria-label="add-expense-form"
+      >
         <header>
           <h2 className="text-3xl text-green-800 font-bold underline">
             Add a New Expense!
