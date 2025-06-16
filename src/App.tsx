@@ -7,9 +7,11 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import useApp from "./hooks/useApp";
 
+type Props = { mock?: any };
+
 //renders whole application
-function App(): JSX.Element {
-  useApp();
+const App: React.FC<Props> = ({ mock }) => {
+  useApp(mock);
 
   // returns loading messages, toast notifications, navbar, and routes list
   return (
@@ -24,10 +26,10 @@ function App(): JSX.Element {
         <SmallLoadingMsg />
         <ToastContainer position="bottom-right" />
         <Navbar />
-        <RoutesList />
+        <RoutesList mock={mock} />
       </SkeletonTheme>
     </div>
   );
-}
+};
 
 export default App;

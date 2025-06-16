@@ -11,11 +11,9 @@ import TransactionAPI from "../../apis/TransactionAPI";
 import { addNewTransaction } from "../../helpers/addNewTransaction";
 import { toast, Id } from "react-toastify";
 
-type input = UserInfoInterface;
-
 // custom hook for dashboard: includes retrieval of recent expenses and transactions on initial render,
 // showing and hiding the form for new transactions, and adding new transactions to the recent transaction list
-const useDashboard = (user: input) => {
+const useDashboard = (user: UserInfoInterface, mock?: any) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const notify = (): Id =>
@@ -45,7 +43,11 @@ const useDashboard = (user: input) => {
         dispatch(setPageLoading(false));
       }
     };
-    getRecentTransactions();
+    if (mock) {
+      mock();
+    } else {
+      getRecentTransactions();
+    }
   }, [user?._id]);
 
   // updates state for showing the update asset form to true, unless the user's current total asset value equals the

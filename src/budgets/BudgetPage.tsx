@@ -6,11 +6,15 @@ import BudgetPageButtons from "./BudgetPageButtons";
 import useBudgetPage from "./hooks/useBudgetPage";
 import Page from "../motionWrappers/Page";
 
+type Props = {
+  mock?: any;
+};
+
 // returns page for list of all budgets the user currently has
-const BudgetPage = (): JSX.Element => {
+const BudgetPage: React.FC<Props> = ({ mock }): JSX.Element => {
   const { id } = useParams();
   const { budgetList, showBudgetForm, addBudget, showForm, hideForm } =
-    useBudgetPage(id);
+    useBudgetPage(id, mock);
 
   return (
     <div id="all-budget-page">

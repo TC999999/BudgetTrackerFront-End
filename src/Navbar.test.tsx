@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, Mock, vi } from "vitest";
-import { renderWithReduxTestStore } from "../utils/test-util";
+import { renderWithReduxTestStore, renderWithRedux } from "../utils/test-util";
 import { screen, fireEvent } from "@testing-library/react";
 import Navbar from "./Navbar";
 
@@ -44,5 +44,14 @@ describe("Navbar", () => {
     expect(
       screen.queryByText("Are You Sure You Want to Log Out?")
     ).toBeInTheDocument();
+  });
+
+  it("should not render if redux store is empty", () => {
+    renderWithRedux(<Navbar />);
+    expect(screen.queryByText("Personal Piggybank")).not.toBeInTheDocument();
+    expect(screen.queryByText("Log Out")).not.toBeInTheDocument();
+    expect(screen.queryByText("Savings Changes")).not.toBeInTheDocument();
+    expect(screen.queryByText("Incomes")).not.toBeInTheDocument();
+    expect(screen.queryByText("Budgets")).not.toBeInTheDocument();
   });
 });

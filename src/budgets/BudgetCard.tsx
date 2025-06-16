@@ -3,8 +3,8 @@ import { useAppSelector } from "../features/hooks";
 import { shallowEqual } from "react-redux";
 import { BudgetListInterface } from "../interfaces/budgetInterfaces";
 import { UserContextInterface } from "../interfaces/userInterfaces";
-
 import { dollarConverter } from "../helpers/currencyConverter";
+// import "./BudgetCard.css";
 
 type Props = {
   budget: BudgetListInterface;
@@ -20,7 +20,11 @@ const BudgetCard: React.FC<Props> = ({ budget }): JSX.Element => {
   return (
     <li className="budget-card-border">
       <Link to={`/budgets/${budget._id}/user/${user?._id}`}>
-        <div className="budget-card border-4 border-green-400 p-8 m-4 shadow-md bg-white rounded-md hover:bg-green-100 hover:scale-105 hover:ring-8 hover:ring-cyan-100/90 active:scale-95 transition duration-150">
+        <div
+          role="card"
+          aria-label="budget-card"
+          className="budget-card bg-white border-4 border-green-400 p-8 m-4 shadow-md rounded-md hover:bg-green-100 hover:scale-105 hover:ring-8 hover:ring-cyan-100/90 active:scale-95 transition duration-150"
+        >
           <header className="text-center">
             <h3 className="budget-title font-bold text-xl">{budget.title}</h3>
             <p className="budget-money-allocation font-mono">

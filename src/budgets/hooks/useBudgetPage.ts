@@ -11,11 +11,9 @@ import {
 import { toast, Id } from "react-toastify";
 import BudgetAPI from "../../apis/BudgetAPI";
 
-type input = string | undefined;
-
 // custom hooks for the page containing a list of all of a user's budgets: includes retrieval of budgets on render,
 // adding new budgets to the list after a form submission, and showing and hiding the form for new budget
-const useBudgetPage = (id: input) => {
+const useBudgetPage = (id: string | undefined, mock?: any) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const notify = (): Id =>
@@ -47,7 +45,11 @@ const useBudgetPage = (id: input) => {
         dispatch(setPageLoading(false));
       }
     };
-    getBudgets();
+    if (mock) {
+      mock();
+    } else {
+      getBudgets();
+    }
   }, []);
 
   // adds a new budget to the state after a form submission

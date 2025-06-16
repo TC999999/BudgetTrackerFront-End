@@ -7,8 +7,10 @@ import UserCard from "./UserCard";
 import useDashboard from "./hooks/useDashboard";
 import Page from "../motionWrappers/Page";
 
+type Props = { mock?: any };
+
 // returns the main page for users who are logged in: shows their current total assets and
-const Dashboard = (): JSX.Element => {
+const Dashboard: React.FC<Props> = ({ mock }): JSX.Element => {
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
     shallowEqual
@@ -20,7 +22,7 @@ const Dashboard = (): JSX.Element => {
     ShowForm,
     HideForm,
     updateTransactions,
-  } = useDashboard(user!);
+  } = useDashboard(user!, mock);
 
   return (
     <Page>

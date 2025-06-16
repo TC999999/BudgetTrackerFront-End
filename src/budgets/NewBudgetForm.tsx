@@ -56,10 +56,10 @@ const BudgetForm: React.FC<Props> = ({
 
   return !formLoading ? (
     <Modal large={false} show={show}>
-      <div id="new-budget-form">
+      <div id="new-budget-form" role="form-modal" aria-label="new-budget-form">
         <header className="text-center">
           <h1 className="text-3xl text-green-800 font-bold underline">
-            Add a New Budget
+            Enter New Budget Information Here
           </h1>
           <h2 className="text-2xl mx-2">Available Funds:</h2>
           <h2 className="text-5xl font-bold text-green-700">

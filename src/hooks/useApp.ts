@@ -13,7 +13,7 @@ import { dollarConverter } from "../helpers/currencyConverter";
 
 // custom hook for entire application: includes retrieving core user data (username and total savings value); also
 // listens for server side events for when a single user's income is updated (connection url is unique to user)
-const useApp = () => {
+const useApp = (mock?: any) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (message: string): Id => toast.success(message);
 
@@ -33,37 +33,44 @@ const useApp = () => {
         dispatch(setUserLoading(false));
       }
     };
-    getUserInfo();
+
+    if (mock) {
+      mock();
+    } else {
+      getUserInfo();
+    }
   }, [dispatch]);
 
   // if user information is found in redux, opens an event source connection to the server to listen
   // for live updates
   useEffect(() => {
-    if (user?._id && !loading) {
-      const es = new EventSource(`${API_URL}/events/${user._id}`);
+    if (!mock) {
+      if (user?._id && !loading) {
+        const es = new EventSource(`${API_URL}/events/${user._id}`);
 
-      es.onopen = () => {
-        console.log("SSE Connection Established");
-      };
+        es.onopen = () => {
+          console.log("SSE Connection Established");
+        };
 
-      es.onmessage = (e) => {
-        let data = JSON.parse(e.data);
-        if (data.newTotalAssets) {
-          dispatch(incomeUpdate(data));
-          notify(
-            `Recieved Income! Your total savings are now ${dollarConverter(
-              data.newTotalAssets.totalAssets
-            )} `
-          );
-        }
-      };
+        es.onmessage = (e) => {
+          let data = JSON.parse(e.data);
+          if (data.newTotalAssets) {
+            dispatch(incomeUpdate(data));
+            notify(
+              `Recieved Income! Your total savings are now ${dollarConverter(
+                data.newTotalAssets.totalAssets
+              )} `
+            );
+          }
+        };
 
-      es.onerror = (e) => {
-        console.log(e);
-        es.close();
-      };
+        es.onerror = (e) => {
+          console.log(e);
+          es.close();
+        };
 
-      return () => es.close();
+        return () => es.close();
+      }
     }
   }, [dispatch, user?._id, loading]);
 };

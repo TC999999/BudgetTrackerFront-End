@@ -6,7 +6,7 @@ import NotFound from "./NotFound";
 import Error from "./Error";
 import HomePage from "./users/HomePage";
 import EditUserForm from "./users/EditUserForm";
-import TransactionHistory from "./transactions/TransactionHistory";
+import TransactionHistory from "./transactions/transactionHistory";
 import BudgetPage from "./budgets/BudgetPage";
 import SingleBudgetPage from "./budgets/SingleBudgetPage";
 import IncomePage from "./incomes/IncomePage";
@@ -17,8 +17,10 @@ import { UserContextInterface } from "./interfaces/userInterfaces";
 import { shallowEqual } from "react-redux";
 import { AnimatePresence } from "motion/react";
 
+type Props = { mock?: any };
+
 // main frontend route list for application
-const RoutesList = (): JSX.Element | null => {
+const RoutesList: React.FC<Props> = ({ mock }): JSX.Element | null => {
   const location = useLocation();
   const { loading }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
@@ -27,7 +29,7 @@ const RoutesList = (): JSX.Element | null => {
   return !loading ? (
     <AnimatePresence mode="wait">
       <Routes key={location.pathname} location={location}>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage mock={mock} />} />
         <Route element={<NotLoggedInRoutes />}>
           <Route path="/register" element={<SignUp />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
