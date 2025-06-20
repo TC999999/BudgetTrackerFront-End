@@ -1,7 +1,7 @@
 import { constructUpdateTimeObj } from "./constructUpdateTimeObj";
 import { describe, it, expect } from "vitest";
 
-describe("constructs an object from a cron string for initial state in an income update form", () => {
+describe("Cron String Construction Helper Function", () => {
   it("should create an object from a cron string", () => {
     let cronString = "23 4 21 5 *";
     expect(constructUpdateTimeObj(cronString)).toStrictEqual({

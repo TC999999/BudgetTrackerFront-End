@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeAll } from "vitest";
 import { makeDateString, makeDateStringIncomeCard } from "./makeDateString";
 
-describe("helper functions to make readable date strings", () => {
+describe("Readable Date String Constructor Helper Function", () => {
   let dateString1: string;
   let dateString2: string;
   let dateString3: string;

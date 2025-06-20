@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { transactionType } from "./transactionType";
 import { Transaction } from "../interfaces/transactionInterfaces";
 
-describe("helper function that returns if a transaction adds to a user's total savings", () => {
+describe("Transaction Operation Data Helper Function", () => {
   let t1: Transaction;
   let t2: Transaction;
 

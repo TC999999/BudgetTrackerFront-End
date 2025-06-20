@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeAll, Mock } from "vitest";
 import { renderWithReduxTestStore } from "../../utils/test-util";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import AddTransactionForm from "./AddTransactionForm";
 import { DateTime } from "luxon";
 
@@ -103,9 +103,7 @@ describe("AddTransactionForm", () => {
         hideForm={hideForm}
       />
     );
-    let val = screen.getByLabelText(
-      "What is the value of this transaction? ($ U.S.):"
-    );
+    let val = screen.getByLabelText("Transaction Value ($ U.S.):");
 
     expect(val).toContainHTML("$0.00");
     expect(screen.queryByText("$1,000.00")).toBeInTheDocument();
@@ -129,7 +127,7 @@ describe("AddTransactionForm", () => {
     expect(screen.queryByText("$1,005.55")).toBeInTheDocument();
   });
 
-  it("should show errors when attempting to submit a form with empty inputs", () => {
+  it("should show errors and not call mock functions when attempting to submit a form with empty inputs", () => {
     renderWithReduxTestStore(
       <AddTransactionForm
         show={true}
@@ -148,6 +146,9 @@ describe("AddTransactionForm", () => {
     let submit = screen.getByRole("button", { name: "Add this Transaction" });
     expect(submit).toBeInTheDocument();
     fireEvent.click(submit);
+
+    expect(hideForm).not.toHaveBeenCalled();
+    expect(updateTransactions).not.toHaveBeenCalled();
     expect(
       screen.queryByText("Transaction title input cannot be empty.")
     ).toBeInTheDocument();
@@ -156,39 +157,52 @@ describe("AddTransactionForm", () => {
     ).toBeInTheDocument();
   });
 
-  it("should call handlesubmit function when submit button is clicked", () => {
+  it("should call handle submit function when submit button is clicked", () => {
     const handleSubmit = vi.fn();
     renderWithReduxTestStore(
       <AddTransactionForm
         show={true}
         updateTransactions={updateTransactions}
         hideForm={hideForm}
-        submit={handleSubmit}
+        mockSubmit={handleSubmit}
       />
     );
+
+    let titleInput = screen.getByLabelText("Transaction Title:");
+    fireEvent.change(titleInput, { target: { value: "Test transaction" } });
+    expect(titleInput).toContainHTML("Test transaction");
+
+    let valueInput = screen.getByLabelText("Transaction Value ($ U.S.):");
+    let five = screen.getByRole("button", { name: "5" });
+    fireEvent.click(five);
+    fireEvent.click(five);
+    fireEvent.click(five);
+    fireEvent.click(five);
+    expect(valueInput).toContainHTML("$55.55");
+
     let submit = screen.getByRole("button", { name: "Add this Transaction" });
     fireEvent.click(submit);
     expect(handleSubmit).toHaveBeenCalled();
+    expect(hideForm).toHaveBeenCalled();
+    expect(updateTransactions).toHaveBeenCalled();
   });
 
-  it("should hide form when cancel button is clicked", () => {
-    const handleSubmit = vi.fn();
+  it("should hide form and reset values to initial state when cancel button is clicked", () => {
     renderWithReduxTestStore(
       <AddTransactionForm
         show={true}
         updateTransactions={updateTransactions}
         hideForm={hideForm}
-        submit={handleSubmit}
       />
     );
+
+    let titleInput = screen.getByLabelText("Transaction Title:");
+    fireEvent.change(titleInput, { target: { value: "Test transaction" } });
+    expect(titleInput).toContainHTML("Test transaction");
+
     let cancel = screen.getByRole("button", { name: "Cancel" });
     fireEvent.click(cancel);
     expect(hideForm).toHaveBeenCalled();
-
-    waitFor(() => {
-      expect(
-        screen.getByRole("form-modal", { name: "add-transaction-form" })
-      ).not.toBeInTheDocument();
-    });
+    expect(titleInput).toContainHTML("");
   });
 });

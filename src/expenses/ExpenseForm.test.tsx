@@ -45,7 +45,9 @@ describe("New Expense Form", () => {
         show={false}
       />
     );
-    expect(screen.queryByText("Add a New Expense!")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("form-modal", { name: "add-expense-form" })
+    ).not.toBeInTheDocument();
   });
 
   it("should show correct header messages", () => {
@@ -193,7 +195,40 @@ describe("New Expense Form", () => {
     ).toBeInTheDocument();
   });
 
-  it("should display an error message if form is submitted with empty inputs", () => {
+  it("should display an error message and not change values if inputted monetary value is greater than remaining budget funds", () => {
+    renderWithReduxTestStore(
+      <ExpenseForm
+        hideExpenseForm={hideExpenseForm}
+        budget={testBudget}
+        addExpense={addExpense}
+        updateBudget={updateBudget}
+        show={true}
+      />
+    );
+
+    let input = screen.getByLabelText("Expense Value ($ U.S.):");
+    expect(input).toContainHTML("$0.00");
+    expect(screen.queryByText("$400.00")).toBeInTheDocument();
+
+    let five = screen.getByRole("button", { name: "5" });
+    fireEvent.click(five);
+    fireEvent.click(five);
+    fireEvent.click(five);
+    fireEvent.click(five);
+    expect(input).toContainHTML("$55.55");
+    expect(screen.queryByText("$344.45")).toBeInTheDocument();
+
+    fireEvent.click(five);
+    expect(
+      screen.queryByText(
+        "Expense transaction value cannot exceed available budget"
+      )
+    ).toBeInTheDocument();
+    expect(input).toContainHTML("$55.55");
+    expect(screen.queryByText("$344.45")).toBeInTheDocument();
+  });
+
+  it("should display an error message and not update budget if form is submitted with empty/invalid inputs", () => {
     renderWithReduxTestStore(
       <ExpenseForm
         hideExpenseForm={hideExpenseForm}
@@ -212,6 +247,10 @@ describe("New Expense Form", () => {
     expect(
       screen.queryByText("Expense value must be greater than $0.00.")
     ).toBeInTheDocument();
+
+    expect(hideExpenseForm).not.toHaveBeenCalled();
+    expect(addExpense).not.toHaveBeenCalled();
+    expect(updateBudget).not.toHaveBeenCalled();
   });
 
   it("should run a submit function when submit button is clicked", () => {

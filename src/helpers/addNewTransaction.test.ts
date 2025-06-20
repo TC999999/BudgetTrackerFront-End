@@ -2,7 +2,7 @@ import { Transaction } from "../interfaces/transactionInterfaces";
 import { addNewTransaction } from "./addNewTransaction";
 import { describe, it, expect, beforeEach } from "vitest";
 
-describe("helper function for adding a new transaction to the list", () => {
+describe("Add to Transaction List Helper Function", () => {
   let transactions: Transaction[];
   let newTransaction: Transaction[];
 
@@ -15,6 +15,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "3",
@@ -23,6 +25,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        budgetOperation: "-",
+        newBalance: 500,
       },
 
       {
@@ -32,6 +36,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "1",
@@ -40,6 +46,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        newBalance: 500,
+        budgetOperation: "-",
       },
     ];
 
@@ -51,6 +59,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1500,
       },
     ];
   });
@@ -65,6 +75,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1500,
       },
       {
         _id: "4",
@@ -73,6 +85,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "3",
@@ -81,7 +95,10 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        budgetOperation: "-",
+        newBalance: 500,
       },
+
       {
         _id: "2",
         date: "2025-01-03T00:00:00.000+00:00",
@@ -89,6 +106,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "1",
@@ -97,6 +116,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        newBalance: 500,
+        budgetOperation: "-",
       },
     ]);
   });
@@ -111,6 +132,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "3",
@@ -119,7 +142,10 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        budgetOperation: "-",
+        newBalance: 500,
       },
+
       {
         _id: "2",
         date: "2025-01-03T00:00:00.000+00:00",
@@ -127,6 +153,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "1",
@@ -135,6 +163,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        newBalance: 500,
+        budgetOperation: "-",
       },
       {
         _id: "5",
@@ -143,6 +173,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1500,
       },
     ]);
   });
@@ -157,6 +189,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "3",
@@ -165,7 +199,10 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        budgetOperation: "-",
+        newBalance: 500,
       },
+
       {
         _id: "2",
         date: "2025-01-03T00:00:00.000+00:00",
@@ -173,6 +210,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "5",
@@ -181,6 +220,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1500,
       },
       {
         _id: "1",
@@ -189,13 +230,14 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        newBalance: 500,
+        budgetOperation: "-",
       },
     ]);
   });
 
   it("should never have a length greater than 5: if more than one transaction is added, pushes out the earliest transaction from the bottom of the list", () => {
     newTransaction[0].date = "2025-01-02T00:00:00.000+00:00";
-
     transactions = addNewTransaction(transactions, [
       {
         _id: "6",
@@ -204,6 +246,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "add",
+        newBalance: 2000,
+        budgetOperation: "-",
       },
     ]);
     expect(addNewTransaction(transactions, newTransaction)).toStrictEqual([
@@ -214,6 +258,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "add",
+        newBalance: 2000,
+        budgetOperation: "-",
       },
       {
         _id: "4",
@@ -222,6 +268,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "3",
@@ -230,7 +278,10 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "subtract",
+        budgetOperation: "-",
+        newBalance: 500,
       },
+
       {
         _id: "2",
         date: "2025-01-03T00:00:00.000+00:00",
@@ -238,6 +289,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: false,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1000,
       },
       {
         _id: "5",
@@ -246,6 +299,8 @@ describe("helper function for adding a new transaction to the list", () => {
         transaction: 500,
         fromIncome: true,
         operation: "add",
+        budgetOperation: "-",
+        newBalance: 1500,
       },
     ]);
   });

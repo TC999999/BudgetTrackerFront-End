@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { makeReadableUpdateTimeString } from "./makeReadableUpdateTimeString";
 import { UpdateTime } from "../interfaces/incomeInterfaces";
 
-describe("helper function to make a readable update time string letting users know when their savings will increase by a set amount", () => {
+describe("Make Readable Interval String From Cron Object Helper Function", () => {
   let ut1: UpdateTime;
   let ut2: UpdateTime;
   let ut3: UpdateTime;

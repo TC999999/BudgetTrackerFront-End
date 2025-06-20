@@ -33,14 +33,19 @@ type input = {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
     form: "showEditForm"
   ) => void;
-
   updateBudget: (updatedBudget: BudgetUpdate) => void;
+  mockSubmit?: any;
 };
 
 // custom hook for form for updating a single budget: includes handlers for text inputs for both change
 // in funds and title, key presses on custom key pad component, radio buttons that checks if the funds are being
 // added or subtracted, and submission of data
-const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
+const useEditBudget = ({
+  budget,
+  hideEditForm,
+  updateBudget,
+  mockSubmit,
+}: input) => {
   const dispatch: AppDispatch = useAppDispatch();
 
   const notify = (notificationString: string): Id =>
@@ -213,26 +218,32 @@ const useEditBudget = ({ budget, hideEditForm, updateBudget }: input) => {
       e.preventDefault();
       try {
         if (handleUpdateBudgetSubmitErrors(formData, setFormErrors)) {
-          dispatch(setFormLoading(true));
-          let submitData: SubmitBudgetUpdateInterface = {
-            userID: user!._id,
-            budgetID: budget._id,
-            title: formData.title,
-            operation: formData.operation === "add" ? "subtract" : "add",
-            addedMoney:
-              formData.operation === "add"
-                ? formData.addedMoney
-                : -formData.addedMoney,
-          };
-          let { newUserBudget, newAssets } = await BudgetAPI.updateBudget(
-            submitData
-          );
-          updateBudget(newUserBudget);
-          dispatch(setTotalAssets(newAssets));
+          let newBudget;
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            dispatch(setFormLoading(true));
+            let submitData: SubmitBudgetUpdateInterface = {
+              userID: user!._id,
+              budgetID: budget._id,
+              title: formData.title,
+              operation: formData.operation === "add" ? "subtract" : "add",
+              addedMoney:
+                formData.operation === "add"
+                  ? formData.addedMoney
+                  : -formData.addedMoney,
+            };
+            let { newUserBudget, newAssets } = await BudgetAPI.updateBudget(
+              submitData
+            );
+            newBudget = newUserBudget;
+            dispatch(setTotalAssets(newAssets));
+            notify(createUpdateBudgetString(budget.title, formData));
+          }
+          updateBudget(newBudget);
           hideEditForm(e, "showEditForm");
           setFormData(initialState);
           remainingMoney.current = newRemainingMoney;
-          notify(createUpdateBudgetString(budget.title, formData));
         } else {
           if (formErrors.title || formData.title === "")
             setFlashErrors({ title: true });

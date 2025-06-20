@@ -36,16 +36,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
     handleChange,
     handleSubmit,
     handleCancel,
-  } = useDeleteBudget({ budget, hideDeleteForm });
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (mockSubmit) {
-      mockSubmit();
-    } else {
-      handleSubmit(e);
-    }
-  };
+  } = useDeleteBudget({ budget, hideDeleteForm, mockSubmit });
 
   const convertNewAssets = useMemo(() => {
     return dollarConverter(newAssets);
@@ -68,7 +59,7 @@ const DeleteBudgetForm: React.FC<Props> = ({
             delete all records of the expenses made using its funds.
           </h2>
         </header>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <fieldset id="delete-choices">
             <legend className="text-lg sm:text-xl font-bold duration-150">
               Are you returning any funds to your total savings?

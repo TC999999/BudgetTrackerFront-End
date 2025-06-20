@@ -57,16 +57,8 @@ const EditBudgetForm: React.FC<Props> = ({
     budget,
     hideEditForm,
     updateBudget,
+    mockSubmit,
   });
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (mockSubmit) {
-      mockSubmit();
-    } else {
-      handleSubmit(e);
-    }
-  };
 
   const conversion: conversion = useMemo(() => {
     return {
@@ -119,7 +111,7 @@ const EditBudgetForm: React.FC<Props> = ({
             </div>
           </div>
           <div className="edit-budget-form">
-            <form onSubmit={onSubmit}>
+            <form onSubmit={handleSubmit}>
               <div className="title-div mb-2">
                 <label className="text-gray-700 text-lg block" htmlFor="title">
                   Budget Title:{" "}

@@ -23,11 +23,12 @@ type input = {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent,
     form: "showDeleteForm"
   ) => void;
+  mockSubmit?: any;
 };
 
 // custom hooks for form to delete a budget: includes notifications, handling of radio buttons,
 // and handling of submitting data
-const useDeleteBudget = ({ budget, hideDeleteForm }: input) => {
+const useDeleteBudget = ({ budget, hideDeleteForm, mockSubmit }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const notify = (title: string, addBackToAssets: number): Id =>
@@ -93,11 +94,15 @@ const useDeleteBudget = ({ budget, hideDeleteForm }: input) => {
     async (e: React.FormEvent): Promise<void> => {
       e.preventDefault();
       try {
-        dispatch(setFormLoading(true));
-        let { totalAssets } = await BudgetAPI.deleteBudget(formData);
-        dispatch(setTotalAssets(totalAssets));
-        navigate(`/budgets/user/${user?._id}`);
-        notify(budget.title, formData.addBackToAssets);
+        if (mockSubmit) {
+          mockSubmit();
+        } else {
+          dispatch(setFormLoading(true));
+          let { totalAssets } = await BudgetAPI.deleteBudget(formData);
+          dispatch(setTotalAssets(totalAssets));
+          navigate(`/budgets/user/${user?._id}`);
+          notify(budget.title, formData.addBackToAssets);
+        }
       } catch (err: any) {
         notifyError(JSON.parse(err.message));
       } finally {

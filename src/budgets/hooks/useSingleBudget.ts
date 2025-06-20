@@ -24,11 +24,13 @@ type FormState = {
 type input = {
   budgetID?: string;
   id?: string;
+  mockBudget?: BudgetInterface;
+  mockExpenses?: ExpenseInterface[];
 };
 
 // custom hook for page displaying a single budget, includes showing forms, adding new expenses to their
 // proper places in the list, and filtering out deleted expenses
-const useSingleBudget = ({ budgetID, id }: input) => {
+const useSingleBudget = ({ budgetID, id, mockBudget, mockExpenses }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
 
@@ -67,7 +69,13 @@ const useSingleBudget = ({ budgetID, id }: input) => {
         dispatch(setPageLoading(false));
       }
     };
-    getBudget();
+
+    if (mockBudget && mockExpenses) {
+      setCurrentBudget(mockBudget);
+      setExpenses(mockExpenses);
+    } else {
+      getBudget();
+    }
   }, []);
 
   // sets state for which form should be shown. Will not show expense form if total budget funds and money

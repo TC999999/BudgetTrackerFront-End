@@ -14,7 +14,7 @@ type Props = {
   ) => void;
   updateTransactions: (newTransaction: Transaction) => void;
   show: boolean;
-  submit?: any;
+  mockSubmit?: any;
 };
 
 type conversion = {
@@ -28,7 +28,7 @@ const AddTransactionForm: React.FC<Props> = ({
   hideForm,
   updateTransactions,
   show,
-  submit,
+  mockSubmit,
 }): JSX.Element | null => {
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
@@ -52,16 +52,8 @@ const AddTransactionForm: React.FC<Props> = ({
     hideForm,
     updateTransactions,
     show,
+    mockSubmit,
   });
-
-  const onSubmit = (e: React.FormEvent): void => {
-    e.preventDefault();
-    if (submit) {
-      submit();
-    } else {
-      handleSubmit(e);
-    }
-  };
 
   const conversion: conversion = useMemo<conversion>(() => {
     return {
@@ -82,24 +74,24 @@ const AddTransactionForm: React.FC<Props> = ({
             {conversion.convertNewTotalAssets}
           </h2>
         </header>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <div id="form_information" className="sm:flex sm:justify-center">
             <div id="title_and_date_inputs">
               <div className="transaction-title-div">
                 <label className="text-gray-700 block" htmlFor="title">
                   Transaction Title:{" "}
+                  <input
+                    className={`input sm:text-sm md:text-base ${
+                      formErrors.title ? "input-error" : "input-valid"
+                    } ${flashErrors.title ? "animate-blink-error" : ""}`}
+                    id="title"
+                    type="text"
+                    name="title"
+                    placeholder="What is the reason for this transaction?"
+                    value={formData.title}
+                    onChange={handleChange}
+                  />
                 </label>
-                <input
-                  className={`input sm:text-sm md:text-base ${
-                    formErrors.title ? "input-error" : "input-valid"
-                  } ${flashErrors.title ? "animate-blink-error" : ""}`}
-                  id="title"
-                  type="text"
-                  name="title"
-                  placeholder="What is the reason for this transaction?"
-                  value={formData.title}
-                  onChange={handleChange}
-                />
                 {formErrors.title && (
                   <div className="error-message">
                     <p className="text-sm text-red-700 font-bold">
@@ -119,18 +111,18 @@ const AddTransactionForm: React.FC<Props> = ({
               <div className="date-div mb-2">
                 <label htmlFor="date" className="text-gray-700 text-lg block">
                   Transaction Date
+                  <input
+                    type="datetime-local"
+                    className={`input  ${
+                      formErrors.date ? "input-error" : "input-valid-date"
+                    } ${flashErrors.date && "animate-blink-error"}`}
+                    id="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                    readOnly
+                  />
                 </label>
-                <input
-                  type="datetime-local"
-                  className={`input  ${
-                    formErrors.date ? "input-error" : "input-valid-date"
-                  } ${flashErrors.date && "animate-blink-error"}`}
-                  id="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleChange}
-                  readOnly
-                />
                 {formErrors.date && (
                   <div className="error-message">
                     <p className="text-sm text-red-700 font-bold">
@@ -148,20 +140,20 @@ const AddTransactionForm: React.FC<Props> = ({
             <div id="transaction_inputs">
               <div className="added-assets-div">
                 <label className="text-gray-700 block" htmlFor="addedAssets">
-                  What is the value of this transaction? ($ U.S.):
+                  Transaction Value ($ U.S.):
+                  <input
+                    className={`input sm:text-sm sm:w-64 md:text-base md:w-96  ${
+                      formErrors.value ? "input-error" : ""
+                    } ${flashErrors.value ? "animate-blink-error" : ""}`}
+                    id="addedAssets"
+                    type="text"
+                    name="addedAssets"
+                    placeholder="0.00"
+                    value={conversion.convertNewValue}
+                    required
+                    readOnly
+                  />
                 </label>
-                <input
-                  className={`input sm:text-sm sm:w-64 md:text-base md:w-96  ${
-                    formErrors.value ? "input-error" : ""
-                  } ${flashErrors.value ? "animate-blink-error" : ""}`}
-                  id="addedAssets"
-                  type="text"
-                  name="addedAssets"
-                  placeholder="0.00"
-                  value={conversion.convertNewValue}
-                  required
-                  readOnly
-                />
                 {formErrors.value && (
                   <div className="error-message">
                     <p className="text-sm text-red-700 font-bold">

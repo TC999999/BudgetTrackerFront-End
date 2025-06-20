@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeAll, Mock } from "vitest";
+import { describe, it, expect, vi, beforeAll, Mock, afterEach } from "vitest";
 import { renderWithReduxTestStore } from "../../utils/test-util";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import EditBudgetForm from "./EditBudgetForm";
 
@@ -92,10 +92,10 @@ describe("Edit Budget Form", () => {
     expect(valueInput).toBeInTheDocument();
     expect(valueInput).toContainHTML("$0.00");
 
-    let add = screen.getByRole("radio", { name: "Add to Funds" });
-    expect(add).toBeChecked();
-    let sub = screen.getByRole("radio", { name: "Subtract from Funds" });
-    expect(sub).not.toBeChecked();
+    expect(screen.getByRole("radio", { name: "Add to Funds" })).toBeChecked();
+    expect(
+      screen.getByRole("radio", { name: "Subtract from Funds" })
+    ).not.toBeChecked();
   });
 
   it("should change value for budget title", () => {
@@ -210,7 +210,7 @@ describe("Edit Budget Form", () => {
     expect(screen.queryByText("$294.45")).toBeInTheDocument();
   });
 
-  it("should hide form when cancel button is clicked", () => {
+  it("should show an error if user attempts to add more money to budget than is available in savings and not change values", () => {
     renderWithReduxTestStore(
       <EditBudgetForm
         budget={budget}
@@ -220,20 +220,109 @@ describe("Edit Budget Form", () => {
       />
     );
 
+    let valueInput = screen.getByLabelText("New Budget Funds($ U.S.):");
+    expect(valueInput).toContainHTML("$0.00");
+
+    expect(screen.queryByText("$1,000.00")).toBeInTheDocument();
+    expect(screen.queryByText("$500.00")).toBeInTheDocument();
+    expect(screen.queryByText("$300.00")).toBeInTheDocument();
+
+    let button = screen.getByRole("button", { name: "5" });
+    expect(button).toBeInTheDocument();
+
+    fireEvent.click(button);
+    fireEvent.click(button);
+    fireEvent.click(button);
+    fireEvent.click(button);
+    fireEvent.click(button);
+
+    expect(valueInput).toContainHTML("$555.55");
+    expect(screen.queryByText("$444.45")).toBeInTheDocument();
+    expect(screen.queryByText("$1,055.55")).toBeInTheDocument();
+    expect(screen.queryByText("$855.55")).toBeInTheDocument();
+
+    fireEvent.click(button);
+
+    expect(
+      screen.queryByText("New funds cannot be more than total savings.")
+    ).toBeInTheDocument();
+
+    expect(valueInput).toContainHTML("$555.55");
+    expect(screen.queryByText("$444.45")).toBeInTheDocument();
+    expect(screen.queryByText("$1,055.55")).toBeInTheDocument();
+    expect(screen.queryByText("$855.55")).toBeInTheDocument();
+  });
+
+  it("should show an error if user attempts to subtract more money from budget than is available in remaining funds and not change values", () => {
+    renderWithReduxTestStore(
+      <EditBudgetForm
+        budget={budget}
+        hideEditForm={hideEditForm}
+        updateBudget={updateBudget}
+        show={true}
+      />
+    );
+
+    let subtract = screen.getByRole("radio", { name: "Subtract from Funds" });
+    fireEvent.click(subtract);
+
+    let valueInput = screen.getByLabelText("New Budget Funds($ U.S.):");
+    expect(valueInput).toContainHTML("$0.00");
+
+    expect(screen.queryByText("$1,000.00")).toBeInTheDocument();
+    expect(screen.queryByText("$500.00")).toBeInTheDocument();
+    expect(screen.queryByText("$300.00")).toBeInTheDocument();
+
+    let button = screen.getByRole("button", { name: "5" });
+    expect(button).toBeInTheDocument();
+
+    fireEvent.click(button);
+    fireEvent.click(button);
+    fireEvent.click(button);
+    fireEvent.click(button);
+
+    expect(valueInput).toContainHTML("$55.55");
+    expect(screen.queryByText("$1,055.55")).toBeInTheDocument();
+    expect(screen.queryByText("$444.45")).toBeInTheDocument();
+    expect(screen.queryByText("$244.45")).toBeInTheDocument();
+
+    fireEvent.click(button);
+
+    expect(
+      screen.queryByText(
+        "New funds cannot be more than remaining budget funds."
+      )
+    ).toBeInTheDocument();
+
+    expect(valueInput).toContainHTML("$55.55");
+    expect(screen.queryByText("$1,055.55")).toBeInTheDocument();
+    expect(screen.queryByText("$444.45")).toBeInTheDocument();
+    expect(screen.queryByText("$244.45")).toBeInTheDocument();
+  });
+
+  it("should hide form and reset to initial data when cancel button is clicked", () => {
+    renderWithReduxTestStore(
+      <EditBudgetForm
+        budget={budget}
+        hideEditForm={hideEditForm}
+        updateBudget={updateBudget}
+        show={true}
+      />
+    );
+
+    let titleInput = screen.getByLabelText("Budget Title:");
+    fireEvent.change(titleInput, { target: { value: "new test budget" } });
+    expect(titleInput).toContainHTML("new test budget");
+
     let cancel = screen.getByRole("button", { name: "Cancel" });
     expect(cancel).toBeInTheDocument();
 
     fireEvent.click(cancel);
     expect(hideEditForm).toHaveBeenCalled();
-
-    waitFor(() => {
-      expect(
-        screen.queryByRole("form-modal", { name: "edit-budget-form" })
-      ).not.toBeInTheDocument();
-    });
+    expect(titleInput).toContainHTML("test budget");
   });
 
-  it("should call submit function when edit button is pressed", () => {
+  it("should call all mock functions when edit button is pressed", () => {
     renderWithReduxTestStore(
       <EditBudgetForm
         budget={budget}
@@ -249,5 +338,40 @@ describe("Edit Budget Form", () => {
 
     fireEvent.click(submit);
     expect(mockSubmit).toHaveBeenCalled();
+    expect(hideEditForm).toHaveBeenCalled();
+    expect(updateBudget).toHaveBeenCalled();
+  });
+
+  it("should throw an error if title input contains errors", () => {
+    renderWithReduxTestStore(
+      <EditBudgetForm
+        budget={budget}
+        hideEditForm={hideEditForm}
+        updateBudget={updateBudget}
+        show={true}
+        mockSubmit={mockSubmit}
+      />
+    );
+
+    let titleInput = screen.getByLabelText("Budget Title:");
+    fireEvent.change(titleInput, { target: { value: "" } });
+    expect(titleInput).toContainHTML("");
+
+    let submit = screen.getByRole("button", { name: "Edit Budget" });
+    expect(submit).toBeInTheDocument();
+
+    fireEvent.click(submit);
+    expect(
+      screen.queryByText("Budget title input cannot be empty.")
+    ).toBeInTheDocument();
+    expect(mockSubmit).not.toHaveBeenCalled();
+    expect(hideEditForm).not.toHaveBeenCalled();
+    expect(updateBudget).not.toHaveBeenCalled();
+  });
+
+  afterEach(() => {
+    mockSubmit.mockClear();
+    hideEditForm.mockClear();
+    updateBudget.mockClear();
   });
 });

@@ -14,6 +14,7 @@ type Props = {
   ) => void;
   addBudget: (newBudget: BudgetInterface) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 type conversion = {
@@ -26,6 +27,7 @@ const BudgetForm: React.FC<Props> = ({
   hideForm,
   addBudget,
   show,
+  mockSubmit,
 }): JSX.Element | null => {
   const { formLoading }: loading = useAppSelector(
     (store) => store.loading.loadingInfo,
@@ -45,6 +47,7 @@ const BudgetForm: React.FC<Props> = ({
   } = useBudget({
     addBudget,
     hideForm,
+    mockSubmit,
   });
 
   const conversion: conversion = useMemo<conversion>(() => {
@@ -59,7 +62,7 @@ const BudgetForm: React.FC<Props> = ({
       <div id="new-budget-form" role="form-modal" aria-label="new-budget-form">
         <header className="text-center">
           <h1 className="text-3xl text-green-800 font-bold underline">
-            Enter New Budget Information Here
+            New Budget Information
           </h1>
           <h2 className="text-2xl mx-2">Available Funds:</h2>
           <h2 className="text-5xl font-bold text-green-700">
@@ -70,18 +73,18 @@ const BudgetForm: React.FC<Props> = ({
           <div id="title-div" className="text-center mb-2">
             <label className="text-gray-700 block" htmlFor="title">
               Budget Title:
+              <input
+                className={`input ${
+                  formErrors.title ? "input-error" : "input-valid"
+                } ${flashErrors.title ? "animate-blink-error" : ""}`}
+                id="title"
+                type="text"
+                name="title"
+                placeholder="What's this budget for?"
+                value={formData.title}
+                onChange={handleChange}
+              />
             </label>
-            <input
-              className={`input ${
-                formErrors.title ? "input-error" : "input-valid"
-              } ${flashErrors.title ? "animate-blink-error" : ""}`}
-              id="budget_title"
-              type="text"
-              name="title"
-              placeholder="What's this budget for?"
-              value={formData.title}
-              onChange={handleChange}
-            />
             {formErrors.title && (
               <div id="title-error-message">
                 <p className="text-red-700 font-bold">{formErrors.title}</p>
@@ -97,20 +100,20 @@ const BudgetForm: React.FC<Props> = ({
           <div id="allocated-funds-div" className="text-center mb-2">
             <label className="text-gray-700 block" htmlFor="moneyAllocated">
               Money Allocated ($ U.S.):
+              <input
+                className={`input ${
+                  formErrors.moneyAllocated ? "input-error" : ""
+                } } ${flashErrors.moneyAllocated ? "animate-blink-error" : ""}`}
+                id="moneyAllocated"
+                type="text"
+                name="moneyAllocated"
+                placeholder="$0.00"
+                value={conversion.convertMoneyAllocated}
+                onChange={handleChange}
+                required
+                readOnly
+              />
             </label>
-            <input
-              className={`input ${
-                formErrors.moneyAllocated ? "input-error" : ""
-              } } ${flashErrors.moneyAllocated ? "animate-blink-error" : ""}`}
-              id="budget_allocation"
-              type="text"
-              name="moneyAllocated"
-              placeholder="$0.00"
-              value={conversion.convertMoneyAllocated}
-              onChange={handleChange}
-              required
-              readOnly
-            />
             <div>
               {formErrors.moneyAllocated && (
                 <div>

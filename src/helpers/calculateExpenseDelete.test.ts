@@ -4,7 +4,7 @@ import {
 } from "./calculateExpenseDelete";
 import { describe, it, expect } from "vitest";
 
-describe("helper functions for calculating the new money spent/remaining after deleting an expense for a budget", () => {
+describe("Calculate New Money Spent/Remaining Helper Functions", () => {
   it("should calculate the new value for the remaining money", () => {
     expect(calcNewMoneyRemaining(5000, 2500)).toBe(7500);
   });

@@ -12,7 +12,7 @@ export const handleAddErrors = (
   totalAssets: number
 ): string => {
   return newAssets > totalAssets
-    ? "New funds cannot be more that total savings."
+    ? "New funds cannot be more than total savings."
     : "";
 };
 

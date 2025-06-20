@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, Mock, vi } from "vitest";
 import { renderWithReduxTestStore } from "../../utils/test-util";
-import { screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import ExpenseList from "./ExpenseList";
 import {
   ExpenseInterface,
@@ -140,7 +140,46 @@ describe("Expense List", () => {
     );
 
     expect(
-      screen.getAllByRole("button", { name: /delete-expense-button/i })
+      screen.getAllByRole("button", { name: "delete-expense-button" })
     ).toHaveLength(3);
+  });
+
+  it("should show prompt if delete button is pressed and hide if 'Cancel' button is pressed", async () => {
+    renderWithReduxTestStore(
+      <ExpenseList
+        expensesList={E}
+        isFrontPage={false}
+        budgetFunds={{ moneySpent: 500, moneyRemaining: 500 }}
+        budgetID="456"
+        filterExpense={filterExpense}
+        updateBudget={updateBudget}
+      />
+    );
+
+    expect(
+      screen.queryByRole("form-modal", { name: "second-prompt" })
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(
+      screen.getAllByRole("button", {
+        name: "delete-expense-button",
+      })[0]
+    );
+
+    expect(
+      screen.getByRole("form-modal", { name: "second-prompt" })
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Cancel",
+      })
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.queryByRole("form-modal", { name: "second-prompt" })
+      ).not.toBeInTheDocument();
+    });
   });
 });

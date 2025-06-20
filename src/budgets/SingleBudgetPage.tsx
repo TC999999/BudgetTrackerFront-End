@@ -9,9 +9,27 @@ import ListHeader from "../ListHeader";
 import { getRemainingMoney } from "../helpers/getRemainingMoney";
 import useSingleBudget from "./hooks/useSingleBudget";
 import Page from "../motionWrappers/Page";
+import { BudgetInterface } from "../interfaces/budgetInterfaces";
+import { ExpenseInterface } from "../interfaces/expenseInterfaces";
+
+// type Props = {
+//   mockBudget?: BudgetInterface;
+//   mockExpenses?: ExpenseInterface[];
+//   updateBudget?: any;
+//   addExpense?: any;
+//   filterExpense?: any;
+// };
+
+type Props = {
+  mockBudget?: BudgetInterface;
+  mockExpenses?: ExpenseInterface[];
+};
 
 // returns page for a single user's budget based on budget id ("/budgets/:id")
-const SingleBudgetPage = (): JSX.Element => {
+const SingleBudgetPage: React.FC<Props> = ({
+  mockBudget,
+  mockExpenses,
+}): JSX.Element => {
   const { budgetID, id } = useParams();
 
   const {
@@ -23,7 +41,7 @@ const SingleBudgetPage = (): JSX.Element => {
     updateBudget,
     addExpense,
     filterExpense,
-  } = useSingleBudget({ budgetID, id });
+  } = useSingleBudget({ budgetID, id, mockBudget, mockExpenses });
 
   return (
     <div id="single-budget-page">

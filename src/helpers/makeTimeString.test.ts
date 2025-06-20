@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makeTimeString } from "./makeTimeString";
 
-describe("helper function to make readable time string to for creating a new income", () => {
+describe("Make Readable Time String Helper Function", () => {
   it("should return the correct time string", () => {
     expect(makeTimeString("12", "56")).toBe("12:56 p.m.");
     expect(makeTimeString("16", "37")).toBe("04:37 p.m.");

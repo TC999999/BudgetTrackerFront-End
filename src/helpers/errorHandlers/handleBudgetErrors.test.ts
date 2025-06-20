@@ -25,7 +25,7 @@ import {
 describe("add error handler", () => {
   it("returns correct string if budget value input is greater than user's total savings", () => {
     expect(handleAddErrors(100, 50)).toBe(
-      "New funds cannot be more that total savings."
+      "New funds cannot be more than total savings."
     );
   });
 

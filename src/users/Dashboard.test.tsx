@@ -24,7 +24,7 @@ describe("Main User Dashboard", () => {
     ).toBeInTheDocument();
   });
 
-  it("should show a form for new changes to total savings", () => {
+  it("should show a form for new changes to total saving and hide form when 'Cancel' button is clicked", async () => {
     renderWithReduxTestStore(<Dashboard mock={mock} />);
     expect(
       screen.queryByText("Document a Miscellaneous Transaction")
@@ -43,10 +43,9 @@ describe("Main User Dashboard", () => {
     ).toBeInTheDocument();
 
     let cancel = screen.getByRole("button", { name: "Cancel" });
-    expect(cancel).toBeInTheDocument();
     fireEvent.click(cancel);
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(
         screen.queryByText("Document a Miscellaneous Transaction")
       ).not.toBeInTheDocument();

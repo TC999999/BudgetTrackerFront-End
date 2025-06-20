@@ -2,7 +2,7 @@ import { expect, describe, it, beforeAll } from "vitest";
 import { makeCronString } from "./makeCronString";
 import { UpdateTime } from "../interfaces/incomeInterfaces";
 
-describe("function that creates a cron string from an object", () => {
+describe("Cron String Construction Helper Function", () => {
   let ut1: UpdateTime;
   let ut2: UpdateTime;
   let ut3: UpdateTime;

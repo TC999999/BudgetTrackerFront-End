@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { makeEndString, makeDayMonthString } from "./makeDayMonthString";
 
-describe("helper functions to make string consisting of a day and a month as well as other strings when a cron number inputted", () => {
+describe("Create Readable End String From Cron Helper Function", () => {
   it("should return the correct end string when proper cron markers are inputted", () => {
     expect(makeEndString("12", "*")).toBe("");
     expect(makeEndString("*", "21")).toBe("");

@@ -29,12 +29,18 @@ type input = {
   ) => void;
   updateTransactions: (newTransaction: Transaction) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 // custom hook for form for adding a new transaction: includes handlers for calculating the new value of
 // the remaining savings, key presses on the custom keypad component, presses of the radio buttons to update
 // options, and submitting the data
-const useAddTransaction = ({ hideForm, updateTransactions, show }: input) => {
+const useAddTransaction = ({
+  hideForm,
+  updateTransactions,
+  show,
+  mockSubmit,
+}: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (notification: string): Id => toast.success(notification);
   const notifyError = (error: error): Id =>
@@ -201,19 +207,25 @@ const useAddTransaction = ({ hideForm, updateTransactions, show }: input) => {
       e.preventDefault();
       try {
         if (handleEditUserSubmitErrors(formData, setFormErrors)) {
-          const { value, operation } = formData;
-          const submitData: NewTransactionUI = {
-            ...formData,
-            _id: user!._id,
-            value: operation === "add" ? +value : -value,
-          };
-          let { transaction } = await dispatch(
-            addToAssets(submitData)
-          ).unwrap();
-          updateTransactions(transaction);
+          let newTransaction;
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            const { value, operation } = formData;
+            const submitData: NewTransactionUI = {
+              ...formData,
+              _id: user!._id,
+              value: operation === "add" ? +value : -value,
+            };
+            let { transaction } = await dispatch(
+              addToAssets(submitData)
+            ).unwrap();
+            newTransaction = transaction;
+            notify(createUpdateUserString(submitData));
+          }
+          updateTransactions(newTransaction!);
           hideForm(e);
           setFormData(initialState);
-          notify(createUpdateUserString(submitData));
         } else {
           if (formErrors.title || formData.title === "")
             setFlashErrors((flash) => ({ ...flash, title: true }));

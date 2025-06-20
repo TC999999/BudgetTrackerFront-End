@@ -1,7 +1,7 @@
 import { it, expect, describe } from "vitest";
 import { getDaysInAMonth } from "./getDaysInAMonth";
 
-describe("get days in month map function", () => {
+describe("Days in Month Map Retrieval Helper Function", () => {
   it("should get correct map of days for respective month number for months with 31 days", () => {
     expect(getDaysInAMonth("1").get("31")).toBe("31");
     expect(getDaysInAMonth("1").get("30")).toBe("30");

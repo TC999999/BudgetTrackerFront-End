@@ -17,7 +17,11 @@ const SingleBudgetButtons: React.FC<Props> = ({
 }) => {
   return (
     <Buttons>
-      <nav className="flex justify-around w-full">
+      <nav
+        role="navigation"
+        aria-label="budget-page-nav"
+        className="flex justify-around w-full"
+      >
         <button
           id="edit-budget-form-button"
           className="nav-button border-orange-300 text-white bg-orange-400 hover:bg-orange-200 hover:text-black active:bg-orange-300"

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { makeBudgetList } from "./makeBudgetList";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 
-describe("helper function to make a readable list of budgets for budget page", () => {
+describe("Make Readable Budget List Helper Function", () => {
   let budgetList: BudgetInterface[];
 
   beforeAll(() => {

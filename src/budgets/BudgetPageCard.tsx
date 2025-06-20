@@ -37,7 +37,11 @@ const BudgetPageCard: React.FC<Props> = ({ budget }): JSX.Element => {
   }, [budget.moneyAllocated, budget.moneySpent]);
 
   return (
-    <header className="budget-page-card border-2 border-green-500 px-6 py-4 m-4 shadow-md rounded-lg bg-white">
+    <header
+      role="card"
+      aria-label="budget-page-card"
+      className="budget-page-card border-2 border-green-500 px-6 py-4 m-4 shadow-md rounded-lg bg-white"
+    >
       <h3 className="budget-title text-3xl sm:text-4xl text-center text-emerald-800 font-bold">
         {pageLoading ? <Skeleton width={200} /> : budget?.title}
       </h3>

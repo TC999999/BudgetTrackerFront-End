@@ -27,11 +27,12 @@ type input = {
   hideForm: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
+  mockSubmit?: any;
 };
 
 // custom hook for adding a budget: includes changes to text input, button presses on the custom keypad component,
 // and submitting the data
-const useAddBudget = ({ addBudget, hideForm }: input) => {
+const useAddBudget = ({ addBudget, hideForm, mockSubmit }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (title: string, moneyAllocated: number): Id =>
     toast.success(
@@ -136,20 +137,26 @@ const useAddBudget = ({ addBudget, hideForm }: input) => {
       e.preventDefault();
       try {
         if (handleBudgetSubmitErrors(formData, setFormErrors)) {
-          dispatch(setFormLoading(true));
-          let submitData: submitBudget = {
-            userID: user!._id,
-            ...formData,
-          };
-          let { newUserBudget, newAssets } = await BudgetAPI.addNewBudget(
-            submitData
-          );
-          dispatch(setTotalAssets(newAssets));
-          addBudget(newUserBudget);
-          hideForm(e);
-          notify(submitData.title, submitData.moneyAllocated);
+          let newBudget;
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            dispatch(setFormLoading(true));
+            let submitData: submitBudget = {
+              userID: user!._id,
+              ...formData,
+            };
+            let { newUserBudget, newAssets } = await BudgetAPI.addNewBudget(
+              submitData
+            );
+            newBudget = newUserBudget;
+            dispatch(setTotalAssets(newAssets));
+            notify(submitData.title, submitData.moneyAllocated);
+          }
           setFormData(initialState);
           setFormErrors(initialErrors);
+          addBudget(newBudget);
+          hideForm(e);
         } else {
           if (formErrors.title || formData.title === "")
             setFlashErrors((flash) => ({ ...flash, title: true }));

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeAll, Mock } from "vitest";
 import { renderWithReduxTestStore } from "../../utils/test-util";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import DeleteBudgetForm from "./DeleteBudgetForm";
 
@@ -122,10 +122,19 @@ describe("Delete Budget Form", () => {
     expect(r).toBeChecked();
   });
 
-  it("should hide form when cancel button is clicked", () => {
+  it("should call mock hide form function and reset to initial data when cancel button is clicked", () => {
     renderWithReduxTestStore(
       <DeleteBudgetForm hideDeleteForm={mockHide} budget={budget} show={true} />
     );
+
+    let r1 = screen.getByRole("radio", { name: "Return No Funds ( $0.00 )" });
+    expect(r1).toBeChecked();
+
+    let r2 = screen.getByRole("radio", {
+      name: "Return Remaining Funds Only ( $300.00 )",
+    });
+    fireEvent.click(r2);
+    expect(r1).not.toBeChecked();
 
     expect(
       screen.getByRole("form-modal", { name: "delete-budget-form" })
@@ -133,12 +142,7 @@ describe("Delete Budget Form", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(mockHide).toHaveBeenCalled();
-
-    waitFor(() => {
-      expect(
-        screen.getByRole("form-modal", { name: "delete-budget-form" })
-      ).not.toBeInTheDocument();
-    });
+    expect(r1).toBeChecked();
 
     mockHide.mockClear();
   });

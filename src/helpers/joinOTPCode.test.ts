@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { joinOTPCode } from "./joinOTPCode";
 import { OneTimeCodeFormData } from "../interfaces/authInterfaces";
 
-describe("function that joins otp code after inputting the numbers into the keypad", () => {
+describe("Joins 6-Digit Code Helper Function", () => {
   let code1: OneTimeCodeFormData;
   let code2: OneTimeCodeFormData;
   let code3: OneTimeCodeFormData;

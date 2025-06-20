@@ -5,7 +5,7 @@ import {
 } from "./calculateNewTotalAssets";
 import { describe, it, expect } from "vitest";
 
-describe("helper function for calculating the new total savings value for a single user after adding/updating a budget", () => {
+describe("Calculating New Total Savings for Budget Add Helper Function", () => {
   it("subtract from the user's savings after adding/updating a budget (the first value is converted to currency form without decimal)", () => {
     expect(calculateNewTotalAssets(5000, 2500, "add")).toBe(2500);
   });
@@ -15,7 +15,7 @@ describe("helper function for calculating the new total savings value for a sing
   });
 });
 
-describe("helper function for calculating the new total savings value for a single user after adding a transaction", () => {
+describe("Calculating New Total Savings for Transaction Helper Function", () => {
   it("adds to the user's savings after the user makes a add transaction (the first value is converted to currency form without decimal)", () => {
     expect(calculateNewTotalAssetsUserDashboard(5000, 2500, "add")).toBe(7500);
   });
@@ -27,7 +27,7 @@ describe("helper function for calculating the new total savings value for a sing
   });
 });
 
-describe("helper function for calculating the new total savings value for a single user after deleting a budget", () => {
+describe("Calculating New Total Savings for Budget Delete Helper Function", () => {
   it("adds to the user's savings after the user deletes a budget", () => {
     expect(calculateNewTotalAssetsWithoutOperation(5000, 2500)).toBe(7500);
   });
