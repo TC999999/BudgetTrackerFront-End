@@ -56,16 +56,8 @@ const ExpenseForm: React.FC<Props> = ({
     addExpense,
     updateBudget,
     show,
+    mock,
   });
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (mock) {
-      mock();
-    } else {
-      handleSubmit(e);
-    }
-  };
 
   const conversion: conversion = useMemo<conversion>(() => {
     return {
@@ -90,25 +82,25 @@ const ExpenseForm: React.FC<Props> = ({
             {conversion.convertAvailableFunds}
           </h2>
         </header>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <div id="input-divs" className="sm:flex sm:justify-center">
             <div id="title-and-date-div" className="sm:mx-2">
               <div id="title-div" className="mb-2">
                 <label className="text-gray-700 text-lg block" htmlFor="title">
                   Expense Title:
+                  <input
+                    className={`input ${
+                      formErrors.title ? "input-error" : "input-valid"
+                    } ${flashErrors.title && "animate-blink-error"}`}
+                    id="title"
+                    type="text"
+                    name="title"
+                    placeholder="What's this expense for?"
+                    value={formData.title}
+                    onChange={handleChange}
+                    maxLength={30}
+                  />
                 </label>
-                <input
-                  className={`input ${
-                    formErrors.title ? "input-error" : "input-valid"
-                  } ${flashErrors.title && "animate-blink-error"}`}
-                  id="title"
-                  type="text"
-                  name="title"
-                  placeholder="What's this expense for?"
-                  value={formData.title}
-                  onChange={handleChange}
-                  maxLength={30}
-                />
                 <div id="title-error-message">
                   <p className="text-red-700 sm:text-xs font-bold">
                     {formErrors.title}
@@ -126,17 +118,17 @@ const ExpenseForm: React.FC<Props> = ({
               <div id="date-div" className="mb-2">
                 <label htmlFor="date" className="text-gray-700 text-lg block">
                   Expense Date
+                  <input
+                    type="datetime-local"
+                    className={`input ${
+                      formErrors.date ? "input-error" : "input-valid-date"
+                    } ${flashErrors.date && "animate-blink-error"}`}
+                    id="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                  />
                 </label>
-                <input
-                  type="datetime-local"
-                  className={`input ${
-                    formErrors.date ? "input-error" : "input-valid-date"
-                  } ${flashErrors.date && "animate-blink-error"}`}
-                  id="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleChange}
-                />
                 <div id="date-error-message">
                   <p className="text-red-700 sm:text-xs font-bold">
                     {formErrors.date}
@@ -151,18 +143,18 @@ const ExpenseForm: React.FC<Props> = ({
                   className="text-gray-700 text-lg block"
                 >
                   Expense Value ($ U.S.):
+                  <input
+                    className={`input ${
+                      formErrors.transaction ? "input-error" : ""
+                    } ${flashErrors.transaction && "animate-blink-error"}`}
+                    id="transaction"
+                    type="text"
+                    name="trasaction"
+                    placeholder="$0.00"
+                    value={conversion.convertTransaction}
+                    readOnly
+                  />
                 </label>
-                <input
-                  className={`input ${
-                    formErrors.transaction ? "input-error" : ""
-                  } ${flashErrors.transaction && "animate-blink-error"}`}
-                  id="transaction"
-                  type="text"
-                  name="trasaction"
-                  placeholder="$0.00"
-                  value={conversion.convertTransaction}
-                  readOnly
-                />
                 <div id="transaction-error-message">
                   <p className="text-red-700 sm:text-xs font-bold">
                     {formErrors.transaction}

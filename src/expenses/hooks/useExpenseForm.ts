@@ -39,6 +39,7 @@ type input = {
   addExpense: (newExpense: ExpenseInterface) => void;
   updateBudget: (updatedBudget: BudgetUpdate) => void;
   show: boolean;
+  mock?: any;
 };
 
 // custom hook for form for adding a new expense: includes handling of the custom keypad component, changes
@@ -49,6 +50,7 @@ const useExpenseForm = ({
   addExpense,
   updateBudget,
   show,
+  mock,
 }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (title: string, transaction: number): Id =>
@@ -193,20 +195,28 @@ const useExpenseForm = ({
       e.preventDefault();
       try {
         if (handleExpenseSubmitErrors(formData, setFormErrors)) {
-          dispatch(setFormLoading(true));
-          let submitData: submitNewExpense = {
-            ...formData,
-            budgetID: budget?._id,
-          };
-          const { spentMoney, newExpense } = await ExpenseAPI.addNewExpense(
-            submitData,
-            user!._id
-          );
-          addExpense(newExpense);
-          updateBudget(spentMoney);
+          let newBudgetUpdate;
+          let newAddedExpense;
+          if (mock) {
+            mock();
+          } else {
+            dispatch(setFormLoading(true));
+            let submitData: submitNewExpense = {
+              ...formData,
+              budgetID: budget?._id,
+            };
+            const { spentMoney, newExpense } = await ExpenseAPI.addNewExpense(
+              submitData,
+              user!._id
+            );
+            newBudgetUpdate = spentMoney;
+            newAddedExpense = newExpense;
+            notify(submitData.title, submitData.transaction);
+          }
+          addExpense(newAddedExpense);
+          updateBudget(newBudgetUpdate);
           hideExpenseForm(e, "showExpenseForm");
           setFormData(initialState);
-          notify(submitData.title, submitData.transaction);
         } else {
           if (formErrors.title || formData.title === "")
             setFlashErrors((flash) => ({ ...flash, title: true }));

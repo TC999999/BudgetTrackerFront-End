@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, Mock, vi } from "vitest";
 import { renderWithReduxTestStore } from "../../utils/test-util";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import BudgetPage from "./BudgetPage";
 
 describe("Budget List Page", () => {
@@ -20,17 +20,24 @@ describe("Budget List Page", () => {
     expect(button).toBeInTheDocument();
   });
 
-  it("should show a form when add new budget button is pressed", () => {
+  it("should show a form when add new budget button is pressed and hide when 'Cancel' button is pressed", async () => {
     renderWithReduxTestStore(<BudgetPage mock={mock} />);
-    let button = screen.getByRole("button", { name: "Add a new Budget" });
     expect(
       screen.queryByRole("form-modal", { name: "new-budget-form" })
     ).not.toBeInTheDocument();
 
-    fireEvent.click(button);
+    fireEvent.click(screen.getByRole("button", { name: "Add a new Budget" }));
     expect(
       screen.queryByRole("form-modal", { name: "new-budget-form" })
     ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByRole("form-modal", { name: "new-budget-form" })
+      ).not.toBeInTheDocument();
+    });
   });
 
   it("should show correct list header", () => {

@@ -25,7 +25,6 @@ type Props = {
 const NewIncomeForm: React.FC<Props> = ({
   hideIncomeFormState,
   addToIncomeState,
-
   handleIncomes,
   show,
 }): JSX.Element | null => {

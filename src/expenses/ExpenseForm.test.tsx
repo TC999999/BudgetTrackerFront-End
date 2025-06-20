@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeAll, Mock } from "vitest";
 import { renderWithReduxTestStore } from "../../utils/test-util";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import ExpenseForm from "./ExpenseForm";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { DateTime } from "luxon";
@@ -253,7 +253,7 @@ describe("New Expense Form", () => {
     expect(updateBudget).not.toHaveBeenCalled();
   });
 
-  it("should run a submit function when submit button is clicked", () => {
+  it("should run a submit function when submit button is clicked and all inputs are filled correctly", () => {
     let handleSubmit = vi.fn();
     renderWithReduxTestStore(
       <ExpenseForm
@@ -265,12 +265,22 @@ describe("New Expense Form", () => {
         mock={handleSubmit}
       />
     );
+
+    let input = screen.getByLabelText("Expense Title:");
+    fireEvent.change(input, { target: { value: "Test Title" } });
+
+    let five = screen.getByRole("button", { name: "5" });
+    fireEvent.click(five);
+
     let submit = screen.getByRole("button", { name: "Add this Expense" });
     fireEvent.click(submit);
     expect(handleSubmit).toHaveBeenCalled();
+    expect(hideExpenseForm).toHaveBeenCalled();
+    expect(addExpense).toHaveBeenCalled();
+    expect(updateBudget).toHaveBeenCalled();
   });
 
-  it("should hide form when cancel button is clicked", () => {
+  it("should call hide form function when cancel button is clicked", () => {
     renderWithReduxTestStore(
       <ExpenseForm
         hideExpenseForm={hideExpenseForm}
@@ -281,17 +291,7 @@ describe("New Expense Form", () => {
       />
     );
 
-    expect(
-      screen.getByRole("form-modal", { name: "add-expense-form" })
-    ).toBeInTheDocument();
-
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(hideExpenseForm).toHaveBeenCalled();
-
-    waitFor(() => {
-      expect(
-        screen.getByRole("form-modal", { name: "add-expense-form" })
-      ).not.toBeInTheDocument();
-    });
   });
 });
