@@ -18,6 +18,8 @@ const TransactionList: React.FC<Props> = ({ transactions }): JSX.Element => {
   );
   return (
     <div
+      role="list"
+      aria-label="full-transaction-list"
       id="transactions-list"
       className="bg-white border-2 border-green-500 m-2 rounded-md"
     >

@@ -6,10 +6,13 @@ import { AppDispatch } from "../../features/store";
 import { Transaction } from "../../interfaces/transactionInterfaces";
 import { setLoadError, setPageLoading } from "../../features/slices/loadSlice";
 
-type input = string | undefined;
+type input = {
+  id: string | undefined;
+  transactionList?: Transaction[];
+};
 
 // custom hook for transaction history page: retrieves the current user's transactions on initial render
-const useTransactionHistory = (id: input) => {
+const useTransactionHistory = ({ id, transactionList }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -24,6 +27,8 @@ const useTransactionHistory = (id: input) => {
           let transactions: Transaction[] =
             await TransactionAPI.getUserTransactions(id);
           setTransactions(transactions);
+        } else if (transactionList) {
+          setTransactions(transactionList);
         }
       } catch (err: any) {
         dispatch(setLoadError(JSON.parse(err.message)));
