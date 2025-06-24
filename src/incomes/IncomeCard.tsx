@@ -45,7 +45,11 @@ const IncomeCard: React.FC<Props> = ({
   );
 
   return (
-    <div className="flex justify-center">
+    <div
+      role="card"
+      aria-label="income-list-card"
+      className="flex justify-center"
+    >
       <div className="p-2 m-4 w-96 sm:w-2/3 text-center border-4 border-green-700 bg-white rounded-lg shadow-xl">
         <header>
           <h1 className="text-2xl sm:text-4xl text-green-600 underline">

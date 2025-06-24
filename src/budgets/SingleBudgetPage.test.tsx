@@ -78,15 +78,15 @@ describe("Single Budget Page", () => {
       })
     ).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Add Expense" }));
+    fireEvent.click(screen.getByText("Add Expense"));
 
     expect(
-      screen.getByRole("form-modal", {
+      screen.queryByRole("form-modal", {
         name: "add-expense-form",
       })
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByText("Cancel"));
 
     await waitFor(() => {
       expect(
@@ -108,7 +108,7 @@ describe("Single Budget Page", () => {
       })
     ).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete Budget" }));
+    fireEvent.click(screen.getByText("Delete Budget"));
 
     expect(
       screen.queryByRole("form-modal", {
@@ -116,7 +116,7 @@ describe("Single Budget Page", () => {
       })
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByText("Cancel"));
 
     await waitFor(() => {
       expect(
@@ -138,7 +138,7 @@ describe("Single Budget Page", () => {
       })
     ).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Update Budget" }));
+    fireEvent.click(screen.getByText("Update Budget"));
 
     expect(
       screen.queryByRole("form-modal", {
@@ -146,7 +146,7 @@ describe("Single Budget Page", () => {
       })
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByText("Cancel"));
 
     await waitFor(() => {
       expect(

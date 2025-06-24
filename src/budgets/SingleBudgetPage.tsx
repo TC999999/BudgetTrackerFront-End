@@ -12,14 +12,6 @@ import Page from "../motionWrappers/Page";
 import { BudgetInterface } from "../interfaces/budgetInterfaces";
 import { ExpenseInterface } from "../interfaces/expenseInterfaces";
 
-// type Props = {
-//   mockBudget?: BudgetInterface;
-//   mockExpenses?: ExpenseInterface[];
-//   updateBudget?: any;
-//   addExpense?: any;
-//   filterExpense?: any;
-// };
-
 type Props = {
   mockBudget?: BudgetInterface;
   mockExpenses?: ExpenseInterface[];

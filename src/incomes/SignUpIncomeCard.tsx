@@ -37,10 +37,10 @@ const SignUpIncomeCard: React.FC<Props> = ({
         </div>
         <div className="flex items-center">
           <button
+            aria-label="delete-button"
             className="bg-red-700 p-3 rounded-lg"
             onClick={(e) => removeIncome(e, index)}
           >
-            {" "}
             <FaTrashAlt className="text-white" />
           </button>
         </div>

@@ -27,8 +27,8 @@ describe("Budget Page Additional Nav Button", () => {
     renderWithReduxTestStore(
       <BudgetPageButtons budgetListLength={5} showForm={mock} />
     );
-    let button = screen.getByRole("button", { name: "Add a new Budget" });
-    fireEvent.click(button);
+
+    fireEvent.click(screen.getByText("Add a new Budget"));
     expect(mock).toHaveBeenCalled();
   });
 });

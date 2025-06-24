@@ -19,6 +19,7 @@ type Props = {
   addToIncomeState?: (income: Income) => void;
   handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 // returns form to add new income, used for both registration and the income page
@@ -27,14 +28,15 @@ const NewIncomeForm: React.FC<Props> = ({
   addToIncomeState,
   handleIncomes,
   show,
+  mockSubmit,
 }): JSX.Element | null => {
-  const { formLoading }: loading = useAppSelector(
-    (store) => store.loading.loadingInfo,
+  const { user }: UserContextInterface = useAppSelector(
+    (store) => store.user.userInfo,
     shallowEqual
   );
 
-  const { user }: UserContextInterface = useAppSelector(
-    (store) => store.user.userInfo,
+  const { formLoading }: loading = useAppSelector(
+    (store) => store.loading.loadingInfo,
     shallowEqual
   );
 
@@ -80,6 +82,7 @@ const NewIncomeForm: React.FC<Props> = ({
     userID: user?._id,
     addToIncomeState,
     handleIncomes,
+    mockSubmit,
   });
 
   return !formLoading ? (

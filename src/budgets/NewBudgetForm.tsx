@@ -73,18 +73,19 @@ const BudgetForm: React.FC<Props> = ({
           <div id="title-div" className="text-center mb-2">
             <label className="text-gray-700 block" htmlFor="title">
               Budget Title:
-              <input
-                className={`input ${
-                  formErrors.title ? "input-error" : "input-valid"
-                } ${flashErrors.title ? "animate-blink-error" : ""}`}
-                id="title"
-                type="text"
-                name="title"
-                placeholder="What's this budget for?"
-                value={formData.title}
-                onChange={handleChange}
-              />
             </label>
+            <input
+              className={`input ${
+                formErrors.title ? "input-error" : "input-valid"
+              } ${flashErrors.title ? "animate-blink-error" : ""}`}
+              id="title"
+              type="text"
+              name="title"
+              placeholder="What's this budget for?"
+              value={formData.title}
+              onChange={handleChange}
+            />
+
             {formErrors.title && (
               <div id="title-error-message">
                 <p className="text-red-700 font-bold">{formErrors.title}</p>

@@ -19,6 +19,7 @@ type Props = {
   ) => void;
   updateIncomeState: (income: Income) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 // returns a form for users to update their own incomes
@@ -27,6 +28,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
   unselectIncome,
   updateIncomeState,
   show,
+  mockSubmit,
 }): JSX.Element | null => {
   const { user }: UserContextInterface = useAppSelector(
     (store) => store.user.userInfo,
@@ -65,6 +67,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     handleMonth,
     handleWeek,
     handleSubmit,
+    handleCancel,
   } = useIncomeForm({
     initialState,
     initialErrors,
@@ -73,6 +76,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
     income,
     updateIncomeState,
     unselectIncome,
+    mockSubmit,
   });
 
   return !formLoading ? (
@@ -91,7 +95,7 @@ const UpdateIncomeForm: React.FC<Props> = ({
       handleMonth={handleMonth}
       handleWeek={handleWeek}
       handleSubmit={handleSubmit}
-      hide={unselectIncome}
+      hide={handleCancel}
       incomeTitle={income.title}
     />
   ) : null;

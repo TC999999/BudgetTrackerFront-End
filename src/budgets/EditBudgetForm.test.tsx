@@ -314,7 +314,7 @@ describe("Edit Budget Form", () => {
     fireEvent.change(titleInput, { target: { value: "new test budget" } });
     expect(titleInput).toContainHTML("new test budget");
 
-    let cancel = screen.getByRole("button", { name: "Cancel" });
+    let cancel = screen.getByText("Cancel");
     expect(cancel).toBeInTheDocument();
 
     fireEvent.click(cancel);
@@ -333,7 +333,7 @@ describe("Edit Budget Form", () => {
       />
     );
 
-    let submit = screen.getByRole("button", { name: "Edit Budget" });
+    let submit = screen.getByText("Edit Budget");
     expect(submit).toBeInTheDocument();
 
     fireEvent.click(submit);
@@ -357,7 +357,7 @@ describe("Edit Budget Form", () => {
     fireEvent.change(titleInput, { target: { value: "" } });
     expect(titleInput).toContainHTML("");
 
-    let submit = screen.getByRole("button", { name: "Edit Budget" });
+    let submit = screen.getByText("Edit Budget");
     expect(submit).toBeInTheDocument();
 
     fireEvent.click(submit);

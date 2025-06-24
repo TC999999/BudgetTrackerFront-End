@@ -5,9 +5,14 @@ import NewIncomeForm from "./NewIncomeForm";
 import IncomePageButtons from "./IncomePageButtons";
 import useIncomePage from "./hooks/useIncomePage";
 import Page from "../motionWrappers/Page";
+import { Income } from "../interfaces/incomeInterfaces";
+
+type Props = {
+  incomeList?: Income[];
+};
 
 // Shows the list of incomes the current user has
-const IncomePage = (): JSX.Element => {
+const IncomePage: React.FC<Props> = ({ incomeList }): JSX.Element => {
   const { id } = useParams();
   const {
     showIncomeForm,
@@ -17,7 +22,7 @@ const IncomePage = (): JSX.Element => {
     removeFromIncomeState,
     showIncomeFormState,
     hideIncomeFormState,
-  } = useIncomePage(id);
+  } = useIncomePage({ id, incomeList });
 
   return (
     <div id="income-page">

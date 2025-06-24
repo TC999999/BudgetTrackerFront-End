@@ -36,10 +36,10 @@ type input = {
   addToIncomeState?: (income: Income) => void;
   handleIncomes?: (e: React.FormEvent, income: SubmitIncomeSignUp) => void;
   updateIncomeState?: (income: Income) => void;
-
   unselectIncome?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
   ) => void;
+  mockSubmit?: any;
 };
 
 // custom hook for the form for adding a new income or updating a single income for a single user: includes handlers
@@ -56,6 +56,7 @@ const useIncomeForm = ({
   handleIncomes,
   updateIncomeState,
   unselectIncome,
+  mockSubmit,
 }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const notify = (message: string): Id => toast.success(message);
@@ -199,36 +200,45 @@ const useIncomeForm = ({
       try {
         e.preventDefault();
         if (handleIncomeSubmitErrors(formData, setFormErrors)) {
-          dispatch(setFormLoading(true));
-          let { title, salary, updateTime } = formData;
-          let cronString: string = makeCronString(updateTime);
-          let submitData: SubmitIncomeSignUp = {
-            title,
-            salary,
-            cronString,
-            readableUpdateTimeString,
-          };
-          if (handleIncomes) {
-            handleIncomes(e, submitData);
-          } else if (addToIncomeState && userID) {
-            let newIncome: Income = await IncomeAPI.addNewUserIncome(
-              submitData,
-              userID
-            );
-            addToIncomeState(newIncome);
-            notify(`${submitData.title} income created successfully!`);
-          } else if (updateIncomeState && userID && income && unselectIncome) {
-            let updateData: SubmitUpdateIncome = {
-              _id: income._id,
-              ...submitData,
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            dispatch(setFormLoading(true));
+            let { title, salary, updateTime } = formData;
+            let cronString: string = makeCronString(updateTime);
+            let submitData: SubmitIncomeSignUp = {
+              title,
+              salary,
+              cronString,
+              readableUpdateTimeString,
             };
-            let updatedIncome: Income = await IncomeAPI.updateUserIncome(
-              updateData,
-              userID
-            );
-            updateIncomeState(updatedIncome);
-            notify(createUpdateIncomeString(income, updateData));
-            unselectIncome(e);
+            if (handleIncomes) {
+              handleIncomes(e, submitData);
+            } else if (addToIncomeState && userID) {
+              let newIncome: Income = await IncomeAPI.addNewUserIncome(
+                submitData,
+                userID
+              );
+              addToIncomeState(newIncome);
+              notify(`${submitData.title} income created successfully!`);
+            } else if (
+              updateIncomeState &&
+              userID &&
+              income &&
+              unselectIncome
+            ) {
+              let updateData: SubmitUpdateIncome = {
+                _id: income._id,
+                ...submitData,
+              };
+              let updatedIncome: Income = await IncomeAPI.updateUserIncome(
+                updateData,
+                userID
+              );
+              updateIncomeState(updatedIncome);
+              notify(createUpdateIncomeString(income, updateData));
+              unselectIncome(e);
+            }
           }
           if (hideIncomeFormState) hideIncomeFormState(e);
           setFormData(initialState);
@@ -257,9 +267,15 @@ const useIncomeForm = ({
       e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.FormEvent
     ): void => {
       e.preventDefault();
-      if (hideIncomeFormState) hideIncomeFormState(e);
-      setFormData(initialState);
-      setFormErrors(initialErrors);
+      if (hideIncomeFormState) {
+        hideIncomeFormState(e);
+        setFormData(initialState);
+        setFormErrors(initialErrors);
+      } else if (unselectIncome) {
+        unselectIncome(e);
+        setFormData(initialState);
+        setFormErrors(initialErrors);
+      }
     },
     [formData, formErrors]
   );

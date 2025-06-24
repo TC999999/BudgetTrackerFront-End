@@ -100,13 +100,15 @@ describe("Delete Budget Form", () => {
       <DeleteBudgetForm hideDeleteForm={mockHide} budget={budget} show={true} />
     );
 
-    let r1 = screen.getByRole("radio", { name: "Return No Funds ( $0.00 )" });
-    expect(r1).toBeChecked();
+    expect(
+      screen.getByRole("radio", { name: "Return No Funds ( $0.00 )" })
+    ).toBeChecked();
 
-    let r2 = screen.getByRole("radio", {
-      name: "Return Remaining Funds Only ( $300.00 )",
-    });
-    expect(r2).not.toBeChecked();
+    expect(
+      screen.getByRole("radio", {
+        name: "Return Remaining Funds Only ( $300.00 )",
+      })
+    ).not.toBeChecked();
   });
 
   it("should have check radio button when clicked", () => {
@@ -140,7 +142,7 @@ describe("Delete Budget Form", () => {
       screen.getByRole("form-modal", { name: "delete-budget-form" })
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByText("Cancel"));
     expect(mockHide).toHaveBeenCalled();
     expect(r1).toBeChecked();
 
@@ -158,7 +160,7 @@ describe("Delete Budget Form", () => {
       />
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete Budget" }));
+    fireEvent.click(screen.getByText("Delete Budget"));
     expect(mockSubmit).toHaveBeenCalled();
     expect(mockHide).not.toHaveBeenCalled();
   });

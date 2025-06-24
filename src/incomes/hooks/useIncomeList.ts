@@ -53,7 +53,7 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
       setSelectedIncomeForEdit(income);
       setShowEditForm(true);
     },
-    [selectedIncomeForEdit]
+    [selectedIncomeForEdit, showEditForm]
   );
 
   // changes state for selected income for edit
@@ -67,7 +67,7 @@ const useIncomeList = ({ removeFromIncomeState }: input) => {
         setSelectedIncomeForEdit(null);
       }, 150);
     },
-    [selectedIncomeForEdit]
+    [selectedIncomeForEdit, showEditForm]
   );
 
   // updates state to show the prompt window for when a user clicks delete

@@ -40,11 +40,11 @@ describe("New Budget Form", () => {
 
     let titleInput = screen.getByLabelText("Budget Title:");
     expect(titleInput).toBeInTheDocument();
-    expect(titleInput).toContainHTML("");
+    expect(titleInput).toHaveValue("");
 
     let valueInput = screen.getByLabelText("Money Allocated ($ U.S.):");
     expect(valueInput).toBeInTheDocument();
-    expect(valueInput).toContainHTML("$0.00");
+    expect(valueInput).toHaveValue("$0.00");
   });
 
   it("should be able to change title via input", () => {
@@ -54,10 +54,12 @@ describe("New Budget Form", () => {
 
     let titleInput = screen.getByLabelText("Budget Title:");
     expect(titleInput).toContainHTML("");
+    expect(titleInput).toHaveValue("");
 
     fireEvent.change(titleInput, { target: { value: "test budget" } });
 
     expect(titleInput).toContainHTML("test budget");
+    expect(titleInput).toHaveValue("test budget");
   });
 
   it("should show an error message if title input is invalid", () => {
@@ -96,7 +98,7 @@ describe("New Budget Form", () => {
     ).toBeInTheDocument();
   });
 
-  it("should be able to change value input with keypad and change savings header", () => {
+  it("should be able to change value input with keypad and change remaining funds header", () => {
     renderWithReduxTestStore(
       <BudgetForm hideForm={hideForm} addBudget={addBudget} show={true} />
     );
@@ -105,11 +107,13 @@ describe("New Budget Form", () => {
 
     let valueInput = screen.getByLabelText("Money Allocated ($ U.S.):");
     expect(valueInput).toContainHTML("$0.00");
+    expect(valueInput).toHaveValue("$0.00");
 
     let five = screen.getByRole("button", { name: "5" });
 
     fireEvent.click(five);
     expect(valueInput).toContainHTML("$0.05");
+    expect(valueInput).toHaveValue("$0.05");
     expect(screen.queryByText("$999.95")).toBeInTheDocument();
 
     fireEvent.click(five);
@@ -117,11 +121,12 @@ describe("New Budget Form", () => {
     fireEvent.click(five);
     fireEvent.click(five);
     expect(valueInput).toContainHTML("$555.55");
+    expect(valueInput).toHaveValue("$555.55");
     expect(screen.queryByText("$444.45")).toBeInTheDocument();
 
-    let del = screen.getByRole("button", { name: "Delete" });
-    fireEvent.click(del);
+    fireEvent.click(screen.getByText("Delete"));
     expect(valueInput).toContainHTML("$55.55");
+    expect(valueInput).toHaveValue("$55.55");
     expect(screen.queryByText("$944.45")).toBeInTheDocument();
   });
 
@@ -138,7 +143,7 @@ describe("New Budget Form", () => {
     fireEvent.click(five);
     fireEvent.click(five);
     fireEvent.click(five);
-    expect(valueInput).toContainHTML("$555.55");
+    expect(valueInput).toHaveValue("$555.55");
     expect(screen.queryByText("$444.45")).toBeInTheDocument();
 
     fireEvent.click(five);
@@ -147,7 +152,7 @@ describe("New Budget Form", () => {
         "Budget funds cannot exceed remaining total asset value!"
       )
     ).toBeInTheDocument();
-    expect(valueInput).toContainHTML("$555.55");
+    expect(valueInput).toHaveValue("$555.55");
     expect(screen.queryByText("$444.45")).toBeInTheDocument();
   });
 
@@ -165,17 +170,14 @@ describe("New Budget Form", () => {
     fireEvent.change(titleInput, {
       target: { value: "test budget" },
     });
-    expect(titleInput).toContainHTML("test budget");
+    expect(titleInput).toHaveValue("test budget");
 
-    let valueInput = screen.getByLabelText("Money Allocated ($ U.S.):");
-    let five = screen.getByRole("button", { name: "5" });
-    fireEvent.click(five);
-    fireEvent.click(five);
-    fireEvent.click(five);
-    fireEvent.click(five);
-    expect(valueInput).toContainHTML("$55.55");
+    fireEvent.click(screen.getByRole("button", { name: "5" }));
+    expect(screen.getByLabelText("Money Allocated ($ U.S.):")).toHaveValue(
+      "$0.05"
+    );
 
-    let submit = screen.getByRole("button", { name: "Add this Budget" });
+    let submit = screen.getByText("Add this Budget");
     fireEvent.click(submit);
     expect(handleSubmit).toHaveBeenCalled();
     expect(addBudget).toHaveBeenCalled();
@@ -187,8 +189,7 @@ describe("New Budget Form", () => {
       <BudgetForm hideForm={hideForm} addBudget={addBudget} show={true} />
     );
 
-    let submit = screen.getByRole("button", { name: "Add this Budget" });
-    fireEvent.click(submit);
+    fireEvent.click(screen.getByText("Add this Budget"));
     expect(
       screen.queryByText("Budget title input cannot be empty.")
     ).toBeInTheDocument();
@@ -209,12 +210,12 @@ describe("New Budget Form", () => {
     fireEvent.change(titleInput, {
       target: { value: "test budget" },
     });
-    expect(titleInput).toContainHTML("test budget");
+    expect(titleInput).toHaveValue("test budget");
 
     let cancel = screen.getByRole("button", { name: "Cancel" });
     fireEvent.click(cancel);
     expect(hideForm).toHaveBeenCalled();
-    expect(titleInput).toContainHTML("");
+    expect(titleInput).toHaveValue("");
   });
 
   afterEach(() => {

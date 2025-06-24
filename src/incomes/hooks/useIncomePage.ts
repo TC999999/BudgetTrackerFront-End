@@ -7,11 +7,14 @@ import { Income } from "../../interfaces/incomeInterfaces";
 import IncomeAPI from "../../apis/IncomeAPI";
 import { toast, Id } from "react-toastify";
 
-type input = string | undefined;
+type input = {
+  id: string | undefined;
+  incomeList: Income[] | undefined;
+};
 
 // custom hook for income page: includes retrieval of incomes, showing the form for a new income, adding new incomes
 // to the list, updating incomes in the list, and filtering out deleted incomes from the list
-const useIncomePage = (id: input) => {
+const useIncomePage = ({ id, incomeList }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const notify = (): Id =>
@@ -26,10 +29,14 @@ const useIncomePage = (id: input) => {
   useEffect((): void => {
     const getIncomes = async () => {
       try {
-        dispatch(setPageLoading(true));
-        if (id) {
-          let newIncomes: Income[] = await IncomeAPI.getAllUserIncomes(id);
-          setIncomes(newIncomes);
+        if (incomeList) {
+          setIncomes(incomeList);
+        } else {
+          dispatch(setPageLoading(true));
+          if (id) {
+            let newIncomes: Income[] = await IncomeAPI.getAllUserIncomes(id);
+            setIncomes(newIncomes);
+          }
         }
       } catch (err: any) {
         dispatch(setLoadError(JSON.parse(err.message)));
@@ -39,7 +46,7 @@ const useIncomePage = (id: input) => {
       }
     };
     getIncomes();
-  }, [id]);
+  }, [id, incomeList]);
 
   // adds a single income to state after a form submission
   const addToIncomeState = useCallback(
