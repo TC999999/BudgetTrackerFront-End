@@ -134,6 +134,7 @@ export type PasswordResetInput = {
   changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   currentUser: ConfirmUserInfo;
   show: boolean;
+  mockSubmit?: any;
 };
 
 export type PasswordResetInputHook = {
@@ -141,4 +142,5 @@ export type PasswordResetInputHook = {
   changeLoading: (loadingStatus: boolean) => void;
   changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   currentUser: ConfirmUserInfo;
+  mockSubmit?: any;
 };

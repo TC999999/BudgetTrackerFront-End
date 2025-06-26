@@ -16,6 +16,7 @@ const useOneTimeCode = ({
   changeLoading,
   changeSubmitError,
   currentUser,
+  mockSubmit,
 }: PasswordResetInputHook) => {
   // initial numbers for each number box
   const initialState: OneTimeCodeFormData = {
@@ -78,14 +79,18 @@ const useOneTimeCode = ({
       e.preventDefault();
       if (currPlace >= 6) {
         try {
-          changeLoading(true);
-          let code: string = joinOTPCode(formData);
-          let data: OneTimeCodeData = {
-            username: currentUser.username,
-            email: currentUser.email,
-            code,
-          };
-          await ResetPasswordAPI.confirmOTP(data);
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            changeLoading(true);
+            let code: string = joinOTPCode(formData);
+            let data: OneTimeCodeData = {
+              username: currentUser.username,
+              email: currentUser.email,
+              code,
+            };
+            await ResetPasswordAPI.confirmOTP(data);
+          }
           changeStep(e, "newPassword");
           changeSubmitError("", e);
           changeLoading(false);

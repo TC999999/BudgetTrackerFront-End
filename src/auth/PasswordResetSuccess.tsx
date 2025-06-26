@@ -3,15 +3,23 @@ import AuthTabs from "../motionWrappers/AuthTabs";
 
 type Props = {
   show: boolean;
+  mockNav?: any;
 };
 
 // returns page letting the user know that their password reset was succesful and gives them a link to go back
 // to the login page
-const PasswordResetSuccess: React.FC<Props> = ({ show }): JSX.Element => {
+const PasswordResetSuccess: React.FC<Props> = ({
+  show,
+  mockNav,
+}): JSX.Element => {
   const navigate = useNavigate();
 
   const navigateToLoginPage = (): void => {
-    navigate("/");
+    if (mockNav) {
+      mockNav();
+    } else {
+      navigate("/");
+    }
   };
 
   return (
@@ -19,7 +27,7 @@ const PasswordResetSuccess: React.FC<Props> = ({ show }): JSX.Element => {
       <div className="text-center">
         <header className="p-2">
           <h1 className="text-3xl sm:text-5xl font-bold duration-150">
-            Your password has been successfully reset!{" "}
+            Your password has been successfully reset!
           </h1>
         </header>
         <section className="p-2">

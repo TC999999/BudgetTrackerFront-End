@@ -10,6 +10,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
   changeSubmitError,
   currentUser,
   show,
+  mockSubmit,
 }): JSX.Element => {
   const {
     formData,
@@ -23,6 +24,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
     changeLoading,
     changeSubmitError,
     currentUser,
+    mockSubmit,
   });
 
   return (
@@ -38,6 +40,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
         <div id="one-time-code-form">
           <div id="one-time-code-digits" className="flex justify-center">
             <div
+              role="digit-box"
               className={`digitPlace ${
                 currPlace === 0 && "digitPlace-select"
               } ${formSelect[0] && "digitPlace-full"}`}
@@ -46,6 +49,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
               {formData[0]}
             </div>
             <div
+              role="digit-box"
               className={`digitPlace ${
                 currPlace === 1 && "digitPlace-select"
               } ${formSelect[1] && "digitPlace-full"}`}
@@ -54,6 +58,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
               {formData[1]}
             </div>
             <div
+              role="digit-box"
               className={`digitPlace ${
                 currPlace === 2 && "digitPlace-select"
               } ${formSelect[2] && "digitPlace-full"}`}
@@ -62,6 +67,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
               {formData[2]}
             </div>
             <div
+              role="digit-box"
               className={`digitPlace ${
                 currPlace === 3 && "digitPlace-select"
               } ${formSelect[3] && "digitPlace-full"}`}
@@ -70,6 +76,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
               {formData[3]}
             </div>
             <div
+              role="digit-box"
               className={`digitPlace ${
                 currPlace === 4 && "digitPlace-select"
               } ${formSelect[4] && "digitPlace-full"}`}
@@ -78,6 +85,7 @@ const OneTimeCode: React.FC<PasswordResetInput> = ({
               {formData[4]}
             </div>
             <div
+              role="digit-box"
               className={`digitPlace ${
                 currPlace === 5 && "digitPlace-select"
               } ${formSelect[5] && "digitPlace-full"}`}

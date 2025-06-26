@@ -16,6 +16,7 @@ type input = {
   changeLoading: (loadingStatus: boolean) => void;
   changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   changeUser: (e: React.FormEvent, newUser: ConfirmUserInfo) => void;
+  mockSubmit?: any;
 };
 
 // custom hook for submitting user info before resetting password: includes changing data in state and
@@ -25,6 +26,7 @@ const useUserInfo = ({
   changeLoading,
   changeSubmitError,
   changeUser,
+  mockSubmit,
 }: input) => {
   // initial state for confirm user info
   const initialState: ConfirmUserInfo = {
@@ -66,10 +68,13 @@ const useUserInfo = ({
       e.preventDefault();
       try {
         if (handleUserInfoSubmitErrors(formData, setFormErrors)) {
-          changeLoading(true);
-          let res: ConfirmUserInfo = await ResetPasswordAPI.confirmUserInfo(
-            formData
-          );
+          let res;
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            changeLoading(true);
+            res = await ResetPasswordAPI.confirmUserInfo(formData);
+          }
           changeStep(e, "oneTimeCode");
           changeSubmitError("", e);
           changeUser(e, res);

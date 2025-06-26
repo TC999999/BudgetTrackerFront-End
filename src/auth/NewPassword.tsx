@@ -10,6 +10,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
   changeSubmitError,
   currentUser,
   show,
+  mockSubmit,
 }): JSX.Element => {
   const { formData, formErrors, flashErrors, handleChange, handleSubmit } =
     useNewPassword({
@@ -17,6 +18,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
       changeLoading,
       changeSubmitError,
       currentUser,
+      mockSubmit,
     });
 
   return (
@@ -25,7 +27,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
         <form onSubmit={handleSubmit}>
           <div id="new-password-div">
             <label className="text-lg block" htmlFor="newPassword">
-              Input your new password here:{" "}
+              Input your new password here:
             </label>
             <input
               type="password"
@@ -49,7 +51,7 @@ const NewPassword: React.FC<PasswordResetInput> = ({
           </div>
           <div className="confirm-password-div">
             <label className="text-lg block" htmlFor="confirmNewPassword">
-              Confirm your new password here
+              Confirm your new password here:
             </label>
             <div className="flex justify-center">
               <input

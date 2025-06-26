@@ -31,6 +31,7 @@ const AuthProgressHeader: React.FC<Props> = ({
 
   return (
     <div
+      title="auth-progress-header"
       className={`pt-2 pb-8 text-xs sm:text-base flex justify-center items-center ${borderHandle()} ${
         current ? "underline text-green-500 bg-green-100" : ""
       } ${done ? "text-green-700 bg-green-500" : ""}`}

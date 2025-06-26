@@ -4,8 +4,8 @@ import AuthProgressHeader from "./AuthProgressHeader";
 
 type Props = {
   type: "register" | "resetPassword";
-  stepList: StepCompleted | stepList;
-  currentStep: CurrentStep | step;
+  stepList: stepList | StepCompleted;
+  currentStep: step | CurrentStep;
   currentProgress: number;
 };
 

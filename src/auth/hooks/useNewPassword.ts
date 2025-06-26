@@ -19,6 +19,7 @@ const useNewPassword = ({
   changeLoading,
   changeSubmitError,
   currentUser,
+  mockSubmit,
 }: PasswordResetInputHook) => {
   // initial data for resetting password;
   //    newPassword: the user's new password
@@ -77,13 +78,17 @@ const useNewPassword = ({
       e.preventDefault();
       try {
         if (handleConfirmPasswordSubmitErrors(formData, setFormErrors)) {
-          changeLoading(true);
-          let submitData: PasswordResetSubmit = {
-            username: currentUser.username,
-            email: currentUser.email,
-            newPassword: formData.newPassword,
-          };
-          await ResetPasswordAPI.resetPassword(submitData);
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            changeLoading(true);
+            let submitData: PasswordResetSubmit = {
+              username: currentUser.username,
+              email: currentUser.email,
+              newPassword: formData.newPassword,
+            };
+            await ResetPasswordAPI.resetPassword(submitData);
+          }
           changeStep(e, "success");
           changeSubmitError("", e);
           changeLoading(false);

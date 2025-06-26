@@ -8,6 +8,7 @@ type Props = {
   changeSubmitError: (newSubmitError: string, e: React.FormEvent) => void;
   changeUser: (e: React.FormEvent, newUser: ConfirmUserInfo) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 // For to input user email and username to make a request for a one time verification
@@ -18,9 +19,16 @@ const UserInfo: React.FC<Props> = ({
   changeSubmitError,
   changeUser,
   show,
+  mockSubmit,
 }): JSX.Element => {
   const { formData, formErrors, flashErrors, handleChange, handleSubmit } =
-    useUserInfo({ changeStep, changeLoading, changeSubmitError, changeUser });
+    useUserInfo({
+      changeStep,
+      changeLoading,
+      changeSubmitError,
+      changeUser,
+      mockSubmit,
+    });
 
   return (
     <AuthTabs show={show}>

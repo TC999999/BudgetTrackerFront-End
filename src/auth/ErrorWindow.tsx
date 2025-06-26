@@ -14,7 +14,7 @@ const ErrorWindow: React.FC<Props> = ({
   submitError,
 }): JSX.Element | null => {
   return submitError ? (
-    <div tabIndex={-1} className="modal-layer-1">
+    <div title="auth-error-window" tabIndex={-1} className="modal-layer-1">
       <div className="modal-layer-2">
         <div
           id="submit-form-error-msg"
