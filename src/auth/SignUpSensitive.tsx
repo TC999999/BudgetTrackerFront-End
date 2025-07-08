@@ -16,6 +16,7 @@ type Props = {
     e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 // window for register form for users to input non-optional information (username, password, email)
@@ -25,6 +26,7 @@ const SignUpSensitive: React.FC<Props> = ({
   changeStep,
   changeSubmitError,
   show,
+  mockSubmit,
 }) => {
   const { formData, formErrors, flashErrors, handleChange, handleSubmit } =
     useSignUpSensitive({
@@ -32,6 +34,7 @@ const SignUpSensitive: React.FC<Props> = ({
       changeLoading,
       changeStep,
       changeSubmitError,
+      mockSubmit,
     });
   return (
     <AuthTabs show={show}>
@@ -56,7 +59,7 @@ const SignUpSensitive: React.FC<Props> = ({
             className={`input ${
               formErrors.username ? "input-error" : "input-valid"
             } ${flashErrors.username && "animate-blink-error"}`}
-            id="signup_username"
+            id="username"
             type="text"
             name="username"
             placeholder="type your username here"
@@ -86,7 +89,7 @@ const SignUpSensitive: React.FC<Props> = ({
             className={`input ${
               formErrors.password ? "input-error" : "input-valid"
             } ${flashErrors.password && "animate-blink-error"}`}
-            id="signup_password"
+            id="password"
             type="password"
             name="password"
             placeholder="type your password here"
@@ -157,7 +160,7 @@ const SignUpSensitive: React.FC<Props> = ({
             className={`input ${
               formErrors.email ? "input-error" : "input-valid"
             } ${flashErrors.email && "animate-blink-error"}`}
-            id="signup_email"
+            id="email"
             type="text"
             name="email"
             placeholder="type your email here"

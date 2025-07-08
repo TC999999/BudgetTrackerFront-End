@@ -17,6 +17,7 @@ type input = {
     newSubmitError: string,
     e?: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
+  mockSubmit?: any;
 };
 
 // custom hook for register form for optional data (current total savings or incomes)
@@ -24,6 +25,7 @@ const useSignUpAdditional = ({
   initialState,
   changeLoading,
   changeSubmitError,
+  mockSubmit,
 }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
@@ -160,14 +162,18 @@ const useSignUpAdditional = ({
     async (e: React.FormEvent): Promise<void> => {
       e.preventDefault();
       changeLoading(true);
-
       try {
-        const signUpInfo: SignUpInterface = {
-          ...formData,
-        };
-        await dispatch(registerUser(signUpInfo)).unwrap();
-        navigate("/");
+        if (mockSubmit) {
+          mockSubmit();
+        } else {
+          const signUpInfo: SignUpInterface = {
+            ...formData,
+          };
+          await dispatch(registerUser(signUpInfo)).unwrap();
+          navigate("/");
+        }
       } catch (err: any) {
+        changeSubmitError(err);
       } finally {
         changeLoading(false);
       }

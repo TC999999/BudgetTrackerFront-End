@@ -124,7 +124,7 @@ const IncomeForm: React.FC<Props> = ({
                     <p>{formErrors.salary}</p>
                   </div>
                 )}
-                <div id="income-salary-requirements" className=" pb-2">
+                <div id="income-salary-requirements" className="pb-2">
                   <small>Salary must be greater than $0.00</small>
                 </div>
                 <KeyPad

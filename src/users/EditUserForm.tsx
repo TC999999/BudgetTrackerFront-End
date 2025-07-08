@@ -1,9 +1,12 @@
 import { useParams } from "react-router-dom";
 import useEditUser from "./hooks/useEditUser";
 import Page from "../motionWrappers/Page";
+import { EditUser } from "../interfaces/userInterfaces";
+
+type Props = { user?: EditUser; mockSubmit?: any };
 
 // returns a form component for updating a single current user
-const EditUserForm = (): JSX.Element => {
+const EditUserForm: React.FC<Props> = ({ user, mockSubmit }): JSX.Element => {
   const { id } = useParams();
   const {
     formData,
@@ -13,7 +16,7 @@ const EditUserForm = (): JSX.Element => {
     submitErrorFlash,
     handleChange,
     handleSubmit,
-  } = useEditUser(id);
+  } = useEditUser({ id, user, mockSubmit });
 
   return (
     <Page>

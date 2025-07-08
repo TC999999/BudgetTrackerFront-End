@@ -19,11 +19,11 @@ import UserAPI from "../../apis/UserAPI";
 import { toast, Id } from "react-toastify";
 import { createEditUserString } from "../../helpers/createNotificationString";
 
-type input = string | undefined;
+type input = { id: string | undefined; user?: EditUser; mockSubmit?: any };
 
 // custom hooks for a form to update a single user: includes retrieval of user data upon initial render, handlers for
 // changes in text inputs, and submitting the data
-const useEditUser = (id: input) => {
+const useEditUser = ({ id, user, mockSubmit }: input) => {
   const dispatch: AppDispatch = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const notify = (message: string): Id =>
@@ -64,7 +64,13 @@ const useEditUser = (id: input) => {
     const getUser = async (): Promise<void> => {
       try {
         dispatch(setPageLoading(true));
-        if (id) {
+        if (user) {
+          setFormData(user);
+          notificationData.current = {
+            username: user.username,
+            email: user.email,
+          };
+        } else if (id) {
           const userInfo = await UserAPI.getUser(id);
           setFormData((user) => ({ ...user, ...userInfo }));
           notificationData.current = {
@@ -72,9 +78,6 @@ const useEditUser = (id: input) => {
             email: userInfo.email,
           };
         }
-        // setFormErrors(initialErrors);
-        // setFlashErrors(initialFlashErrors);
-        // setSubmitError("");
       } catch (err: any) {
         dispatch(setLoadError(JSON.parse(err.message)));
         navigate("/error");
@@ -106,23 +109,27 @@ const useEditUser = (id: input) => {
           handleUserEditSubmitErrors(formData, setFormErrors) &&
           !submitError
         ) {
-          let { username, email, password } = formData;
-          const submitData: SubmitEditUser = {
-            _id: id!,
-            username,
-            email,
-            password,
-          };
-          await dispatch(editUser(submitData)).unwrap();
-          notify(
-            createEditUserString(
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            let { username, email, password } = formData;
+            const submitData: SubmitEditUser = {
+              _id: id!,
               username,
-              notificationData.current.username,
               email,
-              notificationData.current.email
-            )
-          );
-          navigate("/");
+              password,
+            };
+            await dispatch(editUser(submitData)).unwrap();
+            notify(
+              createEditUserString(
+                username,
+                notificationData.current.username,
+                email,
+                notificationData.current.email
+              )
+            );
+            navigate("/");
+          }
         } else {
           if (formErrors.username || formData.username === "")
             setFlashErrors((flash) => ({ ...flash, username: true }));

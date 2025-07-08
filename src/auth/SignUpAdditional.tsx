@@ -9,6 +9,7 @@ type Props = {
   changeLoading: (loadingStatus: boolean) => void;
   changeSubmitError: (newSubmitError: string) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 // full page for both form for additional information for user sign up and a new income form for
@@ -18,6 +19,7 @@ const SignUpAdditional: React.FC<Props> = ({
   changeLoading,
   changeSubmitError,
   show,
+  mockSubmit,
 }) => {
   const {
     formData,
@@ -32,7 +34,12 @@ const SignUpAdditional: React.FC<Props> = ({
     removeIncome,
     handleCheckBox,
     handleSubmit,
-  } = useSignUpAdditional({ initialState, changeLoading, changeSubmitError });
+  } = useSignUpAdditional({
+    initialState,
+    changeLoading,
+    changeSubmitError,
+    mockSubmit,
+  });
   return (
     <AuthTabs show={show}>
       <NewIncomeForm

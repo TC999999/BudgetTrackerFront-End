@@ -53,12 +53,12 @@ const SignUpAdditionalForm: React.FC<Props> = ({
       <div id="register-form-div">
         <form onSubmit={handleSubmit}>
           <div id="total-assets-div" className="py-4">
-            <label className="text-lg block" htmlFor="moneyAllocated">
-              Total Assets: ($ U.S.):{" "}
+            <label className="text-lg block" htmlFor="totalAssets">
+              Total Assets: ($ U.S.):
             </label>
             <input
               className="input"
-              id="total_assets"
+              id="totalAssets"
               type="text"
               name="totalAssets"
               placeholder="0.00"
@@ -119,7 +119,7 @@ const SignUpAdditionalForm: React.FC<Props> = ({
                 <div className="flex items-center">
                   <input
                     className="form-checkbox checkbox checkbox-add"
-                    id="login_trusted"
+                    id="trusted"
                     type="checkbox"
                     name="trusted"
                     checked={formData.trusted}

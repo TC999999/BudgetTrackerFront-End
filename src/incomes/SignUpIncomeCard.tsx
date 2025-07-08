@@ -24,7 +24,11 @@ const SignUpIncomeCard: React.FC<Props> = ({
   }, [income.salary]);
 
   return (
-    <div className="submit-income-card border-2 p-2 border-green-600 rounded-lg bg-gray-200 m-2">
+    <div
+      role="card"
+      aria-label="submit-income-card"
+      className="submit-income-card border-2 p-2 border-green-600 rounded-lg bg-gray-200 m-2"
+    >
       <div className="flex justify-between">
         <div>
           <h1 className="text-xl font-bold">{income.title}</h1>

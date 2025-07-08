@@ -23,6 +23,7 @@ type input = {
     newSubmitError: string,
     e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
+  mockSubmit?: any;
 };
 
 // custom hook for register form for inputting important non-optional data (username, password, email)
@@ -31,6 +32,7 @@ const useSignUpSensitive = ({
   changeLoading,
   changeStep,
   changeSubmitError,
+  mockSubmit,
 }: input) => {
   const initialState: SignUpSensitive = {
     username: "",
@@ -86,7 +88,11 @@ const useSignUpSensitive = ({
           changeLoading(true);
           const { username, password, email } = formData;
 
-          await RegisterAPI.createOTP({ username, email });
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            await RegisterAPI.createOTP({ username, email });
+          }
           handleDataChange(e, { username, password, email });
 
           changeStep(e, "showOTPForm");
