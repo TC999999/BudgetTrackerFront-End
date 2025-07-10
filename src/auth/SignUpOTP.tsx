@@ -13,6 +13,7 @@ type Props = {
     e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
   show: boolean;
+  mockSubmit?: any;
 };
 
 // window for register form for users to enter the one time verification code sent to their email
@@ -23,6 +24,7 @@ const SignUpOTP: React.FC<Props> = ({
   changeStep,
   changeSubmitError,
   show,
+  mockSubmit,
 }) => {
   const {
     formData,
@@ -36,6 +38,7 @@ const SignUpOTP: React.FC<Props> = ({
     changeLoading,
     changeStep,
     changeSubmitError,
+    mockSubmit,
   });
   return (
     <AuthTabs show={show}>

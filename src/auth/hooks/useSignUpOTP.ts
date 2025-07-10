@@ -18,6 +18,7 @@ type input = {
     e: React.FormEvent | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
   registerData: SignUpInterface;
+  mockSubmit?: any;
 };
 
 // custom hook for register form for inputting a one time verification code after
@@ -27,6 +28,7 @@ const useSignUpOTP = ({
   changeStep,
   changeSubmitError,
   registerData,
+  mockSubmit,
 }: input) => {
   // initial numbers for each number box
   const initialState: OneTimeCodeFormData = {
@@ -96,7 +98,11 @@ const useSignUpOTP = ({
             email: registerData.email,
             code,
           };
-          await RegisterAPI.confirmOTP(data);
+          if (mockSubmit) {
+            mockSubmit();
+          } else {
+            await RegisterAPI.confirmOTP(data);
+          }
           changeStep(e, "showAdditionalForm");
           if (e) changeSubmitError("", e);
         } catch (err: any) {

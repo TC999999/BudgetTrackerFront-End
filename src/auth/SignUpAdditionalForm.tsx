@@ -77,8 +77,8 @@ const SignUpAdditionalForm: React.FC<Props> = ({
           </div>
           <div id="keyPad-div" className="flex justify-center m-5">
             <KeyPad
-              handlePress={handlePress}
-              handleDelete={handleDelete}
+              handlePress={(e) => handlePress(e)}
+              handleDelete={(e) => handleDelete(e)}
               num={formData.totalAssets}
             />
           </div>
